@@ -1,0 +1,193 @@
+@extends('Frontend.Reports.parse.layout')
+<!--  Relatório Dirigindo e parado -->
+@section('content')
+    @foreach ($devices as $device)
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{ rtl(trans('front.report_type'), $data) }}: {{ rtl($types[$data['type']], $data) }}
+            </div>
+            <div class="panel-body">
+                <table class="table" style="margin-bottom: 0px">
+                    <tbody>
+                    <tr>
+                        <th>{!! rtl(trans('front.plate'), $data) !!}:</th>
+                        <td>{{ rtl($device['plate_number'], $data) }}</td>
+                        <th>&nbsp;</th>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <th>{!! rtl(trans('front.time_period'), $data) !!}:</th>
+                        <td>{{ $data['date_from'] }} - {{ $data['date_to'] }}</td>
+                        <th>&nbsp;</th>
+                        <td>&nbsp;</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-body no-padding">
+                <table class="table table-striped table-speed" style="margin-bottom: 0px">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">{{ rtl(trans('validation.attributes.status'), $data) }}</th>
+                        <th rowspan="2">{{ rtl(trans('front.start'), $data) }}</th>
+                        <th rowspan="2">{{ rtl(trans('front.end'), $data) }}</th>
+                        <th rowspan="2">{{ rtl(trans('front.duration'), $data) }}</th>
+                        <th rowspan="2">{{ rtl(trans('front.engine_idle'), $data) }}</th>
+                        <th rowspan="2">{{ rtl(trans('front.driver'), $data) }}</th>
+                        <th colspan="4">{{ rtl(trans('front.stop_position'), $data) }}</th>
+                        @if (isset($data['zones_instead']))
+                            <th rowspan="2">{{ rtl(trans('front.geofences'), $data) }}</th>
+                        @endif
+                    </tr>
+                    <tr>
+                        <th>{{ rtl(trans('front.route_length'), $data) }}</th>
+                        <th>{{ rtl(trans('front.top_speed'), $data) }}</th>
+                        <th>{{ rtl(trans('front.average_speed'), $data) }}</th>
+                        <th>{{ rtl(trans('front.fuel_consumption'), $data) }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (!isset($items[$device['id']]))
+                        <tr>
+                            <td colspan="20">{{ rtl(trans('front.nothing_found_request'), $data) }}</td>
+                        </tr>
+                    @else
+                        <?php $total_distance = 0; ?>
+                        @foreach ($items[$device['id']]->getItems() as $item)
+                                <tr>
+                                    @if ($item['status'] == 1)
+                                        <td>{{ rtl(trans('front.moving'), $data) }}</td>
+                                        <td>{{ $item['show'] }}</td>
+                                        <td>{{ $item['left'] }}</td>
+                                        <td>{{ $item['time'] }}</td>
+                                        <td>{{ secondsToTime($item['engine_idle']) }}</td>
+                                        <td>{{ rtl($item['driver'], $data) }}</td>
+                                        <?php $total_distance += $item['distance']; ?>
+                                        <td>{{ $items[$device['id']]->unit_of_distance == 'mi' ? kilometersToMiles($item['distance']) : $item['distance'] }} {{ rtl(trans('front.'.$items[$device['id']]->unit_of_distance), $data) }}</td>
+                                        <td>{{ $item['top_speed'] }} {{ rtl(trans("front.dis_h_{$items[$device['id']]->unit_of_distance}"), $data) }}</td>
+                                        <td>{{ $item['average_speed'] }} {{ rtl(trans("front.dis_h_{$items[$device['id']]->unit_of_distance}"), $data) }}</td>
+                                        <td>
+                                            @if ($item['fuel_consumption'] == 0 && $device['fuel_per_km'] > 0)
+                                                {{ $device['fuel_measurement_id'] == 1 ? float($item['distance'] * $device['fuel_per_km']).' '.rtl(trans('front.liters'), $data) : number_format(litersToGallons(($item['distance'] * $device['fuel_per_km'])), 2, '.', '').' '.rtl(trans('front.gallons'), $data) }}
+                                            @else
+                                                {{ float($item['fuel_consumption']).' '.($device['fuel_measurement_id'] == 1 ? rtl(trans('front.liters'), $data) : rtl(trans('front.gallons'), $data)) }}
+                                            @endif
+                                        </td>
+                                    @endif
+                                    @if ($item['status'] == 2)
+                                        <td>{{ rtl(trans('front.stopped'), $data) }}</td>
+                                        <td>{{ $item['show'] }}</td>
+                                        <td>{{ $item['left'] }}</td>
+                                        <td>{{ $item['time'] }}</td>
+                                        <td>{{ secondsToTime($item['engine_idle']) }}</td>
+                                        <td>{{ rtl($item['driver'], $data) }}</td>
+                                        <td colspan="4">                                            
+                                            @if(!empty($item['stop_position']['address']))
+                                                <a href="http://sistema.carseg.com.br/streetview.html?lat={!!$item['stop_position']['lat']!!}&long={!!$item['stop_position']['lng']!!}&t=m" target="_blank">{{ $item['stop_position']['address'] }}</a>
+											@else
+												<a href="http://sistema.carseg.com.br/streetview.html?lat={!!$item['stop_position']['lat']!!}&long={!!$item['stop_position']['lng']!!}&t=m" target="_blank">{{ $item['stop_position']['lat'] }} &deg;, {{ $item['stop_position']['lng'] }} &deg;</a>
+                                            @endif
+                                        </td>
+                                    @endif
+                                    @if (isset($data['zones_instead']))
+                                        <td>{{ array_key_exists('geofences', $item) ? rtl($item['geofences'], $data) : '' }}</td>
+                                    @endif
+                                </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-body">
+                @if (isset($items[$device['id']]))
+                    <table style="margin-bottom: 0;" class="table">
+                        <tr>
+                            <td>
+                                <table class="table">
+                                    <tr>
+                                        <td>{{ rtl(trans('front.route_length'), $data) }}:</td>
+                                        <td>{{ $items[$device['id']]->unit_of_distance == 'mi' ? kilometersToMiles($total_distance) : $total_distance }} {{ rtl(trans('front.'.$items[$device['id']]->unit_of_distance), $data) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ rtl(trans('front.move_duration'), $data) }}:</td>
+                                        <td>{{ $items[$device['id']]->move_duration }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ rtl(trans('front.stop_duration'), $data) }}:</td>
+                                        <td> {{ $items[$device['id']]->stop_duration }}</td>
+                                    </tr>
+									<tr>
+                                        <td>{{ rtl(trans('front.engine_idle'), $data) }}:</td>
+                                        <td>{{ $items[$device['id']]->engine_idle }}</td>
+                                    </tr>                             
+
+                                    @if(!empty($items[$device['id']]->events))
+                                        <tr>
+                                            <td>{{ rtl(trans('front.events'), $data) }}</td>
+                                            <td></td>
+                                        </tr>
+                                        @foreach($items[$device['id']]->events as $event)
+                                            <tr>
+                                                <td>{{ $event->formatMessage() }}:</td>
+                                                <td>{{ $event->total }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </table>
+                            </td>
+                            <td>
+                                <table class="table">
+                                    <!--tr>
+                                        <td>{{ rtl(trans('front.engine_work'), $data) }}:</td>
+                                        <td>{{ $items[$device['id']]->engine_work }}</td>
+                                    </tr-->  
+									@if (!empty($items[$device['id']]->odometers))
+                                        @foreach($items[$device['id']]->odometers as $key => $odometer)
+                                            <tr>
+                                                <td>{{ $odometer['name'] }}:</td>
+                                                <td>{{ $odometer['value'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endif	
+                                    <tr>
+                                        <td>{{ rtl(trans('front.top_speed'), $data) }}:</td>
+                                        <td>{{ $items[$device['id']]->top_speed }} {{ rtl(trans('front.dis_h_'.$items[$device['id']]->unit_of_distance), $data) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ rtl(trans('front.average_speed'), $data) }}:</td>
+                                        <td>{{ $items[$device['id']]->average_speed }} {{ rtl(trans('front.dis_h_'.$items[$device['id']]->unit_of_distance), $data) }}</td>
+                                    </tr>
+									<tr>
+                                        <td>{{ rtl(trans('front.fuel_consumption'), $data) }} ({{ rtl(trans('front.gps'), $data) }}):</td>
+                                        <td>{{ $device['fuel_measurement_id'] == 1 ? float($items[$device['id']]->distance_sum * $device['fuel_per_km']).' '.rtl(trans('front.liters'), $data) : float(litersToGallons($items[$device['id']]->distance_sum * $device['fuel_per_km'])).' '.rtl(trans('front.gallons'), $data) }}</td>
+                                    </tr>
+                                    @foreach($items[$device['id']]->fuel_consumption as $id => $value)
+                                        <tr>
+                                            <td>{{ rtl(trans('front.fuel_consumption'), $data) }} ({{ rtl($items[$device['id']]->sensors_arr[$id]['name'], $data) }}):</td>
+                                            <td>{{ float($value).' '.$items[$device['id']]->sensors_arr[$id]['sufix'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                    @if ($device['fuel_price'] > 0)
+                                        @if ($device['fuel_per_km'] > 0)
+                                            <tr>
+                                                <?php $fuel_consumption = $device['fuel_measurement_id'] == 1 ? $items[$device['id']]->distance_sum * $device['fuel_per_km'] : litersToGallons($items[$device['id']]->distance_sum * $device['fuel_per_km']); ?>
+                                                <td>{{ rtl(trans('front.fuel_cost'), $data) }} ({{ rtl(trans('front.gps'), $data) }}):</td>
+                                                <td>{{ float($fuel_consumption * $device['fuel_price']) }}</td>
+                                            </tr>
+                                        @endif
+                                        @foreach($items[$device['id']]->fuel_consumption as $id => $value)
+                                            <tr>
+                                                <td>{{ rtl(trans('front.fuel_cost'), $data) }} ({{ $items[$device['id']]->sensors_arr[$id]['name'] }}):</td>
+                                                <td>{{ float($value * $device['fuel_price']) }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endif                                    
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                @endif
+            </div>
+        </div>
+    @endforeach
+@stop

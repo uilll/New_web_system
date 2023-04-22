@@ -1,0 +1,151 @@
+<html>
+<head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>		
+		
+		function searchsidebar(){			
+			var filterInput = $("#search").val();
+			if (filterInput !== ""){
+				//alert (filterInput);
+				var group_list = $("ul#group-list li");
+				group_list.each(function(){
+					$(this).hide();//.css({"display": "none"});;
+				});
+				group_list.each(function(){
+					list = $(this);
+					list.children().each(function(){						
+						if($(this).text().indexOf(filterInput) !== -1){
+							list.show();//.css({"display": "inline"});							
+						}						
+					});	
+				});
+				
+			}else {
+				$("ul#group-list li").each(function(index){	
+					$(this).show();//.css({"display": "inline"});
+				});
+			}
+		}
+         
+    </script>
+    
+</head>
+<body>
+    <div id="container">
+        <ul id="group-list">
+			<li data-device-id="1">
+				<div>
+					<span data-device="name">nome1</span>
+				</div>
+				<div id="plate1" >                                    
+					<span data-device="plate">placa1</span>
+					
+				</div>
+			</li>
+			<li data-device-id="2">
+				<div>
+					<span data-device="name">nome2</span>
+				</div>
+				<div id="plate1" >                                    
+					<span data-device="plate">placa2</span>
+					
+				</div>
+			</li>
+		</ul>
+		<input type="text" id="search" onkeyup="searchsidebar();" placeholder="Filtre sua busca por aqui.">
+    </div></body>
+<html>
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myUL {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#myUL li a {
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  display: block
+}
+
+#myUL li a:hover:not(.header) {
+  background-color: #eee;
+}
+</style>
+</head>
+<body>
+
+<h2>My Phonebook</h2>
+
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+
+<ul id="myUL">
+  <li>	<div>
+					<span data-device="name"><a href="#">Adele</a></span>
+		</div>
+		<div>
+					<span data-device="name"><a href="#">Antonio</a></span>
+		</div>
+		</li>
+  <li><a href="#">Agnes</a></li>
+
+  <li><a href="#">Billy</a></li>
+  <li><a href="#">Bob</a></li>
+
+  <li><a href="#">Calvin</a></li>
+  <li><a href="#">Christina</a></li>
+  <li><a href="#">Cindy</a></li>
+</ul>
+
+<script>
+function myFunction() {
+    var input, filter, ul, li, a, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("myUL");
+    li = ul.getElementsByTagName("li");
+	
+	//$('myUL').children().each(function() {
+	//	alert($(this));
+	//});
+	
+    for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+		
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+</body>
+</html> -->

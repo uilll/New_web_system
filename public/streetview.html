@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Street View Side-By-Side</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map, #pano {
+        float: left;
+        height: 100%;
+        width: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="pano"></div>
+    <script>
+
+      function initialize() {
+	  var url_atual = window.location.href;
+	  var parametrosDaUrl = url_atual.split("?")[1];	  		  
+	  var lat_data = parametrosDaUrl.split("&")[0];
+	  var lng_data = parametrosDaUrl.split("&")[1];
+	  var valor_lat = Number(lat_data.split("=")[1]);
+	  var valor_lng = Number(lng_data.split("=")[1]);
+	  	  
+        var fenway = {lat: valor_lat, lng: valor_lng};
+		if (screen.width > 769){
+			var map = new google.maps.Map(document.getElementById('map'), {
+				center: fenway,
+				zoom: 14
+			});			
+		}
+		else{
+			document.getElementById('map').style.width='0%';
+			document.getElementById('pano').style.width='100%';
+		}
+		
+		
+        var panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('pano'), {
+              position: fenway,
+              pov: {
+                heading: 14,
+                pitch: 10
+              }
+            });
+		var marker = new google.maps.Marker({
+		  position: new google.maps.LatLng(valor_lat,valor_lng),
+		  map: panorama,
+		  icon: 'https://sistema.carseg.com.br/images/icon3.png',
+		  title: 'Seu veículo'
+	  });
+		if (screen.width > 769){
+			var marker2 = new google.maps.Marker({
+			  position: new google.maps.LatLng(valor_lat,valor_lng),
+			  map: map,
+			  icon: 'https://sistema.carseg.com.br/images/icon4.png',
+			  title: 'Seu veículo'
+		  });	  
+		  map.setStreetView(panorama);
+		}
+        
+      }
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ-pszuNy18ZMFBD-yf2vm1wAsothpD38&callback=initialize">
+    </script>
+  </body>
+</html>

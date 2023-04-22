@@ -1,0 +1,112 @@
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3156 do cliente: RASTREADOR ENVIADO PARA CLIENTES(SERGIO MOLAS)"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033017828","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-20","history":"","sim_number":"","iccd":"","operator":"HINOVA.ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022032830080","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-20","history":"","sim_number":"","iccd":"89553202100050822754","operator":"HINOVA.ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21299,"imei":"868022033017828","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3175,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-20","history":"\r\n ","excess_data":0,"sim_number":"16995771872","iccd":"89553202100047602723","operator":"HINOVA.ALGAR 4G","manager_id":0,"created_at":"2023-04-20 00:00:00","updated_at":"2023-04-20 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"007904798","brand":"SUNTEC 310U","model":"SUNTEC","work_since":"2023-04-20","history":"","sim_number":"5516995032389","iccd":"89553202100025164522","operator":"SS.ALGAR.BR","manager_id":1085}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21227,"imei":"868022032813722","brand":"J16A","model":"J16A","active":1,"in_use":1,"test":0,"device_id":3103,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-03-27","history":"\r\n Instalado em: \r\n\r\n \r\n \r\n ","excess_data":0,"sim_number":"","iccd":"","operator":"ss.algar.br","manager_id":1085,"created_at":"2023-03-27 00:00:00","updated_at":"2023-04-03 00:00:00"}
+
+"Finalizou OK?"
+
+"Anchor_Start 3026, 1559"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1403 do cliente: RAFAEL DIEGO DE SOUSA E SILVA(RAFAEL DIEGO DE SOUSA E SILVA)"
+
+"Anchor_Start 3019, 1552"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3171 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(IOJACIO DA SILVA RODRIGUES)"
+
+"Anchor_Start 2366, 1387"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3039 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(Leandro Cerqueira Lima Silva)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3172 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(Leandro Cerqueira Lima Silva)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3039 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(LEANDRO CERQUEIRA LIMA SILVA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3172 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(LEANDRO CERQUEIRA LIMA SILVA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3176 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(ALEXANDRE CRUZ)"
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21301,"imei":"007904798","brand":"SUNTEC 310U","model":"SUNTEC","active":1,"in_use":0,"test":0,"device_id":3177,"last_device_id":0,"in_service":"1","maintence_date":"","maintence_quant":0,"work_since":"2023-04-20","history":"\r\n ","excess_data":0,"sim_number":"","iccd":"89553202100025164522","operator":"SS.ALGAR.BR","manager_id":1085,"created_at":"2023-04-20 00:00:00","updated_at":"2023-04-20 00:00:00"}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3177 do cliente: TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3174 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(ALEXANDRE CRUZ)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3176 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(OTACILIO DE DEUS SANTA ROSA NETO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3174 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(OTACILIO DE DEUS SANTA ROSA NETO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3039 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(CARLOS CEZAR LIMA SILVA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3172 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(CARLOS CEZAR LIMA SILVA)"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033017992","brand":"j16-4g","model":"j16","work_since":"2023-04-20","history":"","sim_number":"","iccd":"02566","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+"Anchor_Start 3013, 1485"
+
+"Anchor_Start 3013, 1485"
+
+"Anchor_Start 3079, 1485"
+
+"Anchor_Start 3079, 1485"
+
+"Anchor_Start 1901, 1020"
+
+"Anchor_Start 2649, 533"
+
+"Anchor_Start 255, 901"
+
+"Anchor_Start 2318, 400"
+
+"Anchor_Start 1898, 1018"
+
+"Anchor_Start 1898, 1018"
+
+"Anchor_Start 1898, 1018"
+
+"Anchor_Start 1734, 1161"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3175 do cliente: FR TRANSPORTES EIRELI(FABIO OLIVEIRA MOURA MARTINS)"
