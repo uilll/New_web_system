@@ -1,5 +1,6 @@
 <?php
 
+use App\AsaasCliente;
 use App\Monitoring;
 use App\insta_maint;
 use App\tracker;
@@ -61,72 +62,72 @@ function getNavigation() {
     });
 
     $currentRoute = Route::getCurrentRoute()->getName();
-    if (Auth::User()->isAdmin() ) { 
-        if (Auth::User()->isAdmin() ) { 
+    if (Auth::User()->isAdmin()) {
+        if (true){ //Auth::User()->id !=1024) {
             $items = [
                 [
                     'title' => '<i class="icon map"></i> ' . '<span class="text">' .  trans('admin.map') . '</span>',
                     'route' => 'objects.index',
                     'childs' => []
-                ]
-                ];
-            if( Auth::User()->perm('devices', 'edit') ){
-                $items[] = #Users
+                ],
+                
+                #Users
+                [
+                    'title' => '<i class="icon users"></i> ' . '<span class="text">Clientes (' . array_get($stats, 'total_users', 0) . ')</span>',
+                    'route' => '',
+                    'childs' => [
                         [
-                            'title' => '<i class="icon users"></i> ' . '<span class="text">Clientes (' . array_get($stats, 'total_users', 0) . ')</span>',
-                            'route' => '',
-                            'childs' => [
-                                [
-                                    'title' => '<i class="icon users"></i> ' . '<span class="text">Cadastros (' . array_get($stats, 'total_users', 0) . ')</span>',
-                                    'route' => 'admin.customer.index',
-                                    'childs' => ''
-                                ],
-                                [
-                                    'title' =>  '<i class="icon users"></i> ' . '<span class="text">' .  trans('admin.users').' (' . array_get($stats, 'total_users', 0) . ')</span>',
-                                    'route' => 'admin.clients.index',
-                                    'childs' => ''
-                                ]
-                            ]
-                        ];
-                                
-            }
-            if( Auth::User()->perm('devices', 'view') ){
+                            'title' => '<i class="icon users"></i> ' . '<span class="text">Cadastros (' . array_get($stats, 'total_users', 0) . ')</span>',
+                            'route' => 'admin.customer.index',
+                            'childs' => ''
+                        ],
+                        [
+                            'title' =>  '<i class="icon users"></i> ' . '<span class="text">' .  trans('admin.users').' (' . array_get($stats, 'total_users', 0) . ')</span>',
+                            'route' => 'admin.clients.index',
+                            'childs' => ''
+                        ]
+                    ]
+                ],
                 #Objects
-                $items[] = 
-                        [
-                            'title' => '<i class="icon device"></i> ' . '<span class="text">' .  trans('admin.objects').' (' . array_get($stats, 'online_devices', 0).'/'. array_get($stats, 'total_devices', 0) . ')</span>',
-                            'route' => '',
-                            'childs' => [
-                                [
-                                    'title' =>  '<span class="text">Contabilidade dos chips</span>',
-                                    'route' => 'admin.chips.index',
-                                    'childs' => ''
-                                ],
-                                [
-                                    'title' => '<i class="icon device"></i> ' . '<span class="text">Veículos (' . array_get($stats, 'online_devices', 0).'/'. array_get($stats, 'total_devices', 0) . ')</span>',
-                                    'route' => 'admin.objects.index',
-                                    'childs' => ''
-                                ],
-                                [
-                                    'title' =>  '<span class="text">Rastreadores (' . array_get($stats, 'available_trackers', 0).'/'. array_get($stats, 'total_trackers', 0) . ')</span>',
-                                    'route' => 'admin.tracker.index',
-                                    'childs' => ''
-                                ]
-                            ]
-                        ];
-                    
-            }
-        }
-    
-        else{
-            $items = [
                 [
-                    'title' => '<i class="icon map"></i> ' . '<span class="text">' .  trans('admin.map') . '</span>',
-                    'route' => 'objects.index',
-                    'childs' => []
-                ]
-                ];
-
+                    'title' => '<i class="icon device"></i> ' . '<span class="text">' .  trans('admin.objects').' (' . array_get($stats, 'online_devices', 0).'/'. array_get($stats, 'total_devices', 0) . ')</span>',
+                    'route' => '',
+                    'childs' => [
+                        [
+                            'title' =>  '<span class="text">Contabilidade dos chips</span>',
+                            'route' => 'admin.chips.index',
+                            'childs' => ''
+                        ],
+                        [
+                            'title' => '<i class="icon device"></i> ' . '<span class="text">Veículos (' . array_get($stats, 'online_devices', 0).'/'. array_get($stats, 'total_devices', 0) . ')</span>',
+                            'route' => 'admin.objects.index',
+                            'childs' => ''
+                        ],
+                        [
+                            'title' =>  '<span class="text">Rastreadores (' . array_get($stats, 'available_trackers', 0).'/'. array_get($stats, 'total_trackers', 0) . ')</span>',
+                            'route' => 'admin.tracker.index',
+                            'childs' => ''
+                        ]
+                    ]
+                ],
+                #Stock
+                [
+                    'title' => '<i class="icon device"></i> ' . '<span class="text">' .  'Estoque'.' (' . array_get($stats, 'cadastrados', 0).'/'. array_get($stats, 'em_faltas', 0) . ')</span>',
+                    'route' => '',
+                    'childs' => [
+                        [
+                            'title' =>  '<span class="text">Estoque</span>',
+                            'route' => 'admin.Stock.index',
+                            'childs' => ''
+                        ],
+                        [
+                            'title' => '<i class="icon device"></i> ' . '<span class="text">Faltas (' . array_get($stats, 'em_faltas', 0). ')</span>',
+                            'route' => 'admin.Stock.index',
+                            'childs' => ''
+                        ]
+                    ]
+                ],
+            ];
         }
         if (Auth::User()->perm('monitoring', 'view')){
             // Menu monitoramento
@@ -191,7 +192,7 @@ function getNavigation() {
         }
         
     }
-    /*else{
+    else{
         $items = [
             [
                 'title' => '<i class="icon map"></i> ' . '<span class="text">' .  trans('admin.map') . '</span>',
@@ -209,100 +210,48 @@ function getNavigation() {
                 'childs' => ''
             ]
         ];
-    }*/
+    }
     if (Auth::user()->isManager()) {
-
-            $items = [
-                [
-                    'title' => '<i class="icon map"></i> ' . '<span class="text">' .  trans('admin.map') . '</span>',
-                    'route' => 'objects.index',
-                    'childs' => []
-                ]
-                ];
             $items[] = [
                 'title' => '<i class="icon setup"></i> ' . '<span class="text">' .  trans('validation.attributes.logo') . '</span>',
                 'route' => 'admin.main_server_settings.index',
                 'childs' => []
             ];
-
-            if( Auth::User()->perm('devices', 'edit') ){
-                $items[] = #Users
-                        [
-                            'title' => '<i class="icon users"></i> ' . '<span class="text">Clientes (' . array_get($stats, 'total_users', 0) . ')</span>',
-                            'route' => '',
-                            'childs' => [
-                                [
-                                    'title' => '<i class="icon users"></i> ' . '<span class="text">Cadastros (' . array_get($stats, 'total_users', 0) . ')</span>',
-                                    'route' => 'admin.customer.index',
-                                    'childs' => ''
-                                ],
-                                [
-                                    'title' =>  '<i class="icon users"></i> ' . '<span class="text">' .  trans('admin.users').' (' . array_get($stats, 'total_users', 0) . ')</span>',
-                                    'route' => 'admin.clients.index',
-                                    'childs' => ''
-                                ]
-                            ]
-                        ];
-                                
-            }
-            if( Auth::User()->perm('devices', 'view') ){
-                #Objects
-                $items[] = 
-                        [
-                            'title' => '<i class="icon device"></i> ' . '<span class="text">' .  trans('admin.objects').' (' . array_get($stats, 'online_devices', 0).'/'. array_get($stats, 'total_devices', 0) . ')</span>',
-                            'route' => '',
-                            'childs' => [
-                                [
-                                    'title' => '<i class="icon device"></i> ' . '<span class="text">Veículos (' . array_get($stats, 'online_devices', 0).'/'. array_get($stats, 'total_devices', 0) . ')</span>',
-                                    'route' => 'admin.objects.index',
-                                    'childs' => ''
-                                ],
-                                [
-                                    'title' =>  '<span class="text">Rastreadores (' . array_get($stats, 'available_trackers', 0).'/'. array_get($stats, 'total_trackers', 0) . ')</span>',
-                                    'route' => 'admin.tracker.index',
-                                    'childs' => ''
-                                ]
-                            ]
-                        ];
-                    
-            }
     }
 
-    if (Auth::user()->isAdmin()) {
-        if (Auth::User()->perm('super_admin', 'view')){
-            $items[] = [
-                'title' => '<i class="icon events"></i> ' . '<span class="text">' .  trans('admin.events') . '</span>',
-                'route' => 'admin.events.index',
-                'childs' => []
-            ];
+    if (Auth::user()->isAdmin() && Auth::User()->id !=1024) {
+        $items[] = [
+            'title' => '<i class="icon events"></i> ' . '<span class="text">' .  trans('admin.events') . '</span>',
+            'route' => 'admin.events.index',
+            'childs' => []
+        ];
 
-            $items['content'] = [
-                'title' => '<i class="icon content"></i> ' . '<span class="text">' .  trans('admin.content') . '</span>',
-                'route' => '',
-                'childs' => [
-                    [
-                        'title' =>  '<span class="text">' . trans('admin.email_templates') . '</span>',
-                        'route' => 'admin.email_templates.index',
-                        'childs' => ''
-                    ],
-                    [
-                        'title' =>  '<span class="text">' . trans('front.sms_templates') . '</span>',
-                        'route' => 'admin.sms_templates.index',
-                        'childs' => ''
-                    ],
-                    [
-                        'title' =>  '<span class="text">' . trans('admin.map_icons') . '</span>',
-                        'route' => 'admin.map_icons.index',
-                        'childs' => ''
-                    ],
-                    [
-                        'title' =>  '<span class="text">' . trans('admin.device_icons') . '</span>',
-                        'route' => 'admin.device_icons.index',
-                        'childs' => ''
-                    ]
+        $items['content'] = [
+            'title' => '<i class="icon content"></i> ' . '<span class="text">' .  trans('admin.content') . '</span>',
+            'route' => '',
+            'childs' => [
+                [
+                    'title' =>  '<span class="text">' . trans('admin.email_templates') . '</span>',
+                    'route' => 'admin.email_templates.index',
+                    'childs' => ''
+                ],
+                [
+                    'title' =>  '<span class="text">' . trans('front.sms_templates') . '</span>',
+                    'route' => 'admin.sms_templates.index',
+                    'childs' => ''
+                ],
+                [
+                    'title' =>  '<span class="text">' . trans('admin.map_icons') . '</span>',
+                    'route' => 'admin.map_icons.index',
+                    'childs' => ''
+                ],
+                [
+                    'title' =>  '<span class="text">' . trans('admin.device_icons') . '</span>',
+                    'route' => 'admin.device_icons.index',
+                    'childs' => ''
                 ]
-            ];
-        }
+            ]
+        ];
 
         if (env('SHOW_POPUPS', false)) {
             $items['content']['childs'][] = [
@@ -406,7 +355,7 @@ function getNavigation() {
 
     $childs = [];
 
-    if ( Auth::User()->isAdmin() ) {
+    if ( Auth::User()->isAdmin()  && Auth::User()->id !=1024 ) {
         $childs[] = [
             'title' => '<i class="icon restart"></i> ' . '<span class="text">' .  trans('admin.restart_tracking_service') . '</span>',
             'route' => 'admin.restart_traccar',

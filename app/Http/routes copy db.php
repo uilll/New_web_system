@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
 use App\Monitoring;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 require_once 'global.php';
 //checkLogin();
@@ -51,7 +49,7 @@ Route::group([], function() {
 
 
 // Authenticated Frontend |active_subscription
-Route::group(['middleware' => ['auth','active_subscription', 'CheckPasswordUpdated'], 'namespace' => 'Frontend'], function () {
+Route::group(['middleware' => ['auth','active_subscription', 'check_password_updated'], 'namespace' => 'Frontend'], function () {
     Route::delete('objects/destroy/{objects}', ['as' => 'objects.destroy', 'uses' => 'DevicesController@destroy']);
 	Route::get('objects/items/{page?}/{search_item?}/{search_type?}/{device_per_page?}', ['as' => 'objects.items', 'uses' => 'ObjectsController@items']);
     //    Route::get('objects/items_page/{pagina}', ['as' => 'objects.itemspage', 'uses' => 'ObjectsController@items_page']);
@@ -71,7 +69,6 @@ Route::group(['middleware' => ['auth','active_subscription', 'CheckPasswordUpdat
     Route::get('objects/traccer_route/{id?}', ['as' => 'objects.traccer_route', 'uses' => 'ObjectsController@traccer_route']);
     Route::get('objects/anchor/{id?}', ['as' => 'objects.anchor', 'uses' => 'ObjectsController@anchor']);
     Route::get('objects/sensores/{id?}', ['as' => 'objects.sensores', 'uses' => 'ObjectsController@sensores']);
-    Route::get('objects/share/{id?}', ['as' => 'objects.share', 'uses' => 'ObjectsController@share_device']);
     Route::resource('objects', 'ObjectsController', ['only' => ['index']]);
     
 
@@ -79,6 +76,9 @@ Route::group(['middleware' => ['auth','active_subscription', 'CheckPasswordUpdat
     Route::get('objects/list/items', ['as' => 'objects.listview.items', 'uses' => 'ObjectsListController@items']);
     Route::get('objects/list/settings', ['as' => 'objects.listview_settings.edit', 'uses' => 'ObjectsListController@edit']);
     Route::post('objects/list/settings', ['as' => 'objects.listview_settings.update', 'uses' => 'ObjectsListController@update']);
+
+    # Autologin
+    Route::get('autologin/{token}', ['as' => 'autologin', 'uses' => '\Watson\Autologin\AutologinController@autologin']);
 
     # Geofences
     Route::get('geofences/export', ['as' => 'geofences.export', 'uses' => 'GeofencesController@export']);
@@ -101,8 +101,6 @@ Route::group(['middleware' => ['auth','active_subscription', 'CheckPasswordUpdat
 
     # Devices
     Route::get('devices/edit/{id}/{admin?}', ['as' => 'devices.edit', 'uses' => 'DevicesController@edit']);
-    Route::get('devices/transfer/{id}', ['as' => 'devices.transfer', 'uses' => 'DevicesController@transfer']);
-    Route::post('devices/transfer_now', ['as' => 'devices.transfer_now', 'uses' => 'DevicesController@transfer_now']);
     Route::post('devices/change_active', ['as' => 'devices.change_active', 'uses' => 'DevicesController@changeActive']);
     Route::get('devices/follow_map/{id?}', ['as' => 'devices.follow_map', 'uses' => 'DevicesController@followMap']);
     Route::get('devices/commands', ['as' => 'devices.commands', 'uses' => 'SendCommandController@getCommands']);
@@ -164,8 +162,6 @@ Route::group(['middleware' => ['auth','active_subscription', 'CheckPasswordUpdat
     Route::post('email_confirmation/resend', ['as' => 'email_confirmation.resend_code_submit', 'uses' => 'EmailConfirmationController@resendActivationCodeSubmit']);
     Route::resource('email_confirmation', 'EmailConfirmationController', ['only' => ['edit', 'update']]);
     Route::get('my_account_settings/change_language/{lang}', ['as' => 'my_account_settings.change_lang', 'uses' => 'MyAccountSettingsController@changeLang']);
-        //adicionei a linha abaixo para o controle de compra mensal da assinatura
-    //Route::get('update_account_user/{user}', ['as' => 'my_account.update_account_user', 'uses' => 'MyAccountController@update_account_user']);
 
 
     # User drivers
@@ -287,7 +283,7 @@ Route::group(['middleware' => ['auth','active_subscription', 'CheckPasswordUpdat
 });
 
 // Authenticated Admin
-Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','active_subscription', 'CheckPasswordUpdated'], 'namespace' => 'Admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','active_subscription', 'check_password_updated'], 'namespace' => 'Admin'], function () {
     Route::get('/', ['as' => 'admin', 'uses' => function () {
         return Redirect::route('admin.clients.index');
     }]);
@@ -361,7 +357,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/monitoring/auto_store', ['as' => 'admin.monitoring.auto_store', 'uses' => 'MonitoringsController@auto_store']);
 
     #finanças
-    Route::any('users/finacas', ['as' => 'admin.financas.index', 'uses' => 'MontPayController@index']);
+    Route::any('users/finacas/{search_item?}', ['as' => 'admin.financas.index', 'uses' => 'MontPayController@index']);
     
     #instalation and maintence Insta_maintController.php
     Route::any('users/Insta_maint', ['as' => 'admin.insta_maint.index', 'uses' => 'Insta_maintController@index']);
@@ -375,6 +371,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/Insta_maint/do_destroy', ['as' => 'admin.insta_maint.do_destroy', 'uses' => 'Insta_maintController@dodestroy']);
     Route::any('users/Insta_maint/destroy', ['as' => 'admin.insta_maint.destroy', 'uses' => 'Insta_maintController@destroy']);
     Route::any('users/Insta_maint/os/{id}', ['as' => 'admin.insta_maint.os', 'uses' => 'Insta_maintController@os']);
+
+    #estoque
+    Route::any('users/Stock', ['as' => 'admin.Stock.index', 'uses' => 'StockController@index']);
+    Route::any('users/Stock/page/{page?}/{search_item?}', ['as' => 'admin.Stock.index', 'uses' => 'StockController@index']);
+    Route::any('users/Stock/create', ['as' => 'admin.Stock.create', 'uses' => 'StockController@create']);
+    Route::any('users/Stock/store', ['as' => 'admin.Stock.store', 'uses' => 'StockController@store']);
+    Route::any('users/Stock/edit/{id}', ['as' => 'admin.Stock.edit', 'uses' => 'StockController@edit']);
+    Route::any('users/Stock/cancel/{id}', ['as' => 'admin.Stock.cancel', 'uses' => 'StockController@cancel']);
+    Route::any('users/Stock/canceled', ['as' => 'admin.Stock.canceled', 'uses' => 'StockController@canceled']);
+    Route::any('users/Stock/update', ['as' => 'admin.Stock.update', 'uses' => 'StockController@update']);
+    Route::any('users/Stock/do_destroy', ['as' => 'admin.Stock.do_destroy', 'uses' => 'StockController@dodestroy']);
+    Route::any('users/Stock/destroy', ['as' => 'admin.Stock.destroy', 'uses' => 'StockController@destroy']);
+    Route::any('users/Stock/os/{id}', ['as' => 'admin.Stock.os', 'uses' => 'StockController@os']);
+
     
     #Técnicos (Technicians)
     Route::any('users/Technician', ['as' => 'admin.technician.index', 'uses' => 'TechnicianController@index']);
@@ -435,12 +445,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
 });
 
 # Payments
-Route::any('payments/checkout/{plan_id}', ['as' => 'payments.checkout', 'uses' => 'Frontend\PaymentsController@getCheckout', 'middleware' => ['auth', 'CheckPasswordUpdated']]);
+Route::any('payments/checkout/{plan_id}', ['as' => 'payments.checkout', 'uses' => 'Frontend\PaymentsController@getCheckout', 'middleware' => ['auth', 'check_password_updated']]);
 Route::any('payments/get_done/{plan_id}/{user_id}', ['as' => 'payments.get_done', 'uses' => 'Frontend\PaymentsController@getPayment']);
 Route::get('payments/get_cancel', ['as' => 'payments.get_cancel', 'uses' => 'Frontend\PaymentsController@getCancel']);
-Route::get('subscriptions/renew', ['as' => 'subscriptions.renew', 'uses' => 'Frontend\SubscriptionsController@renew', 'middleware' => ['auth', 'CheckPasswordUpdated']]);
+Route::get('subscriptions/renew', ['as' => 'subscriptions.renew', 'uses' => 'Frontend\SubscriptionsController@renew', 'middleware' => ['auth', 'check_password_updated']]);
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.admin', 'CheckPasswordUpdated'], 'namespace' => 'Admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.admin', 'check_password_updated'], 'namespace' => 'Admin'], function () {
     # Billing
     Route::any('billing/index', ['as' => 'admin.billing.index', 'uses' => 'BillingController@index']);
     Route::any('billing/plans', ['as' => 'admin.billing.plans', 'uses' => 'BillingController@plans']);
@@ -550,7 +560,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.admin', 'CheckP
 
 // API
 
-Route::get('login/app/{email}/{password}', ['as' => 'api.loginapp', 'uses' => 'Frontend\ApiController@loginApp', 'middleware' => ['api_active', 'throttle:60,1'], 'CheckPasswordUpdated']);
+Route::get('login/app/{email}/{password}', ['as' => 'api.loginapp', 'uses' => 'Frontend\ApiController@loginApp', 'middleware' => ['api_active', 'throttle:60,1', 'check_password_updated']]);
 Route::get('api/save_token/{id}/{token}/{code_security}', ['as' => 'save_token', 'uses' => 'Frontend\ApiController@save_token']);
 
 
@@ -558,9 +568,9 @@ Route::get('api/save_token/{id}/{token}/{code_security}', ['as' => 'save_token',
 
 
 
-Route::any('api/login', ['as' => 'api.login', 'uses' => 'Frontend\ApiController@login', 'middleware' => ['api_active', 'throttle:60,1', 'CheckPasswordUpdated']]);
+Route::any('api/login', ['as' => 'api.login', 'uses' => 'Frontend\ApiController@login', 'middleware' => ['api_active', 'throttle:60,1', 'check_password_updated']]);
 Route::any('api/geo_address', ['as' => 'api.geo_address', 'uses' => 'Frontend\ApiController@geoAddress']);
-Route::group(['prefix' => 'api', 'middleware' => ['api_auth', 'active_subscription', 'api_active', 'CheckPasswordUpdated'], 'namespace' => 'Frontend'], function () {
+Route::group(['prefix' => 'api', 'middleware' => ['api_auth', 'active_subscription', 'api_active', 'check_password_updated'], 'namespace' => 'Frontend'], function () {
     Route::any('get_devices', ['as' => 'api.get_devices', 'uses' => 'ApiController@getDevices']);
     Route::any('get_devices_latest', ['as' => 'api.get_devices_json', 'uses' => 'ApiController@getDevicesJson']);
     
@@ -695,7 +705,7 @@ Route::group(['prefix' => 'api', 'middleware' => ['api_auth', 'active_subscripti
     Route::any('get_user_data', ['as' => 'api.get_user_data', 'uses' => 'ApiController@getUserData']);
 
     Route::any('register', ['as' => 'api.register', 'uses' => 'ApiController@RegistrationController#store']);
-    Route::any('change_password', ['as' => 'api.changemiddleware_password', 'uses' => 'ApiController@RegistrationController#changePassword']);
+    Route::any('change_password', ['as' => 'api.change_password', 'uses' => 'ApiController@RegistrationController#changePassword']);
 
     Route::any('get_sms_events', ['as' => 'api.get_sms_events', 'uses' => 'ApiController@getSmsEvents']);
 
@@ -703,9 +713,9 @@ Route::group(['prefix' => 'api', 'middleware' => ['api_auth', 'active_subscripti
     Route::any('services_keys', ['as' => 'api.services_keys', 'uses' => 'ApiController@getServicesKeys']);
 });
 
-Route::group(['prefix' => 'api/v2', 'middleware' => ['api_active', 'CheckPasswordUpdated']], function ()
+Route::group(['prefix' => 'api/v2', 'middleware' => ['api_active', 'check_password_updated']], function ()
 {
-    Route::group(['prefix' => 'tracker', 'middleware' => ['tracker_auth', 'CheckPasswordUpdated']], function () {
+    Route::group(['prefix' => 'tracker', 'middleware' => ['tracker_auth', 'check_password_updated']], function () {
         Route::any('login', ['as' => 'tracker.login', 'uses' => 'Frontend\Tracker\ApiController@login']);
         Route::get('tasks', ['as' => 'tracker.task.index', 'uses' => 'Frontend\Tracker\TasksController@getTasks']);
         Route::get('tasks/statuses', ['as' => 'tracker.task.statuses', 'uses' => 'Frontend\Tracker\TasksController@getStatuses']);
@@ -719,7 +729,7 @@ Route::group(['prefix' => 'api/v2', 'middleware' => ['api_active', 'CheckPasswor
     });
 });
 
-Route::group(['prefix' => 'api/admin', 'middleware' => ['api_auth', 'active_subscription', 'api_active','auth.admin', 'CheckPasswordUpdated']], function () {
+Route::group(['prefix' => 'api/admin', 'middleware' => ['api_auth', 'active_subscription', 'api_active','auth.admin', 'check_password_updated']], function () {
     Route::post('client', ['as' => 'api.admin.client.store', 'uses' => 'Admin\ClientsController@store']);
 });
 
@@ -765,45 +775,14 @@ Route::get('/teste', ['as' => 'teste', 'uses' => function () {echo 'teste2';}]);
 //Route::post('authentication/store/app', 'Frontend\LoginController@storeApp');
 Route::get('authentication/store/app/{email}/{senha}', 'Frontend\LoginController@storeApp');
 
-Route::get('update_account_user/{user}', function($user){
-    $data_ = Carbon::now("-3");
-    $data_now = Carbon::now("-3");
-    $data_->addMonth(1);
-    $data_no_BD = DB::table('users')->where('id', $user)->get(['subscription_expiration']);
-
-    //var_dump($data_no_BD );
-    
-    foreach($data_no_BD as $coluna){
-        //echo $coluna->subscription_expiration;
-
-        $data_no_BD = Carbon::parse($coluna->subscription_expiration, '+3');
-        
-        
-    }
-
-    if($data_no_BD->lessThan($data_now)){
-        DB::table('users')->where('id', $user)->update(['subscription_expiration' => $data_]);
-        $externo = $data_->format('d/m/Y');
-        echo $externo->created_at->toDateString();
-    }
-    else{
-        DB::table('users')->where('id', $user)->update(['subscription_expiration' => $data_no_BD->addMonth(1)]);
-        $externo = $data_no_BD->format('d/m/Y');
-        $externo = str_replace(" ", "",$externo);
-
-        echo $externo;
-    }
-});
-
-Route::get('testex', function (){
-    echo "teste";
-});
-# Objects
-//Route::any('users/objects/app', ['as' => 'objects.indexApp', 'uses' => 'Frontend\ObjectsController@indexApp']);
-
-// Cookies
+# Autologin
 Route::get('autologin/{token}', ['as' => 'autologin', 'uses' => '\Watson\Autologin\AutologinController@autologin']);
 
+Route::get('testex', 'Frontend\LoginController@testex');
+# Objects
+Route::any('users/objects/app', ['as' => 'objects.indexApp', 'uses' => 'Frontend\ObjectsController@indexApp']);
+
+// Cookies
 Route::get('/cookie/set/{name}/{value}', ['as' => 'set_cookie', 'uses' => 'CookieController@setCookie']);
 Route::get('/cookie/get/{name}', ['as' => 'get_cookie', 'uses' => 'CookieController@getCookie']);
 

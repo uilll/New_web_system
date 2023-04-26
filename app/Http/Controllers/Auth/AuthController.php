@@ -42,6 +42,7 @@ class AuthController extends Controller {
 	protected function authenticated(Request $request, $user)
 	{
 		$request->session()->put('last_login_at', Carbon::now());
+		//debugar(true, json_decode("Seção do Authcontroller resultado ->".$request->session()));
 	}
 
 }

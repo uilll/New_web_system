@@ -21297,6 +21297,9 @@ $(document).on("change", '#comando_personalisado', function() {
         case '[J16] - Mensagem_angulo':
             $('#comandos_ textarea').text("SZCS#ANGLEVALUE=10-045");
             break;
+        case '[J16] - Sensibilidade / Níveis 1-6':
+            $('#comandos_ textarea').text("SZCS#VIBL=6");
+            break;
     }
 });
 

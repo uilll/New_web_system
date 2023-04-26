@@ -170,7 +170,7 @@ class ObjectsController extends Controller {
 					//#######################################################
 					//CÓDIGO ABAIXO PARA TESTE
 					if (Auth::User()->id == 6) {
-						//dd(getCitiesByState());
+						//dd(Auth::User());
 					}
 
 					//#######################################################

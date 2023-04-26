@@ -74,6 +74,7 @@
                                 '[J16] - Ignicao_virtual'=>'35 - [ J16 ] - Ignição virtual[0], real[1]',
                                 '[J16] - Solicitar_localizacao'=>'36 - [ J16 ] - Solicitar localização',
                                 '[J16] - Mensagem_angulo'=>'37 - [ J16 ] - Mensagem por ângulo',
+                                '[J16] - Sensibilidade / Níveis 1-6'=>'38 - [J16] - Sensibilidade / Níveis 1-6',
 
                                 ], 
                                 

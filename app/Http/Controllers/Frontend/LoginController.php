@@ -30,6 +30,12 @@ class LoginController extends Controller {
     public function create($id = NULL)
     {
         if (Auth::check()) {
+            $user = Auth::user();
+            $user->loged_at = Carbon::now();
+            $user->save();
+
+            session(['last_login_at' => $user->last_login_at]);
+
             return Redirect::route('objects.index');
         }
 

@@ -173,7 +173,7 @@ class TrackerController extends BaseController {
                 $user_ = Auth::User()->id;
             else
                 $user_ = 0;
-            debugar(true, "Início criar novo cadastro de rastreador");
+            //debugar(true, "Início criar novo cadastro de rastreador");
             $item = new Tracker([
                 'active' => $request->input('active'),
                 'in_use' => 0,
