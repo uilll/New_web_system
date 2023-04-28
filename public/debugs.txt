@@ -210,3 +210,251 @@
 "Anchor_Start 2418, 1251"
 
 "Anchor_Start 2418, 1251"
+
+"Anchor_Start 2333, 1560"
+
+"Anchor_Start 2333, 1560"
+
+"Anchor_Start 2333, 1560"
+
+"Anchor_Start 2333, 1560"
+
+"Anchor_Start 3161, 1569"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3185 do cliente: TECNICO RODRIGO FEIRA DE SANTANA - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3182 do cliente: TECNICO RODRIGO FEIRA DE SANTANA - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3188 do cliente: TECNICO RODRIGO FEIRA DE SANTANA - TESTE()"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21317,"imei":"007904808","brand":"SUNTEC","model":"SUNTEC 310U","active":1,"in_use":0,"test":0,"device_id":3193,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-26","history":"\r\n ","excess_data":0,"sim_number":"5511916422393","iccd":"89551080357020894732","operator":"WL.VIVO.COM.BR","manager_id":1085,"created_at":"2023-04-26 00:00:00","updated_at":"2023-04-26 00:00:00"}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2181 do cliente: CARLOS ADRIANO MOTA DOS SANTOS(CARLOS ADRIANO MOTA DOS SANTOS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 626 do cliente: CANCELAR(CARLITO CARVALHO NASCIMENTO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 629 do cliente: CANCELAR(CARLITO CARVALHO NASCIMENTO)"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"807324576","brand":"SUNTECH - SUNTECH","model":"ST310UC2","work_since":"2023-04-27","history":"","sim_number":"","iccd":"89553202100036378715","operator":"HINOVA.BR \/ ALGAR ","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"511456393","brand":"SUNTECH - CL","model":"ST310U","work_since":"2023-04-27","history":"","sim_number":"","iccd":"89553202100050821731","operator":"HINOVA.BR \/ ALGAR ","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"1269585","brand":"MXT140","model":"MXT140","work_since":"2023-04-27","history":"","sim_number":"","iccd":"","operator":"","manager_id":1085}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"511176306","brand":"SUNTECH - CL","model":"ST310U","work_since":"2023-04-27","history":"","sim_number":"","iccd":"89553202100047602061","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"511645633","brand":"SUNTECH - SUNTECH","model":"ST310U","work_since":"2023-04-27","history":"","sim_number":"","iccd":"89553202100050821855","operator":"HINOVA.BR \/ ALGAR ","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"807323685","brand":"SUNTECH - SUNTECH","model":"ST310UC2","work_since":"2023-04-27","history":"","sim_number":"","iccd":"89553202100050822176","operator":"HINOVA.BR \/ ALGAR ","manager_id":0}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21318,"imei":"807324576","brand":"SUNTECH - SUNTECH","model":"ST310UC2","active":"1","in_use":0,"test":0,"device_id":3194,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-27","history":"\r\n ","excess_data":0,"sim_number":"","iccd":"89553202100047603234","operator":"HINOVA.BR \/ ALGAR ","manager_id":0,"created_at":"2023-04-27 00:00:00","updated_at":"2023-04-27 00:00:00"}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2301 do cliente: GABRIEL DA SILVA MOREIRA()"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"511377624","brand":"SUNTEC 310U","model":"SUNTEC","work_since":"2023-04-27","history":"","sim_number":"5511964908258","iccd":"89551080357021057313","operator":"WL.VIVO.COM.BR","manager_id":1085}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3183 do cliente: KAIO FABIANO DIAS DE LIMA(KAIO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3183 do cliente: KAIO FABIANO DIAS DE LIMA(KAIO FABIANO DIAS DE LIMA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3178 do cliente: FR TRANSPORTES E MONTAGENS INDUSTRIAIS LTDA(FR TRANSPORTE)"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022032831351","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-27","history":"","sim_number":"","iccd":"","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033016549","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-27","history":"","sim_number":"","iccd":"","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033018974","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-27","history":"","sim_number":"","iccd":"","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033015335","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-27","history":"","sim_number":"","iccd":"","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3178 do cliente: FR TRANSPORTES E MONTAGENS INDUSTRIAIS LTDA(FR TRANSPORTE)"
+
+"Anchor_Start 1743, 1020"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3178 do cliente: FR TRANSPORTES E MONTAGENS INDUSTRIAIS LTDA(FR TRANSPORTES E MONTAGENS INDUSTRIAIS LTDA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3161 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(EDIVAN ALVES DE JESUS )"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3184 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(EDIVAN ALVES DE JESUS )"
+
+"Anchor_Start 3166, 1555"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21227,"imei":"868022032813722","brand":"J16A","model":"J16A","active":1,"in_use":1,"test":0,"device_id":3103,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-03-27","history":"\r\n Instalado em: \r\n\r\n \r\n \r\n \r\n ","excess_data":0,"sim_number":"5516995034027","iccd":"89553202100025165743","operator":"ss.algar.br","manager_id":1085,"created_at":"2023-03-27 00:00:00","updated_at":"2023-04-20 00:00:00"}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022032911567","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"71999149765","iccd":"89551180157001606454","operator":"DAP.VIVO.COM.BR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3060 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(DANIEL DE SANTANA SENA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3171 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(DANIEL DE SANTANA SENA)"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033015582","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"71996408063","iccd":"89551180157001611298","operator":"DAP.VIVO.COM.BR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022032829819","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"71999123642","iccd":"89551180157001606587","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033015608","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"71999149765","iccd":"89551180157001606454","operator":"DAP.VIVO.COM.BR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1379 do cliente: CANCELAR(JACKSON BRANDAO DE SANTANA)"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022032911575","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"71999120189","iccd":"89551180157001606595","operator":"DAP.VIVO.COM.BR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1809 do cliente: TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3175 do cliente: TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3175 do cliente: TESTE()"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21299,"imei":"868022033017828","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3175,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-20","history":"\r\n \r\n ","excess_data":0,"sim_number":"16996901201","iccd":"89553202100050821897","operator":"HINOVA.ALGAR 4G","manager_id":0,"created_at":"2023-04-20 00:00:00","updated_at":"2023-04-20 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21325,"imei":"868022032831351","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3201,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-27","history":"\r\n ","excess_data":0,"sim_number":"16996902894","iccd":"89553202100050822135","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-27 00:00:00","updated_at":"2023-04-27 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21305,"imei":"868022033018586","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3181,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-25","history":"\r\n ","excess_data":0,"sim_number":"16999056412","iccd":"89553202100050822218","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-25 00:00:00","updated_at":"2023-04-25 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21330,"imei":"868022033015582","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3206,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-28","history":"\r\n ","excess_data":0,"sim_number":"16990889615","iccd":"89553202100050821939","operator":"APN,hinova.br,algar,algar#","manager_id":0,"created_at":"2023-04-28 00:00:00","updated_at":"2023-04-28 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21327,"imei":"868022033018974","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3203,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-27","history":"\r\n ","excess_data":0,"sim_number":"16994692200","iccd":"89553202100050822150","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-27 00:00:00","updated_at":"2023-04-27 00:00:00"}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1054 do cliente: JOAO PAULO SILVA DE LIMA(JOAO PAULO SILVA DE LIMA)"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21327,"imei":"868022033018974","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3203,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-27","history":"\r\n \r\n ","excess_data":0,"sim_number":"16994692200","iccd":"89553202100050822150","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-27 00:00:00","updated_at":"2023-04-28 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21328,"imei":"868022033015335","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3204,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-27","history":"\r\n ","excess_data":0,"sim_number":"16999901354","iccd":"89553202100050822127","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-27 00:00:00","updated_at":"2023-04-27 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21305,"imei":"868022033018586","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3181,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-25","history":"\r\n \r\n ","excess_data":0,"sim_number":"16999056412","iccd":"89553202100050822218","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-25 00:00:00","updated_at":"2023-04-28 00:00:00"}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033018859","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"16994697702","iccd":"89553202100050821962","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033016739","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"16996822109","iccd":"89553202100050821871","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033015152","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"","iccd":"","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033015152","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"","iccd":"","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21335,"imei":"868022033016739","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3211,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-28","history":"\r\n ","excess_data":0,"sim_number":"","iccd":"","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-28 00:00:00","updated_at":"2023-04-28 00:00:00"}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033019238","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"","iccd":"","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033014528","brand":"J16-4G","model":"J16-4G","work_since":"2023-04-28","history":"","sim_number":"","iccd":"","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21339,"imei":"868022033014528","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3214,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-28","history":"\r\n ","excess_data":0,"sim_number":"16999907886","iccd":"89553202100050821863","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-28 00:00:00","updated_at":"2023-04-28 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21338,"imei":"868022033019238","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3213,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-28","history":"\r\n ","excess_data":0,"sim_number":"16994690608","iccd":"89553202100050822119","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-28 00:00:00","updated_at":"2023-04-28 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21335,"imei":"868022033016739","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3211,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-28","history":"\r\n \r\n ","excess_data":0,"sim_number":"16996822109","iccd":"89553202100050821871","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-28 00:00:00","updated_at":"2023-04-28 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21336,"imei":"868022033015152","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3212,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-28","history":"\r\n ","excess_data":0,"sim_number":"16994697674","iccd":"89553202100050821954","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0,"created_at":"2023-04-28 00:00:00","updated_at":"2023-04-28 00:00:00"}
+
+"Finalizou OK?"
+
+"Anchor_Start 2882, 1423"
+
+"Anchor_Start 2882, 1423"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3200 do cliente: T A TRANSPORTES LTDA ME()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2552 do cliente: TESTE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3103 do cliente: D C TRANSPORTE E TURISMO EIRELI()"
