@@ -458,3 +458,45 @@
 "O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2552 do cliente: TESTE()"
 
 "O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3103 do cliente: D C TRANSPORTE E TURISMO EIRELI()"
+
+"Anchor_Start 1898, 1018"
+
+"Anchor_Start 1898, 1018"
+
+"Anchor_Start 1979, 1265"
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}
+
+{}

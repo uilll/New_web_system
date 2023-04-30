@@ -63,8 +63,8 @@ class CheckPasswordUpdated
                     $lastLogin = Carbon::parse($request->session()->get('last_login_at'));
                     
                     if (!$lastLogin || $passwordUpdated->gt($lastLogin)) {
-                        //Auth::logout(); //Aguardar o pessoal logar amanhã 24/04/2023 e depois descomentar esssa linha
-                        debugar(true, "Deslogou");
+                        Auth::logout(); //Aguardar o pessoal logar amanhã 24/04/2023 e depois descomentar esssa linha
+                        //debugar(true, "Deslogou");
                         
                         return redirect()->route('login')
                             ->withErrors(['message' => 'Sua senha foi alterada. Por favor, faça login novamente.']);

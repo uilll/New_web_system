@@ -242,7 +242,7 @@
                 $('#client-name').text(clientName);
                 clientId = $(this).attr('data-customer-id');
 
-                //console.log(clientId);
+                console.log(clientId);
                 // Update data-customer-id and data-customer-name attributes
                 $('.add-message').attr('data-customer-id', $('.client-name').attr('data-customer-id'));
                 $('.add-message').attr('data-customer-name', clientName);
@@ -250,13 +250,6 @@
 
             $('.message-subject').on('click', function(e) {
                 e.preventDefault();
-
-                 // Remover a classe active das outras mensagens
-                $('.message-subject').removeClass('active');
-
-                // Adicionar a classe active à mensagem selecionada
-                $(this).addClass('active');
-
                 var message = $(this).text();
                 var client_id = $(this).data('client-id');
                 var company_id = $(this).data('company-id');
@@ -278,7 +271,6 @@
                         var messagesDiv = $('#mensagens');
                         messagesDiv.html(response);
                         messagesDiv.scrollTop(messagesDiv.prop("scrollHeight"));
-                        //console.log(response);
                         
                         scrollToBottom();
                     },
@@ -317,51 +309,36 @@
                         'X-CSRF-TOKEN': token // Adicione esta linha para incluir o token CSRF no cabeçalho da solicitação
                     },
                     success: function(response) {
+                        //console.log("entrou1?");
+                        //console.log("response:", response);
                         if (response.success) {
-                             //console.log("Entrou1");
-                            e.preventDefault();
+                            //console.log("entrou2?");
+                            var message = $('.message-subject[data-subject-id="' + response.message_id + '"]').text();
+                            var client_id = response.client_id;
+                            var subject = encodeURIComponent(message);
 
-
-                            const message_subject = $('.message-subject.active');
-                            var message = message_subject.text();
-                            var client_id = message_subject.data('client-id');
-                            var company_id = message_subject.data('company-id');
-                            var user_id = message_subject.data('user-id');
-                            var subject = message_subject.data('subject-id');
-
-                            const activeMessage = $('.message-subject.active');
-                            const clientId = activeMessage.data('client-id');
-                            const messageId = activeMessage.data('subject-id');
-
-                            //console.log(clientId,messageId);
-
-                            // Atualizar os campos hidden
-                            $('input[name="client_id"]').val(clientId);
-                            $('input[name="company_id"]').val(company_id);
-                            $('input[name="user_id"]').val(user_id);
-
-                            //console.log(clientId,messageId);
-
+                            var ajaxUrl = '{{ route("messages.get_messages", ["client" => ":client_id", "subject" => ":subject"]) }}'.replace(':client_id', client_id).replace(':subject', subject);
+                            //console.log("ajaxUrl:", ajaxUrl); // Adicione esta linha para verificar a URL AJAX
+                            
                             $.ajax({
-                                url: '{{ route("messages.get_messages", ["client_id" => ":client_id", "subject" => ":subject"]) }}'.replace(':client_id', clientId).replace(':subject', messageId),
+                                url: ajaxUrl,
                                 type: 'GET',
                                 dataType: 'html',
                                 success: function(response) {
-                                    var messagesDiv = $('#mensagens');
-                                    messagesDiv.html(response);
-                                    messagesDiv.scrollTop(messagesDiv.prop("scrollHeight"));
-                                    //console.log(response);
-                                    
-                                    scrollToBottom();
+                                    //console.log("entrou3?");
+                                    $('#mensagens').html(response);
+
+                                    // Limpe o conteúdo do textarea
+                                    $("textarea[name='body']").val("");
+
+                                    // Role a barra de rolagem do elemento "mensagens" para baixo
+                                    $("#mensagens").scrollTop($("#mensagens")[0].scrollHeight);
 
                                 },
                                 error: function(xhr, status, error) {
                                     console.error(xhr.responseText);
                                 }
                             });
-
-                            // Limpe o conteúdo do textarea
-                                    $("textarea[name='body']").val("");
                         } else {
                             console.error(response.error);
                         }
@@ -392,7 +369,7 @@
     $(document).on("keydown", "#search_admin_", function (e) {
         var tecla = (e.keyCode?e.keyCode:e.which);                        
         if(tecla == 13){
-            url = "{{ asset('/admin/users')}}"+"/"+$("#search_menu").text()+"/page/1/"+$("#search_admin_").val();
+            url= "https://bd.carseg.com.br/admin/users/"+$("#search_menu").text()+"/page/1/"+$("#search_admin_").val();
             $(location).prop('href', url);
         }    
         
@@ -401,7 +378,7 @@
         var tecla = (e.keyCode?e.keyCode:e.which);                        
         if(tecla == 13){
             if(!$("#search_log").val()==""){
-                url = "{{ asset('/admin/logs/search')}}"+"/"+$("#search_log").val();
+                url= "https://bd.carseg.com.br/admin/logs/search/"+$("#search_log").val();
                 $(location).prop('href', url);
             }
         }    
@@ -427,7 +404,7 @@
        //alert($("#device_id").text())
         //$("#segue").show();
         //$("#segue").attr('src', $('#segue').attr('src')); // $('#map_iframe').attr('src', $('#map_iframe').attr('src'));
-       //iframe.attr("src", "https://admin.carseg.com.br/devices/follow_map/577");
+       //iframe.attr("src", "https://bd.carseg.com.br/devices/follow_map/577");
        
     });
     $.ajaxSetup({cache: false});
