@@ -162,19 +162,24 @@ function getNavigation() {
         if (Auth::User()->perm('finances', 'view')){
             //Menu Finanças
             $items[] = [
-            
                 'title' => '<i class="icon check"></i> ' . '<span class="text">' .  'Finanças'.' (' . array_get($stats, 'total_active_events', 0).'/'.array_get($stats, 'total_maintence', 0).' Manut.)</span>', 
                 'route' => '',
                 'childs' => [
                     [
-                        'title' =>  '<i class="icon users"></i>'.'<span class="text"> Clientes Asaas'.' (' . '00'.'/'. '00' . ')</span>',
-                        'route' => 'asaas.clientes.listarClientes',
-                        'childs' => ''
-                    ],
-                    [
-                        'title' =>  '<i class="icon check"></i>'.'<span class="text"> Cobranças Asaas'.' (' . '00'.'/'. '00' . ')</span>'   ,
-                        'route' => 'asaas.cobranças.listarCobranças',
-                        'childs' => ''
+                        'title' => '<i class="icon check"></i> ' . '<span class="text">Asaas</span>',
+                        'route' => '',
+                        'childs' => [
+                            [
+                                'title' =>  '<i class="icon users"></i>'.'<span class="text"> Clientes Asaas'.' (' . '00'.'/'. '00' . ')</span>',
+                                'route' => 'asaas.clientes.listarClientes',
+                                'childs' => ''
+                            ],
+                            [
+                                'title' =>  '<i class="icon check"></i>'.'<span class="text"> Cobranças Asaas'.' (' . '00'.'/'. '00' . ')</span>',
+                                'route' => 'asaas.cobranças.listarCobranças',
+                                'childs' => ''
+                            ],
+                        ]
                     ],
                     [
                         'title' =>  '<i class="icon check"></i>'.'<span class="text">Mensalidades'.' (' . array_get($stats, 'total_active_events', 0).'/'. array_get($stats, 'total_events', 0) . ')</span>',
@@ -188,6 +193,7 @@ function getNavigation() {
                     ]
                 ]
             ];
+
         }
         
     }
@@ -444,18 +450,18 @@ function parseNavigation($items, $currentRoute, &$active = 0, $level = 1) {
             ($level == 1) && $active = 0;
             $childs = !empty($item['childs']);
             $innerLevel = $level + 1;
-            //Sets active item
+            // Sets active item
             ($currentRoute == $item['route']) && $active = 1;
 
             // Gets childs html
-            $innerHtml = parseNavigation($item['childs'], $currentRoute, $active, $innerLevel);
+            $innerHtml = $childs ? parseNavigation($item['childs'], $currentRoute, $active, $innerLevel) : '';
 
             $html .= '<li class="' . array_get($item, 'class', '')
                 .($active && $level == 1 ? ' active' : '')
                 .($childs && $level > 1 ? ' dropdown-submenu' : '')
                 . '">
 
-            <a ' . ($level > 1 ? '' : ($childs ? 'data-hover="dropdown" data-toggle="dropdown"' : '')) . ' href="' . (!empty($item['route']) ? route($item['route']) : 'javascript:;') . '"' . (!empty($item['attribute']) ? $item['attribute'] : '') . '>
+            <a ' . ($childs ? 'class="dropdown-toggle" data-toggle="dropdown"' : '') . ' href="' . (!empty($item['route']) ? route($item['route']) : 'javascript:;') . '"' . (!empty($item['attribute']) ? $item['attribute'] : '') . '>
                 ' . $item['title'].
                 ($level == 1 && $childs ? '<i class="' . ($active ? 'selected' : '') . '"></i>' : '').'
             </a>';
