@@ -335,6 +335,11 @@ function getNavigation() {
                             'childs' => ''
                         ],
                         [
+                            'title' =>  '<span class="text">' . 'INSTITUIÇÕES DE PAGAMENTOS' . '</span>',
+                            'route' => 'instituicao_pagamento.index',
+                            'childs' => ''
+                        ],
+                        [
                             'title' =>  '<span class="text">' . trans('validation.attributes.user') . '</span>',
                             'route' => 'admin.billing.index',
                             'childs' => ''

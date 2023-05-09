@@ -18,8 +18,10 @@ class customer extends Model
         'users_passwords',
         'obs',
         'manager_id',
+        'all_users',
         'created_at',
-        'updated_at' 
+        'id_app_ext',
+        'updated_at',
     ]; 
 }
 

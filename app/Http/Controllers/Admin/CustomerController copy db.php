@@ -60,176 +60,176 @@ class CustomerController extends BaseController {
     public function index($page = 0, $search_item = "") {
         
         //Atualização de rastreadores
-            /*
-            $devices = UserRepo::getDevices($this->user->id);
-            //= DB::table('devices')->where('registration_number', 'like','%st%')->where('active', 1)->get();
-            
-            $i=0;
-            $name = '';
-            $cpf_cnpj = '';
-            $address = '';
-            $city = '';
-            $contact = '';
-            $users_passwords = '';
-            
-            foreach ($devices as $device){
-                $i = $i +1;
-                $name = $device->name;
-                $exist = customer::where('name', $name)->count();
-                if($exist==0){
-                    $cpf_cnpj = $device->vin;
-                    if (str_contains(Str::lower($device->additional_notes), 'endereço:')){
-                            $pos = strripos(Str::lower($device->additional_notes), 'endereço:');
-                            $address = substr($device->additional_notes, $pos+10, 70);
-                            //dd($address);
-                    }
-                    if (str_contains(Str::lower($device->additional_notes), 'cidade:')){
-                            $pos = strripos(Str::lower($device->additional_notes), 'cidade:');
-                            $city = substr($device->additional_notes, $pos+8, 24);
-                            //dd($city);
-                    }
-                    if (str_contains(Str::lower($device->additional_notes), 'contato:')){
-                            $pos = strripos(Str::lower($device->additional_notes), 'contato:');
-                            $contact = substr($device->additional_notes, $pos+8, 70);
-                            //dd($contact);
-                    }
-                    if (!str_contains(Str::lower($device->additional_notes), 'contato:') && (str_contains(Str::lower($device->additional_notes), 'cel:') || str_contains(Str::lower($device->additional_notes), 'tel:'))){
-                        
-                        if (str_contains(Str::lower($device->additional_notes), 'cel:') && str_contains(Str::lower($device->additional_notes), 'tel:')){
-                            //dd('Olá');
-                            $pos_cel = strripos(Str::lower($device->additional_notes), 'cel:');
-                            $pos_tel = strripos(Str::lower($device->additional_notes), 'tel:');
-                            if ($pos_cel>$pos_tel)
-                                $pos_init = $pos_tel;
-                            else
-                                $pos_init = $pos_cel;
-                            
-                        }
-                        
-                        if (!str_contains(Str::lower($device->additional_notes), 'cel:') && str_contains(Str::lower($device->additional_notes), 'tel:')){
-                            $pos_tel = strripos(Str::lower($device->additional_notes), 'tel:');
+        /*
+        $devices = UserRepo::getDevices($this->user->id);
+        //= DB::table('devices')->where('registration_number', 'like','%st%')->where('active', 1)->get();
+        
+        $i=0;
+        $name = '';
+        $cpf_cnpj = '';
+        $address = '';
+        $city = '';
+        $contact = '';
+        $users_passwords = '';
+        
+        foreach ($devices as $device){
+            $i = $i +1;
+            $name = $device->name;
+            $exist = customer::where('name', $name)->count();
+            if($exist==0){
+                $cpf_cnpj = $device->vin;
+                if (str_contains(Str::lower($device->additional_notes), 'endereço:')){
+                        $pos = strripos(Str::lower($device->additional_notes), 'endereço:');
+                        $address = substr($device->additional_notes, $pos+10, 70);
+                        //dd($address);
+                }
+                if (str_contains(Str::lower($device->additional_notes), 'cidade:')){
+                        $pos = strripos(Str::lower($device->additional_notes), 'cidade:');
+                        $city = substr($device->additional_notes, $pos+8, 24);
+                        //dd($city);
+                }
+                if (str_contains(Str::lower($device->additional_notes), 'contato:')){
+                        $pos = strripos(Str::lower($device->additional_notes), 'contato:');
+                        $contact = substr($device->additional_notes, $pos+8, 70);
+                        //dd($contact);
+                }
+                if (!str_contains(Str::lower($device->additional_notes), 'contato:') && (str_contains(Str::lower($device->additional_notes), 'cel:') || str_contains(Str::lower($device->additional_notes), 'tel:'))){
+                    
+                    if (str_contains(Str::lower($device->additional_notes), 'cel:') && str_contains(Str::lower($device->additional_notes), 'tel:')){
+                        //dd('Olá');
+                        $pos_cel = strripos(Str::lower($device->additional_notes), 'cel:');
+                        $pos_tel = strripos(Str::lower($device->additional_notes), 'tel:');
+                        if ($pos_cel>$pos_tel)
                             $pos_init = $pos_tel;
-                        }
-                        if (str_contains(Str::lower($device->additional_notes), 'cel:') && !str_contains(Str::lower($device->additional_notes), 'tel:')){
-                            $pos_cel = strripos(Str::lower($device->additional_notes), 'cel:');
+                        else
                             $pos_init = $pos_cel;
-                        }
-                        //dd('Olá');    
-                        if (str_contains(Str::lower($device->additional_notes), 'cidade:')){
-                            $pos_city = strripos(Str::lower($device->additional_notes), 'cidade:');
-                            if ($pos_city>$pos_init)
-                                $contact = substr($device->additional_notes, $pos_init+5, $pos_city);
-                            else
-                                $contact = substr($device->additional_notes, $pos_init+5, 70);
-                        }
+                        
+                    }
+                    
+                    if (!str_contains(Str::lower($device->additional_notes), 'cel:') && str_contains(Str::lower($device->additional_notes), 'tel:')){
+                        $pos_tel = strripos(Str::lower($device->additional_notes), 'tel:');
+                        $pos_init = $pos_tel;
+                    }
+                    if (str_contains(Str::lower($device->additional_notes), 'cel:') && !str_contains(Str::lower($device->additional_notes), 'tel:')){
+                        $pos_cel = strripos(Str::lower($device->additional_notes), 'cel:');
+                        $pos_init = $pos_cel;
+                    }
+                    //dd('Olá');    
+                    if (str_contains(Str::lower($device->additional_notes), 'cidade:')){
+                        $pos_city = strripos(Str::lower($device->additional_notes), 'cidade:');
+                        if ($pos_city>$pos_init)
+                            $contact = substr($device->additional_notes, $pos_init+5, $pos_city);
                         else
                             $contact = substr($device->additional_notes, $pos_init+5, 70);
-                        //dd($contact);
                     }
-                    
-                    if (str_contains(Str::lower($device->additional_notes), 'usuário:') && str_contains(Str::lower($device->additional_notes), 'senha:')){
-                        $pos = strripos(Str::lower($device->additional_notes), 'usuário:');
-                        $usuario = substr($device->additional_notes, $pos+9, 10);
-                        $pos = strripos(Str::lower($device->additional_notes), 'senha:');
-                        $senha = substr($device->additional_notes, $pos+7, 10);
-                        $users_passwords = 'Usuário: '.$usuario.' Senha: '.$senha;
-                        //dd($users_passwords);
-                    }
-                    
-                    $new_customer = new customer([
-                                'active' => true,
-                                'name' => $name,
-                                'in_debt' => false,
-                                'cpf_cnpj' => $cpf_cnpj,
-                                'address' => $address,
-                                'city' => $city,
-                                'contact' => $contact,
-                                'users_passwords' => $users_passwords
-                            ]);
-                            //dd($new_customer);
-                            $new_customer->save();
-                            //dd('olá');
-                            
-                    $name = '';
-                    $cpf_cnpj = '';
-                    $address = '';
-                    $city = '';
-                    $contact = '';
-                    $users_passwords = '';
+                    else
+                        $contact = substr($device->additional_notes, $pos_init+5, 70);
+                    //dd($contact);
                 }
-                //$contact = null;
                 
-                /*if ($device->has('traccar')){
-                    $i++;
-                    //dd($device->traccar->uniqueId);
-                    $tracker = Tracker::find($device->id);
-                    $service = Insta_maint::where('device_id',$device->id)->count();
-                    
-                    $in_service = false;
-                    if (!$service== 0)
-                        $in_service = true;
-                    //dd($device);
-                    if (str_contains(Str::lower($device->additional_notes), 'data da manutenção:')){
-                        $pos = strripos(Str::lower($device->additional_notes), 'data da manutenção:');
-                        $maintence_date = substr($device->additional_notes, $pos+22, 10);
-                        $maintence_quant = 1;
-                    }
-                    else{
-                        $maintence_date = '';
-                        $maintence_quant = 0;
-                    }
-                    
-                    if (str_contains(Str::lower($device->additional_notes), 'data da instalação:')){
-                        $pos = strripos(Str::lower($device->additional_notes), 'data da instalação:');
-                        $work_since =  preg_replace('/[^\d\/]/', '',substr(Str::lower($device->additional_notes), $pos+22, 10));
-                    }
-                    else
-                        $work_since = '';
-                    //if($i == 174)
-                    //    dd($device);
-                    if (str_contains(Str::lower($device->additional_notes), 'iccd:')){
-                        $pos = strripos(Str::lower($device->additional_notes), 'iccd:');
-                        $iccd = substr($device->additional_notes, $pos+6, 41);
-                        $iccd = substr(Str::lower($device->additional_notes), $pos+22, 10);
-                    }
-                    else{
-                        $iccd = $device->sim_number;
-                    }
-                    //dd($iccd);
-                    $operator = preg_replace('/[0-9]/', '', $device->sim_number);
-                    if ($device->traccar->protocol== 'gt06')
-                        $brand = "concox";
-                    elseif ($device->traccar->protocol == 'suntech')
-                        $brand = "suntech";
-                    elseif ($device->traccar->protocol == 'mxt')
-                        $brand = "mxt";
-                    //elseif ($device->traccar->protocol == null)
-                    else
-                    {
-                        //dd($device->traccar->protocol);
-                    }   
-                        
-                    if (is_null($tracker)){
-                        //dd($device);
-                        $new_tracker = new Tracker([
+                if (str_contains(Str::lower($device->additional_notes), 'usuário:') && str_contains(Str::lower($device->additional_notes), 'senha:')){
+                    $pos = strripos(Str::lower($device->additional_notes), 'usuário:');
+                    $usuario = substr($device->additional_notes, $pos+9, 10);
+                    $pos = strripos(Str::lower($device->additional_notes), 'senha:');
+                    $senha = substr($device->additional_notes, $pos+7, 10);
+                    $users_passwords = 'Usuário: '.$usuario.' Senha: '.$senha;
+                    //dd($users_passwords);
+                }
+                
+                $new_customer = new customer([
                             'active' => true,
-                            'imei' => $device->traccar->uniqueId,
-                            'brand' => $brand,
-                            'model' => $device->registration_number,
-                            'in_use' => true,
-                            'device_id' => $device->id,
-                            'in_service' => $in_service,
-                            'maintence_date' => $maintence_date,
-                            'work_since' => $work_since,
-                            'history' => '',
-                            'sim_number' => $device->sim_number,
-                            'iccd' => $iccd,
-                            'operator' => $operator
+                            'name' => $name,
+                            'in_debt' => false,
+                            'cpf_cnpj' => $cpf_cnpj,
+                            'address' => $address,
+                            'city' => $city,
+                            'contact' => $contact,
+                            'users_passwords' => $users_passwords
                         ]);
-                        //dd($new_tracker);
-                        $new_tracker->save();
-                    }
-                }*/
+                        //dd($new_customer);
+                        $new_customer->save();
+                        //dd('olá');
+                        
+                $name = '';
+                $cpf_cnpj = '';
+                $address = '';
+                $city = '';
+                $contact = '';
+                $users_passwords = '';
+            }
+            //$contact = null;
+            
+            /*if ($device->has('traccar')){
+                $i++;
+                //dd($device->traccar->uniqueId);
+                $tracker = Tracker::find($device->id);
+                $service = Insta_maint::where('device_id',$device->id)->count();
+                
+                $in_service = false;
+                if (!$service== 0)
+                    $in_service = true;
+                //dd($device);
+                if (str_contains(Str::lower($device->additional_notes), 'data da manutenção:')){
+                    $pos = strripos(Str::lower($device->additional_notes), 'data da manutenção:');
+                    $maintence_date = substr($device->additional_notes, $pos+22, 10);
+                    $maintence_quant = 1;
+                }
+                else{
+                    $maintence_date = '';
+                    $maintence_quant = 0;
+                }
+                
+                if (str_contains(Str::lower($device->additional_notes), 'data da instalação:')){
+                    $pos = strripos(Str::lower($device->additional_notes), 'data da instalação:');
+                    $work_since =  preg_replace('/[^\d\/]/', '',substr(Str::lower($device->additional_notes), $pos+22, 10));
+                }
+                else
+                    $work_since = '';
+                //if($i == 174)
+                //    dd($device);
+                if (str_contains(Str::lower($device->additional_notes), 'iccd:')){
+                    $pos = strripos(Str::lower($device->additional_notes), 'iccd:');
+                    $iccd = substr($device->additional_notes, $pos+6, 41);
+                    $iccd = substr(Str::lower($device->additional_notes), $pos+22, 10);
+                }
+                else{
+                    $iccd = $device->sim_number;
+                }
+                //dd($iccd);
+                $operator = preg_replace('/[0-9]/', '', $device->sim_number);
+                if ($device->traccar->protocol== 'gt06')
+                    $brand = "concox";
+                elseif ($device->traccar->protocol == 'suntech')
+                    $brand = "suntech";
+                elseif ($device->traccar->protocol == 'mxt')
+                    $brand = "mxt";
+                //elseif ($device->traccar->protocol == null)
+                else
+                {
+                    //dd($device->traccar->protocol);
+                }   
+                    
+                if (is_null($tracker)){
+                    //dd($device);
+                    $new_tracker = new Tracker([
+                        'active' => true,
+                        'imei' => $device->traccar->uniqueId,
+                        'brand' => $brand,
+                        'model' => $device->registration_number,
+                        'in_use' => true,
+                        'device_id' => $device->id,
+                        'in_service' => $in_service,
+                        'maintence_date' => $maintence_date,
+                        'work_since' => $work_since,
+                        'history' => '',
+                        'sim_number' => $device->sim_number,
+                        'iccd' => $iccd,
+                        'operator' => $operator
+                    ]);
+                    //dd($new_tracker);
+                    $new_tracker->save();
+                }
+            }*/
             
         //}
         

@@ -326,7 +326,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('asaas/cobranças/excluirCobrança', 'AsaasClientesController@excluirCobrança')->name('asaas.cobranças.excluirCobrança');
     Route::get('asaas/cobranças/{id}/pagar', 'AsaasClientesController@pagar')->name('asaas.cobranças.pagar');
     Route::any('asaas/cobranças/{id}/receiveInCash', 'AsaasClientesController@receiveInCash')->name('asaas.cobranças.receiveInCash');
- 
+
+    # Instituicões de  pagamentos
+    Route::get('instpag/', ['as' => 'instituicao_pagamento.index', 'uses' => 'InstituicaoPagamentoController@index']);
+    Route::get('instpag/create', ['as' => 'instituicao_pagamento.create','uses' => 'InstituicaoPagamentoController@create']);
+    Route::post('instpag/store', ['as' => 'instituicao_pagamento.store','uses' => 'InstituicaoPagamentoController@store']);
+    Route::get('instpag/{id}/edit', ['as' => 'instituicao_pagamento.edit','uses' => 'InstituicaoPagamentoController@edit']);
+    Route::put('instpag/{id}/update', ['as' => 'instituicao_pagamento.update','uses' => 'InstituicaoPagamentoController@update']);
+    Route::delete('instpag/{id}/delete', ['as' => 'instituicao_pagamento.destroy','uses' => 'InstituicaoPagamentoController@destroy']);
 
 
     # Login as

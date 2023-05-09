@@ -150,7 +150,7 @@ class Handler extends ExceptionHandler {
                 $message = $e->getMessage();
                 break;
 
-            case env('APP_DEBUG', false):
+            case env('APP_DEBUG', true):
                 $message = $e->getMessage() . ' ' .  $e->getFile() . ' ' . $e->getLine();
                 break;
 

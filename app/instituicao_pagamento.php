@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class InstituicaoPagamento extends Model
+class instituicao_pagamento extends Model
 {
     protected $table = 'instituicao_pagamento';
 
@@ -14,9 +14,5 @@ class InstituicaoPagamento extends Model
         'usuarios_permitidos', 
         'chave_acesso', 
         'site_acesso'
-    ];
-
-    protected $casts = [
-        'usuarios_permitidos' => 'array'
     ];
 }

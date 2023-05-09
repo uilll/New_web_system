@@ -47,6 +47,10 @@
                         {!!Form::text('users_passwords', 'Usuário:      Senha:', ['class' => 'form-control'])!!}
                     </div>                    
                 </div>
+                <div class="form-group">         
+                    {!! Form::label('all_users', 'Usuários:') !!}
+                    {!! Form::select('all_users[]', $lista, null, ['class' => 'form-control', 'data-live-search' => true, 'multiple' => 'multiple']) !!}
+                </div>
                 <div class="form-group">
                     {!!Form::label('obs', 'Observação:')!!}
                     {!!Form::textarea('obs', null, ['class' => 'form-control'])!!}

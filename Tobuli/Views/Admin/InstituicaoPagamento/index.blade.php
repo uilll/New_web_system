@@ -8,9 +8,11 @@
                     <h4>Gerenciar Instituições de Pagamento</h4>
                 </div>
                 <div class="panel-body">
-                    <a href="{{ route('instituicao_pagamento.create') }}" class="btn btn-success btn-sm pull-right">
+
+                    <a href="javascript:" type="button" class="btn btn-success btn-sm pull-right" data-modal="instituicao_pagamento_create" data-url="{{ route('instituicao_pagamento.create') }}">
                         <i class="glyphicon glyphicon-plus"></i> Nova Instituição de Pagamento
                     </a>
+                    
                     <br><br>
                     <table class="table table-striped">
                         <thead>
@@ -30,7 +32,7 @@
                                     <td>{{ $instituicao->nome_instituicao }}</td>
                                     <td>{{ $instituicao->usuarios_permitidos }}</td>
                                     <td>
-                                        <a href="{{ route('instituicao_pagamento.edit', $instituicao->id) }}" class="btn btn-primary btn-sm">
+                                        <a href="javascript:" type="button" class="btn btn-primary btn-sm" data-modal="instituicao_pagamento_create" data-url="{{ route('instituicao_pagamento.edit', $instituicao->id) }}">
                                             <i class="glyphicon glyphicon-edit"></i> Editar
                                         </a>
                                         <form action="{{ route('instituicao_pagamento.destroy', $instituicao->id) }}" method="POST" style="display: inline-block;">
