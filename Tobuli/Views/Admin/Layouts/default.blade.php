@@ -361,7 +361,7 @@
                     $(this.form).submit();
                 }
             });
-
+            
             $('#create-reply-form').on('submit', function(e) {
                  e.preventDefault();
 
@@ -431,7 +431,7 @@
                     }
                 });
             });
-
+    });
             // Tentativa de criar sub-menu aninhados
 
 
@@ -501,6 +501,7 @@
     $(document).on('hidden.bs.modal', '.modal', function () {
             location.reload();
     });
+    
 </script>
 
 <div class="modal" id="modalDeleteConfirm">
