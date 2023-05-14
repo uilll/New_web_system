@@ -76,9 +76,13 @@
                         </td>
                         <td> {{$item2->name}}</td>
                         <td>{{$item2->cpf_cnpj}} </td>
-                        <td>
-                            {{ $item2->in_debt }} 
+                        
+                        <td class="{{ $item2->in_debt ? 'devedor' : '' }}">
+                            @if ($item2->in_debt)
+                                <span class="destaque">DEVEDOR(A)</span>
+                            @endif
                         </td>
+
                         <td>
                             {{ $item2->address }}
                         </td>

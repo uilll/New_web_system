@@ -17,6 +17,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <link rel="shortcut icon" href="{{ asset_logo('favicon') }}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
     
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/'.settings('main_settings.template_color').'.css?v=' . config('tobuli.version')) }}" />
     <style type="text/css">
@@ -158,7 +160,13 @@
                 white-space: nowrap;
             }
 
-
+            .devedor {
+                background-color: yellow;
+            }
+            
+            .destaque {
+                font-weight: bold;
+            }
 
 
         </style>
@@ -501,7 +509,16 @@
     $(document).on('hidden.bs.modal', '.modal', function () {
             location.reload();
     });
-    
+
+    function confirmDelete(form) {
+        console.log('Confirm delete called'); // Verificar se esta mensagem é exibida no console
+        if (confirm('Tem certeza que deseja excluir?')) {
+            console.log('Form submitted'); // Verificar se esta mensagem é exibida no console
+            document.getElementById(form).submit();
+            window.location.href = "{{ route('instituicao_pagamento.index') }}";
+        }
+    }
+
 </script>
 
 <div class="modal" id="modalDeleteConfirm">

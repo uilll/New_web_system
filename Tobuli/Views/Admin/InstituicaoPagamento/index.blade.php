@@ -35,10 +35,10 @@
                                         <a href="javascript:" type="button" class="btn btn-primary btn-sm" data-modal="instituicao_pagamento_create" data-url="{{ route('instituicao_pagamento.edit', $instituicao->id) }}">
                                             <i class="glyphicon glyphicon-edit"></i> Editar
                                         </a>
-                                        <form action="{{ route('instituicao_pagamento.destroy', $instituicao->id) }}" method="POST" style="display: inline-block;">
+                                        <form id="meuForm{{$instituicao->id}}" action="{{ route('instituicao_pagamento.destroy', $instituicao->id) }}" method="POST" style="display: inline-block;">
                                             {{ csrf_field() }}
                                             {{ method_field('DELETE') }}
-                                            <button type="submit" class="btn btn-danger btn-sm">
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="event.preventDefault(); confirmDelete('meuForm{{$instituicao->id}}');">
                                                 <i class="glyphicon glyphicon-trash"></i> Excluir
                                             </button>
                                         </form>

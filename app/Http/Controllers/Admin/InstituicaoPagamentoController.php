@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\instituicao_pagamento;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class InstituicaoPagamentoController extends BaseController
 {
@@ -53,14 +54,19 @@ class InstituicaoPagamentoController extends BaseController
 
         instituicao_pagamento::create($data);
 
-        return Response::json(['status' => 1]);
+        return Response::json(['status' => 1, 'reload' => true]);
+
     }
 
-    public function edit(instituicao_pagamento $instituicao)
+    public function edit($id)
     {
+        //dd($request->all());
+        $instituicao = instituicao_pagamento::findOrFail($id);
+        $instituicao->usuarios_permitidos = json_decode($instituicao->usuarios_permitidos, true);
         $lista1 = DB::table('users')->where('active', 1)->lists('email', 'id'); 
-        $lista = DB::table('users')->where('active', 1)->whereIn('id', json_decode($instituicao->usuarios_permitidos, true))->lists('email', 'id');
+        $lista = DB::table('users')->where('active', 1)->whereIn('id', $instituicao->usuarios_permitidos)->lists('email', 'id');
         $instituicao->lista = $lista;
+        
         
         if(!empty($lista))
         {
@@ -73,9 +79,13 @@ class InstituicaoPagamentoController extends BaseController
         return view('admin::InstituicaoPagamento.edit', compact('instituicao'));
     }
 
-    public function update(Request $request, instituicao_pagamento $instituicao)
+    public function update(Request $request)
     {
-        $validatedData = $request->validate([
+        $instituicao = instituicao_pagamento::findOrFail($request->input('id'));
+
+        //dd($instituicao);
+
+        $this->validate($request, [
             'nome_conta' => 'required',
             'nome_instituicao' => 'required',
             'usuarios_permitidos' => 'required',
@@ -83,17 +93,20 @@ class InstituicaoPagamentoController extends BaseController
             'site_acesso' => 'required',
         ]);
 
-        $instituicao->update($validatedData);
+        $data = $request->all();
+        $data['usuarios_permitidos'] = json_encode($data['usuarios_permitidos']);
 
-        return redirect()->route('instituicaopagamento.index')
-            ->with('success', 'Instituição de pagamento atualizada com sucesso.');
+        $instituicao->update($data);
+
+        return Response::json(['status' => 1, 'reload' => true]);
     }
 
-    public function destroy(instituicao_pagamento $instituicao)
+
+    public function destroy($id)
     {
+        $instituicao = instituicao_pagamento::findOrFail($id);
         $instituicao->delete();
 
-        return redirect()->route('instituicaopagamento.index')
-            ->with('success', 'Instituição de pagamento excluída com sucesso.');
+        //return Response::json(['status' => 1, 'reload' => true]);
     }
 }

@@ -4,23 +4,39 @@ namespace App\Services;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Config;
+use App\instituicao_pagamento;
+use Illuminate\Support\Facades\Auth;
 
 class AsaasService
 {
     protected $client;
     
 
-    public function __construct()
+    public function __construct($userId=null)
     {
-        $this->client = new Client([
-            'base_uri' => config('asaas.api_url'),
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'access_token' => config('asaas.api_key'),
-            ],
-        ]);
+        if(is_null($userId))
+            // Obtém o ID do usuário logado
+            $userId = Auth::id();
 
-        //$this->path_asaas = config('asaas.api_url'); 
+       // Obtém as informações da tabela instituicao_pagamento com base no usuário logado
+       $instituicaoPagamento = instituicao_pagamento::where('usuarios_permitidos', 'like', '%"'.$userId.'"%')->first();
+
+       // Verifica se a instituição de pagamento foi encontrada
+       if ($instituicaoPagamento) {
+           $this->baseUri = $instituicaoPagamento->site_acesso;
+           $this->accessToken = $instituicaoPagamento->chave_acesso;
+        } else {
+            // Retorna uma mensagem de erro se a instituição de pagamento não for encontrada para o usuário logado
+            throw new \Exception('Usuário não permitido para acessar a instituição de pagamento.');
+        }
+
+       $this->client = new Client([
+           'base_uri' => $this->baseUri,
+           'headers' => [
+               'Content-Type' => 'application/json',
+               'access_token' => $this->accessToken,
+           ],
+       ]);
     }
 
     public function get($path, $params = [])

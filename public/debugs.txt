@@ -962,3 +962,351 @@
 "[]"
 
 "[]"
+
+"Anchor_Start 2196, 1527"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2154 do cliente: DOUGLAS DA SILVA MARINHO()"
+
+"Anchor_Start 3019, 1552"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1297 do cliente: CHIP ENVIADO P\/ CANCELAR(JAIME ALMEIDA ARAUJO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1397 do cliente: CHIP ENVIADO P\/ CANCELAR(FRANCISLEY BATISTA DE OLIVEIRA )"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2415 do cliente: CHIP ENVIADO P\/ CANCELAR(ENOQUE FERREIRA MOTA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1630 do cliente: CHIP ENVIADO P\/ CANCELAR(AMARILDO DE SOUSA FERREIR)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1905 do cliente: CHIP ENVIADO P\/ CANCELAR(DARIO LIMA CERQUEIRA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2577 do cliente: CHIP ENVIADO P\/ CANCELAR(MARCOS MILITAO DA HORA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3222 do cliente: COMERCIAL DE ALIMENTOS CLEVAL(CLEBER PEREIRA MOTA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2536 do cliente: CHIP ENVIADO P\/ CANCELAR(LUIZ CARLOS SILVA COSTA JUNIOR)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1604 do cliente: CHIP ENVIADO P\/ CANCELAR(KENNEDY OLIVEIRA LIMA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2475 do cliente: CHIP ENVIADO P\/ CANCELAR(ELINALDO MOREIRA MATIAS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2834 do cliente: PENDENTE - VERIFICAR(JAILTON GUIMARAES DE BRITO)"
+
+"Anchor_Start 1570, 832"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1320 do cliente: PENDENTE - VERIFICAR(JOSE VENANCIO NETO)"
+
+"Anchor_Start 699, 1070"
+
+"Anchor_Start 699, 1070"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1200 do cliente: PENDENTE - VERIFICAR(ADRIANO NETO DE CARVALHO)"
+
+"Anchor_Start 2253, 1175"
+
+"Anchor_Start 2253, 1175"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3204 do cliente: SERGIO ROGERIO NOVAIS SANTOS(SERGIO ROGERIO NOVAIS SANTOS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1320 do cliente: CHIP ENVIADO P\/ CANCELAR(JOSE VENANCIO NETO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1294 do cliente: CHIP ENVIADO P\/ CANCELAR(JOSE VENANCIO NETO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1975 do cliente: CHIP ENVIADO P\/ CANCELAR(VALDYRENE MAR\u00c7AL RIBEIRO)"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"1339158","brand":"MXT140","model":"MXT140","work_since":"2023-05-10","history":"","sim_number":"","iccd":"","operator":"","manager_id":1085}
+
+"Finalizou OK?"
+
+"remo\u00e7\u00e3o de rastreadorremovido-21357(10 05, 2023, 7:36 pm)"
+
+" Removido de: \\n  Removido de: "
+
+"\r\n Instalado em: CAR-9158\r\n\r\n Instalado em: CAR-9158"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3227 do cliente: TESTE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2296 do cliente: PAULO VICTOR MEIRELES DOS SANTOS SILVA()"
+
+"Anchor_Start 1110, 1263"
+
+"Anchor_Start 2192, 1150"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3212 do cliente: FREITAS E MORAES LTDA(JOSE FERNANDES FREITAS PINHEIRO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3212 do cliente: FREITAS E MORAES LTDA(JOSE FERNANDES FREITAS PINHEIRO)"
+
+"remo\u00e7\u00e3o de rastreadorremovido-21325(11 05, 2023, 11:51 am)"
+
+"remo\u00e7\u00e3o de rastreadorremovido-21325(11 05, 2023, 11:51 am)"
+
+" Removido de: CAR-1351\\n  Removido de: CAR-1351"
+
+"\r\n \r\n Instalado em: CASE-W20F\r\n\r\n Instalado em: CASE-W20F"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1988 do cliente: FREITAS E MORAES LTDA(JOSE FERNANDES FREITAS PINHEIRO)"
+
+"remo\u00e7\u00e3o de rastreadorremovido-21325(11 05, 2023, 11:55 am)"
+
+"\r\n \r\n Instalado em: CASE-W20F\r\n Ve\u00edculo de placa CASE-W20F deletado (1988)\r\n Instalado em: CAR-1351\r\n\r\n Instalado em: CAR-1351"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3201 do cliente: TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3201 do cliente: FREITAS E MORAES LTDA(JOSE FERNANDES FREITAS PINHEIRO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3201 do cliente: FREITAS E MORAES LTDA(JOSE FERNANDES FREITAS PINHEIRO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3201 do cliente: FREITAS E MORAES LTDA(JOSE FERNANDES FREITAS PINHEIRO)"
+
+"Anchor_Start 3142, 145"
+
+"Anchor_Start 964, 430"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1393 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(JOAQUIM GENEZIO TORRES)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1393 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(JOAQUIM GENEZIO TORRES)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2842 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(JOAQUIM GENEZIO TORRES)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2842 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(JOAQUIM GENEZIO TORRES)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2842 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(JOAQUIM GENEZIO TORRES)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1393 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(JOAQUIM GENEZIO TORRES)"
+
+"Anchor_Start 2328, 99"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1062 do cliente: RENATO DEYVISON DA SILVA MARQUES(RENATO DEYVISON DA SILVA MARQUES)"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2154 do cliente: DIEGO SILVA LIMA ()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2448 do cliente: DOUGLAS DA SILVA MARINHO()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2271 do cliente: DIEGO SILVA LIMA ()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3192 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(ELINALDO MOREIRA MATIAS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3185 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(ELINALDO MOREIRA MATIAS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1200 do cliente: PENDENTE - VERIFICAR(ADRIANO NETO DE CARVALHO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1200 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(ADRIANO NETO DE CARVALHO)"
+
+"Anchor_Start 1976, 1084"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3159 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(GENILSON SILVA FERREIRA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3210 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(GENILSON SILVA FERREIRA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3159 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(GENILSON SILVA FERREIRA)"
+
+"Anchor_Start 2029, 1083"
+
+"Anchor_Start 3175, 1565"
+
+"Anchor_Start 3175, 1565"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1592 do cliente: ANTONIO CARLOS DA SILVA(ANTONIO CARLOS DA SILVA)"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":18661,"imei":"684860emprestado a rodrigo","brand":"SUNTECH","model":"","active":"1","in_use":1,"test":0,"device_id":1149,"last_device_id":0,"in_service":"0","maintence_date":"\r\nLocal da","maintence_quant":0,"work_since":"21\/10\/2016","history":"\r\n ","excess_data":1,"sim_number":"62154","iccd":"62154","operator":"","manager_id":0,"created_at":"2020-05-25 00:00:00","updated_at":"2020-05-25 00:00:00"}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"205684860","brand":"SUNTEC","model":"SUNTEC 350","work_since":"2023-05-12","history":"","sim_number":"5516989916336","iccd":"89553202100042730081","operator":"SS.ALGAR.BR","manager_id":1085}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3226 do cliente: PAULO VICTOR MEIRELES DOS SANTOS SILVA()"
+
+"remo\u00e7\u00e3o de rastreadorremovido-21358(12 05, 2023, 12:22 pm)"
+
+"\r\n Instalado em: CAR-9158\r\n Removido de: \\n  Removido de: "
+
+"\r\n Instalado em: CAR-4860\r\n\r\n Instalado em: CAR-4860"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3227 do cliente: TESTE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3140 do cliente: DIEGO SILVA LIMA ()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3140 do cliente: DIEGO SILVA LIMA ()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2493 do cliente: DIEGO BRITO PALMEIRA ()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3155 do cliente: TESTE(MARCELO)"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3227 do cliente: TESTE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3227 do cliente: TRANSAZEVEDO()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2086 do cliente: LUCELIO SETUBAL VIEIRA(LUCELIO SETUBAL VIEIRA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1997 do cliente: LUCELIO SETUBAL VIEIRA(LUCELIO SETUBAL VIEIRA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3173 do cliente: FR TRANSPORTES E MONTAGENS INDUSTRIAIS LTDA()"
+
+{}
+
+{}
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2091 do cliente: LUCELIO SETUBAL VIEIRA(LUCELIO SETUBAL VIEIRA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3173 do cliente: FR TRANSPORTES E MONTAGENS INDUSTRIAIS LTDA(FR TRANSPORTES E MONTAGENS INDUSTRIAIS LTDA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3188 do cliente: FR TRANSPORTES E MONTAGENS INDUSTRIAIS LTDA( \tFR TRANSPORTES E MONTAGENS INDUSTRIAIS LTDA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3216 do cliente: VS FREITAS CONSTRUTORA LTDA(VS FREITAS CONSTRUTORA LTDA)"
+
+"Anchor_Start 3175, 1565"
+
+"Anchor_Start 3175, 1565"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"511624891","brand":"SUNTEC310","model":"SUNTEC310","work_since":"2023-05-12","history":"","sim_number":"5511964901462","iccd":"89551080357021057305","operator":"WL.VIVO.COM.BR","manager_id":1085}
+
+"Finalizou OK?"
+
+"remo\u00e7\u00e3o de rastreadorremovido-21359(12 05, 2023, 5:00 pm)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3219 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3224 do cliente: TESTE(VS FREITAS CONSTRUTORA LTDA)"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3228 do cliente: CARLOS ANTUNES DE SANTANA GUIMARAES()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3223 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(CLEITIANO DA SILVA CARVALHO)"
+
+{}
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21329,"imei":"868022032911567","brand":"J16-4G","model":"J16-4G","active":"1","in_use":0,"test":0,"device_id":3205,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-04-28","history":"\r\n ","excess_data":0,"sim_number":"71999124926","iccd":"89551180157001606579","operator":"DAP.VIVO.COM.BR 4G","manager_id":0,"created_at":"2023-04-28 00:00:00","updated_at":"2023-04-28 00:00:00"}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3205 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(CLEITIANO DA SILVA CARVALHO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3205 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(CLEITIANO DA SILVA CARVALHO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3104 do cliente: VS FREITAS CONSTRUTORA LTDA(VS FREITAS CONSTRUTORA LTDA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3155 do cliente: TESTE(MARCELO LUIZ DE SANTANA J\u00daNIOR)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3219 do cliente: TESTE(MARCELO LUIZ DE SANTANA J\u00daNIOR)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3223 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(CLEITIANO DA SILVA CARVALHO)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3205 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(CLEITIANO DA SILVA CARVALHO)"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033015251","brand":"J16-4G","model":"J16-4G","work_since":"2023-05-12","history":"","sim_number":"16996901243","iccd":"89553202100050822101","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033014791","brand":"J16-4G","model":"J16-4G","work_since":"2023-05-12","history":"","sim_number":"16989571066","iccd":"868022033014791","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033016002","brand":"J16-4G","model":"J16-4G","work_since":"2023-05-12","history":"","sim_number":"16994692163","iccd":"89553202100050822143","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033018677","brand":"J16-4G","model":"J16-4G","work_since":"2023-05-12","history":"","sim_number":"16996608118","iccd":"89553202100050821798","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033016820","brand":"J16-4G","model":"J16-4G","work_since":"2023-05-12","history":"","sim_number":"16999902627","iccd":"89553202100050821780","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"511124999","brand":"SUNTECH - CL","model":"ST310U","work_since":"2023-05-12","history":"","sim_number":"","iccd":"89551180157001606603","operator":"DAP.VIVO.COM.BR","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"511671505","brand":"SUNTECH - CL","model":"ST310U","work_since":"2023-05-12","history":"","sim_number":"","iccd":"89551180157001606611","operator":"DAP.VIVO.COM.BR ","manager_id":0}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21359,"imei":"511624891","brand":"SUNTEC310","model":"SUNTEC310","active":1,"in_use":0,"test":0,"device_id":3228,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-05-12","history":"\r\n ","excess_data":0,"sim_number":"5516998470793","iccd":"89553202100033083268","operator":"","manager_id":1085,"created_at":"2023-05-12 00:00:00","updated_at":"2023-05-12 00:00:00"}
+
+"Finalizou OK?"
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21359,"imei":"511624891","brand":"SUNTEC310","model":"SUNTEC310","active":1,"in_use":0,"test":0,"device_id":3228,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-05-12","history":"\r\n \r\n ","excess_data":0,"sim_number":"5516998470793","iccd":"89553202100033083268","operator":"SS.ALGAR.BR","manager_id":1085,"created_at":"2023-05-12 00:00:00","updated_at":"2023-05-12 00:00:00"}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"511124983","brand":"SUNTECH - CL","model":"ST310U","work_since":"2023-05-12","history":"","sim_number":"","iccd":"89551180157001606637","operator":"DAP.VIVO.COM.BR","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"511799630","brand":"SUNTECH - CL","model":"ST310U","work_since":"2023-05-12","history":"","sim_number":"","iccd":"89551180157001606629","operator":"DAP.VIVO.COM.BR","manager_id":0}
+
+"Finalizou OK?"
+
+"Anchor_Start 3010, 1469"
+
+"Anchor_Start 927, 438"
+
+"Anchor_Start 1002, 460"
+
+"Anchor_Start 826, 322"
+
+"Anchor_Start 826, 322"
+
+"[\"23\",\"859\"]"
+
+"[\"859\",\"6\",\"23\"]"
+
+"[]"
+
+"{\"1\":\"6\"}"
+
+"[\"23\",\"859\"]"
+
+"[\"23\",\"859\"]"
+
+"[]"
+
+"[]"
+
+"[\"23\",\"859\"]"
+
+"[\"23\",\"859\"]"
+
+"[]"
+
+"[]"
+
+"[]"
+
+"[\"23\",\"859\"]"
+
+"[]"
+
+"[\"23\",\"859\"]"
+
+"[\"859\"]"
+
+"[\"859\"]"
+
+"[]"
+
+"[]"
+
+"[\"859\"]"
+
+"[\"859\"]"
+
+"[]"
+
+"[]"
+
+"[\"859\"]"
+
+"[\"859\"]"
+
+"[]"
+
+"[]"

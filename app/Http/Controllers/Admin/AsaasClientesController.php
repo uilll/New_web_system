@@ -13,6 +13,8 @@ use Illuminate\Pagination\Paginator;
 
 use App\customer;
 use Carbon\Carbon;
+use Tobuli\Repositories\User\UserRepositoryInterface as User;
+use Facades\Repositories\UserRepo;
 
 class AsaasClientesController extends BaseController
 {
@@ -26,6 +28,70 @@ class AsaasClientesController extends BaseController
 
     public function listarClientes(Request $request)
     {
+        //TESTE PARA BLOQUEIO/DESBLOQUEIO DE CLIENTES ################################################
+        if(false){
+
+                            $customers = Customer::where('in_debt', true)->get();
+
+                            //dd($customers);
+
+                            foreach ($customers as $customer) {
+                                $cpfCnpj = $customer->cpf_cnpj;
+                            
+                                $asaasCustomer = collect($this->asaasService->get("customers", ['cpfCnpj' => $cpfCnpj]))->get('data');
+                                
+                                if ($asaasCustomer) {
+                                    $customerId = $asaasCustomer[0]['id'];
+                                    
+                                    $overduePayments = collect($this->asaasService->get("payments", ['status' => 'OVERDUE', 'customer' => $customerId]))->get('data');
+                            
+                                    if (empty($overduePayments)) {
+                                        // DESBLOQUEIO DO CLIENTE
+                                        $customer->active = true;
+                                        $customer->in_debt = false;
+                                        $customer->save();
+                            
+                                        // DESBLOQUEIO DOS USUÁRIOS
+                                        $users = json_decode($customer->all_users);
+                                        foreach ($users as $id) {
+                                            $item = UserRepo::find($id);
+                                            $item->update(['active' => true]);
+                                        }
+                                    }
+                                }
+                            }
+            
+
+
+                            $overduePayments = collect($this->asaasService->get("payments", ['status' => 'OVERDUE']))->get('data');
+
+                            foreach ($overduePayments as $payment) {
+                                $Customer_asaas = $this->asaasService->get("customers/{$payment['customer']}");
+
+                                //dd($Customer_asaas);
+                                $customer = Customer::where('cpf_cnpj', $Customer_asaas['cpfCnpj'])->first();
+                            
+
+                                if ($customer && Carbon::parse($payment['dueDate'])->diffInDays(Carbon::now()) >= 30) {
+                                    // BLOQUEIO DO CLIENTE
+                                    $customer->active = false;
+                                    $customer->in_debt = true;
+                                    $customer->save();
+
+                                    // BLOQUEIO DOS USUÁRIOS
+                                    $users = JSON_DECODE($customer->all_users);
+                                    //dd($users);
+                                    foreach ($users as $id) {
+                                        $item = UserRepo::find($id);
+                                        $item->update(['active' => "false"]);
+                                    }
+                                }
+                            }
+
+        }
+        //FIM DE TESTE PARA BLOQUEIO/DESBLOQUEIO DE CLIENTES ################################################
+
+
         $params = $request->all();
         $page = $request->query("page");
         $offset = 0;
@@ -33,6 +99,7 @@ class AsaasClientesController extends BaseController
 
         do {
             $customers = collect($this->asaasService->get('customers', ['limit' => 100, 'offset' => $offset]))->get('data');
+            //dd($customers);
             $allCustomers = array_merge($allCustomers, $customers);
             $offset += 100;
         } while (count($customers) == 100);

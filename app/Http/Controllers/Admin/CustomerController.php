@@ -354,10 +354,16 @@ class CustomerController extends BaseController {
             return Response::json(['status' => 0, 'message' => 'Cliente não encontrado']);
         }
         $oldUserIds = json_decode($customer->all_users);
+        if ($oldUserIds === null) {
+            $oldUserIds = [];
+        };
         
         // Atualiza os dados do cliente
-        $customer->active = $request->input('active') ? 1 : 0;
-        $customer->in_debt = $request->input('in_debt') ? 1 : 0;
+        if($customer->in_debt)
+            $customer->active = 0;        
+        else
+            $customer->active = $request->input('active') ? 1 : 0;
+        //$customer->in_debt = $request->input('in_debt') ? 1 : 0;
         $customer->name = $request->input('name');
         $customer->cpf_cnpj = $request->input('cpf_cnpj');
         $customer->address = $request->input('address');
