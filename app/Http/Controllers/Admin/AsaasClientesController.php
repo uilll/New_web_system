@@ -97,6 +97,8 @@ class AsaasClientesController extends BaseController
         $offset = 0;
         $allCustomers = [];
 
+        //dd($this->asaasService);
+
         do {
             $customers = collect($this->asaasService->get('customers', ['limit' => 100, 'offset' => $offset]))->get('data');
             //dd($customers);
@@ -234,12 +236,13 @@ class AsaasClientesController extends BaseController
     {
         $params = $request->all();
         $page = $request->query("page");
+        $status = "PENDING";
         $offset = 0;
         $allPayments = [];
         
 
         do {
-            $Payments = collect($this->asaasService->get('payments', ['limit' => 100, 'offset' => $offset]))->get('data');
+            $Payments = collect($this->asaasService->get('payments', ['limit' => 100, 'offset' => $offset, $status ]))->get('data');
             $allPayments = array_merge($allPayments, $Payments);
             $offset += 100;
             //dd($Payments);

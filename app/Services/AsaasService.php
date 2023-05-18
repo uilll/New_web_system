@@ -29,7 +29,7 @@ class AsaasService
             // Retorna uma mensagem de erro se a instituição de pagamento não for encontrada para o usuário logado
             throw new \Exception('Usuário não permitido para acessar a instituição de pagamento.');
         }
-
+        //debugar(true,$this->accessToken);
        $this->client = new Client([
            'base_uri' => $this->baseUri,
            'headers' => [
@@ -37,6 +37,8 @@ class AsaasService
                'access_token' => $this->accessToken,
            ],
        ]);
+
+       //dd($this->client);
     }
 
     public function get($path, $params = [])

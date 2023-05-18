@@ -11,6 +11,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
     <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <meta charset="utf-8"/>
     <title>{{ settings('main_settings.server_name') }}</title>
@@ -167,6 +169,40 @@
             .destaque {
                 font-weight: bold;
             }
+
+            .fixed-height{
+                height: 50px;
+                max-height: 50px;
+                overflow: hidden;
+            }
+
+            details {
+                background-color: #f9f9f9;
+                border-radius: 4px;
+                padding: 10px;
+                margin-bottom: 5px;
+                cursor: pointer;
+            }
+
+            details summary {
+                color: #444;
+                font-weight: bold;
+                text-decoration: underline;
+                padding-bottom: 5px;
+                display: block;
+                cursor: pointer;
+            }
+
+            details p {
+                margin: 0;
+                padding-top: 5px;
+                border-top: 1px solid #ddd;
+            }
+
+            .info-cell {
+                
+            }
+
 
 
         </style>
@@ -438,7 +474,7 @@
                         console.error(xhr.responseText);
                     }
                 });
-            });
+            });   
     });
             // Tentativa de criar sub-menu aninhados
 
@@ -518,6 +554,15 @@
             window.location.href = "{{ route('instituicao_pagamento.index') }}";
         }
     }
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+
 
 </script>
 

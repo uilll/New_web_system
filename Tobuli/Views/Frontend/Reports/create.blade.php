@@ -41,7 +41,7 @@
 							</div>
 							<div class="form-group">
 								{!!Form::label('format', trans('validation.attributes.format'))!!}
-								{!!Form::select('format', $formats, null, ['class' => 'form-control'])!!}
+								{!!Form::select('format', $formats, null, ['class' => 'form-control', 'id' => 'reports_format'])!!}
 							</div>
                     </div>
                 </div>
@@ -258,6 +258,49 @@
 
         $(document).ready(function() {
             $('select[name="filter"]:first, #reports_type').trigger('change');
+
+            // Função para verificar a seleção dos campos "format" e "type"
+                function checkReportOptions() {
+                    var format = $('#reports_format').val();
+                    var type = $('#reports_type').val();
+
+                    if (format === 'pdf' && type === 'historico_posicoes') {
+                        var fromDate = new Date($('#date_from').val());
+                        var toDate = new Date($('#date_to').val());
+
+                        // Calcula a diferença em dias entre as datas
+                        var diffInDays = Math.floor((toDate - fromDate) / (1000 * 60 * 60 * 24));
+
+                        if (diffInDays > 7) {
+                            // Exibe a mensagem de limite de período
+                            $('#limit-message').text('O período máximo permitido é de 7 dias.');
+                            $('#limit-message').show();
+
+                            // Bloqueia o envio do formulário
+                            $('#reports-form').submit(function(e) {
+                                e.preventDefault();
+                            });
+                        } else {
+                            // Remove a mensagem e permite o envio do formulário
+                            $('#limit-message').hide();
+                            $('#reports-form').unbind('submit');
+                        }
+                    } else {
+                        // Remove a mensagem e permite o envio do formulário
+                        $('#limit-message').hide();
+                        $('#reports-form').unbind('submit');
+                    }
+                }
+
+                // Verifica a seleção dos campos sempre que houver alteração
+                $('#format, #type, #date_from, #date_to').change(function() {
+                    checkReportOptions();
+                });
+
+                // Verifica a seleção dos campos quando a página for carregada
+                checkReportOptions();
+
+
         });
 
         tables.set_config('reports-form-report-logs', {

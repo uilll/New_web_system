@@ -588,7 +588,7 @@ class ReportModalHelper extends ModalHelper
             }
             elseif ($data['format'] == 'pdf' || $data['format'] == 'pdf_land') {
                 //UILMO FAZER MELHORIA NA QUESTÃO DE GERAR O PDF,PODE ATÉ ENVIAR OS DADOS PARA O SERVIDOR bd E FAZER A GERAÇÃO POR LÁ
-                $stop = FALSE;
+                $stop = false;
                 $change_page_size = ($data['format'] == 'pdf_land');
                 $tries = 1;
                 while (!$stop) {
@@ -613,7 +613,7 @@ class ReportModalHelper extends ModalHelper
                         sleep(1);
                     }
                 }
-                return 'Sorry can\'t generate, too mutch data.';
+                return 'Desculpe não poder gerar o RELATÓRIO!';
             }
             elseif ($data['format'] == 'xls') {
                 try {

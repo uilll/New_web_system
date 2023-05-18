@@ -79,7 +79,7 @@
                             <div class="btn-group dropdown droparrow" data-position="fixed">
                                 <i class="btn icon edit" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></i>
                                 <ul class="dropdown-menu">
-                                    @if (($item->id == 2 || $item->id == 6) && (Auth::User()->perm('super_admin', 'view')))
+                                    @if (($item->id == 6) && (Auth::User()->perm('super_admin', 'view')))
                                     @else
                                         <li><a href="javascript:" data-modal="{!! $section !!}_edit" data-url="{!! route("admin.{$section}.edit", $item->id) !!}">{!! trans('global.edit') !!}</a></li>
                                         <li><a href="javascript:" data-modal="{!! $section !!}_login_as" data-url="{!! route("admin.{$section}.login_as", $item->id) !!}">{!! trans('front.login_as') !!}</a></li>

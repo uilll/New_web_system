@@ -58,7 +58,7 @@
                     <?php
                         $collor = !$collor;  
                     ?>
-                    <tr style="color: {{ $item2->make_contact ? 'black' : ($collor ? 'white' : 'red') }}; background-color: {{$collor ? 'gray' : '#fffff'}}">
+                    <tr style="color: {{ $item2->make_contact ? 'rgb(0, 0, 128)' : ($collor ? 'black' : 'red') }}; background-color: {{$collor ? 'gray' : '#fffff'}}">
                         <td class="actions">
                             @if (Auth::User()->perm('monitoring', 'edit') || Auth::User()->perm('monitoring', 'remove'))
                                 <div class="btn-group dropdown droparrow" data-position="fixed">
@@ -105,45 +105,79 @@
                                 {!! trans('validation.attributes.active') !!}
                             </span>
                         </td>
-                        <td>{{$item2->customer}} </td>
-                        <td>
-                            {{ $item2->owner }} 
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{$item2->customer}}">
+                        <div class="fixed-height">
+                            {{$item2->customer}}
+                        </div>
                         </td>
-                        <td>
-                        <!--iframe style="border: 0; display: none" id="segue{{$item2->device_id}}" src="{{ route("devices.follow_map", ['id' => $item2->device_id]) }}" width="600px" height="400px" frameborder="0" scrolling="no"></iframe-->
-                            {{ $item2->plate_number }}
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{$item2->owner}}">
+                        <div class="fixed-height">
+                            {{$item2->owner}}
+                        </div>
+                        </td>
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{$item2->plate_number}}">
+                        <div class="fixed-height">
+                            {{$item2->plate_number}}
                             <span id="fechar_mapa{{$item2->device_id}}" onclick="hidemap({{$item2->device_id}});" class="icon close" style="display: none"> Fechar mapa </span>
+                        </div>
                         </td>
-                        <td>
-                            {{ $item2->cause }}
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{$item2->cause}}">
+                        <div class="fixed-height">
+                            {{$item2->cause}}
+                        </div>
                         </td>
-                        <td>
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{ $item2->gps_date ? datetime($item2->gps_date) : trans('front.not_connected') }}">
+                        <div class="fixed-height">
                             {{ $item2->gps_date ? datetime($item2->gps_date) : trans('front.not_connected') }}<br>
                             ( {{ $item2->device_time ? datetime($item2->device_time) : trans('front.not_connected') }} )
+                        </div>
                         </td>
-                        <td>
-                            {{ $item2->occ_date ? $item2->occ_date : 'Não definida'  }}
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{ $item2->occ_date ? $item2->occ_date : 'Não definida' }}">
+                        <div class="fixed-height">
+                            {{ $item2->occ_date ? $item2->occ_date : 'Não definida' }}
+                        </div>
                         </td>
-                        <td>
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{ $item2->modified_date ? $item2->modified_date : 'Nunca modificado' }}">
+                        <div class="fixed-height">
                             {{ $item2->modified_date ? $item2->modified_date : 'Nunca modificado' }}
+                        </div>
                         </td>
-                        <td>
-                            {{ $item2->contact}}
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{$item2->contact}}">
+                        <div class="fixed-height">
+                            {{$item2->contact}}
+                        </div>
                         </td>
-                        <td>
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{ $item2->make_contact ? 'Sim' : 'Não' }}">
+                        <div class="fixed-height">
                             {{ $item2->make_contact ? 'Sim' : 'Não' }}
+                        </div>
                         </td>
-                        <td>
-                            {{ $item2->information ? $item2->information : $item2->additional_notes }}
+
+
+                        <td class="d-inline-block text-truncate">
+                            <div tabindex="0" class="info-cell" role="button" data-toggle="popover" data-placement="bottom" data-content="{{ $item2->information ? $item2->information : $item2->additional_notes }}">
+                                {{ substr($item2->information ? $item2->information : $item2->additional_notes, 0, 50) . (strlen($item2->information ? $item2->information : $item2->additional_notes) > 50 ? '...' : '') }}
+                            </div>
                         </td>
-                        <td>
+
+
+
+
+
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{ $item2->next_con ? $item2->next_con : 'Sem previsão' }}">
+                        <div class="fixed-height">
                             {{ $item2->next_con ? $item2->next_con : 'Sem previsão' }}
+                        </div>
                         </td>
-                        <td>
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{ $item2->sent_maintenance ? 'Sim' : 'Não' }}">
+                        <div class="fixed-height">
                             {{ $item2->sent_maintenance ? 'Sim' : 'Não' }}
+                        </div>
                         </td>
-                        <td>
+                        <td class="d-inline-block text-truncate table-list_truncate" data-toggle="tooltip" title="{{ $item2->automatic_treatment ? 'Sim' : 'Não' }}">
+                        <div class="fixed-height">
                             {{ $item2->automatic_treatment ? 'Sim' : 'Não' }}
+                        </div>
                         </td>
                     </tr>
                     <tr>
@@ -158,10 +192,35 @@
 
 </div>
 
+<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModalLabel">Informações</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Conteúdo será inserido aqui -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 @stop
 
 @section("javascript")
 <script>
-   
+    
+   $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
 </script>
 @stop
