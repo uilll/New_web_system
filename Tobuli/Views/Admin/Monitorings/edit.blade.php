@@ -35,8 +35,9 @@
                     </div>
                     <div class="col-md-6">
                         {!!Form::label('contact', 'Contato:')!!}
-                        {!!Form::text('contact', $item['contact'], ['class' => 'form-control'])!!}
+                        {!!Form::text('contact', isset($item['contact']) ? $item['contact'] : '', ['class' => 'form-control'])!!}
                     </div>
+
                 </div>
                 
                 <div class="form-group">

@@ -63,589 +63,53 @@ class MonitoringsController extends BaseController {
  
     public function index($page = 0, $search_item = "") {
         $page = strip_tags($page);
-        $search_item = strip_tags($search_item);
-        $excessoes = ['teste', 'pendente', 'tecnico', 'pendentes', 'cancelar', 'cancelado','retirado', 'deletar','enviados para o'];
-        //dd("olá");
-        if (Auth::User()->id == 6) {  
-            // PRIMEIRO TESTE ############################################################################################################
-            // ATUALIZAÇAO AUTOMÁTICA DOS VEÍCULOS QUE ESTÃO PARADOS DENTRO DO MONITORAMENTO
-            //TESTE OK
-            $debug = false; 
-            if(0) {
-                $Monitorings = Monitoring::where('cause', 'offline_duration')
-                            ->where('active', 1)
-                            ->where('treated_occurence', 0)
-                            ->get(); 
-
-                $ocorrencias = 0;
-                if($debug){
-                    $fp = fopen('/var/www/html/releases/20190129073809/public/debug.txt', "a+");
-                    fwrite($fp, "\r\n C5 \r\n"); 
-                    fclose($fp);
-                }
-                //dd($Monitorings);
-                foreach ($Monitorings as $item){
-                    if(true){//$item->id== 35503){ 
-                        if($item->id==30305){
-                            //dd("olá");
-                            $device = UserRepo::getDevice(3,$item->device_id);
-                            $result = false;
-                                foreach($excessoes as $word){
-                                    if(!$result){
-                                        if(strpos(strtolower($device->name),strtolower($word))!==false)
-                                  
-                                            $result = true;
-                                    }
-                                    
-                                }
-                                //dd($result);
-                                //debugar($debug, "Monitoramento - exceções OK - ".$item->id);
-                                if ($result){  
-                                    $update_ = Monitoring::find($item->id);
-                                    $update_->active = 0;
-                                    $update_->automatic_treatment = 1;
-                                    $update_->treated_occurence = 1;
-                                    $update_->save();
-                                }
-                                //debugar($debug,"FIM");
-                        }
-                        
-                        if(false){//!is_null($device)){  
-
-                            $service = insta_maint::where('device_id',$item->device_id)->where('active','1')->get()->count();
-                            
-                            if($device->active == 0){
-                                $update_ = Monitoring::find($item->id);
-                                $update_->information = "Veículo está inativo";
-                                $update_->automatic_treatment = true;
-                                $update_->active = false;
-                                $update_->save();
-                                continue;
-                            }
-                        
-                            if($item->make_contact == 1 && $item->sent_maintenance == 0){
-                                
-                                if(!$item->next_con == ""){                    
-                                    $first = Carbon::parse($item->next_con);
-                                    $second = Carbon::now('-3');
-                                    
-                                    if(validaData($first)){
-                                        if($first->lessThanOrEqualTo($second)){
-                                            $interaction_later = 0;
-                                            if ($item->interaction_later==1)
-                                                $interaction_later = 0;
-                                            $item->make_contact = 0;
-                                            $update_ = Monitoring::find($item->id);
-                                            $update_->make_contact = 0;
-                                            $update_->interaction_later = $interaction_later;
-                                            $update_->save();
-                                        }
-                                    }
-                                }
-                            }
-                            //debugar(true,"Aqui ok?");
-                            // Atualização automática para o veículo que voltar a atualizar #############################################
-                            if(true){//$device->id==1686){
-                                //dd("olá");
-                                $data_time = Carbon::parse($device->traccar->server_time);
-                                
-                                if(validaData($data_time)){
-                                        // $first é a data de atualização do veículo
-                                        $first = Carbon::parse($data_time);
-                                }
-                                else{
-                                    $fp = fopen('/var/www/html/releases/20190129073809/public/debug.txt', "a+");
-                                    fwrite($fp, "\r\n Erro no data_time ".$item->id." \r\n"); 
-                                    fclose($fp);
-                                }
-                                
-                                if(validaData(Carbon::parse($item->gps_date))){
-                                        $second = Carbon::parse($item->gps_date);
-                                }
-                                else{
-                                
-                                    $fp = fopen('/var/www/html/releases/20190129073809/public/debug.txt', "a+");
-                                    fwrite($fp, "\r\n Erro no gps_date ".$item->id." / (".$item->gps_date.") \r\n"); 
-                                    fclose($fp);
-                                    if(validaData(Carbon::parse($item->occ_date))){
-                                        $second = Carbon::parse($item->occ_date);
-                                    }
-                                    else{
-                                        $fp = fopen('/var/www/html/releases/20190129073809/public/debug.txt', "a+");
-                                        fwrite($fp, "\r\n Erro no occ_date ".$item->id." / (".$item->occ_date.") \r\n"); 
-                                        fclose($fp);
-                                        continue;
-                                    }
-                                    
-                                }
-                                //dd($first,$second, $first->diffInMinutes($second));
-                                if ($first->diffInMinutes($second)>1){      
-                                    $update = Monitoring::find($item->id);
-                                    $update->active = 0;
-                                    $update->automatic_treatment = 1;
-                                    $update->treated_occurence = 1;
-                                    $update->information = "Veículo voltou a atualizar (inserção automática)";
-                                    $update->save();
-                                    
-                                }
-
-                            }    
-
-                                $result = false;
-                                foreach($excessoes as $word){
-                                    if(!$result){
-                                        if(strpos(strtolower($device->name),strtolower($word))!==false)
-                                  
-                                            $result = true;
-                                    }
-                                    
-                                }
-                                
-                                debugar($debug,"C1");
-                                if ($result){  
-                                    $update_ = Monitoring::find($item->id);
-                                    $update_->active = 0;
-                                    $update_->automatic_treatment = 1;
-                                    $update_->treated_occurence = 1;
-                                    $update_->save();
-                                }
-                                debugar($debug,"FIM");
-                        }
-                    }
-                }
-            }
-            // FIM PRIMEIRO TESTE ############################################################################################################
-
-            // INÍCIO DO SEGUNDO TESTE ############################################################################################################
-            // BUSCA DOS VEÍCULOS QUE ESTÃO PARADOS A MAIS DE 24H
-            if(0){
-                //dd("olá");
+                $search_item = strip_tags($search_item);
+                $exceptions = ['teste', 'pendente', 'tecnico', 'pendentes', 'cancelar', 'cancelado','retirado', 'deletar','enviados para o'];
                 
-                $excessoes = ['teste', 'pendente', 'tecnico', 'cancelar', 'cancelado','retirado', 'deletar','suntech', 'enviados para o','', 'crx1 com problemas', 'uilmo'];
-
-                $date = Carbon::now(-3);
-                $debug = false;
-                //        if($date->dayOfWeek == 0 || $date->dayOfWeek == 1){}
-                //        else{
-                    debugar($debug, "Inicio Monitoramento");
-
-                    //CÓDIGO PARA VERIFICAR AS OCORRÊNCIAS DE VEÍCULO PARADO A MAIS DE 24H NO MONITORAMENTO
-                    $events = DB::table('events')
-                    ->where('user_id', '=', 3)
-                    ->where('alert_id', '=','52')
-                    ->where('deleted', '=',0)
-                    ->Where('created_at', '>', Carbon::now()->subHour(24*10))
-                    ->get();
-
-                    //dd($events);
-                    
-                    debugar($debug, "C1"); 
-                    foreach($events as $event){
-                            if($event->device_id==1591){
-                                
-                                $response = Monitoring::where('event_id', '=', $event->id)->where('active', '=', true)->get()->count();
-                                //dd($response);
-                                debugar($debug, "C2 ".$response);
-                                if($response == 0){ // Se já existir o evento no monitoramento o sistema não entrarará neste laço
-                                    $response2 = Monitoring::where('device_id', '=', $event->device_id)->where('cause', '=', 'offline_duration')->where('active', '=', 1)->get()->count();
-                                    $service = insta_maint::where('device_id',$event->device_id)->where('active','1')->get()->count();
-                                    debugar($debug, "C3 ".$response2." ".$service);
-                                    
-                                    if ($response2 ==0 && $service == 0){ // Se já existir um veículo dentro do monitoramento de 24 ou se já estiver nas manutenções de forma ativa ele não entra nesse laço
-                                        debugar($debug, "C4"); 
-                                        $device = UserRepo::getDevice(3,$event->device_id);
-                                        if(true){//$device->id==628){
-                                                            //dd("olá ".$device->id);
-                                            $result= false;
-                                            foreach($excessoes as $word){
-                                                if(!$result){
-                                                    if (str_contains(Str::lower($device->name), $word))
-                                                        $result = true;
-                                                }
-                                                
-                                            }
-                                            
-                                            if(!is_null($device) && $result == false){
-                                                    if($device->active){
-                                                        
-
-                                                                $data_time = $device->traccar->server_time;
-                                                                $year = Str::substr($data_time,0, 4);
-                                                                $month = Str::substr($data_time,5, 2);
-                                                                $day = Str::substr($data_time,8, 2);
-                                                                $first = Carbon::parse($data_time);
-                                                                
-                                                                //dd('oi');
-                                                                if(!validaData($first)){
-                                                                    $fp = fopen('/var/www/html/releases/20190129073809/public/debug.txt', "a+");
-                                                                    fwrite($fp, "\r\n Data Inválida  ID:".$device->id." \r\n"); 
-                                                                    fclose($fp);
-                                                                    break;
-                                                                }
-                                                                
-                                                                $second = Carbon::now();
-                                                                //dd($first."   ".$data_time);
-                                                                if ($second->diffInHours($first)>24){
-                                                                    
-                                                                        if ($device->active == 1){
-                                                                            $Monitoring = new Monitoring;
-                                                                        
-                                                                            $Monitoring->active = true;
-                                                                            $Monitoring->device_id = $event->device_id;
-                                                                            $Monitoring->event_id = $event->id;
-                                                                            $Monitoring->cause = $event->type;
-                                                                            $Monitoring->information = "Inserção automática"; //$device->additional_notes,
-                                                                            $Monitoring->gps_date = $device->traccar->device_time ? $device->traccar->device_time : $event->created_at;
-                                                                            $Monitoring->lat = $event->latitude ? $event->latitude : $device->traccar->lastValidLatitude;
-                                                                            $Monitoring->lon = $event->longitude ? $event->longitude : $device->traccar->lastValidLongitude;
-                                                                            $Monitoring->occ_date = $event->created_at;
-                                                                            //'next_con' => $next_contact,
-                                                                            $Monitoring->make_contact = false;
-                                                                            //'treated_occurence' => $request->input('treated_occurence'),
-                                                                            $Monitoring->sent_maintenance = false;
-                                                                            $Monitoring->automatic_treatment = false;
-
-                                                                            $Monitoring->save();
-                                                                        }
-                                                                    
-                                                                }                                     
-                                                    }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                    }   
-                    debugar($debug, "Monitoramento - Fim novas ocorrências");
-
-            }
-            
-            //INICIO DO TERCEIRO TESTE
-            if(false){
-                $excessoes = ['teste', 'pendente', 'tecnico', 'pendentes', 'cancelar', 'cancelado','retirado', 'deletar','suntech','enviados para o', ''];
-
-                if(true){ //Auth::User()->id == 6) {     // Verificação de veículos parados através da data de atualização do veículo
-                            //$device = UserRepo::getDevice($this->user->id, 1506);
-        
-                            //try {
-                        if(true) {
-                            $devices = UserRepo::getDevices(3);
-                            $data_atual = Carbon::now('-3');
-                            foreach ($devices as $device){
-                                if(true){//$device->id==466){
-                                    if(!empty($device->traccar->server_time)){
-                                        
-                                        if( validaData($device->traccar->server_time)){
-                                            // && (!str_contains($device->plate_number,['CAR-','REMOVIDO', 'removido']) || (!str_contains(Str::lower($device->name), ['teste','teste de rastreador','pendente','cancelar'])) )){
-                                            if($device->active){
-                                                $result = false;
-                                                foreach($excessoes as $word){
-                                                    if(!$result){
-                                                        if (str_contains(Str::lower($device->name), $word))
-                                                            $result = true;
-                                                    }
-                                                    
-                                                }
-                                                if($result==false){
-                                                    $data_rast = Carbon::parse($device->traccar->server_time, '-3');
-                                                    if ($data_atual->diffInHours($data_rast)>24){
-                                                        //dd($data_atual, $data_rast, $data_atual->diffInHours($data_rast)>24);
-                                                        $response2 = Monitoring::where('device_id', '=', $device->id)->where('cause', '=', 'offline_duration')->where('active','1')->get()->count();
-                                                        $service = insta_maint::where('device_id',$device->id)->where('active','1')->get()->count();
-                                                        if ($response2 ==0 && $service == 0){
-                                                            $Monitoring = new Monitoring;
-                                                            
-                                                            $Monitoring->active = true;
-                                                            $Monitoring->device_id = $device->id;
-                                                            $Monitoring->cause = "offline_duration";
-                                                            $Monitoring->information = "Inserção fora de eventos, verificar se veículo está em alertas de duração off-line"; //$device->additional_notes,
-                                                            $Monitoring->gps_date = $device->traccar->server_time;
-                                                            $Monitoring->lat = $device->latitude ? $device->latitude : $device->traccar->lastValidLatitude;
-                                                            $Monitoring->lon = $device->longitude ? $device->longitude : $device->traccar->lastValidLongitude;
-                                                            $Monitoring->occ_date = $data_atual;
-                                                            //'next_con' => $next_contact,
-                                                            $Monitoring->make_contact = false;
-                                                            //'treated_occurence' => $request->input('treated_occurence'),
-                                                            $Monitoring->sent_maintenance = false;
-                                                            $Monitoring->automatic_treatment = false;
-                                                            
-                                                            
-                                                            $Monitoring->save();
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-        
-                        if(true){
-                            $events = DB::table('events')
-                                ->where('user_id', '=', 3)
-                                //->where('device_id', '=', '421')
-                                ->where('alert_id', '=','52')
-                                ->where('deleted', '=',0)
-                                ->Where('created_at', '>', Carbon::now()->subHour(48)) 
-                                ->get();
-                            foreach($events as $event){
-                                $response = Monitoring::where('event_id', '=', $event->id)->get()->count();
-                                    if($response == 0){ // Se já existir o evento no monitoramento o sistema não entrarará neste laço
-                                        $response2 = Monitoring::where('device_id', '=', $device->id)->where('cause', '=', 'offline_duration')->get()->count();
-                                        $service = insta_maint::where('device_id',$device->id)->where('active','1')->get()->count();
-                                        if ($response2 ==0 && $service == 0){
-                                            $fp = fopen('/var/www/html/releases/20190129073809/public/debug.txt', "a+");
-                                            fwrite($fp, "\r\n DEBUGER ".json_encode($event->id)." \r\n"); 
-                                            fclose($fp);
-                                            if(!DB::table('devices')->where('traccar_device_id', $event->device_id)->count() == 0){
-                                                $devices_ = DB::table('devices')->where('traccar_device_id', $event->device_id)->get();
-                                                foreach ($devices_ as $device_){
-                                                    $device = $device_;
-                                                }
-                                                    if(!$device==null){
-                                                        if ($device->active){
-        
-                                                            if(!DB::connection('traccar_mysql')->table('devices')->where('id', 'like',$device->traccar_device_id)->count()==0){
-        
-                                                                $device->traccar = DB::connection('traccar_mysql')->table('devices')->find($device->traccar_device_id);
-                                                                $data_time = $device->traccar->server_time ? $device->traccar->server_time : $event->created_at;
-                                                                $year = Str::substr($data_time,0, 4);
-                                                                $month = Str::substr($data_time,5, 2);
-                                                                $day = Str::substr($data_time,8, 2);
-                                                                $first = Carbon::create($year,$month,$day);
-                                                                $second = Carbon::now();
-        
-                                                                if ($second->diffInHours($first)>24){
-                                                                    if ((!str_contains(Str::lower($device->name), 'teste')) || (!str_contains(Str::lower($device->name), 'cancelar')) || (!str_contains(Str::lower($device->name), 'pendente'))){
-                                                                        if ($device->active == 1){
-        
-                                                                            $Monitoring = new Monitoring;
-        
-                                                                            $Monitoring->active = true;
-                                                                            $Monitoring->device_id = $event->device_id;
-                                                                            $Monitoring->event_id = $event->id;
-                                                                            $Monitoring->cause = $event->type;
-                                                                            $Monitoring->information = "";//$device->additional_notes,
-                                                                            $Monitoring->gps_date = $device->traccar->server_time ? $device->traccar->server_time : $event->created_at;
-                                                                            $Monitoring->lat = $event->latitude ? $event->latitude : $device->traccar->lastValidLatitude;
-                                                                            $Monitoring->lon = $event->longitude ? $event->longitude : $device->traccar->lastValidLongitude;
-                                                                            $Monitoring->occ_date = $event->created_at;
-                                                                            //'next_con' => $next_contact,
-                                                                            $Monitoring->make_contact = false;
-                                                                            //'treated_occurence' => $request->input('treated_occurence'),
-                                                                            $Monitoring->sent_maintenance = false;
-                                                                            $Monitoring->automatic_treatment = false;
-        
-                                                                            $Monitoring->save();
-        
-                                                                        }
-                                                                    }
-                                                                }
-        
-                                                            }
-        
-                                                        }
-        
-                                                    }
-                                            }
-        
-                                            $fp = fopen('/var/www/html/releases/20190129073809/public/debug.txt', "a+");
-                                            fwrite($fp, "\r\n ".json_encode($event->id)." \r\n"); 
-                                            fclose($fp);
-                                        }
-                                    }
-                            }
-        
-                        }
-                    
+                $input = Input::all();
+                $users = null;
+                
+                if (Auth::User()->isManager()) {
+                    $users = Auth::User()->subusers()->lists('id', 'id')->all();
+                    $users[] = Auth::User()->id;
                 }
-            }
-
-            //FIM DO TERCEIRO TESTE
-		}
-        // FIM DOS COMANDOS DE TESTE 
-
-        $input = Input::all();
-        $users = NULL;
-        if (Auth::User()->isManager()) {
-            $users = Auth::User()->subusers()->lists('id', 'id')->all();
-            $users[] = Auth::User()->id;
-        }
-        
-        //Obter as ocorrências para apresentação
-        if ($search_item == ""){
-            // Sem fazer busca na barra de pesquisa
-            $page = 0;
-            $Monitorings = Monitoring::orderby('make_contact','asc')
-                            ->orderby('cause','desc')
-                            ->orderby('sent_maintenance', 'asc')
-                            ->orderby('occ_date', 'asc')
-                            
-                            ->orderby('modified_date', 'asc') 
-                            ->where('active', 1)
-                            ->where('treated_occurence', 0)
-                            ->get();
-            //dd($Monitorings[0]);
-        }
-        else{
-            $only_actives = 0;
-            $treated_occurence = 0;
-            
-            if(strpos($search_item, "ant-") !== false){
-                   
-                $search_item = str_replace("ant-", "",$search_item);
-                //dd($search_item); 
-                $devices_ = DB::table('devices')->where('plate_number', 'like', '%'.$search_item.'%')->get();
-                //dd($devices_);
-                if(!empty($devices_)){
-                    foreach ($devices_ as $device_){
-                        $device = UserRepo::getDevice($this->user->id, $device_->id);
-                    }
-                    if(!$device== null && !empty($device)){
-                        if (Str::contains(Str::lower($device->name), Str::lower($search_item)) || Str::contains(Str::lower($device->object_owner), Str::lower($search_item)) || Str::contains(Str::lower($device->plate_number), Str::lower($search_item))){
-                            $Monitorings = Monitoring::orderby('cause','desc')
-                            ->orderby('make_contact','asc')
-                            ->orderby('gps_date', 'asc')
-                            ->where('device_id', $device->id)
-                            ->get();
-                        }
-                            
-                    }
-                    else{
-                        $Monitorings = Monitoring::orderby('make_contact','asc')
-                            ->orderby('cause','desc')
-                            ->orderby('sent_maintenance', 'asc')
-                            ->orderby('occ_date', 'asc')
-                            
-                            ->orderby('modified_date', 'asc') 
-                            ->where('active', 1)
-                            ->where('treated_occurence', 0)
-                            ->get();
-                    }
-                }
-                else{
-                    $Monitorings = Monitoring::orderby('make_contact','asc')
-                    ->orderby('cause','desc')
-                    ->orderby('sent_maintenance', 'asc')
-                    ->orderby('occ_date', 'asc')
-                    
-                    ->orderby('modified_date', 'asc') 
+                
+                $query = Monitoring::orderBy('make_contact','asc')
+                    ->orderBy('cause','desc')
+                    ->orderBy('sent_maintenance', 'asc')
+                    ->orderBy('occ_date', 'asc')
+                    ->orderBy('modified_date', 'asc') 
                     ->where('active', 1)
-                    ->where('treated_occurence', 0)
-                    ->get();
-                }
+                    ->where('treated_occurence', 0);
                 
-                //dd($Monitorings);
-            }
-            else{
-                
-                $Monitorings = Monitoring::orderby('cause','desc')
-                            ->orderby('make_contact','asc')
-                            ->orderby('device_id', 'asc') 
-                            ->where('active', 1)
-                            ->where('treated_occurence', 0)
-                            ->get()->filter(function ($Monitoring) use ($search_item) {
-                                $devices_ = DB::table('devices')->where('id', $Monitoring->device_id)->get();
-                                if(!empty($devices_)){
-                                    foreach ($devices_ as $device_){
-                                        $device = UserRepo::getDevice($this->user->id, $device_->id);
-                                    }
-
-                                    if(!$device== null && !empty($device)){
-                                        
-                                        if (Str::contains(Str::lower($device->name), Str::lower($search_item)) || Str::contains(Str::lower($device->object_owner), Str::lower($search_item)) || Str::contains(Str::lower($device->plate_number), Str::lower($search_item))){
-                                            
-                                            return $Monitoring;
-                                        }
-                                        
-                                    }
-                                    else{
-                                        $Monitoring->active = false;
-                                        $Monitoring->information = "dispositivo deletado";
-                                        $Monitoring->save();
-                                    }
-                                }
+                if ($search_item != "") {
+                    $query = $query->where(function ($query) use ($search_item) {
+                        $query->whereHas('device', function ($query) use ($search_item) {
+                            $query->where('name', 'like', '%' . $search_item . '%')
+                                ->orWhere('object_owner', 'like', '%' . $search_item . '%')
+                                ->orWhere('plate_number', 'like', '%' . $search_item . '%');
+                        });
                     });
-            }
-            $page = 0;
-           
-        }
-
-        $items = $Monitorings->paginate(10,$page);
-
-        foreach ($items as $item){
-            $devices_ = DB::table('devices')->where('id', $item->device_id)->get();
-            if(!empty($devices_)){
-                //
-                foreach ($devices_ as $device_){
-                    $device = UserRepo::getDevice($this->user->id, $device_->id);
                 }
-                //$device = UserRepo::getDevice($this->user->id, $item->device_id);
-                if(!$device==null){
-                    //echo $item->occ_date;
-                    if(!$item->occ_date==null){
-                        if($this->validaData($item->occ_date))
-                            $item->occ_date = converter_data($item->occ_date, true);
-                        //echo $device->occ_date;
-                    }
-                    $item->device_id = $device->id;           
-
-                    if($device->traccar){
-                        if($device->traccar->device_time)
-                        $item->device_time = $device->traccar->ack_time;
-                    }
-                    else{
-
-                    }
-
-                    if (Auth::User()->id == 6) {
-                        //dd($device, $device->device_model);
-                    }
-
-                    $item->customer = $device->name;
-                    $item->owner = $device->object_owner;
-                    $item->plate_number = $device->plate_number;
-                    
-
-                    if (Str::contains(Str::lower($item->information), "rodando/viajando normalmente")) { //Alterar na apresentação só para ter destaque de vermelho
-                        $item->make_contact=false;
-                    }
-
-                    if($item->next_con=="0000-00-00 00:00:00"){
-                        $item->next_con = false;
-                        //dd($item->next_con);
-                        //$item->next_con = "Sem previsão";
-                    }
-                    else{
-                        $item->next_con = $this->convert_date($item->next_con, true);
-                    }
-                    
-                    if($device->name == "ASSOCIAÇÃO LÍDER" ||  $device->name == "COOPERATIVA"){
-                            $item->contact = $device->contact;
-                    }
-                    else{
-                        if($device->cliente_id==0){
-                            $customers = customer::where('name', $device->name)->get();
-                                foreach ($customers as $customer){
-                                    $item->contact = $customer->contact;
-                                }
-                        }
-                        else{
-                            $customers = customer::find($device->cliente_id);
-                            $item->contact = $customer->contact;
-                        }
+                
+                $monitorings = $query->get();
+                
+                $page = 0;
+                $items = $monitorings->paginate(10, $page);
+                
+                foreach ($items as $item) {
+                    $device = DB::table('devices')->where('traccar_device_id', $item->device_id)->first();
+                    if ($device !== null) {
+                        $item = $this->processDevice($device, $item); // Supondo que processDevice() faz as modificações necessárias
+                    } else {
+                        Monitoring::where('id', $item->id)->delete();
                     }
                 }
                 
-            }
-            else{
-                Monitoring::where('id', $item->id)->delete();
-            }
-        }
-         //dd('oi');
-        $section = $this->section;
-        return View::make('admin::'.ucfirst($this->section).'.' . 'table')->with(compact('items','section','Monitorings'));
+                $section = $this->section;
+                return View::make('admin::'.ucfirst($this->section).'.' . 'table')->with(compact('items','section','monitorings'));
+                
+                // Função para processar o dispositivo
     }
 
     public function create() {
@@ -654,11 +118,11 @@ class MonitoringsController extends BaseController {
         $Monitorings = Monitoring::all();        
         /*$devices = UserRepo::getDevices($this->user->id)->filter(function ($devices_) { return $devices_->traccar_device_id == 832; });
         
-        foreach ($devices as $item){
-            $device = array_get($item, 'updated_at');
-            $device = $device->toArray();
-            $device = array_get($device, 'formatted');
-            $device = $item;
+            foreach ($devices as $item){
+                $device = array_get($item, 'updated_at');
+                $device = $device->toArray();
+                $device = array_get($device, 'formatted');
+                $device = $item;
         }*/
         
         $devices = UserRepo::getDevices($this->user->id);
@@ -671,35 +135,37 @@ class MonitoringsController extends BaseController {
         //dd($Monitoring);
         
         $Monitoring = $Monitoring->toArray();
-        $devices_ = DB::table('devices')->where('id', $Monitoring[0]['device_id'])->get();
+        $devices_ = DB::table('devices')->where('traccar_device_id', $Monitoring[0]['device_id'])->get();
         
         foreach ($devices_ as $device_){
             $device = UserRepo::getDevice($this->user->id, $device_->id);
         }
-        if (empty($Monitoring[0]['information'])){
-            $item = $Monitoring[0];
-            $item['additional_notes'] = $device->additional_notes;
-            $item['information'] = "";
+
+            if (empty($Monitoring[0]['information'])){
+                $item = $Monitoring[0];
+                $item['additional_notes'] = $device->additional_notes;
+                $item['information'] = "";
+                }
+            else{
+                $item = $Monitoring[0];
+                $item['additional_notes'] = $device->additional_notes;
             }
-        else{
-            $item = $Monitoring[0];
-            $item['additional_notes'] = $device->additional_notes;
-        }
-        
-        //Pegar contato em outras tabelas
-        $stateandcity = getGeoCity( $device->traccar->lastValidLatitude, $device->traccar->lastValidLongitude );
-        $last_address = $stateandcity[2]." - ".$stateandcity[1]." - ".$stateandcity[0];
-        $item['last_address'] = $last_address;
-        $item['city'] = $device->city;
-        $item['name'] = $device->name;
-        $item['device_id'] = $device->id;
-        $item['device_model'] = $device->device_model;
-        $item['vehicle_color'] = $device->vehicle_color;
-        
-        $poi_next_001 = collect([]);
-        $poi_next_01 = collect([]);
-        $poi_next_1 = collect([]);
-        $poi_next_10 = collect([]);
+            
+            //Pegar contato em outras tabelas
+            $stateandcity = getGeoCity( $device->traccar->lastValidLatitude, $device->traccar->lastValidLongitude );
+            $last_address = $stateandcity[2]." - ".$stateandcity[1]." - ".$stateandcity[0];
+            $item['last_address'] = $last_address;
+            $item['city'] = $device->city;
+            $item['name'] = $device->name;
+            $item['plate_number'] = $device->plate_number;
+            $item['device_id'] = $device->id;
+            $item['device_model'] = $device->device_model;
+            $item['vehicle_color'] = $device->vehicle_color;
+            
+            $poi_next_001 = collect([]);
+            $poi_next_01 = collect([]);
+            $poi_next_1 = collect([]);
+            $poi_next_10 = collect([]);
 
         
         
@@ -732,36 +198,36 @@ class MonitoringsController extends BaseController {
                 }
             }
             //dd($poi_next_001,$poi_next_01, $poi_next_1, $poi_next_10);    
-        //}
+            //}
 
-        
-        //dd('ola');
-        
-        if($device->name == "ASSOCIAÇÃO LÍDER" ||  $device->name == "COOPERATIVA"){
-                $item['contact'] = $device->contact;
-        }
-        else{
-            if($device->cliente_id==0){
-                $customers = customer::where('name', $device->name)->get();
-                
-                if (empty($customers->contact)){
-                    foreach ($customers as $customer){
-                        $item['contact'] = $customer->contact;
-                    }
-                }
-                else
+            
+            //dd('ola');
+            
+            if($device->name == "ASSOCIAÇÃO LÍDER" ||  $device->name == "COOPERATIVA"){
                     $item['contact'] = $device->contact;
-                //dd($item);
-                
             }
             else{
-                $customers = customer::find($device->cliente_id);
-                if (empty($customers->contact))
-                    $item['contact'] = $customer->contact;
-                else
-                    $item['contact'] = $device->contact;
+                if($device->cliente_id==0){
+                    $customers = customer::where('name', $device->name)->get();
+                    
+                    if (empty($customers->contact)){
+                        foreach ($customers as $customer){
+                            $item['contact'] = $customer->contact;
+                        }
+                    }
+                    else
+                        $item['contact'] = $device->contact;
+                    //dd($item);
+                    
+                }
+                else{
+                    $customers = customer::find($device->cliente_id);
+                    if (empty($customers->contact))
+                        $item['contact'] = $customer->contact;
+                    else
+                        $item['contact'] = $device->contact;
+                }
             }
-        }
         //****
         
         return View::make('admin::'.ucfirst($this->section).'.edit')->with(compact('managers', 'item', 'poi_next_001', 'poi_next_01', 'poi_next_1', 'poi_next_10'));
@@ -1114,5 +580,12 @@ class MonitoringsController extends BaseController {
             $modified_date = $dayOfWeek[$modified_date->dayOfWeek].', '.$modified_date->day.'-'.$modified_date->month.'-'.$modified_date->year.' '.$modified_date->hour.':'.$modified_date->minute.':'.$modified_date->second;
         }
         return $modified_date;
+    }
+
+    public function processDevice($device, $item)
+    {
+        $item->customer = $device->name;
+        $item->owner = $device->object_owner;
+        $item->plate_number = $device->plate_number;
     }
 }
