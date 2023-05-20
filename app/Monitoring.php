@@ -3,6 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Facades\Repositories\UserRepo;
+use Tobuli\Repositories\Device\DeviceRepositoryInterface as Device;
+
 
 class Monitoring extends Model
 {
@@ -37,4 +40,10 @@ class Monitoring extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function device()
+    {
+        return $this->belongsTo(Device::class);
+    }
+
 }

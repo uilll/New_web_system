@@ -74,23 +74,30 @@ class MonitoringsController extends BaseController {
                     $users[] = Auth::User()->id;
                 }
                 
-                $query = Monitoring::orderBy('make_contact','asc')
-                    ->orderBy('cause','desc')
+                $query = Monitoring::orderBy('make_contact', 'asc')
+                    ->orderBy('cause', 'desc')
                     ->orderBy('sent_maintenance', 'asc')
                     ->orderBy('occ_date', 'asc')
-                    ->orderBy('modified_date', 'asc') 
+                    ->orderBy('modified_date', 'asc')
                     ->where('active', 1)
                     ->where('treated_occurence', 0);
-                
+
                 if ($search_item != "") {
                     $query = $query->where(function ($query) use ($search_item) {
-                        $query->whereHas('device', function ($query) use ($search_item) {
-                            $query->where('name', 'like', '%' . $search_item . '%')
-                                ->orWhere('object_owner', 'like', '%' . $search_item . '%')
-                                ->orWhere('plate_number', 'like', '%' . $search_item . '%');
+                        $query->whereIn('device_id', function ($subQuery) use ($search_item) {
+                            $subQuery->select('traccar_device_id')
+                                ->from('devices')
+                                ->where(function ($query) use ($search_item) {
+                                    $query->where('name', 'like', '%' . $search_item . '%')
+                                        ->orWhere('object_owner', 'like', '%' . $search_item . '%')
+                                        ->orWhere('plate_number', 'like', '%' . $search_item . '%');
+                                });
                         });
                     });
                 }
+
+                $results = $query->get();
+
                 
                 $monitorings = $query->get();
                 
@@ -587,5 +594,12 @@ class MonitoringsController extends BaseController {
         $item->customer = $device->name;
         $item->owner = $device->object_owner;
         $item->plate_number = $device->plate_number;
+        if(!$item->occ_date==null){
+            if($this->validaData($item->occ_date)){
+                $item->occ_date = Carbon::createFromFormat('Y-m-d H:i:s', $item->occ_date)
+                                        ->timezone('America/Sao_Paulo')
+                                        ->format('Y-m-d H:i:s');
+            }
+        }
     }
 }

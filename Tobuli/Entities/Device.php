@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tobuli\Exceptions\ValidationException;
 use Tobuli\Traits\Chattable;
+use App\Models\Monitoring;
 
 class Device extends Eloquent {
 
@@ -872,4 +873,10 @@ class Device extends Eloquent {
             ]);
         }
     }
+
+    public function monitorings()
+    {
+        return $this->hasMany(Monitoring::class);
+    }
+
 }

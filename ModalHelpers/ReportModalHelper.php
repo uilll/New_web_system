@@ -20,9 +20,12 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Bugsnag\BugsnagLaravel\BugsnagFacade as Bugsnag;
 use Tobuli\Exceptions\ValidationException;
 use Tobuli\Helpers\ReportHelper;
+use Illuminate\Support\Facades\Auth;
 
 use Carbon\Carbon;
 use TCPDF;
+//use SnappyPDF;
+use Dompdf\Dompdf;
 
 
 class ReportModalHelper extends ModalHelper
@@ -421,6 +424,14 @@ class ReportModalHelper extends ModalHelper
                 elseif ($data['type'] == 25) { # Object history
 
                     $items[$device->id] = $reportHelper->generateObjectHistory($date_from, $date_to, $device, $this->user);
+                    //if (Auth::User()->id == 6) {   
+                        
+                        // Filtrar as posições
+                        $filteredPositions = $this->filterPositions($items[$device->id]['positions']);
+                        //dump($items[$device->id]['positions'], $filteredPositions);
+                        $items[$device->id]['positions'] = $filteredPositions;
+                        //dd($items);
+                    //}
 
                     if (empty($data['parameters']))
                         $data['parameters'] = [];
@@ -450,6 +461,7 @@ class ReportModalHelper extends ModalHelper
                 }
                 elseif ($data['type'] == 30) { # Ignition on/off
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
+                    
 
                     $driver_history = getDevicesDrivers($data['user_id'], $device->id, $date_from, $date_to, '>=', NULL, TRUE);
                     $last_dr = getDevicesDrivers($data['user_id'], $device->id, $date_from, NULL, '<=', 1);
@@ -469,6 +481,7 @@ class ReportModalHelper extends ModalHelper
                 }
                 else {
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
+                    
 
                     if (!empty($items_result)) {
                         $engine_status = $device->getEngineStatusFrom($date_from);
@@ -587,33 +600,99 @@ class ReportModalHelper extends ModalHelper
                 echo $html;
             }
             elseif ($data['format'] == 'pdf' || $data['format'] == 'pdf_land') {
-                //UILMO FAZER MELHORIA NA QUESTÃO DE GERAR O PDF,PODE ATÉ ENVIAR OS DADOS PARA O SERVIDOR bd E FAZER A GERAÇÃO POR LÁ
+                    //UILMO FAZER MELHORIA NA QUESTÃO DE GERAR O PDF,PODE ATÉ ENVIAR OS DADOS PARA O SERVIDOR bd E FAZER A GERAÇÃO POR LÁ
+                    /*
                 $stop = false;
                 $change_page_size = ($data['format'] == 'pdf_land');
                 $tries = 1;
-                while (!$stop) {
-                    try {
-                        if ($change_page_size)
-                            $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))->setPaper(array(0,0,950,950), 'landscape');
-                        else
-                            $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'));
+                $view = view('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))->render();
 
-                        return $pdf->stream($report_name.'.pdf');
-                    }
-                    catch (\Exception $e) {
-                        if ($e instanceof \DOMPDF_Exception && $e->getMessage() == 'Frame not found in cellmap') {
-                            $change_page_size = TRUE;
-                        } else {
-                            Bugsnag::notifyException($e);
+                    // Caminho completo para o diretório de destino
+                $pdfDirectory = '/home/centos/wkhtmltopdf/';
+                    // Caminho completo para o arquivo PDF
+                //$pdfFilePath = $pdfDirectory . $report_name.'.pdf';
+                
+                /*
+                
+
+                $pdf = SnappyPDF::loadHTML($view);
+                $pdf->setOption('dpi', '72'); // Defina um valor baixo para a opção dpi
+                return $pdf->inline('meu_pdf.pdf');
+
+                //$pdf->save($pdfDirectory.'meu_pdf.pdf');* /
+
+                $dompdf = new Dompdf();
+                $dompdf->set_option('dpi', 72); // Defina um valor baixo para o DPI
+                $dompdf->loadHtml($view);
+                $dompdf->render();
+
+                return $dompdf->stream('meu_pdf.pdf');*/
+
+                if($data['type'] == 25){
+                        return redirect()->back()->with('error', 'Desculpe, não foi possível gerar o RELATÓRIO! Tente o formato HTML ou XLS')->header('Refresh', '5');
+                        //UILMO FAZER MELHORIA NA QUESTÃO DE GERAR O PDF,PODE ATÉ ENVIAR OS DADOS PARA O SERVIDOR bd E FAZER A GERAÇÃO POR LÁ
+                        $stop = false;
+                        $change_page_size = ($data['format'] == 'pdf_land');
+                        $tries = 1;
+                        while (!$stop) {
+                            try {
+                                if ($change_page_size)
+                                    $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))
+                                                ->setPaper(array(0,0,950,950), 'landscape')
+                                                ->setOptions(['dpi' => 72,
+                                                                'isHtml5ParserEnabled' => true]);
+                                else
+                                    $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))
+                                                ->setOptions([  'dpi' => 72,
+                                                                'isHtml5ParserEnabled' => true]);
+
+                                return $pdf->stream($report_name.'.pdf');
+                            }
+                            catch (\Exception $e) {
+                                if ($e instanceof \DOMPDF_Exception && $e->getMessage() == 'Frame not found in cellmap') {
+                                    $change_page_size = TRUE;
+                                } else {
+                                    Bugsnag::notifyException($e);
+                                }
+
+                                $tries++;
+                                if ($tries > 2)
+                                    $stop = TRUE;
+                                sleep(1);
+                            }
                         }
+                }
+                else{
+                    $stop = false;
+                        $change_page_size = ($data['format'] == 'pdf_land');
+                        $tries = 1;
+                        while (!$stop) {
+                            try {
+                                if ($change_page_size)
+                                    $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))
+                                                ->setPaper(array(0,0,950,950), 'landscape');
+                                else
+                                    $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'));
 
-                        $tries++;
-                        if ($tries > 2)
-                            $stop = TRUE;
-                        sleep(1);
-                    }
+                                return $pdf->stream($report_name.'.pdf');
+                            }
+                            catch (\Exception $e) {
+                                if ($e instanceof \DOMPDF_Exception && $e->getMessage() == 'Frame not found in cellmap') {
+                                    $change_page_size = TRUE;
+                                } else {
+                                    Bugsnag::notifyException($e);
+                                }
+
+                                $tries++;
+                                if ($tries > 2)
+                                    $stop = TRUE;
+                                sleep(1);
+                            }
+                        }
                 }
                 return 'Desculpe não poder gerar o RELATÓRIO!';
+                
+
             }
             elseif ($data['format'] == 'xls') {
                 try {
@@ -885,4 +964,28 @@ class ReportModalHelper extends ModalHelper
             $data['parameters'] = array_only($data, $parameters);
         }
     }
+
+     // Função para filtrar as posições
+    public function filterPositions($positions)
+    {
+        // Última posição válida
+        $lastValidPosition = null;
+    
+        // Posições filtradas
+        $filteredPositions = [];
+        $previousTime = null;
+    
+        foreach ($positions as $position) {
+            $currentTime = Carbon::createFromFormat('d-m-Y H:i:s', $position['time']);
+            if ($previousTime !== null && $currentTime->diffInMinutes($previousTime) < 3) {
+                continue; // Ignora a posição se estiver muito próxima da anterior
+            }
+
+            $filteredPositions[] = $position;
+            $previousTime = $currentTime;
+        }
+    
+        return $filteredPositions;
+    }
+    
 }
