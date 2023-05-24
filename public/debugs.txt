@@ -2064,3 +2064,15 @@
 "O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3245 do cliente: SUPERMERCADO JORGE TOR\u00c7O LTDA()"
 
 "Anchor_Start 2130, 1146"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"354522188202399","brand":"BWS E3+","model":"BWS E3+","work_since":"2023-05-24","history":"","sim_number":"5511950727083","iccd":"89551080157052927529","operator":"WL.VIVO.COM.BR","manager_id":1085}
+
+"Finalizou OK?"
+
+{}
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 102 do cliente: TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2066 do cliente: TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2185 do cliente: TESTE()"

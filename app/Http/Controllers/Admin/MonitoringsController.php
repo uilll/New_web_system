@@ -161,9 +161,12 @@ class MonitoringsController extends BaseController {
         //dd($Monitoring->device_id);
         
         //$Monitoring = $Monitoring->toArray();
-        $devices_ = DB::table('devices')->where('traccar_device_id', $Monitoring->device_id)->first();
+        if($Monitoring->cause== "Bateria Violada")
+            $devices_ = DB::table('devices')->where('id', $Monitoring->device_id)->first();
+        else
+            $devices_ = DB::table('devices')->where('traccar_device_id', $Monitoring->device_id)->first();
         $device = UserRepo::getDevice($this->user->id, $devices_->id);
-        //dd($devices_);
+        
         
         
     /*foreach ($devices_ as $device_){
