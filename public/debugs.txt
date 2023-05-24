@@ -1932,3 +1932,135 @@
 {}
 
 {}
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2999 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(MILTON SANTOS CUNHA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3230 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(MILTON SANTOS CUNHA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3230 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(MILTON SANTOS CUNHA)"
+
+"Anchor_Start 155, 290"
+
+"Anchor_Start , 374"
+
+"Anchor_Start 2130, 1146"
+
+"Anchor_Start 1002, 460"
+
+"Anchor_Start 2861, 1416"
+
+"Anchor_Start 2130, 1146"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2236 do cliente: PENDENTE - VERIFICAR(cancelar)"
+
+{"active":"1","device_id":2160,"plate_number":"FUW-7C20","cause":"offline_duration","information":"\"2023-02-03 14:01:00\"","gps_date":"2023-02-03 14:01:00","occ_date":"","next_con":"2023-05-22","make_contact":"1","treated_occurence":"0","sent_maintenance":"0","automatic_treatment":false,"customer":"MASSA FORT CONCRETO LTDA","owner":"MASSA FORT CONCRETO LTDA "}
+
+{"active":"1","device_id":2502,"plate_number":"OZL-8837","cause":"offline_duration","information":"\"2022-12-21 23:14:43\"","gps_date":"2022-12-21 23:14:43","occ_date":"2023-05-23","next_con":"2023-05-23","make_contact":"1","treated_occurence":"0","sent_maintenance":"0","automatic_treatment":false,"customer":"INFORNET PROVEDOR DE INTERNET E COMERCIO EIRELI - EPP","owner":"INFORNET PROVEDOR DE INTERNET E COMERCIO EIRELI - EPP"}
+
+"Anchor_Start 1166, 665"
+
+{}
+
+{}
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2671 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(CLAUDIONOR SOUZA DOS SANTOS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1154 do cliente: CLAUDIO DE SOUZA DOS SANTOS(CLAUDIO DE SOUZA DOS SANTOS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1154 do cliente: CLAUDIO DE SOUZA DOS SANTOS(CLAUDIO DE SOUZA DOS SANTOS)"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2895 do cliente: VICTOR MILDEBERG SANTOS ()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1154 do cliente: CLAUDIO DE SOUZA DOS SANTOS(CLAUDIO DE SOUZA DOS SANTOS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1154 do cliente: CLAUDIO DE SOUZA DOS SANTOS(CLAUDIO DE SOUZA DOS SANTOS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 1154 do cliente: CLAUDIO DE SOUZA DOS SANTOS(CLAUDIO DE SOUZA DOS SANTOS)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 2087 do cliente: FR TRANSPORTES EIRELI(FABIO OLIVEIRA MOURA MARTINS)"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2545 do cliente: TESTE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2552 do cliente: TESTE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3244 do cliente: CICERO APARECIDO DE ANDRADE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3250 do cliente: TECNICO BRUNO - SALVADOR - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3257 do cliente: TECNICO BRUNO - SALVADOR - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3251 do cliente: TECNICO BRUNO - SALVADOR - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3243 do cliente: TECNICO BRUNO - SALVADOR - TESTE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2545 do cliente: CICERO APARECIDO DE ANDRADE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3244 do cliente: TESTE()"
+
+"Anchor_Start 2249, 596"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3190 do cliente: TECNICO BRUNO - SALVADOR - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3248 do cliente: TECNICO BRUNO - SALVADOR - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3255 do cliente: TECNICO BRUNO - SALVADOR - TESTE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 2545 do cliente: CICERO APARECIDO DE ANDRADE()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3244 do cliente: TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3189 do cliente: TECNICO RODRIGO FEIRA DE SANTANA - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3246 do cliente: TECNICO RODRIGO FEIRA DE SANTANA - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3247 do cliente: TECNICO RODRIGO FEIRA DE SANTANA - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3249 do cliente: TECNICO RODRIGO FEIRA DE SANTANA - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3254 do cliente: TECNICO RODRIGO FEIRA DE SANTANA - TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3252 do cliente: TESTE()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3236 do cliente: TESTE()"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022032872579","brand":"J16-4G","model":"J16-4G","work_since":"","history":"","sim_number":"16999053031","iccd":"89553202100050822408","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+{"active":"1","in_use":0,"in_service":0,"imei":"868022033014338","brand":"J16-4G","model":"J16-4G","work_since":"2023-05-22","history":"","sim_number":"16996602306","iccd":"89553202100050822390","operator":"HINOVA.BR \/ ALGAR 4G","manager_id":0}
+
+"Finalizou OK?"
+
+"O usu\u00e1rio: 6, alterou o ve\u00edculo: 2160 do cliente: MASSA FORT CONCRETO LTDA(MASSA FORT CONCRETO LTDA )"
+
+"Anchor_Start 1913, 1031"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3236 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(WHELISON CARVALHO SILVA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3252 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER()"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3252 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(WHELISON CARVALHO SILVA)"
+
+"O usu\u00e1rio: 3, alterou o ve\u00edculo: 3236 do cliente: ASSOCIA\u00c7\u00c3O L\u00cdDER(WHELISON CARVALHO SILVA)"
+
+{}
+
+"In\u00edcio criar novo cadastro de rastreador"
+
+{"id":21377,"imei":"007367667","brand":"ST310U","model":"SUNTEC","active":1,"in_use":0,"test":0,"device_id":3245,"last_device_id":0,"in_service":"0","maintence_date":"","maintence_quant":0,"work_since":"2023-05-18","history":"\r\n \r\n ","excess_data":0,"sim_number":"","iccd":"89551080357021057305","operator":"WL.VIVO.COM.BR","manager_id":1085,"created_at":"2023-05-18 00:00:00","updated_at":"2023-05-19 00:00:00"}
+
+"Finalizou OK?"
+
+{}
+
+{}
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3245 do cliente: TESTE()"
+
+"Anchor_Start 2010, 192"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3244 do cliente: CLEIDSON VILELA BRITO()"
+
+"O usu\u00e1rio: 1085, alterou o ve\u00edculo: 3245 do cliente: SUPERMERCADO JORGE TOR\u00c7O LTDA()"
+
+"Anchor_Start 2130, 1146"

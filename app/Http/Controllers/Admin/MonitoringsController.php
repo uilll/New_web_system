@@ -84,15 +84,29 @@ class MonitoringsController extends BaseController {
 
                 if ($search_item != "") {
                     $query = $query->where(function ($query) use ($search_item) {
-                        $query->whereIn('device_id', function ($subQuery) use ($search_item) {
-                            $subQuery->select('traccar_device_id')
-                                ->from('devices')
-                                ->where(function ($query) use ($search_item) {
-                                    $query->where('name', 'like', '%' . $search_item . '%')
-                                        ->orWhere('object_owner', 'like', '%' . $search_item . '%')
-                                        ->orWhere('plate_number', 'like', '%' . $search_item . '%');
-                                });
-                        });
+                        // Consulta quando 'cause' é 'Bateria Violada'
+                        $query->where('cause', 'Bateria Violada')
+                            ->whereIn('device_id', function ($subQuery) use ($search_item) {
+                                $subQuery->select('id')
+                                    ->from('devices')
+                                    ->where(function ($query) use ($search_item) {
+                                        $query->where('name', 'like', '%' . $search_item . '%')
+                                            ->orWhere('object_owner', 'like', '%' . $search_item . '%')
+                                            ->orWhere('plate_number', 'like', '%' . $search_item . '%');
+                                    });
+                            });
+                
+                        // Consulta quando 'cause' é 'offline_duration' ou outros
+                        $query->orWhere('cause', '!=', 'Bateria Violada')
+                            ->whereIn('device_id', function ($subQuery) use ($search_item) {
+                                $subQuery->select('traccar_device_id')
+                                    ->from('devices')
+                                    ->where(function ($query) use ($search_item) {
+                                        $query->where('name', 'like', '%' . $search_item . '%')
+                                            ->orWhere('object_owner', 'like', '%' . $search_item . '%')
+                                            ->orWhere('plate_number', 'like', '%' . $search_item . '%');
+                                    });
+                            });
                     });
                 }
 
@@ -105,7 +119,12 @@ class MonitoringsController extends BaseController {
                 $items = $monitorings->paginate(10, $page);
                 
                 foreach ($items as $item) {
-                    $device = DB::table('devices')->where('traccar_device_id', $item->device_id)->first();
+                    if($item->cause == 'Bateria Violada') {
+                        $device = DB::table('devices')->where('id', $item->device_id)->first();
+                    } else {
+                        $device = DB::table('devices')->where('traccar_device_id', $item->device_id)->first();
+                    }
+                    
                     if ($device !== null) {
                         $item = $this->processDevice($device, $item); // Supondo que processDevice() faz as modificações necessárias
                     } else {
@@ -138,36 +157,43 @@ class MonitoringsController extends BaseController {
     
     public function edit($id) {
         $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->lists('email', 'id')->all();
-        $Monitoring = Monitoring::where('id', $id)->get();
-        //dd($Monitoring);
+        $Monitoring = Monitoring::where('id', $id)->first();
+        //dd($Monitoring->device_id);
         
-        $Monitoring = $Monitoring->toArray();
-        $devices_ = DB::table('devices')->where('traccar_device_id', $Monitoring[0]['device_id'])->get();
+        //$Monitoring = $Monitoring->toArray();
+        $devices_ = DB::table('devices')->where('traccar_device_id', $Monitoring->device_id)->first();
+        $device = UserRepo::getDevice($this->user->id, $devices_->id);
+        //dd($devices_);
         
-        foreach ($devices_ as $device_){
+        
+    /*foreach ($devices_ as $device_){
+            
             $device = UserRepo::getDevice($this->user->id, $device_->id);
-        }
+        }*/
 
-            if (empty($Monitoring[0]['information'])){
-                $item = $Monitoring[0];
-                $item['additional_notes'] = $device->additional_notes;
-                $item['information'] = "";
+        //dd($device);
+
+            if (empty($Monitoring->information)){
+                $item = $Monitoring;
+                $item->additional_notes = $device->additional_notes;
+                $item->information = "";
                 }
             else{
-                $item = $Monitoring[0];
-                $item['additional_notes'] = $device->additional_notes;
+                    
+                $item = $Monitoring;
+                $item->additional_notes = $device->additional_notes;
             }
             
             //Pegar contato em outras tabelas
             $stateandcity = getGeoCity( $device->traccar->lastValidLatitude, $device->traccar->lastValidLongitude );
             $last_address = $stateandcity[2]." - ".$stateandcity[1]." - ".$stateandcity[0];
-            $item['last_address'] = $last_address;
-            $item['city'] = $device->city;
-            $item['name'] = $device->name;
-            $item['plate_number'] = $device->plate_number;
-            $item['device_id'] = $device->id;
-            $item['device_model'] = $device->device_model;
-            $item['vehicle_color'] = $device->vehicle_color;
+            $item->last_address = $last_address;
+            $item->city = $device->city;
+            $item->name = $device->name;
+            $item->plate_number = $device->plate_number;
+            $item->device_id = $device->id;
+            $item->device_model = $device->device_model;
+            $item->vehicle_color = $device->vehicle_color;
             
             $poi_next_001 = collect([]);
             $poi_next_01 = collect([]);
@@ -211,7 +237,7 @@ class MonitoringsController extends BaseController {
             //dd('ola');
             
             if($device->name == "ASSOCIAÇÃO LÍDER" ||  $device->name == "COOPERATIVA"){
-                    $item['contact'] = $device->contact;
+                    $item->contact = $device->contact;
             }
             else{
                 if($device->cliente_id==0){
@@ -219,20 +245,20 @@ class MonitoringsController extends BaseController {
                     
                     if (empty($customers->contact)){
                         foreach ($customers as $customer){
-                            $item['contact'] = $customer->contact;
+                            $item->contact = $customer->contact;
                         }
                     }
                     else
-                        $item['contact'] = $device->contact;
+                        $item->contact = $device->contact;
                     //dd($item);
                     
                 }
                 else{
                     $customers = customer::find($device->cliente_id);
                     if (empty($customers->contact))
-                        $item['contact'] = $customer->contact;
+                        $item->contact = $customer->contact;
                     else
-                        $item['contact'] = $device->contact;
+                        $item->contact = $device->contact;
                 }
             }
         //****
