@@ -244,7 +244,7 @@ class MontPayController extends BaseController
                                 ->get();
 
             if ($customers) {
-                $customers = $customers->lists('name', 'id')->all();
+                $customers = $customers->pluck('name', 'id')->all();
 
                 foreach ($customers_app_ext as $customer_app_ext) {
                     foreach ($customer_app_ext as $customer_ext) {
@@ -343,7 +343,7 @@ class MontPayController extends BaseController
 
     public function create()
     {
-        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->lists('email', 'id')->all();
+        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->pluck('email', 'id')->all();
         $devices = UserRepo::getDevices($this->user->id);
         $Monitorings = Monitoring::all();
         $devices = UserRepo::getDevices($this->user->id)->filter(function ($devices_) {
@@ -364,7 +364,7 @@ class MontPayController extends BaseController
 
     public function edit($id)
     {
-        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->lists('email', 'id')->all();
+        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->pluck('email', 'id')->all();
         $Monitoring = Monitoring::where('id', $id)->get();
         $Monitoring = $Monitoring->toArray();
         $devices_ = DB::table('devices')->where('traccar_device_id', $Monitoring[0]['device_id'])->get();

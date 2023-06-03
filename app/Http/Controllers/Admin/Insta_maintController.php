@@ -103,7 +103,7 @@ class Insta_maintController extends BaseController
         $input = Input::all();
         $users = null;
         if (Auth::User()->isManager()) {
-            $users = Auth::User()->subusers()->lists('id', 'id')->all();
+            $users = Auth::User()->subusers()->pluck('id', 'id')->all();
             $users[] = Auth::User()->id;
         }
 
@@ -267,7 +267,7 @@ class Insta_maintController extends BaseController
 
     public function create()
     {
-        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->lists('email', 'id')->all();
+        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->pluck('email', 'id')->all();
 
         $devices = UserRepo::getDevices($this->user->id);
         $technician = Technician::all();
@@ -286,7 +286,7 @@ class Insta_maintController extends BaseController
 
     public function edit($id)
     {
-        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->lists('email', 'id')->all();
+        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->pluck('email', 'id')->all();
         $service = insta_maint::find($id);
 
         $device = UserRepo::getDevice($this->user->id, $service->device_id);

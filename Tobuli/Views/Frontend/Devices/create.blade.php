@@ -34,7 +34,7 @@
                 </div>
                 <div class="form-group">
                     {!! Form::label('user_id', trans('validation.attributes.user').'*:') !!}
-                    {!! Form::select('user_id[]', $users->lists('email', 'id'), ["3", "2", "6", "1025", "1026"], ['class' => 'form-control', 'multiple' => 'multiple', 'data-live-search' => true]) !!}
+                    {!! Form::select('user_id[]', $users->pluck('email', 'id'), ["3", "2", "6", "1025", "1026"], ['class' => 'form-control', 'multiple' => 'multiple', 'data-live-search' => true]) !!}
                 </div>
             @else
                 <div class="form-group">
@@ -46,7 +46,7 @@
                 </div>
                 <div class="form-group">
                     {!! Form::label('user_id', trans('validation.attributes.user').'*:') !!}
-                    {!! Form::select('user_id[]', $users->lists('email', 'id'), [Auth::User()->id], ['class' => 'form-control', 'multiple' => 'multiple', 'data-live-search' => true]) !!}
+                    {!! Form::select('user_id[]', $users->pluck('email', 'id'), [Auth::User()->id], ['class' => 'form-control', 'multiple' => 'multiple', 'data-live-search' => true]) !!}
                 </div>
             @endif
 

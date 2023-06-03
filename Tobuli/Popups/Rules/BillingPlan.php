@@ -26,7 +26,7 @@ class BillingPlan extends BaseRule
 
     public function getFields()
     {
-        $fields = BillingPlanRepo::all()->lists('title', 'id');
+        $fields = BillingPlanRepo::all()->pluck('title', 'id');
         $fields->prepend(trans('admin.no_plan'));
 
         $value = $this->rule ? $this->rule->field_value : null;

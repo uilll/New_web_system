@@ -11,7 +11,7 @@ class ValidatorRulesServiceProvider extends ServiceProvider
     public function boot()
     {
         Validator::extend('same_protocol', function ($attribute, $value, $parameters, $validator) {
-            $protocols = DeviceRepo::getProtocols($value)->lists('protocol', 'protocol')->all();
+            $protocols = DeviceRepo::getProtocols($value)->pluck('protocol', 'protocol')->all();
 
             if (count($protocols) > 1) {
                 return false;

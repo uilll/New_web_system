@@ -42,7 +42,7 @@
                     <div class="form-group" id="default_billing_plan">
                         {!! Form::label('default_billing_plan', trans('validation.attributes.default_billing_plan'), ['class' => 'col-xs-12 col-sm-4 control-label"']) !!}
                         <div class="col-xs-12 col-sm-8">
-                            {!! Form::select('default_billing_plan', $items->lists('title','id')->all(), settings('main_settings.default_billing_plan'), ['class' => 'form-control']) !!}
+                            {!! Form::select('default_billing_plan', $items->pluck('title','id')->all(), settings('main_settings.default_billing_plan'), ['class' => 'form-control']) !!}
                         </div>
                     </div>
                     <div class="form-group">

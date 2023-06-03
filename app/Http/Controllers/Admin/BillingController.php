@@ -28,7 +28,7 @@ class BillingController extends BaseController
 
         $settings = settings('main_settings');
 
-        $timezones = $timezoneRepo->order()->lists('title', 'id')->all();
+        $timezones = $timezoneRepo->order()->pluck('title', 'id')->all();
         $payment_types = $this->payment_types;
 
         $perms = LaravelConfig::get('tobuli.permissions');
@@ -190,7 +190,7 @@ class BillingController extends BaseController
 
     public function billingPlansForm(BillingPlan $billingPlanRepo)
     {
-        $items = $billingPlanRepo->all()->lists('title', 'id')->all();
+        $items = $billingPlanRepo->all()->pluck('title', 'id')->all();
 
         return Form::select('default_billing_plan', $items, settings('main_settings.default_billing_plan'), ['class' => 'form-control']);
     }

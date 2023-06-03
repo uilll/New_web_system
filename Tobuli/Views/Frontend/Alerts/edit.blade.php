@@ -29,7 +29,7 @@
 
                 <div class="form-group">
                     {!! Form::label('devices', trans('validation.attributes.devices').'*:') !!}
-                    {!! Form::select('devices[]', $devices , $item->devices->lists('id', 'id')->all(), ['class' => 'form-control multiexpand', 'multiple' => 'multiple', 'data-live-search' => true, 'data-actions-box' => true]) !!}
+                    {!! Form::select('devices[]', $devices , $item->devices->pluck('id', 'id')->all(), ['class' => 'form-control multiexpand', 'multiple' => 'multiple', 'data-live-search' => true, 'data-actions-box' => true]) !!}
                 </div>
 
             </div>
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        {!!Form::select('zones[]', $geofences, $item->zones->lists('id', 'id')->all(), ['class' => 'form-control multiexpand disabled', 'multiple' => 'multiple', 'data-live-search' => true, 'data-actions-box' => true])!!}
+                        {!!Form::select('zones[]', $geofences, $item->zones->pluck('id', 'id')->all(), ['class' => 'form-control multiexpand disabled', 'multiple' => 'multiple', 'data-live-search' => true, 'data-actions-box' => true])!!}
                     </div>
                 @else
                     <div class="alert alert-warning" role="alert">{!!trans('front.no_geofences')!!}</div>

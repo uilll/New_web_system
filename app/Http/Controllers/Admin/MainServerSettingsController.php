@@ -61,7 +61,7 @@ class MainServerSettingsController extends BaseController
             return $language['title'];
         });
 
-        $timezones = $this->timezone->order()->lists('title', 'id')->all();
+        $timezones = $this->timezone->order()->pluck('title', 'id')->all();
         $units_of_distance = LaravelConfig::get('tobuli.units_of_distance');
         $units_of_capacity = LaravelConfig::get('tobuli.units_of_capacity');
         $units_of_altitude = LaravelConfig::get('tobuli.units_of_altitude');

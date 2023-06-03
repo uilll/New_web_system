@@ -40,7 +40,7 @@ class ObjectsListController extends Controller
     {
         $this->checkException('devices', 'view');
 
-        $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id])->lists('title', 'id')->all();
+        $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id])->pluck('title', 'id')->all();
         $devices = UserRepo::getDevicesWith($this->user->id, [
             'devices',
             'devices.sensors',

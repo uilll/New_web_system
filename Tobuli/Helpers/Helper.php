@@ -301,7 +301,7 @@ function sendNotification($user_id, Tobuli\Entities\EventQueue $eventQueue)
         return;
     }
 
-    $tokens = $user->fcm_tokens->lists('token')->toArray();
+    $tokens = $user->fcm_tokens->pluck('token')->toArray();
 
     if (! $tokens) {
         return;

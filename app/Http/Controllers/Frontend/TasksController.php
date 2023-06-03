@@ -18,7 +18,7 @@ class TasksController extends Controller
         $this->checkException('tasks', 'view');
 
         $devices[0] = '-- '.trans('admin.select').' --';
-        $devices += UserRepo::getDevices($this->user->id)->lists('name', 'id')->all();
+        $devices += UserRepo::getDevices($this->user->id)->pluck('name', 'id')->all();
 
         $statuses[0] = '-- '.trans('admin.select').' --';
         foreach (TaskStatus::$statuses as $key => $status) {
@@ -63,7 +63,7 @@ class TasksController extends Controller
         $tasks = TasksRepo::searchAndPaginate(['filter' => $filter], 'id', 'desc', 10);
 
         $devices[0] = '-- '.trans('admin.select').' --';
-        $devices += UserRepo::getDevices($this->user->id)->lists('name', 'id')->all();
+        $devices += UserRepo::getDevices($this->user->id)->pluck('name', 'id')->all();
 
         $statuses[0] = '-- '.trans('admin.select').' --';
         foreach (TaskStatus::$statuses as $key => $status) {
@@ -116,7 +116,7 @@ class TasksController extends Controller
 
         $this->checkException('tasks', 'edit', $item);
 
-        $devices = UserRepo::getDevices($this->user->id)->lists('name', 'id')->all();
+        $devices = UserRepo::getDevices($this->user->id)->pluck('name', 'id')->all();
 
         $priorities = [];
         foreach (Task::$priorities as $key => $priority) {

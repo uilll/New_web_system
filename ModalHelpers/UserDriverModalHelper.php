@@ -27,7 +27,7 @@ class UserDriverModalHelper extends ModalHelper
 
     public function createData()
     {
-        $devices = UserRepo::getDevices($this->user->id)->lists('plate_number', 'id')->all();
+        $devices = UserRepo::getDevices($this->user->id)->pluck('plate_number', 'id')->all();
 
         return compact('devices');
     }
@@ -60,7 +60,7 @@ class UserDriverModalHelper extends ModalHelper
 
         $this->checkException('drivers', 'edit', $item);
 
-        $devices = UserRepo::getDevices($this->user->id)->lists('plate_number', 'id')->all();
+        $devices = UserRepo::getDevices($this->user->id)->pluck('plate_number', 'id')->all();
 
         return compact('item', 'devices');
     }

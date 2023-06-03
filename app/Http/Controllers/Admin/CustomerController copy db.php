@@ -233,7 +233,7 @@ class CustomerController extends BaseController
         $input = Request::all();
         $users = null;
         if (Auth::User()->isManager()) {
-            $users = Auth::User()->subusers()->lists('id', 'id')->all();
+            $users = Auth::User()->subusers()->pluck('id', 'id')->all();
             $users[] = Auth::User()->id;
         }
 
@@ -276,7 +276,7 @@ class CustomerController extends BaseController
 
     public function create()
     {
-        $lista = DB::table('users')->where('attach_custumer', false)->where('active', 1)->lists('email', 'id');
+        $lista = DB::table('users')->where('attach_custumer', false)->where('active', 1)->pluck('email', 'id');
 
         return View::make('admin::'.ucfirst($this->section).'.create')->with(compact('lista'));
     }
@@ -294,8 +294,8 @@ class CustomerController extends BaseController
                       ->orWhereNull('manager_id');
             })
             ->first();
-        $lista1 = DB::table('users')->where('attach_custumer', false)->where('active', 1)->lists('email', 'id');
-        $lista = DB::table('users')->where('active', 1)->whereIn('id', json_decode($item->all_users, true))->lists('email', 'id');
+        $lista1 = DB::table('users')->where('attach_custumer', false)->where('active', 1)->pluck('email', 'id');
+        $lista = DB::table('users')->where('active', 1)->whereIn('id', json_decode($item->all_users, true))->pluck('email', 'id');
         $item->lista = $lista;
 
         if (! empty($lista)) {

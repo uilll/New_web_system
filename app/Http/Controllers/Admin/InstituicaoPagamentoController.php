@@ -31,7 +31,7 @@ class InstituicaoPagamentoController extends BaseController
 
     public function create()
     {
-        $lista = DB::table('users')->where('active', 1)->lists('email', 'id');
+        $lista = DB::table('users')->where('active', 1)->pluck('email', 'id');
 
         return view('admin::InstituicaoPagamento.create', compact('lista'));
     }
@@ -59,8 +59,8 @@ class InstituicaoPagamentoController extends BaseController
         //dd($request->all());
         $instituicao = instituicao_pagamento::findOrFail($id);
         $instituicao->usuarios_permitidos = json_decode($instituicao->usuarios_permitidos, true);
-        $lista1 = DB::table('users')->where('active', 1)->lists('email', 'id');
-        $lista = DB::table('users')->where('active', 1)->whereIn('id', $instituicao->usuarios_permitidos)->lists('email', 'id');
+        $lista1 = DB::table('users')->where('active', 1)->pluck('email', 'id');
+        $lista = DB::table('users')->where('active', 1)->whereIn('id', $instituicao->usuarios_permitidos)->pluck('email', 'id');
         $instituicao->lista = $lista;
 
         if (! empty($lista)) {

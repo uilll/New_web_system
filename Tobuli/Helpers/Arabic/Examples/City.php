@@ -41,7 +41,7 @@ try {
 
     $sth = $dbh->prepare("select * from city where id=$city_id");
     $sth->execute();
-    $result = $sth->fetch(PDO::FETCH_ASSOC);
+    $result = $sth->pluck(PDO::FETCH_ASSOC);
 
     echo $result['arabic'].' / '.$result['english'].'<br /><br />';
     if (! empty($result['latitude'])) {
@@ -140,7 +140,7 @@ $code = <<< END
 
       \$sth = \$dbh->prepare("select * from city where id=\$city_id");
       \$sth->execute();
-      \$result = \$sth->fetch(PDO::FETCH_ASSOC);
+      \$result = \$sth->pluck(PDO::FETCH_ASSOC);
 
       echo \$result['arabic'] . ' / ' . \$result['english'] . '<br />';
       if (!empty(\$result['latitude'])) {

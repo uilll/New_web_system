@@ -60,7 +60,7 @@ class ObjectsController extends BaseController
 
         $users = null;
         if (Auth::User()->isManager()) {
-            $users = Auth::User()->subusers()->lists('id', 'id')->all();
+            $users = Auth::User()->subusers()->pluck('id', 'id')->all();
             $users[] = Auth::User()->id;
         }
 
@@ -77,7 +77,7 @@ class ObjectsController extends BaseController
 
     public function create()
     {
-        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->lists('email', 'id')->all();
+        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->pluck('email', 'id')->all();
 
         return View::make('admin::'.ucfirst($this->section).'.create')->with(compact('managers', 'trackers'));
     }

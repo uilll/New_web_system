@@ -54,7 +54,7 @@ class GeofenceGroupsModalHelper extends ModalHelper
             $groups_nr = 0;
             $groups = $geofenceGroupRepo->getWhere(['user_id' => $user->id]);
             if (! $groups->isEmpty()) {
-                $groups = $groups->lists('id', 'id')->all();
+                $groups = $groups->pluck('id', 'id')->all();
             }
 
             $input_group = isset($input['groups']) ? json_decode($input['groups'], true) : [];

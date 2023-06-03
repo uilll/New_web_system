@@ -230,7 +230,7 @@ public function obtemdispositivosapp($iduser, $latitudes, $longitudes)
                 'devices.users',
             ]);
 
-            $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id])->lists('title', 'id')->all();
+            $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id])->pluck('title', 'id')->all();
 
             $grouped = [];
 

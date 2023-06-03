@@ -24,7 +24,7 @@ class EloquentTimezoneRepository extends EloquentRepository implements TimezoneR
         $timezones = Cache::get('timezones');
 
         if (! $timezones) {
-            $timezones = $this->entity->orderBy('order')->get()->lists('zone', 'id')->all();
+            $timezones = $this->entity->orderBy('order')->get()->pluck('zone', 'id')->all();
 
             Cache::put('timezones', $timezones, 1);
         }

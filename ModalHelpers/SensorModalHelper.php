@@ -179,17 +179,17 @@ class SensorModalHelper extends ModalHelper
     {
         if (! $this->api) {
             $devices = isset($this->data['devices']) ? $this->data['devices'] : [];
-            $protocols = DeviceRepo::getProtocols($devices)->lists('protocol', 'protocol')->all();
-            $protocols = ['-' => '- '.trans('validation.attributes.protocol').' -'] + EventCustomRepo::getProtocols($this->data['type'] == '1' ? $this->user->id : null, $protocols)->lists('protocol', 'protocol')->all();
+            $protocols = DeviceRepo::getProtocols($devices)->pluck('protocol', 'protocol')->all();
+            $protocols = ['-' => '- '.trans('validation.attributes.protocol').' -'] + EventCustomRepo::getProtocols($this->data['type'] == '1' ? $this->user->id : null, $protocols)->pluck('protocol', 'protocol')->all();
         } else {
             $protocols = [
                 [
                     'type' => 1,
-                    'items' => apiArray(EventCustomRepo::getProtocols($this->user->id)->lists('protocol', 'protocol')->all()),
+                    'items' => apiArray(EventCustomRepo::getProtocols($this->user->id)->pluck('protocol', 'protocol')->all()),
                 ],
                 [
                     'type' => 2,
-                    'items' => apiArray(EventCustomRepo::getProtocols(null)->lists('protocol', 'protocol')->all()),
+                    'items' => apiArray(EventCustomRepo::getProtocols(null)->pluck('protocol', 'protocol')->all()),
                 ],
             ];
         }
@@ -205,7 +205,7 @@ class SensorModalHelper extends ModalHelper
             $where['protocol'] = $protocol;
         }
 
-        $items = EventCustomRepo::getWhere($where)->lists('message', 'id')->all();
+        $items = EventCustomRepo::getWhere($where)->pluck('message', 'id')->all();
         if ($this->api) {
             $items = apiArray($items);
         }

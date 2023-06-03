@@ -88,12 +88,12 @@ class DeviceModalHelper extends ModalHelper
         }
 
         $users = UserRepo::getUsers($this->user);
-        $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id])->lists('title', 'id')->all();
+        $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id])->pluck('title', 'id')->all();
         $expiration_date_select = [
             '0000-00-00' => trans('front.unlimited'),
             '1' => trans('validation.attributes.expiration_date'),
         ];
-        $timezones = ['0' => trans('front.default')] + TimezoneRepo::order()->lists('title', 'id')->all();
+        $timezones = ['0' => trans('front.default')] + TimezoneRepo::order()->pluck('title', 'id')->all();
         $timezones_arr = [];
         foreach ($timezones as $key => &$timezone) {
             $timezone = str_replace('UTC ', '', $timezone);
@@ -105,7 +105,7 @@ class DeviceModalHelper extends ModalHelper
         $sensor_groups = [];
         if (isAdmin()) {
             $sensor_groups = SensorGroupRepo::getWhere([], 'title');
-            $sensor_groups = $sensor_groups->lists('title', 'id')->all();
+            $sensor_groups = $sensor_groups->pluck('title', 'id')->all();
         }
 
         $sensor_groups = ['0' => trans('front.none')] + $sensor_groups;
@@ -271,7 +271,7 @@ class DeviceModalHelper extends ModalHelper
 
         $users = UserRepo::getUsers($this->user);
 
-        $sel_users = $item->users->lists('id', 'id')->all();
+        $sel_users = $item->users->pluck('id', 'id')->all();
         $group_id = null;
 
         $timezone_id = $item->timezone_id;
@@ -317,7 +317,7 @@ class DeviceModalHelper extends ModalHelper
             $device_icons_grouped[$dicon['type']][] = $dicon;
         }
 
-        $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id])->lists('title', 'id')->all();
+        $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id])->pluck('title', 'id')->all();
         $sensors = SensorModalHelper::paginated($item->id);
         $services = ServiceModalHelper::paginated($item->id);
         $expiration_date_select = [
@@ -338,7 +338,7 @@ class DeviceModalHelper extends ModalHelper
         $detect_engine = $arr['detect_engine'];
         unset($item->sensors);
 
-        $timezones = ['0' => trans('front.default')] + TimezoneRepo::order()->lists('title', 'id')->all();
+        $timezones = ['0' => trans('front.default')] + TimezoneRepo::order()->pluck('title', 'id')->all();
         foreach ($timezones as $key => &$timezone) {
             $timezone = str_replace('UTC ', '', $timezone);
         }
@@ -346,7 +346,7 @@ class DeviceModalHelper extends ModalHelper
         $sensor_groups = [];
         if (isAdmin()) {
             $sensor_groups = SensorGroupRepo::getWhere([], 'title');
-            $sensor_groups = $sensor_groups->lists('title', 'id')->all();
+            $sensor_groups = $sensor_groups->pluck('title', 'id')->all();
         }
 
         $sensor_groups = ['0' => trans('front.none')] + $sensor_groups;
@@ -385,7 +385,7 @@ class DeviceModalHelper extends ModalHelper
             $this->data['user_id'] = array_combine($this->data['user_id'], $this->data['user_id']);
 
             if ($this->user->isManager()) {
-                $users = $this->user->subusers()->lists('id', 'id')->all() + [$this->user->id => $this->user->id];
+                $users = $this->user->subusers()->pluck('id', 'id')->all() + [$this->user->id => $this->user->id];
 
                 foreach ($item->users as $user) {
                     if (array_key_exists($user->id, $users) && ! array_key_exists($user->id, $this->data['user_id'])) {

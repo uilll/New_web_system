@@ -24,7 +24,7 @@ class GeofenceModalHelper extends ModalHelper
             return compact('geofences');
         }
 
-        $geofence_groups = ['0' => trans('front.ungrouped')] + GeofenceGroupRepo::getWhere(['user_id' => $this->user->id])->lists('title', 'id')->all();
+        $geofence_groups = ['0' => trans('front.ungrouped')] + GeofenceGroupRepo::getWhere(['user_id' => $this->user->id])->pluck('title', 'id')->all();
         $geofence_groups_opened = array_flip(json_decode($this->user->open_geofence_groups, true));
 
         $grouped = $geofences->groupBy('group_id');
@@ -311,7 +311,7 @@ class GeofenceModalHelper extends ModalHelper
             'export_inactive' => trans('front.export_inactive'),
         ];
 
-        $geofences = GeofenceRepo::getWhere(['user_id' => $this->user->id])->lists('name', 'id')->all();
+        $geofences = GeofenceRepo::getWhere(['user_id' => $this->user->id])->pluck('name', 'id')->all();
 
         return compact('export_types', 'geofences');
     }
@@ -321,14 +321,14 @@ class GeofenceModalHelper extends ModalHelper
         $type = $this->data['type'];
         $selected = null;
 
-        $items = GeofenceRepo::getWhere(['user_id' => $this->user->id])->lists('name', 'id')->all();
+        $items = GeofenceRepo::getWhere(['user_id' => $this->user->id])->pluck('name', 'id')->all();
 
         if ($type == 'export_groups') {
-            $items = ['0' => trans('front.ungrouped')] + GeofenceGroupRepo::getWhere(['user_id' => $this->user->id])->lists('title', 'id')->all();
+            $items = ['0' => trans('front.ungrouped')] + GeofenceGroupRepo::getWhere(['user_id' => $this->user->id])->pluck('title', 'id')->all();
         } elseif ($type == 'export_active') {
-            $selected = GeofenceRepo::getWhere(['user_id' => $this->user->id, 'active' => 1])->lists('id', 'id')->all();
+            $selected = GeofenceRepo::getWhere(['user_id' => $this->user->id, 'active' => 1])->pluck('id', 'id')->all();
         } elseif ($type == 'export_inactive') {
-            $selected = GeofenceRepo::getWhere(['user_id' => $this->user->id, 'active' => 0])->lists('id', 'id')->all();
+            $selected = GeofenceRepo::getWhere(['user_id' => $this->user->id, 'active' => 0])->pluck('id', 'id')->all();
         }
 
         $data = compact('items', 'selected', 'type');

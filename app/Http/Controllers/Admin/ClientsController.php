@@ -78,12 +78,12 @@ class ClientsController extends BaseController
 
     public function create(BillingPlan $billingPlanRepo)
     {
-        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->lists('email', 'id')->all();
+        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->pluck('email', 'id')->all();
         $maps = getMaps();
 
         $plans = [];
         if (settings('main_settings.enable_plans')) {
-            $plans = ['0' => '-- '.trans('admin.select').' --'] + $billingPlanRepo->getWhere([], 'objects', 'asc')->lists('title', 'id')->all();
+            $plans = ['0' => '-- '.trans('admin.select').' --'] + $billingPlanRepo->getWhere([], 'objects', 'asc')->pluck('title', 'id')->all();
         }
 
         $objects_limit = null;
@@ -235,11 +235,11 @@ class ClientsController extends BaseController
             return modalError(dontExist('global.user'));
         }
 
-        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers($item->id)->lists('email', 'id')->all();
+        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers($item->id)->pluck('email', 'id')->all();
         $maps = getMaps();
         $plans = [];
         if (settings('main_settings.enable_plans')) {
-            $plans = ['0' => '-- '.trans('admin.select').' --'] + $billingPlanRepo->getWhere([], 'objects', 'asc')->lists('title', 'id')->all();
+            $plans = ['0' => '-- '.trans('admin.select').' --'] + $billingPlanRepo->getWhere([], 'objects', 'asc')->pluck('title', 'id')->all();
         }
 
         $objects_limit = null;

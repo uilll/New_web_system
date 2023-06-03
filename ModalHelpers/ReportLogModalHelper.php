@@ -69,7 +69,7 @@ class ReportLogModalHelper extends ModalHelper
         $filter = ['user_id' => $this->user->id];
 
         if ($this->user->isManager()) {
-            $filter = ['user_ids' => UserRepo::getWhere(['manager_id' => $this->user->id])->lists('id', 'id')->all()];
+            $filter = ['user_ids' => UserRepo::getWhere(['manager_id' => $this->user->id])->pluck('id', 'id')->all()];
             $filter['user_ids'][] = $this->user->id;
         }
 

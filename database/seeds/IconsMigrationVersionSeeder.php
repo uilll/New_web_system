@@ -120,7 +120,7 @@ class IconsMigrationVersionSeeder extends Seeder
             'frontend/images/map_icons/velocimeter.png',
         ];
 
-        $oldMapIcons = DB::table('map_icons')->whereIn('path', $oldMapIconsPath)->lists('id');
+        $oldMapIcons = DB::table('map_icons')->whereIn('path', $oldMapIconsPath)->pluck('id');
 
         $this->call('MapIconsTableSeeder');
 

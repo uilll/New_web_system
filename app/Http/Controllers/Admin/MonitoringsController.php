@@ -74,7 +74,7 @@ class MonitoringsController extends BaseController
         $users = null;
 
         if (Auth::User()->isManager()) {
-            $users = Auth::User()->subusers()->lists('id', 'id')->all();
+            $users = Auth::User()->subusers()->pluck('id', 'id')->all();
             $users[] = Auth::User()->id;
         }
 
@@ -144,7 +144,7 @@ class MonitoringsController extends BaseController
 
     public function create()
     {
-        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->lists('email', 'id')->all();
+        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->pluck('email', 'id')->all();
         $devices = UserRepo::getDevices($this->user->id);
         $Monitorings = Monitoring::all();
         /*$devices = UserRepo::getDevices($this->user->id)->filter(function ($devices_) { return $devices_->traccar_device_id == 832; });
@@ -163,7 +163,7 @@ class MonitoringsController extends BaseController
 
     public function edit($id)
     {
-        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->lists('email', 'id')->all();
+        $managers = ['0' => '-- '.trans('admin.select').' --'] + UserRepo::getOtherManagers(0)->pluck('email', 'id')->all();
         $Monitoring = Monitoring::where('id', $id)->first();
         //dd($Monitoring->device_id);
 

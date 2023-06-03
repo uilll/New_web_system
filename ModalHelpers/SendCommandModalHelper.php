@@ -24,8 +24,8 @@ class SendCommandModalHelper extends ModalHelper
         $this->checkException('send_command', 'view');
 
         $devices = UserRepo::getDevices($this->user->id);
-        $devices_gprs = $devices->lists('plate_number', 'id')->all();
-        $devices_sms = UserRepo::getDevicesSms($this->user->id)->lists('plate_number', 'id')->all();
+        $devices_gprs = $devices->pluck('plate_number', 'id')->all();
+        $devices_sms = UserRepo::getDevicesSms($this->user->id)->pluck('plate_number', 'id')->all();
 
         $commands = [
             'engineStop' => trans('front.engine_stop'),
@@ -91,9 +91,9 @@ class SendCommandModalHelper extends ModalHelper
             $number_index = apiArray($number_index);
             $actions = apiArray($actions);
         } else {
-            $sms_templates = ['0' => trans('front.no_template')] + UserSmsTemplateRepo::getWhere(['user_id' => $this->user->id], 'title')->lists('title', 'id')->all();
+            $sms_templates = ['0' => trans('front.no_template')] + UserSmsTemplateRepo::getWhere(['user_id' => $this->user->id], 'title')->pluck('title', 'id')->all();
 
-            $gprs_templates_only = UserGprsTemplateRepo::getWhere(['user_id' => $this->user->id], 'title')->lists('title', 'id')->all();
+            $gprs_templates_only = UserGprsTemplateRepo::getWhere(['user_id' => $this->user->id], 'title')->pluck('title', 'id')->all();
             $gprs_templates = ['0' => trans('front.no_template')] + $gprs_templates_only;
         }
 

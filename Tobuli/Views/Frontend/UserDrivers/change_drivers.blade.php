@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-md-6">
                     {!!Form::label('driver', 'Motorista:')!!}
-                    {!! Form::select('id', $drivers->lists('name', 'id'), $items->current_driver_id, ['class' => 'form-control', 'data-live-search' => true]) !!}
+                    {!! Form::select('id', $drivers->pluck('name', 'id'), $items->current_driver_id, ['class' => 'form-control', 'data-live-search' => true]) !!}
                 </div>
             </div>
         </div>

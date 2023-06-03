@@ -25,7 +25,7 @@
                         {{ $item->protocol }}
                     </td>
                     <td>
-                        {{ !empty($item->tags) ? implode(', ', array_fetch($item->tags->toArray(), 'tag')) : '' }}
+                        {{ !empty($item->tags) ? implode(', ', array_pluck($item->tags->toArray(), 'tag')) : '' }}
                     </td>
                     <td>
                         {{ $item->message }}

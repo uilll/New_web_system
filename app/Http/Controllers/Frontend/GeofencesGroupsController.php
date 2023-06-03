@@ -29,7 +29,7 @@ class GeofencesGroupsController extends Controller
     public function updateSelect(GeofenceGroup $geofenceGroupRepo)
     {
         $input = Request::all();
-        $geofence_groups = $geofenceGroupRepo->getWhere(['user_id' => Auth::User()->id])->lists('title', 'id')->all();
+        $geofence_groups = $geofenceGroupRepo->getWhere(['user_id' => Auth::User()->id])->pluck('title', 'id')->all();
 
         return Form::select('group_id', ['0' => trans('front.ungrouped')] + $geofence_groups, isset($input['group_id']) ? $input['group_id'] : null, ['class' => 'form-control']);
     }

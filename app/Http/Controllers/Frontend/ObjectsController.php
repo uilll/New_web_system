@@ -66,7 +66,7 @@ class ObjectsController extends Controller
             $devices = UserRepo::getDevicesWith($this->user->id, ['devices', 'devices.sensors', 'devices.traccar']);
         }
         if (! empty($devices)) {
-            $devices = $devices->lists('plate_number', 'id')->all();
+            $devices = $devices->pluck('plate_number', 'id')->all();
         }
 
         /* $collection = collect($devices);
@@ -85,7 +85,7 @@ class ObjectsController extends Controller
 
         $mapIcons = MapIconRepo::all();
 
-        $geofence_groups = ['0' => trans('front.ungrouped')] + GeofenceGroupRepo::getWhere(['user_id' => $this->user->id])->lists('title', 'id')->all();
+        $geofence_groups = ['0' => trans('front.ungrouped')] + GeofenceGroupRepo::getWhere(['user_id' => $this->user->id])->pluck('title', 'id')->all();
 
         return view('front::Objects.index')->with(compact('devices', 'history', 'version', 'geofence_groups', 'mapIcons', 'notifications'));
     }
@@ -99,7 +99,7 @@ class ObjectsController extends Controller
              $devices = UserRepo::getDevicesWith($this->user->id, ['devices', 'devices.sensors', 'devices.traccar']);
          }
          if (! empty($devices)) {
-             $devices = $devices->lists('object_owner', 'object_owner')->all();
+             $devices = $devices->pluck('object_owner', 'object_owner')->all();
          }
 
          $history = [
@@ -114,7 +114,7 @@ class ObjectsController extends Controller
 
          $mapIcons = MapIconRepo::all();
 
-         $geofence_groups = ['0' => trans('front.ungrouped')] + GeofenceGroupRepo::getWhere(['user_id' => $this->user->id])->lists('title', 'id')->all();
+         $geofence_groups = ['0' => trans('front.ungrouped')] + GeofenceGroupRepo::getWhere(['user_id' => $this->user->id])->pluck('title', 'id')->all();
          $tudo = compact('devices', 'history', 'version', 'geofence_groups', 'mapIcons', 'notifications');
          $dev = $tudo['devices'];
 
@@ -132,7 +132,7 @@ class ObjectsController extends Controller
             //dd('oi');
 
             $timezones = TimezoneRepo::getList();
-            $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id], 'title')->lists('title', 'id')->all();
+            $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id], 'title')->pluck('title', 'id')->all();
             $device_groups_opened = array_flip(json_decode($this->user->open_device_groups, true));
             //dd('oi');
             $grouped = [];
@@ -232,7 +232,7 @@ class ObjectsController extends Controller
                                 $devices_ids = DB::connection('traccar_mysql')
                                                     ->table('devices')
                                                     ->where('protocol', 'LIKE', '%'.Str::lower($search_item).'%')
-                                                    ->lists('uniqueId');
+                                                    ->pluck('uniqueId');
                                 $devices = UserRepo::getDevicesWith($this->user->id, [
                                     'devices',
                                     'devices.sensors',
@@ -251,7 +251,7 @@ class ObjectsController extends Controller
                                 $devices_ids = DB::table('devices')
                                                 ->select('id')
                                                 ->where(Str::lower($search_type), 'LIKE', '%'.Str::lower($search_item).'%')
-                                                ->lists('id');
+                                                ->pluck('id');
                                 $devices = UserRepo::getDevicesWith($this->user->id, [
                                     'devices',
                                     'devices.sensors',

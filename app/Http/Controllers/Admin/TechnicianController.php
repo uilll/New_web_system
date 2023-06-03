@@ -67,7 +67,7 @@ class TechnicianController extends BaseController
         $input = Request::all();
         $users = null;
         if (Auth::User()->isManager()) {
-            $users = Auth::User()->subusers()->lists('id', 'id')->all();
+            $users = Auth::User()->subusers()->pluck('id', 'id')->all();
             $users[] = Auth::User()->id;
         }
 

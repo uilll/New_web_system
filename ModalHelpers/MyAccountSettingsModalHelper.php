@@ -26,7 +26,7 @@ class MyAccountSettingsModalHelper extends ModalHelper
     public function editData()
     {
         $item = UserRepo::find($this->user->id)->toArray();
-        $timezones = TimezoneRepo::order()->lists('title', 'id')->all();
+        $timezones = TimezoneRepo::order()->pluck('title', 'id')->all();
         $groups = DeviceGroupRepo::getWhere(['user_id' => $this->user->id], 'title');
         if (! $this->api) {
             $drivers = UserDriverRepo::searchAndPaginate(['filter' => ['user_id' => $this->user->id]], 'id', 'desc', 15);
@@ -299,7 +299,7 @@ class MyAccountSettingsModalHelper extends ModalHelper
                 $arr = [];
                 $groups = DeviceGroupRepo::getWhere(['user_id' => $item->id]);
                 if (! $groups->isEmpty()) {
-                    $groups = $groups->lists('id', 'id')->all();
+                    $groups = $groups->pluck('id', 'id')->all();
                 }
 
                 $this->data_group = [];

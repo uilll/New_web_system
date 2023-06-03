@@ -23,7 +23,7 @@
                 </div>
                 <div class="form-group">                        
                     {!! Form::label('plate_number', trans('validation.attributes.plate_number').'*:') !!}
-                    {!! Form::select('plate_number', $devices->lists('plate_number', 'id'), null, ['class' => 'form-control', 'data-live-search' => true]) !!}
+                    {!! Form::select('plate_number', $devices->pluck('plate_number', 'id'), null, ['class' => 'form-control', 'data-live-search' => true]) !!}
                 </div>                
                 <div class="form-group">
                     {!!Form::label('cause', 'Causa:')!!}

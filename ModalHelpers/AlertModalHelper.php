@@ -68,8 +68,8 @@ class AlertModalHelper extends ModalHelper
     {
         $this->checkException('alerts', 'create');
 
-        $devices = UserRepo::getDevices($this->user->id)->lists('plate_number', 'id')->all();
-        $geofences = GeofenceRepo::whereUserId($this->user->id)->lists('name', 'id')->all();
+        $devices = UserRepo::getDevices($this->user->id)->pluck('plate_number', 'id')->all();
+        $geofences = GeofenceRepo::whereUserId($this->user->id)->pluck('name', 'id')->all();
 
         if (empty($devices)) {
             throw new ValidationException(['id' => trans('front.must_have_one_device')]);
@@ -156,8 +156,8 @@ class AlertModalHelper extends ModalHelper
         //dd('oi2');
         $commands = SendCommandModalHelper::getCommands($devices);
         //dd('oi2');
-        $devices = $devices->lists('plate_number', 'id')->all();
-        $geofences = GeofenceRepo::whereUserId($this->user->id)->lists('name', 'id')->all();
+        $devices = $devices->pluck('plate_number', 'id')->all();
+        $geofences = GeofenceRepo::whereUserId($this->user->id)->pluck('name', 'id')->all();
         //dd('oi');
         $alert_zones = [
             '1' => trans('front.zone_in'),
