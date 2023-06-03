@@ -32,7 +32,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot(DispatcherContract $events)
     {
         parent::boot($events);
-        \Event::listen('auth.login', function ($user, $remember) {
+        \Event::listen(\Illuminate\Auth\Events\Login::class, function ($user, $remember) {
             $user->last_login_at = Carbon::now();
             $user->save();
 
