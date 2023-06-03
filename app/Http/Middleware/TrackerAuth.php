@@ -9,7 +9,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Tobuli\Entities\Device;
 
 class TrackerAuth
@@ -22,7 +22,7 @@ class TrackerAuth
      */
     public function handle($request, Closure $next)
     {
-        $input = Input::all();
+        $input = Request::all();
         $user = null;
         if (! empty($input['imei'])) {
             $imei = $input['imei'];

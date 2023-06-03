@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Facades\Repositories\DeviceRepo;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Tobuli\Entities\Chat;
 use Tobuli\Entities\ChatMessage;
 use Tobuli\Entities\Device;
@@ -19,7 +19,7 @@ class ChatController extends Controller
     {
         $this->checkException('chats', 'view');
 
-        $searchData = Input::all();
+        $searchData = Request::all();
         $searchData['filter']['traccar_device_id'] = TraccarDevice::where('protocol', 'osmand')->get()->pluck('id', 'id')->toArray();
         $chattableObjects = DeviceRepo::searchAndPaginateNew($searchData, 'name', 'asc', 10, [$this->user->id]);
 
@@ -30,7 +30,7 @@ class ChatController extends Controller
     {
         $this->checkException('chats', 'view');
 
-        $searchData = Input::all();
+        $searchData = Request::all();
         $searchData['filter']['traccar_device_id'] = TraccarDevice::where('protocol', 'osmand')->get()->pluck('id', 'id')->toArray();
         $chattableObjects = DeviceRepo::searchAndPaginateNew($searchData, 'name', 'asc', 10, [$this->user->id]);
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -50,7 +50,7 @@ class EmailSettingsController extends BaseController
 
     public function save()
     {
-        $input = Input::all();
+        $input = Request::all();
         $item_arr = settings('email');
         if (isset($item_arr['smtp_password']) && (! isset($input['smtp_password']) || empty($input['smtp_password']))) {
             $input['smtp_password'] = $item_arr['smtp_password'];
@@ -121,7 +121,7 @@ class EmailSettingsController extends BaseController
 
     public function testEmailSend()
     {
-        $input = Input::all();
+        $input = Request::all();
 
         try {
             $body = view('front::Emails.template')->with(['body' => 'Test', 'lang' => Auth::User()->lang])->render();

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Facades\Repositories\UserRepo;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
@@ -56,7 +56,7 @@ class PasswordReminderController extends Controller
      */
     public function store()
     {
-        $response = $this->passwords->sendResetLink(Input::only('email'), function ($m) {
+        $response = $this->passwords->sendResetLink(Request::only('email'), function ($m) {
             $m->subject(trans('front.password_reminder'));
         });
 
@@ -70,7 +70,7 @@ class PasswordReminderController extends Controller
 
     public function update()
     {
-        $input = Input::only(['email', 'password', 'password_confirmation', 'token']);
+        $input = Request::only(['email', 'password', 'password_confirmation', 'token']);
 
         $res = Password::reset($input, function ($user, $password) {
             UserRepo::update($user->id, ['password' => $password]);

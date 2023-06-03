@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config as LaravelConfig;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\View;
 use Tobuli\Exceptions\ValidationException;
@@ -102,7 +102,7 @@ class MainServerSettingsController extends BaseController
 
     public function save()
     {
-        $input = Input::all();
+        $input = Request::all();
 
         $settings = settings('main_settings');
         try {
@@ -178,11 +178,11 @@ class MainServerSettingsController extends BaseController
 
     public function logoSave()
     {
-        $input = Input::all();
-        $login_page_logo = Input::file('login_page_logo');
-        $frontpage_logo = Input::file('frontpage_logo');
-        $favicon = Input::file('favicon');
-        $login_page_background = Input::file('background');
+        $input = Request::all();
+        $login_page_logo = Request::file('login_page_logo');
+        $frontpage_logo = Request::file('frontpage_logo');
+        $favicon = Request::file('favicon');
+        $login_page_background = Request::file('background');
 
         if (Auth::User()->isAdmin()) {
             $base_path = '/var/www/html/images/';
@@ -286,7 +286,7 @@ class MainServerSettingsController extends BaseController
 
     public function newUserDefaultsSave()
     {
-        $input = Input::all();
+        $input = Request::all();
 
         try {
             if (! isset($input['enable_plans'])) {

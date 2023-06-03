@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Str;
 use Log;
@@ -669,7 +669,7 @@ class ObjectsController extends Controller
 
     public function itemsSimple()
     {
-        $searchData = Input::all();
+        $searchData = Request::all();
         $deviceCollection = DeviceRepo::searchAndPaginateSimple($searchData, /*editado anterior 'name'*/'plate_number', 'asc', 15, [$this->user->id]);
         //dd($deviceCollection);
         return view('front::Objects.itemsSimple')->with(compact('deviceCollection'));
@@ -901,7 +901,7 @@ class ObjectsController extends Controller
     public function interaction_action(Request $request)
     {
         /*$ocorrency = Monitoring::find(2511);//$request->input('id'));
-        $ocorrency->information = json_encode(Input::All());
+        $ocorrency->information = json_encode(Request::All());
         $ocorrency->save();*/
         try {
             $rules = ['id' => 'required|numeric',

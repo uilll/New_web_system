@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -35,7 +35,7 @@ class EventsController extends BaseController
 
     public function index()
     {
-        $input = Input::all();
+        $input = Request::all();
         $input['filter']['user_id'] = null;
 
         $items = $this->eventCustom->searchAndPaginate($input, 'message');
@@ -67,7 +67,7 @@ class EventsController extends BaseController
 
     public function store()
     {
-        $input = Input::all();
+        $input = Request::all();
 
         try {
             $this->eventCustomFormValidator->validate('create', $input);
@@ -144,7 +144,7 @@ class EventsController extends BaseController
 
     public function update()
     {
-        $input = Input::all();
+        $input = Request::all();
         $id = $input['id'];
         $item = $this->eventCustom->find($input['id']);
 
@@ -194,7 +194,7 @@ class EventsController extends BaseController
 
     public function destroy()
     {
-        $ids = Input::get('id');
+        $ids = Request::get('id');
         if (is_array($ids) && $nr = count($ids)) {
             foreach ($ids as $id) {
                 $this->eventCustom->delete($id);

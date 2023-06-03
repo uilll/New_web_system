@@ -8,7 +8,7 @@ use Facades\Repositories\EventRepo;
 use Facades\Repositories\UserRepo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
@@ -56,7 +56,7 @@ class ObjectsController extends BaseController
     public function index()
     {
         //dd("oi");
-        $input = Input::all();
+        $input = Request::all();
 
         $users = null;
         if (Auth::User()->isManager()) {
@@ -88,7 +88,7 @@ class ObjectsController extends BaseController
             return ['status' => 0, 'errors' => ['message' => trans('front.login_failed')]];
         }
 
-        $ids = Input::get('ids');
+        $ids = Request::get('ids');
 
         if (is_array($ids) && count($ids)) {
             foreach ($ids as $id) {

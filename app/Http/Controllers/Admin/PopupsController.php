@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Facades\Repositories\PopupRepo;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -23,7 +23,7 @@ class PopupsController extends BaseController
 
     public function index()
     {
-        $items = PopupRepo::searchAndPaginate(Input::all(), 'id');
+        $items = PopupRepo::searchAndPaginate(Request::all(), 'id');
 
         return View::make('admin::'.ucfirst($this->section).'.'.(Request::ajax() ? 'table' : 'index'))->with(['section' => $this->section, 'items' => $items]);
     }
@@ -46,7 +46,7 @@ class PopupsController extends BaseController
 
     public function store()
     {
-        $input = Input::all();
+        $input = Request::all();
         if ($this->notificationService->save($input)) {
             return Response::json(['success' => true, 'status' => 1]);
         }
@@ -56,7 +56,7 @@ class PopupsController extends BaseController
 
     public function update()
     {
-        $input = Input::all();
+        $input = Request::all();
 
         if ($this->notificationService->save($input)) {
             return Response::json(['success' => true, 'status' => 1]);

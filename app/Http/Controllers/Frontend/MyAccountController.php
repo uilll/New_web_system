@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use ModalHelpers\MyAccountSettingsModalHelper;
 use Tobuli\Repositories\User\UserRepositoryInterface as User;
 use Tobuli\Validation\UserAccountFormValidator;
@@ -23,7 +23,7 @@ class MyAccountController extends Controller
 
     public function update(MyAccountSettingsModalHelper $myAccountSettingsModalHelper, User $userRepo, UserAccountFormValidator $userAccountFormValidator)
     {
-        $input = Input::all();
+        $input = Request::all();
         $data = $myAccountSettingsModalHelper->changePassword($input, Auth::User(), $userRepo, $userAccountFormValidator);
 
         return response()->json($data);
@@ -35,7 +35,7 @@ class MyAccountController extends Controller
             return response()->json(['status' => 1, 'demo' => true]);
         }
 
-        $input = Input::all();
+        $input = Request::all();
         $selected = trim($input['selected']);
         $maps = Config::get('tobuli.maps');
         $map_id = 1;

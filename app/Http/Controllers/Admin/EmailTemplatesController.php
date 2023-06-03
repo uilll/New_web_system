@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -34,7 +34,7 @@ class EmailTemplatesController extends BaseController
 
     public function index()
     {
-        $input = Input::all();
+        $input = Request::all();
 
         $items = $this->emailTemplate->searchAndPaginate($input, 'title');
         $section = $this->section;
@@ -60,7 +60,7 @@ class EmailTemplatesController extends BaseController
 
     public function update()
     {
-        $input = Input::all();
+        $input = Request::all();
         $id = $input['id'];
 
         try {

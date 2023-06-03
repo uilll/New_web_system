@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Html\FormFacade as Form;
 use Illuminate\Support\Facades\Config as LaravelConfig;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Tobuli\Exceptions\ValidationException;
@@ -38,7 +38,7 @@ class BillingController extends BaseController
 
     public function store(Config $configRepo, AdminBillingGatewayFormValidator $adminBillingGatewayFormValidator)
     {
-        $input = Input::all();
+        $input = Request::all();
 
         try {
             $adminBillingGatewayFormValidator->validate('update', $input);
@@ -86,7 +86,7 @@ class BillingController extends BaseController
 
     public function planStore(BillingPlan $billingPlanRepo, AdminBillingPlanFormValidator $adminBillingPlanFormValidator)
     {
-        $input = Input::all();
+        $input = Request::all();
         $permissions = LaravelConfig::get('tobuli.permissions');
 
         try {
@@ -143,7 +143,7 @@ class BillingController extends BaseController
 
     public function update(BillingPlan $billingPlanRepo, AdminBillingPlanFormValidator $adminBillingPlanFormValidator)
     {
-        $input = Input::all();
+        $input = Request::all();
         $permissions = LaravelConfig::get('tobuli.permissions');
 
         try {
@@ -197,7 +197,7 @@ class BillingController extends BaseController
 
     public function destroy(BillingPlan $billingPlanRepo)
     {
-        $input = Input::all();
+        $input = Request::all();
         if (! isset($input['id'])) {
             return response()->json(['status' => 0]);
         }

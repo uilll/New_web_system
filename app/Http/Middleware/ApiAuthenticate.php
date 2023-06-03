@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Tobuli\Entities\User;
 
 class ApiAuthenticate
@@ -30,7 +30,7 @@ class ApiAuthenticate
      */
     public function handle($request, Closure $next)
     {
-        $input = Input::all();
+        $input = Request::all();
         $user = null;
         if (isset($input['user_api_hash'])) {
             $hash = $input['user_api_hash'];

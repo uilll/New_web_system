@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
@@ -82,7 +82,7 @@ class TrackerController extends BaseController
             }
         }
 
-        $input = Input::all();
+        $input = Request::all();
         $users = null;
         if (Auth::User()->isManager()) {
             $users = Auth::User()->subusers()->lists('id', 'id')->all();

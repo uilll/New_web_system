@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Facades\Repositories\DeviceRepo;
 use Facades\Repositories\UserRepo;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Tobuli\Entities\File\DeviceMedia;
 
 class DeviceMediaController extends Controller
@@ -17,7 +17,7 @@ class DeviceMediaController extends Controller
      */
     public function create()
     {
-        $search_input = Input::all();
+        $search_input = Request::all();
 
         $deviceCollection = DeviceRepo::searchAndPaginateSimple($search_input, 'name', 'asc', 15, [$this->user->id]);
 

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Console\PositionsStack;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Tobuli\Repositories\AlertDevice\AlertDeviceRepositoryInterface as AlertDevice;
 use Tobuli\Repositories\Config\ConfigRepositoryInterface as Config;
 use Tobuli\Repositories\Device\DeviceRepositoryInterface as Device;
@@ -118,7 +118,7 @@ class PositionsController extends Controller
 
     public function insert()
     {
-        $input = Input::all();
+        $input = Request::all();
         if (! isset($input['key']) || $input['key'] != 'Hdaiohaguywhga12344hdsbsdsfsd') {
             return;
         }

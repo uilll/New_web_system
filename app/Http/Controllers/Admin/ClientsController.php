@@ -8,7 +8,7 @@ use Facades\Validators\ObjectsListSettingsFormValidator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
@@ -63,7 +63,7 @@ class ClientsController extends BaseController
 
     public function index()
     {
-        $input = Input::all();
+        $input = Request::all();
         //DB::table('users')->update(['manager_id' => 0]);
 
         $items = UserRepo::searchAndPaginate($input, 'email');
@@ -109,7 +109,7 @@ class ClientsController extends BaseController
 
     public function store(BillingPlan $billingPlanRepo)
     {
-        $input = Input::all();
+        $input = Request::all();
         unset($input['id']);
 
         try {
@@ -270,7 +270,7 @@ class ClientsController extends BaseController
 
     public function update(BillingPlan $billingPlanRepo)
     {
-        $input = Input::all();
+        $input = Request::all();
         $id = $input['id'];
         $item = UserRepo::find($id);
 
@@ -414,7 +414,7 @@ class ClientsController extends BaseController
 
     public function importMapIconSet(User $userRepo, MapIconModalHelper $mapIconModalHelper, UserMapIcon $mapIconRepo)
     {
-        $input = Input::all();
+        $input = Request::all();
         $file = Request::file('file');
 
         $file_path = $file->getPathName();
@@ -445,7 +445,7 @@ class ClientsController extends BaseController
 
     public function importGeofencesSet(User $userRepo, GeofenceModalHelper $geofenceModalHelper, Geofence $geofenceRepo, GeofenceGroup $geofenceGroupRepo)
     {
-        $input = Input::all();
+        $input = Request::all();
         $file = Request::file('file');
 
         $file_path = $file->getPathName();
@@ -476,7 +476,7 @@ class ClientsController extends BaseController
 
     public function destroy()
     {
-        $ids = Input::get('id');
+        $ids = Request::get('id');
         if (is_array($ids) && count($ids)) {
             foreach ($ids as $id) {
                 UserRepo::delete($id);
@@ -510,7 +510,7 @@ class ClientsController extends BaseController
 
     public function getPermissionsTable(BillingPlan $billingPlanRepo, User $userRepo)
     {
-        $input = Input::all();
+        $input = Request::all();
         $perms = Config::get('tobuli.permissions');
 
         $plan = null;

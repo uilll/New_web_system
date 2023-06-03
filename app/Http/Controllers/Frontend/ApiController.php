@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Mockery\CountValidator\Exception;
 use Tobuli\Exceptions\ValidationException;
 use Validator;
@@ -64,7 +64,7 @@ class ApiController extends Controller
             'password' => "$password",
         ];
 
-        $remember_me = config('session.remember_me') && (Input::get('remember_me') == 1 ? true : false);
+        $remember_me = config('session.remember_me') && (Request::get('remember_me') == 1 ? true : false);
 
         if (Auth::attempt(array_merge($array, ['active' => '1']), $remember_me)) {
             $devices = UserRepo::getDevicesWith(Auth::User()->id, [

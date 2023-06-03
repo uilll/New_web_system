@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Console\PositionsStack;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Tobuli\Repositories\Device\DeviceRepositoryInterface as Device;
 
@@ -22,7 +22,7 @@ class GpsDataController extends Controller
 
     public function insert()
     {
-        $input = Input::all();
+        $input = Request::all();
         $error = null;
         $required = ['imei' => '', 'date' => '', 'lat' => '', 'lon' => '', 'speed' => '', 'altitude' => '', 'course' => '', 'protocol' => ''];
 

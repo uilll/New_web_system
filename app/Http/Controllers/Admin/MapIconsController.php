@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -38,7 +38,7 @@ class MapIconsController extends BaseController
 
     public function index()
     {
-        $input = Input::all();
+        $input = Request::all();
 
         $items = $this->mapIcon->searchAndPaginate($input, 'path', 'desc', 40);
         $section = $this->section;
@@ -52,10 +52,10 @@ class MapIconsController extends BaseController
 
     public function store()
     {
-        $file = Input::file('file');
+        $file = Request::file('file');
         try {
             $this->mapIconUploadValidator->validate('create', ['file' => $file]);
-            $file = Input::file('file');
+            $file = Request::file('file');
             [$w, $h] = getimagesize($file);
             $destinationPath = 'images/map_icons';
             $filename = uniqid('', true).'.'.$file->getClientOriginalExtension();
@@ -73,7 +73,7 @@ class MapIconsController extends BaseController
 
     public function destroy()
     {
-        $ids = Input::get('id');
+        $ids = Request::get('id');
         if (is_array($ids) && $nr = count($ids)) {
             $all = $this->mapIcon->count();
             if ($nr >= $all) {

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Html\FormFacade as Form;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use ModalHelpers\GeofenceGroupsModalHelper;
 use Tobuli\Repositories\GeofenceGroup\GeofenceGroupRepositoryInterface as GeofenceGroup;
 use Tobuli\Repositories\User\UserRepositoryInterface as User;
@@ -21,14 +21,14 @@ class GeofencesGroupsController extends Controller
 
     public function store(GeofenceGroupsModalHelper $geofenceGroupsModalHelper, GeofenceGroup $geofenceGroupRepo)
     {
-        $input = Input::all();
+        $input = Request::all();
 
         return response()->json(array_merge($geofenceGroupsModalHelper->edit($input, Auth::User(), 0, $geofenceGroupRepo), ['trigger' => 'updateGeofenceGroupsSelect', 'url' => route('geofences_groups.update_select')]));
     }
 
     public function updateSelect(GeofenceGroup $geofenceGroupRepo)
     {
-        $input = Input::all();
+        $input = Request::all();
         $geofence_groups = $geofenceGroupRepo->getWhere(['user_id' => Auth::User()->id])->lists('title', 'id')->all();
 
         return Form::select('group_id', ['0' => trans('front.ungrouped')] + $geofence_groups, isset($input['group_id']) ? $input['group_id'] : null, ['class' => 'form-control']);
@@ -36,7 +36,7 @@ class GeofencesGroupsController extends Controller
 
     public function changeStatus(User $userRepo)
     {
-        $input = Input::all();
+        $input = Request::all();
         $geofence_groups_opened = array_flip(json_decode(Auth::User()->open_geofence_groups, true));
 
         if (isset($geofence_groups_opened[$input['id']])) {
@@ -54,7 +54,7 @@ class GeofencesGroupsController extends Controller
 
     public function destroy(GeofenceModalHelper $geofenceModalHelper, Geofence $geofenceRepo)
     {
-        $id = Input::get('id');
+        $id = Request::get('id');
 
         return response()->json($geofenceModalHelper->destroy($id, Auth::User(), $geofenceRepo));
     }

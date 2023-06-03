@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -39,7 +39,7 @@ class DeviceIconsController extends BaseController
 
     public function index()
     {
-        $input = Input::all();
+        $input = Request::all();
 
         $section = $this->section;
 
@@ -57,11 +57,11 @@ class DeviceIconsController extends BaseController
 
     public function store()
     {
-        $type = Input::get('type', 'icon');
+        $type = Request::get('type', 'icon');
 
         try {
-            if (! Input::get('by_status')) { // single icon store
-                $file = Input::file('file');
+            if (! Request::get('by_status')) { // single icon store
+                $file = Request::file('file');
 
                 $this->deviceIconUploadValidator->validate('create', [
                     'file' => $file,
@@ -113,11 +113,11 @@ class DeviceIconsController extends BaseController
             return modalError(dontExist('global.icon'));
         }
 
-        $type = Input::get('type', 'icon');
+        $type = Request::get('type', 'icon');
 
         try {
-            if (! Input::get('by_status')) { // single icon update
-                $file = Input::file('file');
+            if (! Request::get('by_status')) { // single icon update
+                $file = Request::file('file');
 
                 $this->deviceIconUploadValidator->validate('update', [
                     'file' => $file,
@@ -161,7 +161,7 @@ class DeviceIconsController extends BaseController
 
     public function destroy()
     {
-        $ids = Input::get('id');
+        $ids = Request::get('id');
         if (is_array($ids) && $nr = count($ids)) {
             $all = $this->deviceIcon->count();
             if ($nr >= $all) {
@@ -194,7 +194,7 @@ class DeviceIconsController extends BaseController
 
     private function storeByStatus($type)
     {
-        if (count($files = Input::file()) < self::STATUSES_COUNT) {
+        if (count($files = Request::file()) < self::STATUSES_COUNT) {
             return Response::make(['errors' => ['message' => 'You must upload 4 icons for all statuses.']], '406');
         }
 
@@ -229,7 +229,7 @@ class DeviceIconsController extends BaseController
 
     private function updateByStatus($item, $type)
     {
-        if ($item->by_status && empty($files = Input::file())) {
+        if ($item->by_status && empty($files = Request::file())) {
             $item->update([
                 'type' => $type,
                 'by_status' => true,
@@ -239,7 +239,7 @@ class DeviceIconsController extends BaseController
         }
 
         // if wasn't by status, upload all images
-        if (! $item->by_status && count($files = Input::file()) < self::STATUSES_COUNT) {
+        if (! $item->by_status && count($files = Request::file()) < self::STATUSES_COUNT) {
             return Response::make(['errors' => ['message' => 'You must upload 4 icons for all statuses.']], '406');
         }
 

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Facades\Repositories\UserRepo;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -77,9 +77,9 @@ class LoginController extends Controller
             }
         }
 
-        $remember_me = config('session.remember_me') && (Input::get('remember_me') == 1 ? true : false);
+        $remember_me = config('session.remember_me') && (Request::get('remember_me') == 1 ? true : false);
 
-        if (Auth::attempt(array_merge(Input::only(['email', 'password']), ['active' => '1']), $remember_me)) {
+        if (Auth::attempt(array_merge(Request::only(['email', 'password']), ['active' => '1']), $remember_me)) {
             $this->notificationService->check(Auth::User());
             //if (Auth::User()->id == 6)
             $this->log_register(1, Auth::User()->id);
@@ -132,7 +132,7 @@ class LoginController extends Controller
 
     public function LoginAsPost()
     {
-        $input = Input::all();
+        $input = Request::all();
         $user = UserRepo::findWhere(['email' => $input['email']]);
         if (! isset($user->id)) {
             return Redirect::route('loginas')->with(['message' => 'Email not found']);

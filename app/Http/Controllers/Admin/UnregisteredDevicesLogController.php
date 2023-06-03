@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Request;
 
 class UnregisteredDevicesLogController extends BaseController
@@ -22,7 +22,7 @@ class UnregisteredDevicesLogController extends BaseController
 
     public function destroy()
     {
-        $id = Input::get('id');
+        $id = Request::get('id');
 
         $ids = is_array($id) ? $id : [$id];
 

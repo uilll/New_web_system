@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Facades\Repositories\DeviceRepo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
@@ -64,7 +64,7 @@ class TechnicianController extends BaseController
         dd($lastlat, $lastlon);*/
         //Atualização de ocorrências
 
-        $input = Input::all();
+        $input = Request::all();
         $users = null;
         if (Auth::User()->isManager()) {
             $users = Auth::User()->subusers()->lists('id', 'id')->all();
