@@ -95,6 +95,8 @@ $result = [
 
     'log' => 'errorlog',
 
+        'log_level' => env('APP_LOG_LEVEL', 'debug'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -111,12 +113,10 @@ $result = [
         /*
          * Laravel Framework Service Providers...
          */
-        'Illuminate\Foundation\Providers\ArtisanServiceProvider',
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
         'Illuminate\Cache\CacheServiceProvider',
         'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
-        'Illuminate\Routing\ControllerServiceProvider',
         'Illuminate\Cookie\CookieServiceProvider',
         'Illuminate\Database\DatabaseServiceProvider',
         'Illuminate\Encryption\EncryptionServiceProvider',
@@ -187,7 +187,6 @@ $result = [
         'Artisan' => 'Illuminate\Support\Facades\Artisan',
         'Auth' => 'Illuminate\Support\Facades\Auth',
         'Blade' => 'Illuminate\Support\Facades\Blade',
-        'Bus' => 'Illuminate\Support\Facades\Bus',
         'Cache' => 'Illuminate\Support\Facades\Cache',
         'Config' => 'Illuminate\Support\Facades\Config',
         'Cookie' => 'Illuminate\Support\Facades\Cookie',
@@ -239,3 +238,6 @@ if (env('APP_ENV') === 'local') {
 }
 
 return $result;
+
+    'env' => env('APP_ENV', 'production'),
+
