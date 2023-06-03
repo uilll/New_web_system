@@ -18,7 +18,7 @@ class EventServiceProvider extends ServiceProvider
         'event.name' => [
             'EventListener',
         ],
-        'App\Events\NewMessage' => [
+        \App\Events\NewMessage::class => [
             NewMessageListener::class,
         ],
 

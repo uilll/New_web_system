@@ -40,6 +40,6 @@ class Message extends Model
 
     public function replies()
     {
-        return $this->hasMany('App\message_replies');
+        return $this->hasMany(\App\message_replies::class);
     }
 }
