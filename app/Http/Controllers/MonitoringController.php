@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Monitoring;
+use Illuminate\Http\Request;
 
 class MonitoringController extends Controller
 {
@@ -17,7 +15,8 @@ class MonitoringController extends Controller
     public function index()
     {
         $monitorings = Monitoring::all();
-        return view('monitoring', ['monitorings' => $monitorings]);            
+
+        return view('monitoring', ['monitorings' => $monitorings]);
         //
     }
 
@@ -34,7 +33,6 @@ class MonitoringController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -67,7 +65,6 @@ class MonitoringController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */

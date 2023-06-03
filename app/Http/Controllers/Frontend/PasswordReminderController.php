@@ -1,28 +1,29 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\Repositories\UserRepo;
+use Illuminate\Contracts\Auth\PasswordBroker;
+use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
-use Tobuli\Repositories\User\UserRepositoryInterface as User;
-use Illuminate\Contracts\Auth\PasswordBroker;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 
-class PasswordReminderController extends Controller {
-
+class PasswordReminderController extends Controller
+{
     /*
-	|--------------------------------------------------------------------------
-	| Password Reset Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller is responsible for handling password reset requests
-	| and uses a simple trait to include this behavior. You're free to
-	| explore this trait and override any methods you wish to tweak.
-	|
-	*/
+    |--------------------------------------------------------------------------
+    | Password Reset Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller is responsible for handling password reset requests
+    | and uses a simple trait to include this behavior. You're free to
+    | explore this trait and override any methods you wish to tweak.
+    |
+    */
 
     use ResetsPasswords;
 
@@ -33,7 +34,7 @@ class PasswordReminderController extends Controller {
      */
     protected $passwords;
 
-    function __construct(PasswordBroker $passwords)
+    public function __construct(PasswordBroker $passwords)
     {
         $this->passwords = $passwords;
     }
@@ -55,13 +56,11 @@ class PasswordReminderController extends Controller {
      */
     public function store()
     {
-        $response = $this->passwords->sendResetLink(Input::only('email'), function($m)
-        {
+        $response = $this->passwords->sendResetLink(Input::only('email'), function ($m) {
             $m->subject(trans('front.password_reminder'));
         });
 
         return Redirect::route('password_reminder.create')->withInput()->with(($response == PasswordBroker::RESET_LINK_SENT ? 'success' : 'message'), trans($response));
-
     }
 
     public function reset($token)
@@ -73,14 +72,14 @@ class PasswordReminderController extends Controller {
     {
         $input = Input::only(['email', 'password', 'password_confirmation', 'token']);
 
-        $res = Password::reset($input, function($user, $password)
-        {
+        $res = Password::reset($input, function ($user, $password) {
             UserRepo::update($user->id, ['password' => $password]);
         });
 
-        if ($res == Password::PASSWORD_RESET)
+        if ($res == Password::PASSWORD_RESET) {
             return Redirect::route('login')->with('success', trans($res));
-        else
+        } else {
             return Redirect::route('password_reminder.reset', $input['token'])->with('message', trans($res))->withInput();
+        }
     }
-} 
+}

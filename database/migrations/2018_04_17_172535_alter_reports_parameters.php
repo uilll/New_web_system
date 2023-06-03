@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AlterReportsParameters extends Migration
@@ -12,7 +11,7 @@ class AlterReportsParameters extends Migration
      */
     public function up()
     {
-        if( ! Schema::hasColumn('reports', 'parameters')) {
+        if (! Schema::hasColumn('reports', 'parameters')) {
             Schema::table('reports', function ($table) {
                 $table->text('parameters')->nullable();
             });
@@ -26,7 +25,7 @@ class AlterReportsParameters extends Migration
      */
     public function down()
     {
-        Schema::table('reports', function($table) {
+        Schema::table('reports', function ($table) {
             $table->dropColumn('parameters');
         });
     }

@@ -8,7 +8,6 @@
 
 namespace Tobuli\Services;
 
-
 use App\Notifications\PopupNotification;
 use Facades\Repositories\PopupRepo;
 use Facades\Repositories\UserRepo;
@@ -24,7 +23,6 @@ use Tobuli\Repositories\User\UserRepositoryInterface;
 
 class NotificationService
 {
-
     /**
      * @var UserRepo
      */
@@ -38,19 +36,19 @@ class NotificationService
     public static $ruleCollection = [
         BillingPlan::class,
         DemoUser::class,
-        SubscriptionEnding::class
+        SubscriptionEnding::class,
     ];
 
-    public function __construct(UserRepositoryInterface $userRepo) {
+    public function __construct(UserRepositoryInterface $userRepo)
+    {
         $this->userRepo = $userRepo;
     }
 
-
-    public function save($input) {
-
+    public function save($input)
+    {
         $popup = PopupRepo::first(['id' => $input['id']]);
 
-        if ( ! $popup) {
+        if (! $popup) {
             $popup = new Popup();
         }
 
@@ -68,8 +66,9 @@ class NotificationService
             $rules = $input['rules'];
 
             foreach ($rules as $ruleName => $values) {
-                if ( ! isset($values['is_active']))
+                if (! isset($values['is_active'])) {
                     continue;
+                }
 
                 unset($values['is_active']);
 
@@ -85,7 +84,6 @@ class NotificationService
             }
 
             return true;
-
         } catch (\Exception $e) {
             return false;
         }
@@ -94,7 +92,7 @@ class NotificationService
     public function check($user)
     {
         foreach (Popup::where('active', '=', true)->with('rules')->get() as $popup) {
-            if ( ! $this->checkRules($popup, $user)) {
+            if (! $this->checkRules($popup, $user)) {
                 continue;
             }
 
@@ -106,16 +104,16 @@ class NotificationService
         return true;
     }
 
-
-    public function checkRules(Popup $popup, $user) {
+    public function checkRules(Popup $popup, $user)
+    {
         foreach ($popup->rules as $ruleContent) {
-
             $rule = BaseRule::load($ruleContent, $user);
 
-            if ( ! $rule)
+            if (! $rule) {
                 continue;
+            }
 
-            if ( ! $rule->doesApply()) {
+            if (! $rule->doesApply()) {
                 return false;
             }
         }
@@ -125,31 +123,34 @@ class NotificationService
 
     public function applyOnContent(Popup $popup, $user)
     {
-        foreach ($popup->rules as $ruleContent)
-        {
+        foreach ($popup->rules as $ruleContent) {
             $rule = BaseRule::load($ruleContent, $user);
-            if ( ! $rule)
+            if (! $rule) {
                 continue;
+            }
 
-            $popup->title   = $rule->processShortcodes($popup->title);
+            $popup->title = $rule->processShortcodes($popup->title);
             $popup->content = $rule->processShortcodes($popup->content);
         }
 
         return $popup;
     }
 
-
     public function sendNotification(Popup $popup, $user)
     {
-        if ( ! $user)  return false;
+        if (! $user) {
+            return false;
+        }
 
         $exists = DatabaseNotification::where('data', '=', $popup->toJson())
             ->where('notifiable_id', '=', $user->id)
             ->where('type', '=', PopupNotification::class)
-            ->where('read_at',  '>', date("Y-m-d H:i:s", strtotime("-".$popup->show_every_days . ' days')))
+            ->where('read_at', '>', date('Y-m-d H:i:s', strtotime('-'.$popup->show_every_days.' days')))
             ->first();
 
-        if ($exists) { return false; }
+        if ($exists) {
+            return false;
+        }
 
         $notification = new PopupNotification($popup);
 
@@ -161,6 +162,4 @@ class NotificationService
 
         return true;
     }
-
-
 }

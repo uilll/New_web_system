@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Events\NewTask;
+use App\Exceptions\ResourseNotFoundException;
 use App\Http\Controllers\Controller;
 use Facades\Repositories\TasksRepo;
 use Facades\Repositories\UserRepo;
@@ -10,12 +11,8 @@ use Facades\Validators\TasksFormValidator;
 use Tobuli\Entities\Task;
 use Tobuli\Entities\TaskStatus;
 
-use App\Exceptions\ResourseNotFoundException;
-use App\Exceptions\PermissionException;
-use Tobuli\Exceptions\ValidationException;
-
-class TasksController extends Controller {
-
+class TasksController extends Controller
+{
     public function index()
     {
         $this->checkException('tasks', 'view');
@@ -39,7 +36,7 @@ class TasksController extends Controller {
             'devices' => $devices,
             'priorities' => $priorities,
             'tasks' => $tasks,
-            'statuses' => $statuses
+            'statuses' => $statuses,
         ]);
     }
 
@@ -47,19 +44,23 @@ class TasksController extends Controller {
     {
         $this->checkException('tasks', 'view');
 
-        $filter =  ['user_id' => $this->user->id];
-        if ($this->data['search_device_id'] != 0 )
+        $filter = ['user_id' => $this->user->id];
+        if ($this->data['search_device_id'] != 0) {
             $filter['device_id'] = (int) $this->data['search_device_id'];
+        }
 
-        if ($this->data['search_task_status'] != 0 )
+        if ($this->data['search_task_status'] != 0) {
             $filter['status'] = (int) $this->data['search_task_status'];
+        }
 
-        if ($this->data['search_time_from'])
+        if ($this->data['search_time_from']) {
             $filter['delivery_time_from'] = (int) $this->data['search_time_from'];
+        }
 
-        if ($this->data['search_time_to'])
+        if ($this->data['search_time_to']) {
             $filter['delivery_time_to'] = (int) $this->data['search_time_to'];
-        $tasks = TasksRepo::searchAndPaginate(['filter' => $filter ], 'id', 'desc', 10);
+        }
+        $tasks = TasksRepo::searchAndPaginate(['filter' => $filter], 'id', 'desc', 10);
 
         $devices[0] = '-- '.trans('admin.select').' --';
         $devices += UserRepo::getDevices($this->user->id)->lists('name', 'id')->all();
@@ -87,7 +88,8 @@ class TasksController extends Controller {
         return ['status' => 1];
     }
 
-    public function doDestroy($id) {
+    public function doDestroy($id)
+    {
         $item = TasksRepo::find($id);
 
         $this->checkException('tasks', 'remove', $item);
@@ -95,7 +97,8 @@ class TasksController extends Controller {
         return view('front::Tasks.destroy')->with(['item' => $item]);
     }
 
-    public function destroy() {
+    public function destroy()
+    {
         $id = array_key_exists('task_id', $this->data) ? $this->data['task_id'] : $this->data['id'];
 
         $item = TasksRepo::findWithAttributes($id);
@@ -129,11 +132,12 @@ class TasksController extends Controller {
             'item' => $item,
             'devices' => $devices,
             'priorities' => $priorities,
-            'statuses' => $statuses
+            'statuses' => $statuses,
         ]);
     }
 
-    public function update() {
+    public function update()
+    {
         $task = TasksRepo::findWithAttributes($this->data['id']);
 
         $this->checkException('tasks', 'update', $task);
@@ -146,14 +150,17 @@ class TasksController extends Controller {
         return ['status' => 1];
     }
 
-    public function getSignature($taskStatusId) {
+    public function getSignature($taskStatusId)
+    {
         $taskStatus = TaskStatus::find($taskStatusId);
 
-        if ( ! $taskStatus)
+        if (! $taskStatus) {
             throw new ResourseNotFoundException('global.task_status');
+        }
 
-        if ( ! $taskStatus->signature)
+        if (! $taskStatus->signature) {
             throw new ResourseNotFoundException('global.task_status_1456');
+        }
 
         return response($taskStatus->signature)
             ->header('Content-Type', 'image/jpeg')

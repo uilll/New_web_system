@@ -1,19 +1,23 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class Route extends Eloquent {
-	protected $table = 'routes';
+class Route extends Eloquent
+{
+    protected $table = 'routes';
 
-    protected $fillable = array('user_id', 'name', 'active', 'color');
+    protected $fillable = ['user_id', 'name', 'active', 'color'];
 
-    protected $hidden = array('polyline');
+    protected $hidden = ['polyline'];
 
     protected $casts = [
         'coordinates' => 'array',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('Tobuli\Entities\User', 'user_id', 'id');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Lisää laite',
     'per_one' => 'per 1',
@@ -664,4 +664,4 @@ SMS-yhdyskäytävän URL esimerkki: http://SMS_GATEWAY/sendsms.php?username=USER
     'do_objects_delete' => 'Haluatko todella poistaa nämä laitteet? <br> Kaikki siihen liittyvät tiedot menetetään.',
     'ignition_off' => 'Sytytys pois päältä',
     'forward' => 'Eteenpäin',
-);
+];

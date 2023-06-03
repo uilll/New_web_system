@@ -1,19 +1,19 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class RegistrationFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class RegistrationFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
     public $rules = [
         'create' => [
-            'email' => 'required|email|unique:users,email'
+            'email' => 'required|email|unique:users,email',
         ],
         'update' => [
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

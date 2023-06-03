@@ -16,21 +16,48 @@
  * Example of Arabic Text ArStandard
  *
  * @category  I18N
- * @package   I18N_Arabic
+ *
  * @author    Khaled Al-Sham'aa <khaled@ar-php.org>
  * @copyright 2006-2016 Khaled Al-Sham'aa
- *
  * @license   LGPL <http://www.gnu.org/licenses/lgpl.txt>
+ *
  * @link      http://www.ar-php.org
  */
-
 error_reporting(E_STRICT);
 $time_start = microtime(true);
 
 require '../../Arabic.php';
 $Arabic = new I18N_Arabic('Standard');
 
-$content = <<<END
+$content = <<<'END'
+هذا نص عربي ، و فيه علامات ترقيم بحاجة إلى ضبط و معايرة !و كذلك نصوص( بين 
+أقواس )أو حتى مؤطرة"بإشارات إقتباس "أو- علامات إعتراض -الخ......
+<br>
+لذا ستكون هذه المكتبة أداة و وسيلة لمعالجة مثل هكذا حالات، بما فيها الواحدات 1 
+Kg أو مثلا MB 16 وسواها حتى النسب المؤية مثل 20% أو %50 وهكذا ...
+END;
+
+$str = $Arabic->standard($content);
+
+echo '<b>Origenal:</b>';
+echo '<p dir="rtl" align="justify">';
+echo $content.'</p>';
+
+echo '<b>Standard:</b>';
+echo '<p dir="rtl" align="justify">';
+echo $str.'</p>';
+?>
+
+</div><br />
+<div class="Paragraph">
+<h2>Example Code:</h2>
+<?php
+$code = <<< 'ENDALL'
+<?php
+    require '../../Arabic.php';
+    $Arabic = new I18N_Arabic('Standard');
+    
+    $content = <<<END
 هذا نص عربي ، و فيه علامات ترقيم بحاجة إلى ضبط و معايرة !و كذلك نصوص( بين 
 أقواس )أو حتى مؤطرة"بإشارات إقتباس "أو- علامات إعتراض -الخ......
 <br>
@@ -39,7 +66,7 @@ Kg أو مثلا MB 16 وسواها حتى النسب المؤية مثل 20% أ
 END;
 
     $str = $Arabic->standard($content);
-
+    
     echo '<b>Origenal:</b>';
     echo '<p dir="rtl" align="justify">';
     echo $content . '</p>';
@@ -47,34 +74,6 @@ END;
     echo '<b>Standard:</b>';
     echo '<p dir="rtl" align="justify">';
     echo $str . '</p>';
-?>
-
-</div><br />
-<div class="Paragraph">
-<h2>Example Code:</h2>
-<?php
-$code = <<< ENDALL
-<?php
-    require '../../Arabic.php';
-    \$Arabic = new I18N_Arabic('Standard');
-    
-    \$content = <<<END
-هذا نص عربي ، و فيه علامات ترقيم بحاجة إلى ضبط و معايرة !و كذلك نصوص( بين 
-أقواس )أو حتى مؤطرة"بإشارات إقتباس "أو- علامات إعتراض -الخ......
-<br>
-لذا ستكون هذه المكتبة أداة و وسيلة لمعالجة مثل هكذا حالات، بما فيها الواحدات 1 
-Kg أو مثلا MB 16 وسواها حتى النسب المؤية مثل 20% أو %50 وهكذا ...
-END;
-
-    \$str = \$Arabic->standard(\$content);
-    
-    echo '<b>Origenal:</b>';
-    echo '<p dir="rtl" align="justify">';
-    echo \$content . '</p>';
-    
-    echo '<b>Standard:</b>';
-    echo '<p dir="rtl" align="justify">';
-    echo \$str . '</p>';
 ENDALL;
 
 highlight_string($code);
@@ -83,7 +82,7 @@ $time_end = microtime(true);
 $time = $time_end - $time_start;
 
 echo "<hr />Total execution time is $time seconds<br />\n";
-echo 'Amount of memory allocated to this script is ' . memory_get_usage() . ' bytes';
+echo 'Amount of memory allocated to this script is '.memory_get_usage().' bytes';
 
 $included_files = get_included_files();
 echo '<h4>Names of included or required files:</h4><ul>';

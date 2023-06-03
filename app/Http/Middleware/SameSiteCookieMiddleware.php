@@ -16,7 +16,7 @@ class SameSiteCookieMiddleware
 
             $newCookies = [];
             foreach ($cookies as $cookie) {
-                $newCookies[] = $cookie . '; SameSite=None; Secure';
+                $newCookies[] = $cookie.'; SameSite=None; Secure';
             }
 
             $response->headers->set('Set-Cookie', $newCookies);

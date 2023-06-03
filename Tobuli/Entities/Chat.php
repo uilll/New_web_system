@@ -11,15 +11,16 @@ namespace Tobuli\Entities;
 use Eloquent;
 use Illuminate\Support\Collection;
 
-
-class Chat extends Eloquent {
-
-    public function participants() {
+class Chat extends Eloquent
+{
+    public function participants()
+    {
         return $this->hasMany(ChatParticipant::class, 'chat_id', 'id');
     }
 
-    public function messages() {
-        return $this->hasMany(ChatMessage::class)->with(['sender'])->orderBy('id','desc');
+    public function messages()
+    {
+        return $this->hasMany(ChatMessage::class)->with(['sender'])->orderBy('id', 'desc');
     }
 
     public function getLastMessages()
@@ -27,25 +28,28 @@ class Chat extends Eloquent {
         $messages = $this->messages()->paginate();
 
         $_messages = $messages->items();
-        $reversed  = $messages->reverse();
+        $reversed = $messages->reverse();
 
-        foreach ($_messages as $key => $message)
+        foreach ($_messages as $key => $message) {
             $messages->forget($key);
+        }
 
-        foreach ($reversed as $key => $message)
+        foreach ($reversed as $key => $message) {
             $messages->put($key, $message);
+        }
 
         return $messages;
     }
 
-    public function getTitleAttribute() {
+    public function getTitleAttribute()
+    {
         $title = [];
-        foreach ($this->participants as $participant)
-        {
-            if ( ! $participant->chattable)
+        foreach ($this->participants as $participant) {
+            if (! $participant->chattable) {
                 continue;
+            }
 
-            $title[] = ($participant->chattable->name ? $participant->chattable->name : $participant->chattable->email );
+            $title[] = ($participant->chattable->name ? $participant->chattable->name : $participant->chattable->email);
         }
 
         return implode(' | ', $title);
@@ -60,8 +64,7 @@ class Chat extends Eloquent {
 
     public function addParticipants($participants)
     {
-        foreach ($participants as $participant)
-        {
+        foreach ($participants as $participant) {
             $this->addParticipant($participant);
         }
     }
@@ -73,8 +76,7 @@ class Chat extends Eloquent {
 
     public function scopeGetByParticipants($query, $participants)
     {
-        foreach ($participants as $entity)
-        {
+        foreach ($participants as $entity) {
             $query->whereHas('participants', function ($query) use ($entity) {
                 $query->where('chattable_id', '=', $entity->id)->where('chattable_type', get_class($entity));
             });
@@ -83,41 +85,44 @@ class Chat extends Eloquent {
         return $query;
     }
 
-    public static function getRoom($participants) {
+    public static function getRoom($participants)
+    {
         $chat = self::getByParticipants($participants)->first();
 
-        if ( ! $chat) {
+        if (! $chat) {
             $chat = self::createRoom($participants);
         }
 
         return $chat;
     }
 
-    public static function getRoomByDevice(Device $device) {
+    public static function getRoomByDevice(Device $device)
+    {
         $chat = self::getByDevice($device)->first();
 
-        if ( ! $chat) {
+        if (! $chat) {
             $participants = new Collection();
             $participants->push($device);
             $participants = $participants->merge($device->users);
             $participants = $participants->all();
 
-            $chat =  self::createRoom($participants);
+            $chat = self::createRoom($participants);
         }
-/*
-        ChatParticipant::whereNotIn('chattable_id', $device->users->pluck('id'))
-            ->where('chat_id', $chat->id)
-            ->where('chattable_type', User::class)->delete();
+        /*
+                ChatParticipant::whereNotIn('chattable_id', $device->users->pluck('id'))
+                    ->where('chat_id', $chat->id)
+                    ->where('chattable_type', User::class)->delete();
 
 
-        foreach ($device->users as $user) {
-            ChatParticipant::firstOrCreate(['chattable_id' => $user->id, 'chattable_type' => User::class, 'chat_id' => $chat->id]);
-        }
-*/
+                foreach ($device->users as $user) {
+                    ChatParticipant::firstOrCreate(['chattable_id' => $user->id, 'chattable_type' => User::class, 'chat_id' => $chat->id]);
+                }
+        */
         return $chat;
     }
 
-    private static function createRoom($participants) {
+    private static function createRoom($participants)
+    {
         $chat = new Chat();
         $chat->save();
 
@@ -126,8 +131,8 @@ class Chat extends Eloquent {
         return $chat;
     }
 
-    public function getRoomHashAttribute() {
-        return md5('message_for_'. $this->id);
+    public function getRoomHashAttribute()
+    {
+        return md5('message_for_'.$this->id);
     }
-
 }

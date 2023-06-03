@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class AdminBillingGatewayFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class AdminBillingGatewayFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -15,10 +17,8 @@ class AdminBillingGatewayFormValidator extends Validator {
             'stripe_currency' => 'required_if:payment_type,stripe',
             'stripe_public_key' => 'required_if:payment_type,stripe',
             'stripe_secret_key' => 'required_if:payment_type,stripe',
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

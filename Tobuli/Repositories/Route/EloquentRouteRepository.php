@@ -1,12 +1,14 @@
-<?php namespace Tobuli\Repositories\Route;
+<?php
+
+namespace Tobuli\Repositories\Route;
 
 use Illuminate\Support\Facades\DB;
 use Tobuli\Entities\Route as Entity;
 use Tobuli\Repositories\EloquentRepository;
 
-class EloquentRouteRepository extends EloquentRepository implements RouteRepositoryInterface {
-
-    public function __construct( Entity $entity )
+class EloquentRouteRepository extends EloquentRepository implements RouteRepositoryInterface
+{
+    public function __construct(Entity $entity)
     {
         $this->entity = $entity;
     }
@@ -16,7 +18,8 @@ class EloquentRouteRepository extends EloquentRepository implements RouteReposit
         return $this->entity->where('user_id', $user_id)->get();
     }
 
-    public function create($data) {
+    public function create($data)
+    {
         $cor_text = $this->gen_polyline_text($data['polyline']);
         //dd('LINESTRING('.$cor_text.')');
 
@@ -26,19 +29,22 @@ class EloquentRouteRepository extends EloquentRepository implements RouteReposit
         )");
     }
 
-    public function updateWithPolyline($id, $data) {
+    public function updateWithPolyline($id, $data)
+    {
         $cor_text = $this->gen_polyline_text($data['polyline']);
 
         DB::unprepared("UPDATE routes SET name = '".$data['name']."', coordinates = '".$data['polyline']."', polyline = GeomFromText('LINESTRING($cor_text)'), color = '".$data['color']."' WHERE id = '{$id}'");
     }
 
-    private function gen_polyline_text($json) {
-        $cor_text = NULL;
+    private function gen_polyline_text($json)
+    {
+        $cor_text = null;
         $items = json_decode($json);
-        foreach($items as $item) {
+        foreach ($items as $item) {
             $cor_text .= $item->lat.' '.$item->lng.',';
         }
         $cor_text = substr($cor_text, 0, -1);
+
         return $cor_text;
     }
 }

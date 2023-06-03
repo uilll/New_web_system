@@ -25,8 +25,7 @@ class FractalTransformerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        App::bind('FractalTransformer', function()
-        {
+        App::bind('FractalTransformer', function () {
             return new FractalTransformerService();
         });
     }

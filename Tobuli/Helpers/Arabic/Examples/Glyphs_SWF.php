@@ -3,15 +3,14 @@
  * Example of SWF implementation for Arabic glyphs Class
  *
  * @category  I18N
- * @package   I18N_Arabic
+ *
  * @author    Khaled Al-Sham'aa <khaled@ar-php.org>
  * @copyright 2006-2016 Khaled Al-Sham'aa
- *
  * @license   LGPL <http://www.gnu.org/licenses/lgpl.txt>
+ *
  * @link      http://www.ar-php.org
  */
-
-if (!extension_loaded('ming')) {
+if (! extension_loaded('ming')) {
     ?>
 
     <p><b><font color="red">This example needs MING extension which is not loaded in your PHP environment!</font></b></p>
@@ -45,19 +44,18 @@ $m->setBackground(105, 121, 47);
  * This functions was based on the example from
  * http://ming.sourceforge.net/examples/animation.html
  *
- * @param integer $r      Red
- * @param integer $g      Green
- * @param integer $b      Blue
- * @param integer $a      Alpha
- * @param integer $rot    Rotate
- * @param integer $x      X
- * @param integer $y      Y
- * @param integer $scale  Scale
- * @param string  $string String
- *
+ * @param  int  $r      Red
+ * @param  int  $g      Green
+ * @param  int  $b      Blue
+ * @param  int  $a      Alpha
+ * @param  int  $rot    Rotate
+ * @param  int  $x      X
+ * @param  int  $y      Y
+ * @param  int  $scale  Scale
+ * @param  string  $string String
  * @return SWFMovie object
  */
-function text ($r, $g, $b, $a, $rot, $x, $y, $scale, $string)
+function text($r, $g, $b, $a, $rot, $x, $y, $scale, $string)
 {
     global $f, $m;
 
@@ -79,11 +77,11 @@ function text ($r, $g, $b, $a, $rot, $x, $y, $scale, $string)
 $x = 1040;
 $y = 50;
 $size = 0.4;
-$t[0] = text(220, 220, 220, 0xff, 0, $x, $y, $size, $text_before);
+$t[0] = text(220, 220, 220, 0xFF, 0, $x, $y, $size, $text_before);
 
 $y = 80;
 $size = 0.8;
-$t[1] = text(255, 255, 0, 0xff, 0, $x, $y, $size, $text_after);
+$t[1] = text(255, 255, 0, 0xFF, 0, $x, $y, $size, $text_after);
 
 $frames = 400;
 for ($j = 0; $j < $frames; $j++) {

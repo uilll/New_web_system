@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class ServiceFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class ServiceFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -19,8 +21,6 @@ class ServiceFormValidator extends Validator {
             'trigger_event_left' => 'numeric|min:1|lesser_than:interval',
         ],
     ];
-
 }   //end of class
-
 
 //EOF

@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Repositories\DeviceGroup;
+<?php
+
+namespace Tobuli\Repositories\DeviceGroup;
 
 use Tobuli\Repositories\EloquentRepositoryInterface;
 
-interface DeviceGroupRepositoryInterface extends EloquentRepositoryInterface {
-
+interface DeviceGroupRepositoryInterface extends EloquentRepositoryInterface
+{
 }

@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @param $title
- * @param string $extra
+ * @param  string  $extra
  * @return string
  */
-function tableHeader($title, $extra = '') {
+function tableHeader($title, $extra = '')
+{
     $html = '<th class="sorting_disabled" '.$extra.'>
-                '. trans($title) .'
+                '.trans($title).'
             </th>';
 
     return $html;
@@ -15,16 +15,16 @@ function tableHeader($title, $extra = '') {
 
 /**
  * @param $input
- * @param $field
- * @param null $title
- * @param string $extra
+ * @param  null  $title
+ * @param  string  $extra
  * @return string
  */
-function tableHeaderSort($sorting, $field, $title = NULL, $extra = '') {
+function tableHeaderSort($sorting, $field, $title = null, $extra = '')
+{
     $html = '<th class="sorting'.
-        ($sorting['sort_by'] == $field ? '_'.$sorting['sort'] : '') # If header active class "sorting_desc" or "sortinc_asc"
+        ($sorting['sort_by'] == $field ? '_'.$sorting['sort'] : '') // If header active class "sorting_desc" or "sortinc_asc"
         .'" data-id="'.$field.'" '.$extra.'>
-                '. trans(!is_null($title) ? $title : "validation.attributes.{$field}") .'
+                '.trans(! is_null($title) ? $title : "validation.attributes.{$field}").'
             </th>';
 
     return $html;
@@ -33,7 +33,8 @@ function tableHeaderSort($sorting, $field, $title = NULL, $extra = '') {
 /**
  * @return string
  */
-function tableHeaderCheckall($actions = []) {
+function tableHeaderCheckall($actions = [])
+{
     $checkboxHtml =
                 '<div class="checkbox">
                     <input type="checkbox" data-toggle="checkbox">
@@ -41,7 +42,7 @@ function tableHeaderCheckall($actions = []) {
                 </div>';
 
     $actionHtml = '';
-    if ( $actions ) {
+    if ($actions) {
         $actionHtml .=
             '<div class="btn-group dropdown">
                     <i class="btn icon multi-edit" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ></i>
@@ -55,9 +56,9 @@ function tableHeaderCheckall($actions = []) {
     }
 
     $html = '<th class="table-checkbox sorting_disabled" role="columnheader" rowspan="1" colspan="1">'
-        . $checkboxHtml
-        . $actionHtml
-        . '</th>';
+        .$checkboxHtml
+        .$actionHtml
+        .'</th>';
 
     return $html;
 }

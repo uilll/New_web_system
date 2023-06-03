@@ -1,10 +1,11 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use Facades\Repositories\SmsEventQueueRepo;
 use Facades\Validators\SendTestSmsFormValidator;
 use Facades\Validators\SMSGatewayFormValidator;
 use Tobuli\Helpers\SMS\SMSGatewayManager;
-
 
 class SmsGatewayModalHelper extends ModalHelper
 {
@@ -31,6 +32,7 @@ class SmsGatewayModalHelper extends ModalHelper
     public function clearQueue()
     {
         SmsEventQueueRepo::deletewhere(['user_id' => $this->user->id]);
+
         return ['status' => 1];
     }
 }

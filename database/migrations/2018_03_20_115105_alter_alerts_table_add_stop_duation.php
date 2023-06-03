@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AlterAlertsTableAddStopDuation extends Migration
@@ -12,8 +11,9 @@ class AlterAlertsTableAddStopDuation extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('alerts', 'stop_duration'))
+        if (Schema::hasColumn('alerts', 'stop_duration')) {
             return;
+        }
 
         Schema::table('alerts', function ($table) {
             $table->integer('stop_duration')->after('ac_alarm')->nullable();
@@ -27,8 +27,7 @@ class AlterAlertsTableAddStopDuation extends Migration
      */
     public function down()
     {
-        Schema::table('alerts', function($table)
-        {
+        Schema::table('alerts', function ($table) {
             $table->dropColumn('stop_duration');
         });
     }

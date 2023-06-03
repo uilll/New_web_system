@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'Szerkesztése',
     'add_new' => 'Új hozzáadása',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Hétvége',
     'always' => 'Mindig',
     'advanced' => 'Fejlett',
-);
+];

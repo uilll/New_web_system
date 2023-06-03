@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateChatMessagesToUser extends Migration
 {
@@ -12,7 +12,9 @@ class CreateChatMessagesToUser extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('chat_messages_to_user')) { return; }
+        if (Schema::hasTable('chat_messages_to_user')) {
+            return;
+        }
 
         Schema::create('chat_messages_to_user', function (Blueprint $table) {
             $table->increments('id');

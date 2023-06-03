@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class CellocatorProtocol extends BaseProtocol implements Protocol
 {
@@ -11,7 +11,7 @@ class CellocatorProtocol extends BaseProtocol implements Protocol
     {
         return [
             $this->initCommand(Commands::TYPE_OUTPUT_CONTROL),
-            $this->initCommand(Commands::TYPE_CUSTOM)
+            $this->initCommand(Commands::TYPE_CUSTOM),
         ];
     }
 }

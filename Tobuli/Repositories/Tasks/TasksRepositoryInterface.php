@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Repositories\Tasks;
+<?php
+
+namespace Tobuli\Repositories\Tasks;
 
 use Tobuli\Repositories\EloquentRepositoryInterface;
 
-interface TasksRepositoryInterface extends EloquentRepositoryInterface {
-
+interface TasksRepositoryInterface extends EloquentRepositoryInterface
+{
 }

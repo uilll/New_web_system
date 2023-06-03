@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Aggiungi dispositivo',
     'per_one' => 'per 1',
@@ -663,4 +663,4 @@ return array(
     'do_objects_delete' => 'Vuoi davvero eliminare questi dispositivi? <br> Tutti i dati associati andranno persi.',
     'ignition_off' => 'Accensione disattivata',
     'forward' => 'Inoltrare',
-);
+];

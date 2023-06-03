@@ -21,8 +21,9 @@ class Hive
         $this->key = env('admin_user');
     }
 
-    public function getBackupServer() {
-        return $this->json('GET', "backup_server");
+    public function getBackupServer()
+    {
+        return $this->json('GET', 'backup_server');
     }
 
     public function getError()
@@ -34,8 +35,9 @@ class Hive
     {
         $response = $this->call($method, $endpoint, $data);
 
-        if (is_null($response))
+        if (is_null($response)) {
             return null;
+        }
 
         return json_decode($response->getBody()->getContents(), true);
     }
@@ -45,8 +47,8 @@ class Hive
         $this->error = null;
 
         try {
-            $result = $this->client->request($method, self::URL . $this->key . "/" . $endpoint, [
-                'form_params' => $data
+            $result = $this->client->request($method, self::URL.$this->key.'/'.$endpoint, [
+                'form_params' => $data,
             ]);
         } catch (ClientException $e) {
             $response = $e->getResponse();

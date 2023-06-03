@@ -3,9 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Facades\Repositories\UserRepo;
 use Tobuli\Repositories\Device\DeviceRepositoryInterface as Device;
-
 
 class Monitoring extends Model
 {
@@ -15,7 +13,7 @@ class Monitoring extends Model
         'active',
         'event_id',
         'device_id',
-        'customer', 
+        'customer',
         'owner',
         'plate_number',
         'cause',
@@ -26,7 +24,7 @@ class Monitoring extends Model
         'modified_date',
         'tel',
         'make_contact',
-        'information',        
+        'information',
         'next_con',
         'treated_occurence',
         'sent_maintenance',
@@ -34,16 +32,15 @@ class Monitoring extends Model
         'interaction_date',
         'interaction_choice1',
         'interaction_choice2',
-        'interaction_later',        
+        'interaction_later',
         'timestamp',
         'manager_id',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     public function device()
     {
         return $this->belongsTo(Device::class);
     }
-
 }

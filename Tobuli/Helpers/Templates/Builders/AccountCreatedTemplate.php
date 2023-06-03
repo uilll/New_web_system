@@ -2,20 +2,18 @@
 
 namespace Tobuli\Helpers\Templates\Builders;
 
-
 use Tobuli\Helpers\Templates\TemplateBuilder;
 
 class AccountCreatedTemplate extends TemplateBuilder
 {
     /**
-     * @param $item
      * @return array
      */
     protected function getReplaceVariables($item)
     {
         return [
-            '[email]'    => $item['email'],
-            '[password]' => $item['password']
+            '[email]' => $item['email'],
+            '[password]' => $item['password'],
         ];
     }
 
@@ -25,7 +23,7 @@ class AccountCreatedTemplate extends TemplateBuilder
     public function getReplacers()
     {
         return [
-            '[email]'    => 'User email',
+            '[email]' => 'User email',
             '[password]' => 'User password',
         ];
     }

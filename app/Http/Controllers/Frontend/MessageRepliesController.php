@@ -1,12 +1,11 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers;
-
-use App\Http\Requests\CreateMessageReplyRequest;
 use App\Http\Requests\UpdateMessageReplyRequest;
-use App\message_replies;
 use App\Message;
+use App\message_replies;
 use Illuminate\Http\Request;
 
 class MessageRepliesController extends Controller
@@ -14,7 +13,7 @@ class MessageRepliesController extends Controller
     public function index($message_id)
     {
         $message = Message::find($message_id);
-        if (!$message) {
+        if (! $message) {
             abort(404);
         }
         $replies = $message->replies()->get();
@@ -25,7 +24,7 @@ class MessageRepliesController extends Controller
     public function create($message_id)
     {
         $message = Message::find($message_id);
-        if (!$message) {
+        if (! $message) {
             abort(404);
         }
 
@@ -37,7 +36,7 @@ class MessageRepliesController extends Controller
         //debugar(true, "inicio");
         try {
             $message = Message::find($message_id);
-            if (!$message) {
+            if (! $message) {
                 abort(404);
             }
             //debugar(true, $message);
@@ -66,15 +65,14 @@ class MessageRepliesController extends Controller
         }
     }
 
-
     public function edit($message_id, $id)
     {
         $message = Message::find($message_id);
-        if (!$message) {
+        if (! $message) {
             abort(404);
         }
         $reply = message_replies::find($id);
-        if (!$reply) {
+        if (! $reply) {
             abort(404);
         }
 
@@ -84,11 +82,11 @@ class MessageRepliesController extends Controller
     public function update(UpdateMessageReplyRequest $request, $message_id, $id)
     {
         $message = Message::find($message_id);
-        if (!$message) {
+        if (! $message) {
             abort(404);
         }
         $reply = message_replies::find($id);
-        if (!$reply) {
+        if (! $reply) {
             abort(404);
         }
 
@@ -105,11 +103,11 @@ class MessageRepliesController extends Controller
     public function destroy($message_id, $id)
     {
         $message = Message::find($message_id);
-        if (!$message) {
+        if (! $message) {
             abort(404);
         }
         $reply = message_replies::find($id);
-        if (!$reply) {
+        if (! $reply) {
             abort(404);
         }
         $reply->delete();
@@ -135,6 +133,4 @@ class MessageRepliesController extends Controller
 
         return response()->json(['success' => 'O estado "Visto" das respostas foi atualizado com sucesso'], 200);
     }
-
-
 }

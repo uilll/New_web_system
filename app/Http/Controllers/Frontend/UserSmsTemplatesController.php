@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\UserSmsTemplateModalHelper;
@@ -9,7 +11,7 @@ class UserSmsTemplatesController extends Controller
     {
         $data = UserSmsTemplateModalHelper::get();
 
-        return !$this->api ? view('front::UserSmsTemplates.index')->with($data) : ['items' => $data];
+        return ! $this->api ? view('front::UserSmsTemplates.index')->with($data) : ['items' => $data];
     }
 
     public function create()
@@ -26,7 +28,7 @@ class UserSmsTemplatesController extends Controller
     {
         $data = UserSmsTemplateModalHelper::editData();
 
-        return is_array($data) && !$this->api ? view('front::UserSmsTemplates.edit')->with($data) : $data;
+        return is_array($data) && ! $this->api ? view('front::UserSmsTemplates.edit')->with($data) : $data;
     }
 
     public function update()
@@ -38,7 +40,7 @@ class UserSmsTemplatesController extends Controller
     {
         $data = UserSmsTemplateModalHelper::getMessage();
 
-        return isset($data['message']) ? (!$this->api ? $data['message'] : $data) : '';
+        return isset($data['message']) ? (! $this->api ? $data['message'] : $data) : '';
     }
 
     public function doDestroy($id)

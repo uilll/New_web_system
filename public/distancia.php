@@ -46,7 +46,8 @@
     </style> -->
   </head>
   <body>
-  <?php $lat = -11.381746666667; $lng=-40.002633333333; ?>
+  <?php $lat = -11.381746666667;
+  $lng = -40.002633333333; ?>
     <div id="floating-panel">
       <input id="latlng" type="text" value="<?php echo $lat ?>,<?php echo $lng ?>">
       <input id="submit" type="button" value="Reverse Geocode">

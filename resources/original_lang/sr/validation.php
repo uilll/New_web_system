@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute mora biti prihvaćeno.',
     'active_url' => ':attribute nije validna URL.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => ':attribute može sadržati samo slova i brojeve.',
     'array' => ':attribute mora biti niz.',
     'before' => ':attribute mora biti datum pre :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute mora biti između :min i :max.',
         'file' => ':attribute mora biti između :min i :max kilobajta.',
         'string' => ':attribute mora biti između :min i :max karaktera.',
         'array' => ':attribute mora imati imeđu :min i :max činilaca.',
-    ),
+    ],
     'confirmed' => ':attribute potvrda se ne slaže.',
     'date' => ':attribute nije ispravan datum.',
     'date_format' => ':attribute ne odgovara formatu :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'izabrani :attribute je neispravan.',
     'integer' => ':attribute mora biti integer.',
     'ip' => ':attribute mora biti ispravna IP adresa.',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute ne može biti veći od :max.',
         'file' => ':attribute ne može biti veći od :max kilobajta.',
         'string' => ':attribute ne može biti veći od :max karaktera.',
         'array' => ':attribute ne može da ima više od :max stavki.',
-    ),
+    ],
     'mimes' => 'The :attribute must be a file of type: :values.',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute mora biti najmanje :min.',
         'file' => ':attribute mora biti najmanje :min kilobajta.',
         'string' => ':attribute mora biti najmanje :min karaktera.',
         'array' => ':attribute mora imati najmanje :min stavki.',
-    ),
+    ],
     'not_in' => 'izabran :attribute je neispravan.',
     'numeric' => ':attribute mora biti broj.',
     'regex' => ':attribute format je neispravan.',
@@ -51,21 +51,21 @@ return array(
     'required_without' => ':attribute polje je obavezno kada :values nije prisutan.',
     'required_without_all' => ':attribute polje je obavezno kada nijedan :values nije prisutan.',
     'same' => ':attribute i :other mora se podudarati.',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute mora biti :size.',
         'file' => ':attribute mora biti :size kilobytes.',
         'string' => ':attribute mora biti :size characters.',
         'array' => ':attribute mora sadržati :size stavki.',
-    ),
+    ],
     'unique' => ':attribute već je zauzet.',
     'url' => ':attribute format je neispravan.',
     'array_max' => ':attribute max stavki :max.',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'custom-message',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'Email',
         'password' => 'Lozinka',
         'password_confirmation' => 'Potvrda lozinke',
@@ -314,9 +314,9 @@ return array(
         'icon_status_offline' => 'Икона статуса ван мреже',
         'icon_status_ack' => 'Ацк статус ицон',
         'icon_status_engine' => 'Икона статуса мотора',
-    ),
+    ],
     'same_protocol' => 'Уређаји морају бити истог протокола.',
     'lesser_than' => ':attribute мора бити мањи од :other',
     'contains' => ':attribute мора садржати :value .',
     'ip_port' => ':attribute не одговара формату IP:PORT',
-);
+];

@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AlterDevicesForward extends Migration
 {
@@ -12,10 +12,11 @@ class AlterDevicesForward extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('devices', 'forward'))
+        if (Schema::hasColumn('devices', 'forward')) {
             return;
+        }
 
-        Schema::table('devices', function(Blueprint $table) {
+        Schema::table('devices', function (Blueprint $table) {
             $table->text('forward')->nullable();
         });
     }
@@ -27,6 +28,5 @@ class AlterDevicesForward extends Migration
      */
     public function down()
     {
-
     }
 }

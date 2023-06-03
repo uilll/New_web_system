@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class AdminEmailSettingsFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class AdminEmailSettingsFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -16,7 +18,7 @@ class AdminEmailSettingsFormValidator extends Validator {
             'smtp_server_host' => 'required',
             'smtp_server_port' => 'required|numeric',
             'smtp_username' => 'required_if:smtp_authentication,1',
-            'smtp_password' => 'required_if:smtp_authentication,1'
+            'smtp_password' => 'required_if:smtp_authentication,1',
         ],
         'sendgrid' => [
             'from_name' => 'required',
@@ -30,8 +32,6 @@ class AdminEmailSettingsFormValidator extends Validator {
             'domain' => 'required',
         ],
     ];
-
 }   //end of class
-
 
 //EOF

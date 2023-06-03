@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class WatchProtocol extends BaseProtocol implements Protocol
 {
@@ -25,9 +25,10 @@ class WatchProtocol extends BaseProtocol implements Protocol
         ];
     }
 
-    protected function buildCommandrequestPhoto($device, $data) {
-        $data[Commands::KEY_TYPE] =  Commands::TYPE_CUSTOM;
-        $data[Commands::KEY_DATA] =  'rcapture';
+    protected function buildCommandrequestPhoto($device, $data)
+    {
+        $data[Commands::KEY_TYPE] = Commands::TYPE_CUSTOM;
+        $data[Commands::KEY_DATA] = 'rcapture';
 
         return $data;
     }
@@ -36,35 +37,39 @@ class WatchProtocol extends BaseProtocol implements Protocol
     {
         $addressees = [];
 
-        foreach($data['name'] as $index => $name)
-        {
+        foreach ($data['name'] as $index => $name) {
             $phone = $data['phone'][$index];
 
-            if (empty($name))
+            if (empty($name)) {
                 continue;
+            }
 
-            if (empty($phone))
+            if (empty($phone)) {
                 continue;
+            }
 
             $phone = str_replace(',', '', $phone);
-            $name  = str_replace(',', '', $name);
+            $name = str_replace(',', '', $name);
 
-            $name  = $this->string2Hex($name);
+            $name = $this->string2Hex($name);
 
-            $addressees[] = $phone . ',' . $name;
+            $addressees[] = $phone.','.$name;
         }
 
         $data[Commands::KEY_DATA] = implode(',', $addressees);
 
         unset($data['name'], $data['phone']);
+
         return $data;
     }
 
-    function string2Hex($string){
-        $hex='';
-        for ($i=0; $i < strlen($string); $i++){
-            $hex .= '00' . dechex(ord($string[$i]));
+    public function string2Hex($string)
+    {
+        $hex = '';
+        for ($i = 0; $i < strlen($string); $i++) {
+            $hex .= '00'.dechex(ord($string[$i]));
         }
+
         return $hex;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'แก้ไข',
     'add_new' => 'เพิ่มใหม่',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'สุดสัปดาห์',
     'always' => 'เสมอ',
     'advanced' => 'สูง',
-);
+];

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'login_page_text_color' => 'Boja teksta stranica za prijavu',
     'template_color' => 'Boja predloška',
@@ -93,4 +93,4 @@ return array(
     'languages' => 'Jezici',
     'translate' => 'Prevedi',
     'group_4' => 'Demo',
-);
+];

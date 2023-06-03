@@ -1,11 +1,14 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
-class BillingPlan extends Eloquent {
-	protected $table = 'billing_plans';
+class BillingPlan extends Eloquent
+{
+    protected $table = 'billing_plans';
 
     protected $fillable = [
         'title',
@@ -13,18 +16,21 @@ class BillingPlan extends Eloquent {
         'objects',
         'duration_type',
         'duration_value',
-        'visible'
+        'visible',
     ];
 
     public $timestamps = false;
-    private $permissions = NULL;
 
-    public function perm($name, $mode) {
+    private $permissions = null;
+
+    public function perm($name, $mode)
+    {
         $mode = trim($mode);
         $modes = Config::get('tobuli.permissions_modes');
 
-        if (!array_key_exists($mode, $modes))
-            die('Bad permission');
+        if (! array_key_exists($mode, $modes)) {
+            exit('Bad permission');
+        }
 
         if (is_null($this->permissions)) {
             $this->permissions = [];
@@ -33,17 +39,17 @@ class BillingPlan extends Eloquent {
                 ->where('plan_id', '=', $this->id)
                 ->get();
 
-            if (!empty($perms)) {
+            if (! empty($perms)) {
                 foreach ($perms as $perm) {
                     $this->permissions[$perm->name] = [
                         'view' => $perm->view,
                         'edit' => $perm->edit,
-                        'remove' => $perm->remove
+                        'remove' => $perm->remove,
                     ];
                 }
             }
         }
 
-        return array_key_exists($name, $this->permissions) && array_key_exists($mode, $this->permissions[$name]) ? boolval($this->permissions[$name][$mode]) : FALSE;
+        return array_key_exists($name, $this->permissions) && array_key_exists($mode, $this->permissions[$name]) ? boolval($this->permissions[$name][$mode]) : false;
     }
 }

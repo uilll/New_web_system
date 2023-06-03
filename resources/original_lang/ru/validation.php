@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute должен быть принят.',
     'active_url' => ':attribute не является допустимым URL-адресом.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => ':attribute может содержать только буквы и цифры.',
     'array' => ':attribute должен быть массивом.',
     'before' => ':attribute должен быть дата до :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute должен быть между :min и :max.',
         'file' => ':attribute должен быть между :min и :max Кб.',
         'string' => ':attribute должен быть между :min и :max символами.',
         'array' => ':attribute должен быть между :min и :max.',
-    ),
+    ],
     'confirmed' => ':attribute подтверждение не соответствует.',
     'date' => ':attribute не является действительной датой.',
     'date_format' => ':attribute не соответствует формату :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'Выбранный :attribute является недействительным.',
     'integer' => ':attributeдолжен быть целым числом.',
     'ip' => ':attribute должен быть действительным IP-адресом.',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute может быть не больше :max.',
         'file' => ':attribute может быть не больше :max Кб.',
         'string' => ':attribute может быть не больше :max символов.',
         'array' => ':attribute может не быть больше, чем :max.',
-    ),
+    ],
     'mimes' => ':attribute должен быть файлом типа: :values.',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute должен быть не менее :min.',
         'file' => ':attribute должен быть не менее :min Кб.',
         'string' => ':attribute должен быть не менее :min символов.',
         'array' => ':attribute должен иметь по крайней мере :min.',
-    ),
+    ],
     'not_in' => 'Выбранный :attribute не верен.',
     'numeric' => ':attribute должен быть числом.',
     'regex' => ':attribute формат недействителен.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => ':attribute поле требуется, когда :values не присутствует.',
     'required_without_all' => ':attribute поле требуется, если ни один из :values присутствуют.',
     'same' => ':attribute и :other должны соответствовать.',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute должен быть :size.',
         'file' => ':attribute должен быть :size Кб.',
         'string' => ':attribute должен быть :size символов.',
         'array' => ':attribute должен содержать :size.',
-    ),
+    ],
     'unique' => 'The :attribute уже был взят.',
     'url' => 'The :attribute формат недействителен.',
     'array_max' => ':attribute макс. предметы :max.',
     'lesser_than' => ':attribute должен быть меньше :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'custom-message',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'E-mail',
         'password' => 'Пароль',
         'password_confirmation' => 'Подтверждение пароля',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Значок автономного статуса',
         'icon_status_ack' => 'Значок статуса Ack',
         'icon_status_engine' => 'Значок состояния двигателя',
-    ),
+    ],
     'same_protocol' => 'Устройства должны быть одного протокола.',
     'contains' => ':attribute должен содержать :value .',
     'ip_port' => ':attribute не соответствует формату IP:PORT',
-);
+];

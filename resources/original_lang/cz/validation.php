@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute musí být akceptován.',
     'active_url' => 'Atribut :attribute není platnou adresou URL.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => 'Atribut :attribute může obsahovat pouze písmena a čísla.',
     'array' => 'Atribut :attribute musí být pole.',
     'before' => 'Atribut :attribute musí mít datum před :date .',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute musí být mezi :min a :max .',
         'file' => ':attribute musí být mezi :min a :max kilobajty.',
         'string' => 'Atribut :attribute musí obsahovat znaky :min a :max .',
         'array' => 'Atribut :attribute musí obsahovat položky :min a :max .',
-    ),
+    ],
     'confirmed' => 'Potvrzení :attribute neodpovídá. ',
     'date' => 'Atribut :attribute není platným datem.',
     'date_format' => 'Atribut :attribute neodpovídá formátu :format .',
@@ -28,19 +28,19 @@ return array(
     'in' => 'Vybraný :attribute je neplatný.',
     'integer' => 'Atribut :attribute musí být celé číslo.',
     'ip' => 'Atribut :attribute musí mít platnou adresu IP.',
-    'max'  => array(
+    'max' => [
         'numeric' => 'Atribut :attribute nesmí být větší než :max .',
         'file' => 'Atribut :attribute nesmí být větší než :max Kilobajty.',
         'string' => 'Atribut :attribute nesmí být větší než :max znaky.',
         'array' => 'Atribut :attribute nesmí mít více než :max položky.',
-    ),
+    ],
     'mimes' => 'Atribut :attribute musí být soubor typu :values .',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute musí být alespoň :min .',
         'file' => ':attribute musí být alespoň :min kilobytes.',
         'string' => 'Atribut :attribute musí obsahovat minimálně :min znaků.',
         'array' => ':attribute musí mít alespoň :min položky.',
-    ),
+    ],
     'not_in' => 'Vybraný :attribute je neplatný.',
     'numeric' => 'Atribut :attribute musí být číslo.',
     'regex' => 'Formát :attribute je neplatný.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => 'Pole :attribute je požadováno, pokud :values nejsou k dispozici.',
     'required_without_all' => 'Pole :attribute je vyžadováno, pokud nejsou žádné :values existují.',
     'same' => ':attribute a :other musí odpovídat.',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute musí být :size .',
         'file' => ':attribute musí být :size kilobajtů.',
         'string' => 'Atribut :attribute musí obsahovat :size znaků.',
         'array' => 'Atribut :attribute musí obsahovat :size položky :size .',
-    ),
+    ],
     'unique' => 'Atribut :attribute již byl odebrán.',
     'url' => 'Formát :attribute je neplatný.',
     'array_max' => ':attribute max. Položek :max .',
     'lesser_than' => ':attribute musí být menší než :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'Vlastní zpráva',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'E-mail',
         'password' => 'Heslo',
         'password_confirmation' => 'Potvrzení hesla',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Ikona stavu stavu offline',
         'icon_status_ack' => 'Ikona stavu Ack',
         'icon_status_engine' => 'Ikona stavu motoru',
-    ),
+    ],
     'same_protocol' => 'Zařízení musí mít stejný protokol.',
     'contains' => 'Atribut :attribute musí obsahovat :value .',
     'ip_port' => 'Atribut :attribute neodpovídá formátu IP:PORT',
-);
+];

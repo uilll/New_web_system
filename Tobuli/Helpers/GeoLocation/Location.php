@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Tobuli\Helpers\GeoLocation;
-
 
 class Location
 {
@@ -25,12 +23,10 @@ class Location
         'type',
     ];
 
-
     public function __construct($location_attributes = [])
     {
         foreach ($this->attributes as $attribute) {
-            if ( ! array_key_exists($attribute, $location_attributes)) {
-
+            if (! array_key_exists($attribute, $location_attributes)) {
                 $this->values[$attribute] = null;
 
                 continue;
@@ -41,12 +37,11 @@ class Location
 
         $this->values['id'] = md5(strtolower(
             $this->values['country_code']
-            . $this->values['state']
-            . $this->values['house']
-            . $this->values['zip']
+            .$this->values['state']
+            .$this->values['house']
+            .$this->values['zip']
         ));
     }
-
 
     public function __get($key)
     {

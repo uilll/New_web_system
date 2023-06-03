@@ -1,9 +1,6 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
-use Tobuli\Entities\Alert;
 
 class CleanAlertGeofenceDublicates extends Migration
 {
@@ -17,7 +14,7 @@ class CleanAlertGeofenceDublicates extends Migration
         $items = DB::table('alert_geofence')
             ->select('*', DB::raw('COUNT(*) as total'))
             ->groupBy(['alert_id', 'geofence_id'])
-            ->having('total', '>' , 1)
+            ->having('total', '>', 1)
             ->get();
 
         foreach ($items as $item) {

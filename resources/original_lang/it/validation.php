@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => 'L :attribute deve essere accettato.',
     'active_url' => 'L\' :attribute non è un URL valido.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => 'L\' :attribute può contenere solo lettere e numeri.',
     'array' => 'L\' :attribute deve essere un insieme.',
     'before' => 'L\' :attribute deve essere una data antecedente :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => 'L\' :attribute deve essere compreso tra :min e :max.',
         'file' => 'L\' :attribute deve essere compreso tra :min e :max KB.',
         'string' => 'L\' :attribute deve essere compreso tra :min e :max personaggi.',
         'array' => 'L\' :attribute deve avere tra :min e :max elementi.',
-    ),
+    ],
     'confirmed' => 'L\' :attribute la conferma non corrisponde.',
     'date' => 'L\' :attribute non è una data valida.',
     'date_format' => 'L\' :attribute non corrisponde al formato :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'Il selezionato :attribute è invalido.',
     'integer' => 'L\' :attribute deve essere un numero intero.',
     'ip' => 'L\' :attribute deve essere un indirizzo IP valido.',
-    'max'  => array(
+    'max' => [
         'numeric' => 'L\' :attribute non può essere superiore :max.',
         'file' => 'L\' :attribute non può essere superiore :max kilobyte.',
         'string' => 'L\' :attribute non può essere superiore :max personaggi.',
         'array' => 'L\' :attribute non possono avere più di :max elementi.',
-    ),
+    ],
     'mimes' => 'L\' :attribute deve essere un file di tipo: :valore.',
-    'min'  => array(
+    'min' => [
         'numeric' => 'L\' :attribute deve essere almeno :min.',
         'file' => 'L\' :attribute deve essere almeno :min KB.',
         'string' => 'L\' :attribute deve essere almeno :min personaggi.',
         'array' => 'L\' :attribute deve essere almeno :min elementi.',
-    ),
+    ],
     'not_in' => 'Il selezionato :attribute non è valido.',
     'numeric' => 'L\' :attribute deve essere un numero.',
     'regex' => 'L\' :attribute formato non valido.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => 'L\' :attribute è un campo obbligatorio quando :valore non è presente.',
     'required_without_all' => 'L\' :attribute è un campo obbligatorio quando nessuno dei :valori sono presenti.',
     'same' => 'L\' :attribute e :altro dispositivo deve combaciare.',
-    'size'  => array(
+    'size' => [
         'numeric' => 'L\' :attribute deve essere :dimensione.',
         'file' => 'L\' :attribute deve essere :dimensione KB.',
         'string' => 'L\' :attribute deve essere :dimensione personaggi.',
         'array' => 'L\' :attribute deve contenere :dimensione elementi.',
-    ),
+    ],
     'unique' => 'L\' :attribute è già stata presa.',
     'url' => 'L\' :attribute formato non valido.',
     'array_max' => 'L\' :attribute articoli max :max.',
     'lesser_than' => ':attribute deve essere minore di :altro',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'messaggio personalizzato',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'Email',
         'password' => 'Password',
         'password_confirmation' => 'Conferma password',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Icona di stato offline',
         'icon_status_ack' => 'Icona di stato Ack',
         'icon_status_engine' => 'Icona di stato del motore',
-    ),
+    ],
     'same_protocol' => 'I dispositivi devono essere dello stesso protocollo.',
     'contains' => 'L&#39; :attribute deve contenere :value .',
     'ip_port' => 'L&#39; :attribute non corrisponde al formato IP:PORT',
-);
+];

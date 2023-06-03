@@ -1,4 +1,6 @@
-<?php namespace Tobuli\Repositories;
+<?php
+
+namespace Tobuli\Repositories;
 
 abstract class EloquentRepository implements EloquentRepositoryInterface
 {
@@ -34,6 +36,7 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
     public function update($id, $input)
     {
         $item = $this->entity->find($id);
+
         return $item->update($input);
     }
 
@@ -47,19 +50,23 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
         return $this->entity->whereIn($id, $arr)->update($update);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         return $this->entity->find($id)->delete();
     }
 
-    public function deleteWhere($where) {
+    public function deleteWhere($where)
+    {
         return $this->entity->where($where)->delete();
     }
 
-    public function deleteWhereIn($arr, $id = 'id') {
+    public function deleteWhereIn($arr, $id = 'id')
+    {
         return $this->entity->whereIn($id, $arr)->delete();
     }
 
-    public function deleteWhereNotIn($arr, $id = 'id') {
+    public function deleteWhereNotIn($arr, $id = 'id')
+    {
         return $this->entity->whereNotIn($id, $arr)->delete();
     }
 
@@ -68,20 +75,20 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
         $data = $this->generateSearchData($data);
         $sort = array_merge([
             'sort' => $sort,
-            'sort_by' => $sort_by
+            'sort_by' => $sort_by,
         ], $data['sorting']);
 
         $items = $this->entity
             ->orderBy($sort['sort_by'], $sort['sort'])
             ->where(function ($query) use ($data) {
-                if (!empty($data['search_phrase'])) {
+                if (! empty($data['search_phrase'])) {
                     foreach ($this->searchable as $column) {
-                        $query->orWhere($column, 'like', '%' . $data['search_phrase'] . '%');
+                        $query->orWhere($column, 'like', '%'.$data['search_phrase'].'%');
                     }
                 }
 
                 if (count($data['filter'])) {
-                    foreach ($data['filter'] as $key=>$value) {
+                    foreach ($data['filter'] as $key => $value) {
                         $query->where($key, $value);
                     }
                 }
@@ -98,55 +105,67 @@ abstract class EloquentRepository implements EloquentRepositoryInterface
         return array_merge([
             'sorting' => [],
             'search_phrase' => '',
-            'filter' => []
+            'filter' => [],
         ], $data);
     }
 
-    public function  count() {
+    public function count()
+    {
         return $this->entity->count();
     }
 
-    public function countWhere($where) {
+    public function countWhere($where)
+    {
         return $this->entity->where($where)->count();
     }
 
-    public function getWhere(array $where, $sort = NULL, $sort_t = 'asc') {
+    public function getWhere(array $where, $sort = null, $sort_t = 'asc')
+    {
         $query = $this->entity->where($where);
-        if (!is_null($sort))
+        if (! is_null($sort)) {
             $query->orderBy($sort, $sort_t);
+        }
 
         return $query->get();
     }
 
-    public function getWithWhere($with, $where = []) {
+    public function getWithWhere($with, $where = [])
+    {
         return $this->entity->with($with)->where($where)->get();
     }
 
-    public function getWhereSelect(array $where, array $select, $sort = NULL, $sort_t = 'asc') {
+    public function getWhereSelect(array $where, array $select, $sort = null, $sort_t = 'asc')
+    {
         $query = $this->entity->select($select)->where($where);
-        if (!is_null($sort))
+        if (! is_null($sort)) {
             $query->orderBy($sort, $sort_t);
+        }
 
         return $query->get();
     }
 
-    public function getWithFirst($with, $where = []) {
+    public function getWithFirst($with, $where = [])
+    {
         return $this->entity->with($with)->where($where)->first();
     }
 
-    public function whereWith($where = [], $with = []) {
+    public function whereWith($where = [], $with = [])
+    {
         return $this->entity->with($with)->where($where)->get();
     }
 
-    public function getWhereIn($arr, $id = 'id') {
+    public function getWhereIn($arr, $id = 'id')
+    {
         return $this->entity->whereIn($id, $arr)->get();
     }
 
-    public function getWhereInWith($arr, $id = 'id', $with = []) {
+    public function getWhereInWith($arr, $id = 'id', $with = [])
+    {
         return $this->entity->whereIn($id, $arr)->with($with)->get();
     }
 
-    public function getWhereInWhere($arr, $id = 'id', $where) {
+    public function getWhereInWhere($arr, $id, $where)
+    {
         return $this->entity->whereIn($id, $arr)->where($where)->get();
     }
 }

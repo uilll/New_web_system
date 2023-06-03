@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'percentage' => 'Porshento',
     'price' => 'Preis',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Final de semana',
     'always' => 'Sempre',
     'advanced' => 'Avançado',
-);
+];

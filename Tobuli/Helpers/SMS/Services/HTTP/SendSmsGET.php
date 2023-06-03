@@ -11,12 +11,13 @@ class SendSmsGET extends SendSmsHTTP
     {
         $command = 'curl -i ';
 
-        if ($this->authentication)
-            $command .= '--user ' . $this->username . ':' . $this->password . ' ';
+        if ($this->authentication) {
+            $command .= '--user '.$this->username.':'.$this->password.' ';
+        }
 
         $command = $this->headersInToCommandLine($command);
 
-        $command .= '"' . $base_url . '?' . $query_url . '" > /dev/null 2>&1 &';
+        $command .= '"'.$base_url.'?'.$query_url.'" > /dev/null 2>&1 &';
 
         @exec($command);
     }
@@ -29,13 +30,15 @@ class SendSmsGET extends SendSmsHTTP
             $curl->options = ['CURLOPT_TIMEOUT' => 5];
             $curl->headers = ['Content-Length' => 0];
 
-            if ( ! empty($this->customHeaders))
+            if (! empty($this->customHeaders)) {
                 $curl->headers = array_merge($curl->headers, $this->userHeadersToArray());
+            }
 
-            if ($this->authentication)
+            if ($this->authentication) {
                 $curl->setAuth($this->username, $this->username);
+            }
 
-            $response = $curl->request('GET', $base_url . '?' . $query_url);
+            $response = $curl->request('GET', $base_url.'?'.$query_url);
 
             return $response;
         } catch (\CurlException $e) {

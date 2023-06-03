@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use Illuminate\Database\Schema\Blueprint;
 use Tobuli\Entities\Alert;
 
 class AlertsRefactor extends Migration
@@ -14,12 +13,13 @@ class AlertsRefactor extends Migration
      */
     public function up()
     {
-        if (Schema::hasColumn('alerts', 'type'))
+        if (Schema::hasColumn('alerts', 'type')) {
             return;
+        }
 
         $alerts = $this->getAlerts();
 
-        Schema::table('alerts', function(Blueprint $table) {
+        Schema::table('alerts', function (Blueprint $table) {
             $table->text('data')->after('name')->nullable();
             $table->text('notifications')->after('name')->nullable();
             $table->text('schedules')->after('name')->nullable();
@@ -33,22 +33,20 @@ class AlertsRefactor extends Migration
             $table->dropColumn('stop_duration');
         });
 
-        Schema::table('alert_device', function(Blueprint $table) {
+        Schema::table('alert_device', function (Blueprint $table) {
             $table->dropColumn('id');
             $table->dropColumn('overspeed');
         });
 
-        Schema::table('alert_geofence', function(Blueprint $table) {
+        Schema::table('alert_geofence', function (Blueprint $table) {
             $table->dropColumn('id');
             $table->dropColumn('zone');
             $table->dropColumn('time_from');
             $table->dropColumn('time_to');
         });
 
-        if ( ! Schema::hasTable('alert_zone'))
-        {
-            Schema::create('alert_zone', function(Blueprint $table)
-            {
+        if (! Schema::hasTable('alert_zone')) {
+            Schema::create('alert_zone', function (Blueprint $table) {
                 $table->integer('alert_id')->unsigned()->index();
                 $table->foreign('alert_id')->references('id')->on('alerts')->onDelete('cascade');
                 $table->integer('geofence_id')->unsigned()->index();
@@ -85,17 +83,19 @@ class AlertsRefactor extends Migration
                 'devices' => array_pluck(DB::table('alert_device')->where('alert_id', $alert->id)->get(), 'device_id'),
                 'notifications' => [
                     'sound' => ['active' => true],
-                    'push'  => ['active' => true],
+                    'push' => ['active' => true],
                 ],
                 'schedule' => false,
                 'created_at' => $alert->created_at,
                 'updated_at' => $alert->updated_at,
             ];
 
-            if ($alert->email)
+            if ($alert->email) {
                 array_set($_item, 'notifications.email', ['active' => true, 'input' => $alert->email]);
-            if ($alert->mobile_phone)
+            }
+            if ($alert->mobile_phone) {
                 array_set($_item, 'notifications.sms', ['active' => true, 'input' => $alert->mobile_phone]);
+            }
 
             if ($alert->overspeed_speed > 0) {
                 $items[] = array_merge($_item, [
@@ -131,18 +131,18 @@ class AlertsRefactor extends Migration
             if ($geofences) {
                 $_geofences = [];
                 foreach ($geofences as $geofence) {
-                    $_geofences[$geofence->time_from . '-' . $geofence->time_to][$geofence->zone][] = $geofence->geofence_id;
+                    $_geofences[$geofence->time_from.'-'.$geofence->time_to][$geofence->zone][] = $geofence->geofence_id;
                 }
 
                 foreach ($_geofences as $time => $values) {
-                    if ($time == '00:00-00:00')
+                    if ($time == '00:00-00:00') {
                         $_item['schedule'] = false;
-                    elseif ($time == '00:00-24:00')
+                    } elseif ($time == '00:00-24:00') {
                         $_item['schedule'] = false;
-                    else {
+                    } else {
                         $_item['schedule'] = true;
 
-                        list($from, $to) = explode('-', $time);
+                        [$from, $to] = explode('-', $time);
 
                         $from = roundToQuarterHour($from);
                         $to = roundToQuarterHour($to);
@@ -151,33 +151,36 @@ class AlertsRefactor extends Migration
 
                         $times = [];
 
-                        for ($i = 1; $i < 100; $i++)
-                        {
+                        for ($i = 1; $i < 100; $i++) {
                             $formated = $start->format('H:i');
 
-                            if (in_array($formated, $times))
+                            if (in_array($formated, $times)) {
                                 break;
+                            }
 
-                            if ($formated == $to)
+                            if ($formated == $to) {
                                 break;
+                            }
 
                             $times[] = $formated;
 
                             $start->addMinutes(15);
                         }
 
-                        $weekdays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+                        $weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
-                        foreach ($weekdays as $weekday)
+                        foreach ($weekdays as $weekday) {
                             $_item['schedules'][$weekday] = $times;
+                        }
                     }
 
                     $items = array_merge($items, $this->getInOut($_item, $values));
                 }
             }
 
-            if (empty($items))
+            if (empty($items)) {
                 $items[] = $_item;
+            }
 
             $result[$alert->id] = $items;
         }
@@ -193,48 +196,52 @@ class AlertsRefactor extends Migration
             $in = array_diff($array[1], $array[2]);
             $out = array_diff($array[2], $array[1]);
             $both = array_intersect($array[1], $array[2]);
-        } elseif(isset($array[1])) {
+        } elseif (isset($array[1])) {
             $in = $array[1];
-        } elseif(isset($array[2])) {
+        } elseif (isset($array[2])) {
             $out = $array[2];
         }
 
-        if ( ! empty($in))
+        if (! empty($in)) {
             $items[] = array_merge($item, [
                 'type' => 'geofence_in',
                 'geofences' => $in,
             ]);
+        }
 
-        if ( ! empty($out))
+        if (! empty($out)) {
             $items[] = array_merge($item, [
                 'type' => 'geofence_out',
                 'geofences' => $out,
             ]);
+        }
 
-        if ( ! empty($both))
+        if (! empty($both)) {
             $items[] = array_merge($item, [
                 'type' => 'geofence_inout',
                 'geofences' => $both,
             ]);
+        }
 
         return $items;
     }
 
     private function setAlerts($alerts)
     {
-        foreach ($alerts as $alert_id => $values)
-        {
+        foreach ($alerts as $alert_id => $values) {
             if (count($values) > 1) {
-                $this->updateAlert( array_shift($values) );
-                foreach ($values as $value)
+                $this->updateAlert(array_shift($values));
+                foreach ($values as $value) {
                     $this->createAlert($value);
+                }
             } else {
-                $this->updateAlert( array_shift($values) );
+                $this->updateAlert(array_shift($values));
             }
         }
     }
 
-    private function createAlert($data){
+    private function createAlert($data)
+    {
         $prev_alert_id = $data['id'];
         unset($data['id']);
 
@@ -248,12 +255,15 @@ class AlertsRefactor extends Migration
 
         $types = [$alert->type];
 
-        if ($alert->type == 'geofence_in')
+        if ($alert->type == 'geofence_in') {
             $types = ['zone_in'];
-        if ($alert->type == 'geofence_out')
+        }
+        if ($alert->type == 'geofence_out') {
             $types = ['zone_out'];
-        if ($alert->type == 'geofence_inout')
+        }
+        if ($alert->type == 'geofence_inout') {
             $types = ['zone_in', 'zone_out'];
+        }
 
         DB::table('events')
             ->where('alert_id', $prev_alert_id)

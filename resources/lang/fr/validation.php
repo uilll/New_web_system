@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => 'Le champ :attribute doit être accepté.',
     'active_url' => 'Le champ :attribute n\'est pas une URL valide.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => 'Le champ :attribute doit seulement contenir des chiffres et des lettres.',
     'array' => 'Le champ :attribute doit être un tableau.',
     'before' => 'Le champ :attribute doit être une date antérieure au :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => 'La valeur de :attribute doit être comprise entre :min et :max.',
         'file' => 'Le fichier :attribute doit avoir une taille entre :min et :max ko.',
         'string' => 'Le texte :attribute doit avoir entre :min et :max caractères.',
         'array' => 'Le tableau :attribute doit avoir entre :min et :max éléments.',
-    ),
+    ],
     'confirmed' => 'Le champ de confirmation :attribute ne correspond pas.',
     'date' => 'Le champ :attribute n\'est pas une date valide.',
     'date_format' => 'Le champ :attribute ne correspond pas au format :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'Le champ :attribute est invalide.',
     'integer' => 'Le champ :attribute doit être un entier.',
     'ip' => 'Le champ :attribute doit être une adresse IP valide.',
-    'max'  => array(
+    'max' => [
         'numeric' => 'La valeur de :attribute ne peut être supérieure à :max.',
         'file' => 'Le fichier :attribute ne peut être plus gros que :max ko.',
         'string' => 'Le texte de :attribute ne peut contenir plus de :max caractères.',
         'array' => 'Le tableau :attribute ne peut avoir plus de :max éléments.',
-    ),
+    ],
     'mimes' => 'Le champ :attribute doit être un fichier de type : :values.',
-    'min'  => array(
+    'min' => [
         'numeric' => 'La valeur de :attribute doit être supérieure à :min.',
         'file' => 'Le fichier :attribute doit être plus gros que :min ko.',
         'string' => 'Le texte :attribute doit contenir au moins :min caractères.',
         'array' => 'Le tableau :attribute doit avoir au moins :min éléments.',
-    ),
+    ],
     'not_in' => 'Le champ :attribute sélectionné n\'est pas valide.',
     'numeric' => 'Le champ :attribute doit contenir un nombre.',
     'regex' => 'Le format du champ :attribute est invalide.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => 'Le champ :attribute est obligatoire quand :values n\'est pas présent.',
     'required_without_all' => 'Le champ :attribute est requis quand aucun de :values n\'est présent.',
     'same' => 'Les champs :attribute et :other doivent être identiques.',
-    'size'  => array(
+    'size' => [
         'numeric' => 'La valeur de :attribute doit être :size.',
         'file' => 'La taille du fichier de :attribute doit être de :size ko.',
         'string' => 'Le texte de :attribute doit contenir :size caractères.',
         'array' => 'Le tableau :attribute doit contenir :size éléments.',
-    ),
+    ],
     'unique' => 'La valeur du champ :attribute est déjà utilisée.',
     'url' => 'Le format de l\'URL de :attribute n\'est pas valide.',
     'array_max' => 'L\' :attribute articles max :max.',
     'lesser_than' => 'L\' :attribute doit être inférieure à celle :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'custom-message',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'E-mail',
         'password' => 'Mot de passe',
         'password_confirmation' => 'Confirmation du mot de passe',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Icône d&#39;état hors ligne',
         'icon_status_ack' => 'Ack status icon',
         'icon_status_engine' => 'Icône d&#39;état du moteur',
-    ),
+    ],
     'same_protocol' => 'Les appareils doivent être du même protocole.',
     'contains' => 'L&#39; :attribute doit contenir :value .',
     'ip_port' => 'L&#39; :attribute ne correspond pas au format IP:PORT',
-);
+];

@@ -1,19 +1,22 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
 
-use Illuminate\Support\Facades\File;
+namespace App\Http\Controllers\Admin;
+
 use Illuminate\Support\Facades\View;
 
 class TranslationsController extends BaseController
 {
     private $languages;
+
     private $attributes;
+
     private $files;
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
-        $this->languages = array_sort(settings('languages'), function($language){
+        $this->languages = array_sort(settings('languages'), function ($language) {
             return $language['title'];
         });
 
@@ -39,7 +42,7 @@ class TranslationsController extends BaseController
             'front' => trans('admin.front_trans'),
             'admin' => trans('admin.admin_trans'),
             'global' => trans('admin.global_trans'),
-            'validation' => trans('admin.validation_trans')
+            'validation' => trans('admin.validation_trans'),
         ];
     }
 
@@ -64,32 +67,34 @@ class TranslationsController extends BaseController
         $lang = request()->get('lang');
         $trans = request()->get('trans');
 
-        if (!array_key_exists($file, $this->files))
+        if (! array_key_exists($file, $this->files)) {
             return ['status' => 0];
+        }
 
-        $en_translations = include(base_path('resources/original_lang/en/'.$file.'.php'));
+        $en_translations = include base_path('resources/original_lang/en/'.$file.'.php');
 
         foreach ($trans as $key => $tran) {
             if (is_array($tran)) {
                 foreach ($tran as $skey => $tran) {
                     foreach ($this->attributes as $atr) {
-                        if (strpos($en_translations[$key][$skey], $atr) && strpos($tran, $atr) === false)
+                        if (strpos($en_translations[$key][$skey], $atr) && strpos($tran, $atr) === false) {
                             return ['status' => 0, 'error' => ['key' => $key.'.'.$skey, 'message' => strtr(trans('front.attribute_missing'), [':attribute' => $atr])]];
+                        }
                     }
                 }
-            }
-            else {
+            } else {
                 foreach ($this->attributes as $atr) {
-                    if (strpos($en_translations[$key], $atr) && strpos($tran, $atr) === false)
+                    if (strpos($en_translations[$key], $atr) && strpos($tran, $atr) === false) {
                         return ['status' => 0, 'error' => ['key' => $key, 'message' => strtr(trans('front.attribute_missing'), [':attribute' => $atr])]];
+                    }
                 }
             }
         }
 
         $out = parseTranslations($en_translations, $trans);
 
-        @mkdir(storage_path("langs"));
-        @chmod(storage_path("langs"), 0777);
+        @mkdir(storage_path('langs'));
+        @chmod(storage_path('langs'), 0777);
         @mkdir(storage_path("langs/{$lang}"));
         @chmod(storage_path("langs/{$lang}"), 0777);
         file_put_contents(storage_path("langs/{$lang}/{$file}.php"), $out);
@@ -103,25 +108,27 @@ class TranslationsController extends BaseController
     {
         $file = request()->get('file');
         $lang = request()->get('lang');
-        
-        if (!array_key_exists($file, $this->files))
-            return trans('admin.translation_file_dont_exist');
 
-        $en_translations = include(base_path('resources/original_lang/en/'.$file.'.php'));
-        $or_translations = include(base_path('resources/original_lang/'.$lang.'/'.$file.'.php'));
-        $translations = include(base_path('resources/lang/'.$lang.'/'.$file.'.php'));
-        
-        return View::make('admin::Translations.trans')->with(compact('file', 'lang','translations', 'en_translations', 'or_translations'));
+        if (! array_key_exists($file, $this->files)) {
+            return trans('admin.translation_file_dont_exist');
+        }
+
+        $en_translations = include base_path('resources/original_lang/en/'.$file.'.php');
+        $or_translations = include base_path('resources/original_lang/'.$lang.'/'.$file.'.php');
+        $translations = include base_path('resources/lang/'.$lang.'/'.$file.'.php');
+
+        return View::make('admin::Translations.trans')->with(compact('file', 'lang', 'translations', 'en_translations', 'or_translations'));
     }
-    
+
     public function checkTrans()
     {
         $data = request()->all();
 
-        if (!array_key_exists($data['file'], $this->files))
+        if (! array_key_exists($data['file'], $this->files)) {
             return ['status' => 0];
+        }
 
-        $en_translations = include(base_path('resources/original_lang/en/'.$data['file'].'.php'));
+        $en_translations = include base_path('resources/original_lang/en/'.$data['file'].'.php');
 
         $arr = explode('.', $data['key']);
         $trans = $this->arrayRe($en_translations, $arr);
@@ -131,17 +138,17 @@ class TranslationsController extends BaseController
                 return ['status' => 0, 'error' => strtr(trans('front.attribute_missing'), [':attribute' => $atr])];
             }
         }
-        
+
         return ['status' => 1];
     }
 
     private function arrayRe($arr, $keys)
     {
-        if (!is_array($arr))
+        if (! is_array($arr)) {
             return $arr;
+        }
         $key = current($keys);
         array_shift($keys);
-
 
         return $this->arrayRe($arr[$key], $keys);
     }

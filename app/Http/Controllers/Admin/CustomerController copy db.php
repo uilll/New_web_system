@@ -1,54 +1,50 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
 
+namespace App\Http\Controllers\Admin;
+
+use App\customer;
+use App\tracker;
+use Carbon\Carbon;
 use Facades\Repositories\UserRepo;
-use Facades\Repositories\DeviceRepo;
-use Facades\Repositories\EventRepo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Input;
 //use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Redirect;
-use Tobuli\Exceptions\ValidationException;
+use Illuminate\Support\Str;
+use Tobuli\Repositories\Device\DeviceRepositoryInterface as Device;
+use Tobuli\Repositories\Event\EventRepositoryInterface as Event;
+use Tobuli\Repositories\TraccarDevice\TraccarDeviceRepositoryInterface as TraccarDevice;
 use Tobuli\Repositories\User\UserRepositoryInterface as User;
 use Tobuli\Validation\ClientFormValidator;
-use Tobuli\Repositories\Device\DeviceRepositoryInterface as Device;
-use Tobuli\Repositories\TraccarDevice\TraccarDeviceRepositoryInterface as TraccarDevice;
-use Tobuli\Repositories\Event\EventRepositoryInterface as Event;
 
-use App\tracker;
-use App\customer;
-use ModalHelpers\MonitoringModalHelper;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
-
-
-
-class CustomerController extends BaseController {
+class CustomerController extends BaseController
+{
     /**
      * @var ClientFormValidator
      */
     private $clientFormValidator;
 
     private $section = 'customers';
+
     /**
      * @var Device
      */
     private $device;
+
     /**
      * @var TraccarDevice
      */
     private $traccarDevice;
+
     /**
      * @var Event
      */
     private $event;
 
-    function __construct(ClientFormValidator $clientFormValidator, Device $device, TraccarDevice $traccarDevice, Event $event)
+    public function __construct(ClientFormValidator $clientFormValidator, Device $device, TraccarDevice $traccarDevice, Event $event)
     {
         parent::__construct();
         $this->clientFormValidator = $clientFormValidator;
@@ -57,13 +53,13 @@ class CustomerController extends BaseController {
         $this->event = $event;
     }
 
-    public function index($page = 0, $search_item = "") {
-        
+    public function index($page = 0, $search_item = '')
+    {
         //Atualização de rastreadores
         /*
         $devices = UserRepo::getDevices($this->user->id);
         //= DB::table('devices')->where('registration_number', 'like','%st%')->where('active', 1)->get();
-        
+
         $i=0;
         $name = '';
         $cpf_cnpj = '';
@@ -71,7 +67,7 @@ class CustomerController extends BaseController {
         $city = '';
         $contact = '';
         $users_passwords = '';
-        
+
         foreach ($devices as $device){
             $i = $i +1;
             $name = $device->name;
@@ -94,7 +90,7 @@ class CustomerController extends BaseController {
                         //dd($contact);
                 }
                 if (!str_contains(Str::lower($device->additional_notes), 'contato:') && (str_contains(Str::lower($device->additional_notes), 'cel:') || str_contains(Str::lower($device->additional_notes), 'tel:'))){
-                    
+
                     if (str_contains(Str::lower($device->additional_notes), 'cel:') && str_contains(Str::lower($device->additional_notes), 'tel:')){
                         //dd('Olá');
                         $pos_cel = strripos(Str::lower($device->additional_notes), 'cel:');
@@ -103,9 +99,9 @@ class CustomerController extends BaseController {
                             $pos_init = $pos_tel;
                         else
                             $pos_init = $pos_cel;
-                        
+
                     }
-                    
+
                     if (!str_contains(Str::lower($device->additional_notes), 'cel:') && str_contains(Str::lower($device->additional_notes), 'tel:')){
                         $pos_tel = strripos(Str::lower($device->additional_notes), 'tel:');
                         $pos_init = $pos_tel;
@@ -114,7 +110,7 @@ class CustomerController extends BaseController {
                         $pos_cel = strripos(Str::lower($device->additional_notes), 'cel:');
                         $pos_init = $pos_cel;
                     }
-                    //dd('Olá');    
+                    //dd('Olá');
                     if (str_contains(Str::lower($device->additional_notes), 'cidade:')){
                         $pos_city = strripos(Str::lower($device->additional_notes), 'cidade:');
                         if ($pos_city>$pos_init)
@@ -126,7 +122,7 @@ class CustomerController extends BaseController {
                         $contact = substr($device->additional_notes, $pos_init+5, 70);
                     //dd($contact);
                 }
-                
+
                 if (str_contains(Str::lower($device->additional_notes), 'usuário:') && str_contains(Str::lower($device->additional_notes), 'senha:')){
                     $pos = strripos(Str::lower($device->additional_notes), 'usuário:');
                     $usuario = substr($device->additional_notes, $pos+9, 10);
@@ -135,7 +131,7 @@ class CustomerController extends BaseController {
                     $users_passwords = 'Usuário: '.$usuario.' Senha: '.$senha;
                     //dd($users_passwords);
                 }
-                
+
                 $new_customer = new customer([
                             'active' => true,
                             'name' => $name,
@@ -149,7 +145,7 @@ class CustomerController extends BaseController {
                         //dd($new_customer);
                         $new_customer->save();
                         //dd('olá');
-                        
+
                 $name = '';
                 $cpf_cnpj = '';
                 $address = '';
@@ -158,13 +154,13 @@ class CustomerController extends BaseController {
                 $users_passwords = '';
             }
             //$contact = null;
-            
+
             /*if ($device->has('traccar')){
                 $i++;
                 //dd($device->traccar->uniqueId);
                 $tracker = Tracker::find($device->id);
                 $service = Insta_maint::where('device_id',$device->id)->count();
-                
+
                 $in_service = false;
                 if (!$service== 0)
                     $in_service = true;
@@ -178,7 +174,7 @@ class CustomerController extends BaseController {
                     $maintence_date = '';
                     $maintence_quant = 0;
                 }
-                
+
                 if (str_contains(Str::lower($device->additional_notes), 'data da instalação:')){
                     $pos = strripos(Str::lower($device->additional_notes), 'data da instalação:');
                     $work_since =  preg_replace('/[^\d\/]/', '',substr(Str::lower($device->additional_notes), $pos+22, 10));
@@ -207,8 +203,8 @@ class CustomerController extends BaseController {
                 else
                 {
                     //dd($device->traccar->protocol);
-                }   
-                    
+                }
+
                 if (is_null($tracker)){
                     //dd($device);
                     $new_tracker = new Tracker([
@@ -230,131 +226,129 @@ class CustomerController extends BaseController {
                     $new_tracker->save();
                 }
             }*/
-            
+
         //}
-        
+
         //dd($address);
         $input = Input::all();
-        $users = NULL;
+        $users = null;
         if (Auth::User()->isManager()) {
             $users = Auth::User()->subusers()->lists('id', 'id')->all();
             $users[] = Auth::User()->id;
         }
-        
+
         //Obter as ocorrências para apresentação
-        if ($search_item == ""){
+        if ($search_item == '') {
             $page = 0;
-            if (Auth::User()->isManager()) { 
+            if (Auth::User()->isManager()) {
                 $customers = customer::orderby('id', 'asc')
-                                ->where('manager_id',Auth::User()->id)
+                                ->where('manager_id', Auth::User()->id)
                                 ->get();
-            }
-            else{
+            } else {
                 $customers = customer::orderby('id', 'asc')
                                 ->where('manager_id', 0)
                                 ->get();
-
             }
-        }
-        else{
+        } else {
             $page = 0;
-            if (Auth::User()->isManager())
+            if (Auth::User()->isManager()) {
                 $user_ = Auth::User()->id;
-            else
+            } else {
                 $user_ = 0;
-           $customers = customer::orderby('id', 'asc')
-                    ->where('name', 'like','%'.Str::lower($search_item).'%')
-                    ->where('manager_id',$user_)
-                    ->orWhere('cpf_cnpj', 'like','%'.Str::lower($search_item).'%')
-                    ->orWhere('city', 'like','%'.Str::lower($search_item).'%')
-                    ->orWhere('users_passwords', 'like','%'.Str::lower($search_item).'%')
-                    ->orWhere('obs', 'like','%'.Str::lower($search_item).'%')
-                    ->get();
+            }
+            $customers = customer::orderby('id', 'asc')
+                     ->where('name', 'like', '%'.Str::lower($search_item).'%')
+                     ->where('manager_id', $user_)
+                     ->orWhere('cpf_cnpj', 'like', '%'.Str::lower($search_item).'%')
+                     ->orWhere('city', 'like', '%'.Str::lower($search_item).'%')
+                     ->orWhere('users_passwords', 'like', '%'.Str::lower($search_item).'%')
+                     ->orWhere('obs', 'like', '%'.Str::lower($search_item).'%')
+                     ->get();
         }
-        
-        $customers = $customers->paginate(10,$page);
+
+        $customers = $customers->paginate(10, $page);
         $items = $this->device->searchAndPaginateAdmin($input, 'name', 'asc', 1, $users);
-        
+
         $section = $this->section;
-        return View::make('admin::'.ucfirst($this->section).'.' . 'table')->with(compact('items','section','customers'));
+
+        return View::make('admin::'.ucfirst($this->section).'.'.'table')->with(compact('items', 'section', 'customers'));
     }
 
-    public function create() {
-        $lista = DB::table('users')->where('attach_custumer', false)->where('active', 1)->lists('email', 'id'); 
+    public function create()
+    {
+        $lista = DB::table('users')->where('attach_custumer', false)->where('active', 1)->lists('email', 'id');
+
         return View::make('admin::'.ucfirst($this->section).'.create')->with(compact('lista'));
     }
-    
-    public function edit($id) {
-        if (Auth::User()->isManager())
+
+    public function edit($id)
+    {
+        if (Auth::User()->isManager()) {
             $user_ = Auth::User()->id;
-        else
+        } else {
             $user_ = 0;
+        }
         $item = customer::where('id', $id)
             ->where(function ($query) use ($user_) {
                 $query->where('manager_id', $user_)
                       ->orWhereNull('manager_id');
             })
             ->first();
-        $lista1 = DB::table('users')->where('attach_custumer', false)->where('active', 1)->lists('email', 'id'); 
+        $lista1 = DB::table('users')->where('attach_custumer', false)->where('active', 1)->lists('email', 'id');
         $lista = DB::table('users')->where('active', 1)->whereIn('id', json_decode($item->all_users, true))->lists('email', 'id');
         $item->lista = $lista;
-        
-        if(!empty($lista))
-        {
 
+        if (! empty($lista)) {
             $item->users = array_replace($lista1, $lista);
-        }
-        else{
+        } else {
             $item->users = $lista1;
         }
-        
+
         return View::make('admin::'.ucfirst($this->section).'.edit')->with(compact('item'));
     }
-    
+
     public function store(Request $request)
-    {   
-    
-    /*public function store(Request $request)  
-    {    $validatedData = $request->validate([      'product_line_id' => 'required|integer',      'description' => 'required|alpha_num',      'expiration_time' => 'required|date',      'price' =>['required',     'regex:/^\d+([.,]\d{1,X})?$]/'] ]);    $data = [      'product_line_id' => request('product_line_id'),      'description' => request('description'),      'expiration_time' => request('expiration_time'),      'price' => request('price') ];    Product::create($data);    return back();  } */
-            if(Auth::user()->isAdmin())
-                $manager_id = 0;
-            else
-                $manager_id = Auth::User()->id;
+    {
+        /*public function store(Request $request)
+        {    $validatedData = $request->validate([      'product_line_id' => 'required|integer',      'description' => 'required|alpha_num',      'expiration_time' => 'required|date',      'price' =>['required',     'regex:/^\d+([.,]\d{1,X})?$]/'] ]);    $data = [      'product_line_id' => request('product_line_id'),      'description' => request('description'),      'expiration_time' => request('expiration_time'),      'price' => request('price') ];    Product::create($data);    return back();  } */
+        if (Auth::user()->isAdmin()) {
+            $manager_id = 0;
+        } else {
+            $manager_id = Auth::User()->id;
+        }
 
-            $item = new customer([
-                'active' => true,
-                'name' => $request->input('name'),
-                'cpf_cnpj' => $request->input('cpf_cnpj'),
-                'address' => $request->input('address'),
-                'city' => $request->input('city'),
-                'contact' => $request->input('contact'),
-                'users_passwords' => $request->input('users_passwords'),
-                'manager_id' => $manager_id,
-                'all_users' => json_encode($request->input('all_users')),
-                'obs' => $request->input('obs')
-            ]);
-            $item->save();
+        $item = new customer([
+            'active' => true,
+            'name' => $request->input('name'),
+            'cpf_cnpj' => $request->input('cpf_cnpj'),
+            'address' => $request->input('address'),
+            'city' => $request->input('city'),
+            'contact' => $request->input('contact'),
+            'users_passwords' => $request->input('users_passwords'),
+            'manager_id' => $manager_id,
+            'all_users' => json_encode($request->input('all_users')),
+            'obs' => $request->input('obs'),
+        ]);
+        $item->save();
 
-            $userIds = is_array($request->input('all_users')) ? $request->input('all_users') : [];
+        $userIds = is_array($request->input('all_users')) ? $request->input('all_users') : [];
 
-            foreach ($userIds as $userId) {
-                DB::table('users')->where('id', $userId)->update(['attach_custumer' => true]);
-            }
+        foreach ($userIds as $userId) {
+            DB::table('users')->where('id', $userId)->update(['attach_custumer' => true]);
+        }
 
-            return Response::json(['status' => 1]);
-        
+        return Response::json(['status' => 1]);
     }
-    
-    
+
     public function update(Request $request)
     {
         $customerId = $request->input('id');
         $customer = Customer::find($customerId);
-        if (!$customer) {
+        if (! $customer) {
             return Response::json(['status' => 0, 'message' => 'Cliente não encontrado']);
         }
         $oldUserIds = json_decode($customer->all_users);
-        
+
         // Atualiza os dados do cliente
         $customer->active = $request->input('active') ? 1 : 0;
         $customer->in_debt = $request->input('in_debt') ? 1 : 0;
@@ -369,32 +363,30 @@ class CustomerController extends BaseController {
         $customer->save();
 
         // Obtém as IDs dos usuários antes e depois da atualização
-        
+
         $newUserIds = is_array($request->input('all_users')) ? $request->input('all_users') : [];
 
         // IDs dos usuários removidos
         $removedUserIds = array_diff($oldUserIds, $newUserIds);
         foreach ($removedUserIds as $userId) {
-            
             DB::table('users')->where('id', $userId)->update(['attach_custumer' => false]);
         }
 
         // IDs dos usuários adicionados
         $addedUserIds = array_diff($newUserIds, $oldUserIds);
-        debugar(true,json_encode($newUserIds));
-        debugar(true,json_encode($oldUserIds));
-        debugar(true,json_encode($addedUserIds));
-        debugar(true,json_encode($removedUserIds));
+        debugar(true, json_encode($newUserIds));
+        debugar(true, json_encode($oldUserIds));
+        debugar(true, json_encode($addedUserIds));
+        debugar(true, json_encode($removedUserIds));
         foreach ($addedUserIds as $userId) {
-            
             DB::table('users')->where('id', $userId)->update(['attach_custumer' => true]);
         }
 
         return Response::json(['status' => 1]);
     }
 
-    public function destroy(Request $request) {
-        
+    public function destroy(Request $request)
+    {
         if (config('tobuli.object_delete_pass') && Auth::user()->isAdmin() && request('password') != config('tobuli.object_delete_pass')) {
             return ['status' => 0, 'errors' => ['message' => trans('front.login_failed')]];
         }
@@ -402,8 +394,8 @@ class CustomerController extends BaseController {
         $ids = $request->input('ids');
 
         if (is_array($ids) && count($ids)) {
-            foreach($ids as $id) {
-                $Monitoring = Monitoring::find($id); 
+            foreach ($ids as $id) {
+                $Monitoring = Monitoring::find($id);
                 $Monitoring->delete();
 
                 /*catch (\Exception $e) {
@@ -419,20 +411,20 @@ class CustomerController extends BaseController {
     {
         $ids = $request->input('ids');
         dd($ids);
+
         return view('admin::monitoring.destroy')->with(compact('ids'));
     }
-    public function convert_date($date, $show_date){
-        
-        if ($show_date==true){
-            $dayOfWeek = array('Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado');
-            
-            $modified_date = Carbon::createFromFormat('Y-m-d', $date,-3);
+
+    public function convert_date($date, $show_date)
+    {
+        if ($show_date == true) {
+            $dayOfWeek = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+
+            $modified_date = Carbon::createFromFormat('Y-m-d', $date, -3);
             $modified_date = $dayOfWeek[$modified_date->dayOfWeek].', '.$modified_date->day.'-'.$modified_date->month.'-'.$modified_date->year;
             //dd($modified_date);
             return $modified_date;
-        }
-        else{
-            
+        } else {
         }
     }
 }

@@ -2,11 +2,9 @@
 
 namespace App\Providers;
 
-
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-
 
 class CollectionMacroProvider extends ServiceProvider
 {
@@ -15,8 +13,9 @@ class CollectionMacroProvider extends ServiceProvider
         /**
          * Paginate a standard Laravel Collection.
          */
-        Collection::macro('paginate', function($perPage, $total = null, $page = null, $pageName = 'page') {
+        Collection::macro('paginate', function ($perPage, $total = null, $page = null, $pageName = 'page') {
             $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+
             return new LengthAwarePaginator(
                 $this->forPage($page, $perPage),
                 $total ?: $this->count(),

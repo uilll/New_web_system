@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'login_page_text_color' => 'Cor do texto da página de login',
     'template_color' => 'Cor do modelo',
@@ -93,4 +93,4 @@ return array(
     'languages' => 'Línguas',
     'translate' => 'Traduzir',
     'group_4' => 'Demonstração',
-);
+];

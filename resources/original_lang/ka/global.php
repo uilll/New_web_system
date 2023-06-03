@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'რედაქტირება',
     'add_new' => 'ახალი ჩანაწერის დამატება',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Weekend',
     'always' => 'ყოველთვის',
     'advanced' => 'ძირითადი',
-);
+];

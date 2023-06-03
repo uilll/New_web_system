@@ -4,7 +4,6 @@ namespace App\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-
 class DeviceLimitException extends HttpException
 {
     public function __construct()

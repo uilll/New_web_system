@@ -2,9 +2,9 @@
 
 namespace Tobuli\Scopes;
 
-use Illuminate\Database\Eloquent\ScopeInterface;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ScopeInterface;
 
 class GodUserScope implements ScopeInterface
 {

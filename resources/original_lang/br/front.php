@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Adicionar dispositivo',
     'per_one' => 'por 1',
@@ -665,4 +665,4 @@ SMS exemplo URL de gateway: http://SMS_GATEWAY/sendsms.php?username=USER&passwor
     'do_objects_delete' => 'Você realmente deseja excluir esses dispositivos? <br> Todos os dados associados serão perdidos.',
     'ignition_off' => 'Ignição desativada',
     'forward' => 'Frente',
-);
+];

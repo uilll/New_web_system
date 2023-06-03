@@ -2,34 +2,37 @@
 
 namespace Tobuli\Helpers\Alerts;
 
-
 class OverspeedAlertCheck extends AlertCheck
 {
     public function checkEvents($position, $prevPosition)
     {
-        if (empty($this->alert->overspeed))
+        if (empty($this->alert->overspeed)) {
             return null;
+        }
 
-        if ( ! $position->isValid())
+        if (! $position->isValid()) {
             return null;
+        }
 
-        if ( ! $this->check($position))
+        if (! $this->check($position)) {
             return null;
+        }
 
-        if ($this->check($prevPosition))
+        if ($this->check($prevPosition)) {
             return null;
+        }
 
         $event = $this->getEvent();
 
         $event->type = 'overspeed';
         $event->message = json_encode([
-            'overspeed_speed'    => $this->alert->overspeed,
+            'overspeed_speed' => $this->alert->overspeed,
             'overspeed_distance' => $this->alert->user->unit_of_speed == 'km/h' ? 1 : 2,
         ]);
 
         $event->additionalQueueData = array_merge($event->additionalQueueData, [
             'overspeed_speed' => $this->alert->overspeed,
-            'overspeed_distance' => $this->alert->user->unit_of_speed == 'km/h' ? 1 : 2
+            'overspeed_distance' => $this->alert->user->unit_of_speed == 'km/h' ? 1 : 2,
         ]);
 
         return [$event];
@@ -37,14 +40,17 @@ class OverspeedAlertCheck extends AlertCheck
 
     protected function check($position)
     {
-        if ( ! $position)
+        if (! $position) {
             return false;
+        }
 
-        if ( ! $this->checkAlertPosition($position))
+        if (! $this->checkAlertPosition($position)) {
             return false;
+        }
 
-        if (round($position->speed) <= round($this->alert->overspeed))
+        if (round($position->speed) <= round($this->alert->overspeed)) {
             return false;
+        }
 
         return true;
     }

@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddAdditionalNotesDeviceFieldAlter extends Migration {
-
+class AddAdditionalNotesDeviceFieldAlter extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -11,7 +11,7 @@ class AddAdditionalNotesDeviceFieldAlter extends Migration {
      */
     public function up()
     {
-        if( ! Schema::hasColumn('devices', 'additional_notes')) {
+        if (! Schema::hasColumn('devices', 'additional_notes')) {
             Schema::table('devices', function ($table) {
                 $table->string('additional_notes')->after('object_owner')->nullable();
             });
@@ -25,9 +25,8 @@ class AddAdditionalNotesDeviceFieldAlter extends Migration {
      */
     public function down()
     {
-        Schema::table('devices', function($table) {
+        Schema::table('devices', function ($table) {
             $table->dropColumn('additional_notes');
         });
     }
-
 }

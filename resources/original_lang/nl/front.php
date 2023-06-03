@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Apparaat toevoegen',
     'per_one' => 'per 1',
@@ -665,4 +665,4 @@ SMS gateway URL voorbeeld: http://SMS_GATEWAY/sendsms.php?username=GEBRUIKER&pas
     'do_objects_delete' => 'Wilt u deze apparaten echt verwijderen? <br> Alle bijbehorende gegevens gaan verloren.',
     'ignition_off' => 'Ontsteking uitgeschakeld',
     'forward' => 'Vooruit',
-);
+];

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Cihazı əlavə et',
     'per_one' => 'Hər birinə görə',
@@ -664,4 +664,4 @@ SMS giriş URL nümunə: http://SMS_GATEWAY/sendsms.php?username=USER&password=P
     'do_objects_delete' => 'Bu cihazları həqiqətən silmək istəyirsiniz? <br> Bütün əlaqəli məlumatlar itirilmiş olacaqdır.',
     'ignition_off' => 'Atəş açma',
     'forward' => 'İrəli',
-);
+];

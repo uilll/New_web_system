@@ -4,34 +4,35 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 
-class CreateUnregisteredDevicesLogTable extends Migration {
+class CreateUnregisteredDevicesLogTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        if (Schema::connection('traccar_mysql')->hasTable('unregistered_devices_log')) {
+            return;
+        }
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-        if (Schema::connection('traccar_mysql')->hasTable('unregistered_devices_log')) { return; }
+        Schema::connection('traccar_mysql')->create('unregistered_devices_log', function (Blueprint $table) {
+            $table->string('imei', 50)->unique();
+            $table->integer('port')->nullable();
+            $table->string('ip', 50)->nullable();
+            $table->timestamp('date')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))->index();
+            $table->integer('times')->unsigned()->default('1');
+        });
 
-		Schema::connection('traccar_mysql')->create('unregistered_devices_log', function(Blueprint $table)
-		{
-			$table->string('imei', 50)->unique();
-			$table->integer('port')->nullable();
-			$table->string('ip', 50)->nullable();
-			$table->timestamp('date')->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))->index();
-			$table->integer('times')->unsigned()->default('1');
-		});
-
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement('
 			CREATE TABLE application_settings (
 		  id bigint(20) NOT NULL,
 		  registrationEnabled tinyint(1) NOT NULL
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-		");
+		');
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement('
 			CREATE TABLE devices (
 		  id bigint(20) NOT NULL,
 		  name varchar(255) DEFAULT NULL,
@@ -51,15 +52,15 @@ class CreateUnregisteredDevicesLogTable extends Migration {
 		  protocol varchar(20) DEFAULT NULL,
 		  latest_positions varchar(500) DEFAULT NULL
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-		");
+		');
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement('
 			CREATE TABLE devices_fake (
 			  uniqueId varchar(255) NOT NULL
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-		");
+		');
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement("
 			CREATE TABLE user (
 		  id int(11) NOT NULL,
 		  name varchar(128) NOT NULL,
@@ -78,7 +79,7 @@ class CreateUnregisteredDevicesLogTable extends Migration {
 		) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 		");
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement("
 			CREATE TABLE user_device (
 			  userId int(11) NOT NULL,
 			  deviceId int(11) NOT NULL,
@@ -87,12 +88,12 @@ class CreateUnregisteredDevicesLogTable extends Migration {
 			) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 		");
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement('
 			ALTER TABLE application_settings
 		  ADD PRIMARY KEY (id);
-		");
+		');
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement('
 			ALTER TABLE devices
 		  ADD PRIMARY KEY (id),
 		  ADD UNIQUE KEY uniqueId (uniqueId),
@@ -100,45 +101,43 @@ class CreateUnregisteredDevicesLogTable extends Migration {
 		  ADD KEY FK5CF8ACDD7C6208C3 (latestPosition_id),
 		  ADD KEY server_time (server_time),
 		  ADD KEY ack_time (ack_time);
-		");
+		');
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement('
 			ALTER TABLE user
 		  ADD PRIMARY KEY (id),
 		  ADD UNIQUE KEY email (email);
-		");
+		');
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement('
 			ALTER TABLE user_device
 		  ADD KEY deviceId (deviceId),
 		  ADD KEY user_device_userId (userId);
-		");
+		');
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement('
 			ALTER TABLE devices
 		  MODIFY id bigint(20) NOT NULL AUTO_INCREMENT;
-		");
+		');
 
-		DB::connection('traccar_mysql')->statement("
+        DB::connection('traccar_mysql')->statement('
 			ALTER TABLE user
 		  MODIFY id int(11) NOT NULL AUTO_INCREMENT;
-		");
-	}
+		');
+    }
 
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		DB::connection('traccar_mysql')->statement('DROP TABLE unregistered_devices_log');
-		DB::connection('traccar_mysql')->statement('DROP TABLE devices');
-		DB::connection('traccar_mysql')->statement('DROP TABLE application_settings');
-		DB::connection('traccar_mysql')->statement('DROP TABLE devices_fake');
-		DB::connection('traccar_mysql')->statement('DROP TABLE user');
-		DB::connection('traccar_mysql')->statement('DROP TABLE user_device');
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        DB::connection('traccar_mysql')->statement('DROP TABLE unregistered_devices_log');
+        DB::connection('traccar_mysql')->statement('DROP TABLE devices');
+        DB::connection('traccar_mysql')->statement('DROP TABLE application_settings');
+        DB::connection('traccar_mysql')->statement('DROP TABLE devices_fake');
+        DB::connection('traccar_mysql')->statement('DROP TABLE user');
+        DB::connection('traccar_mysql')->statement('DROP TABLE user_device');
+    }
 }

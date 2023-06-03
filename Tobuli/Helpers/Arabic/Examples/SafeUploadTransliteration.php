@@ -17,26 +17,22 @@
  * Example of Safe Upload Examples for Arabic Filename
  *
  * @category  I18N
- * @package   I18N_Arabic
+ *
  * @author    Khaled Al-Sham'aa <khaled@ar-php.org>
  * @copyright 2006-2016 Khaled Al-Sham'aa
- *
  * @license   LGPL <http://www.gnu.org/licenses/lgpl.txt>
+ *
  * @link      http://www.ar-php.org
  */
-
 if (isset($_POST['submit'])) {
-
     include '../../Arabic.php';
     $Arabic = new I18N_Arabic('Transliteration');
-    
+
     // Continue only if the file was uploaded via HTTP POST
     if (is_uploaded_file($_FILES['image']['tmp_name'])) {
-
         // Is file size less than 1 MB = 1,048,576 Byte
         if ($_FILES['image']['size'] < 1048576) {
-
-            // Detect MIME Content-type for a file 
+            // Detect MIME Content-type for a file
             if (function_exists('mime_content_type')) {
                 $mime = mime_content_type($_FILES['image']['tmp_name']);
             } else {
@@ -44,10 +40,9 @@ if (isset($_POST['submit'])) {
             }
 
             // List of accepted MIME Content-type
-            $images = array('image/jpeg', 'image/gif', 'image/png', 'image/svg+xml');
+            $images = ['image/jpeg', 'image/gif', 'image/png', 'image/svg+xml'];
 
             if (in_array($mime, $images)) {
-
                 // PHP5 is not capable of addressing files with multi-byte characters in their names at all.
                 // This is why we use Transliteration functionality in Arabic class
                 $filename = trim($Arabic->ar2en($_FILES['image']['name']));
@@ -88,34 +83,34 @@ if (isset($_POST['submit'])) {
 <div class="Paragraph">
 <h2>Safe Upload Examples Code:</h2>
 <?php
-$code = <<< END
+$code = <<< 'END'
 <?php
 
-if(isset(\$_POST['submit'])){
+if(isset($_POST['submit'])){
 
     require '../../Arabic.php';
-    \$Arabic = new I18N_Arabic('Transliteration');
+    $Arabic = new I18N_Arabic('Transliteration');
     
     // Continue only if the file was uploaded via HTTP POST
-    if (is_uploaded_file(\$_FILES['image']['tmp_name'])) {
+    if (is_uploaded_file($_FILES['image']['tmp_name'])) {
 
         // Is file size less than 1 MB = 1,048,576 Byte
-        if (\$_FILES['image']['size'] < 1048576) {
+        if ($_FILES['image']['size'] < 1048576) {
 
             // Detect MIME Content-type for a file 
-            \$mime = mime_content_type(\$_FILES['image']['tmp_name']);
+            $mime = mime_content_type($_FILES['image']['tmp_name']);
             
             // List of accepted MIME Content-type
-            \$images = array('image/jpeg', 'image/gif', 'image/png', 'image/svg+xml');
+            $images = array('image/jpeg', 'image/gif', 'image/png', 'image/svg+xml');
 
-            if (in_array(\$mime, \$images)) {
+            if (in_array($mime, $images)) {
 
                 // PHP5 is not capable of addressing files with multi-byte characters in their names at all.
                 // This is why we use Transliteration functionality in Arabic class
-                \$filename = trim(\$Arabic->ar2en(\$_FILES['image']['name']));
+                $filename = trim($Arabic->ar2en($_FILES['image']['name']));
                 
                 // Moves an uploaded file to a new location
-                move_uploaded_file (\$_FILES['image']['tmp_name'], \$dir.DIRECTORY_SEPARATOR.\$filename);
+                move_uploaded_file ($_FILES['image']['tmp_name'], $dir.DIRECTORY_SEPARATOR.$filename);
             } else {
                 echo '<h3>You can upload image file only (i.e. gif, jpg, png, and svg)!</h3>';
             }

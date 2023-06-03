@@ -1,14 +1,17 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class EventCustomTag extends Eloquent {
-	protected $table = 'event_custom_tags';
+class EventCustomTag extends Eloquent
+{
+    protected $table = 'event_custom_tags';
 
-    protected $fillable = array(
+    protected $fillable = [
         'event_custom_id',
         'tag',
-    );
+    ];
 
     public $timestamps = false;
 }

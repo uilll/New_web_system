@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class UserDriverFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class UserDriverFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -16,8 +18,6 @@ class UserDriverFormValidator extends Validator {
         ],
         'silentUpdate' => [],
     ];
-
 }   //end of class
-
 
 //EOF

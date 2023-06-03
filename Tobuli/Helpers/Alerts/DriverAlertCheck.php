@@ -6,15 +6,16 @@ class DriverAlertCheck extends AlertCheck
 {
     public function checkEvents($position, $prevPosition)
     {
-        if ( ! $this->checkAlertPosition($position))
+        if (! $this->checkAlertPosition($position)) {
             return null;
+        }
 
         $events = [];
 
-        foreach ($this->alert->drivers as $driver)
-        {
-            if ( ! $this->check($position, $driver))
+        foreach ($this->alert->drivers as $driver) {
+            if (! $this->check($position, $driver)) {
                 continue;
+            }
 
             $event = $this->getEvent();
 
@@ -22,7 +23,7 @@ class DriverAlertCheck extends AlertCheck
             $event->message = $driver->name;
 
             $event->additionalQueueData = array_merge($event->additionalQueueData, [
-                'driver' => htmlentities($driver->name)
+                'driver' => htmlentities($driver->name),
             ]);
 
             $events[] = $event;
@@ -33,11 +34,13 @@ class DriverAlertCheck extends AlertCheck
 
     protected function check($position, $driver)
     {
-        if ($this->device->current_driver_id == $driver->id)
+        if ($this->device->current_driver_id == $driver->id) {
             return false;
+        }
 
-        if ( ! $position->isRfid($driver->rfid))
+        if (! $position->isRfid($driver->rfid)) {
             return false;
+        }
 
         return true;
     }

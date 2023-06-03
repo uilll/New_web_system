@@ -1,6 +1,9 @@
-<?php namespace Tobuli\Repositories\DeviceSensor;
+<?php
+
+namespace Tobuli\Repositories\DeviceSensor;
 
 use Tobuli\Repositories\EloquentRepositoryInterface;
 
-interface DeviceSensorRepositoryInterface extends EloquentRepositoryInterface {
+interface DeviceSensorRepositoryInterface extends EloquentRepositoryInterface
+{
 }

@@ -8,48 +8,52 @@
 
 namespace Tobuli\Services;
 
-
 use Illuminate\Support\Facades\Cache;
 
 class StreetviewService
 {
     const DEFAULT_RADIUS = 100;
-    const CBK_URL = "http://maps.google.com/cbk?output=json&v=4&dm=0&pm=0&ll=";
+
+    const CBK_URL = 'http://maps.google.com/cbk?output=json&v=4&dm=0&pm=0&ll=';
+
     const STREETVIEW_URL = 'https://maps.googleapis.com/maps/api/streetview?pano=';
 
     private $metaData;
+
     private $panoId;
 
     private $gKey;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->gKey = config('services.streetview.key');
     }
 
-    public function getMetaData($location, $radius = self::DEFAULT_RADIUS ) {
-
-        $ch = curl_init (self::CBK_URL . $location . '&radius=' . $radius . '&key='. $this->gKey);
+    public function getMetaData($location, $radius = self::DEFAULT_RADIUS)
+    {
+        $ch = curl_init(self::CBK_URL.$location.'&radius='.$radius.'&key='.$this->gKey);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 
         $response = curl_exec($ch);
-        curl_close ($ch);
+        curl_close($ch);
 
         $this->metaData = json_decode($response);
+
         return $this->metaData;
     }
 
-    public function getPanoId($location, $radius = self::DEFAULT_RADIUS) {
-
+    public function getPanoId($location, $radius = self::DEFAULT_RADIUS)
+    {
         $this->panoId = Cache::get(md5($location));
 
-        if ($this->panoId)
+        if ($this->panoId) {
             return $this->panoId;
+        }
 
-
-        if ( ! $this->metaData) {
+        if (! $this->metaData) {
             $this->getMetaData($location, $radius);
         }
 
@@ -61,20 +65,21 @@ class StreetviewService
         }
 
         return false;
-
     }
 
-    public function getImage($location, $size, $heading, $radius = self::DEFAULT_RADIUS) {
-        if ( ! $this->gKey) {
+    public function getImage($location, $size, $heading, $radius = self::DEFAULT_RADIUS)
+    {
+        if (! $this->gKey) {
             $image = file_get_contents("http://5.189.140.114/index2.php?size=$size&location=$location&heading=$heading&pitch=-0.76&radius=$radius");
+
             return $image;
         }
 
-        if ( ! $this->panoId) {
+        if (! $this->panoId) {
             $this->getPanoId($location, $radius);
         }
 
-        $ch = curl_init (self::STREETVIEW_URL . $this->panoId . '&size=' . $size . '&heading=' . $heading . '&pitch=-0.76&key='. $this->gKey);
+        $ch = curl_init(self::STREETVIEW_URL.$this->panoId.'&size='.$size.'&heading='.$heading.'&pitch=-0.76&key='.$this->gKey);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
@@ -82,10 +87,8 @@ class StreetviewService
 
         $image = curl_exec($ch);
 
-        curl_close ($ch);
+        curl_close($ch);
 
         return $image;
-
     }
-
 }

@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class WondexProtocol extends BaseProtocol implements Protocol
 {
@@ -14,7 +14,7 @@ class WondexProtocol extends BaseProtocol implements Protocol
         return [
             $this->initCommand(Commands::TYPE_POSITION_SINGLE),
             $this->initCommand(Commands::TYPE_REBOOT_DEVICE),
-            $this->initCommand(Commands::TYPE_CUSTOM)
+            $this->initCommand(Commands::TYPE_CUSTOM),
         ];
     }
 }

@@ -1,32 +1,31 @@
 <?php
 /**
- * Example of GD implementation for Arabic glyphs Class 
+ * Example of GD implementation for Arabic glyphs Class
  *
  * @category  I18N
- * @package   I18N_Arabic
+ *
  * @author    Khaled Al-Sham'aa <khaled@ar-php.org>
  * @copyright 2006-2016 Khaled Al-Sham'aa
- *
  * @license   LGPL <http://www.gnu.org/licenses/lgpl.txt>
+ *
  * @link      http://www.ar-php.org
  */
-
 error_reporting(E_STRICT);
 
 // Set the content-type
-header("Content-type: image/png");
+header('Content-type: image/png');
 
 // Create the image
 $im = @imagecreatefromgif('GD/bg.gif');
 
 // Create some colors
 $black = imagecolorallocate($im, 0, 0, 0);
-$blue  = imagecolorallocate($im, 0, 0, 255);
+$blue = imagecolorallocate($im, 0, 0, 255);
 $white = imagecolorallocate($im, 255, 255, 255);
 
 // Replace by your own font full path and name
 $path = substr(
-    $_SERVER['SCRIPT_FILENAME'], 0, 
+    $_SERVER['SCRIPT_FILENAME'], 0,
     strrpos($_SERVER['SCRIPT_FILENAME'], '/')
 );
 $font = $path.'/GD/ae_AlHor.ttf';
@@ -49,4 +48,3 @@ imagettftext($im, 20, 0, 250, 100, $black, $font, $text);
 // Using imagepng() results in clearer text compared with imagejpeg()
 imagepng($im);
 imagedestroy($im);
-?>

@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers\Frontend\Tracker;
 
-use Tobuli\Exceptions\ValidationException;
-use Validator;
-use App\Http\Requests\Request;
-use Tobuli\Entities\Chat;
-use Tobuli\Entities\ChatMessage;
-
 use App\Transformers\ChatMessageTransformer;
 use App\Transformers\ChatTransformer;
-use Facades\FractalTransformerService;
 use FractalTransformer;
-
+use Tobuli\Entities\Chat;
+use Tobuli\Entities\ChatMessage;
+use Tobuli\Exceptions\ValidationException;
+use Validator;
 
 class ChatController extends ApiController
 {
@@ -26,11 +22,13 @@ class ChatController extends ApiController
         ));
     }
 
-    public function getChattableObjects() {
+    public function getChattableObjects()
+    {
         return response()->json(['status' => 1, 'data' => $this->deviceInstance->chatableObjects()]);
     }
 
-    public function getMessages() {
+    public function getMessages()
+    {
         $chat = Chat::getRoomByDevice($this->deviceInstance);
 
         return response()->json(array_merge(
@@ -39,14 +37,15 @@ class ChatController extends ApiController
         ));
     }
 
-    public function createMessage() {
-
+    public function createMessage()
+    {
         $validator = Validator::make(request()->all(), [
             'message' => 'required',
         ]);
 
-        if ( $validator->fails() )
+        if ($validator->fails()) {
             throw new ValidationException($validator->errors());
+        }
 
         $messageContent = request()->get('message', null);
 

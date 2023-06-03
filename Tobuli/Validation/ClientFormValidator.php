@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class ClientFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class ClientFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -12,7 +14,7 @@ class ClientFormValidator extends Validator {
             'available_maps' => 'required',
             'group_id' => 'required|in:1,2,3,4,5,6',
             'devices_limit' => 'integer',
-            'expiration_date' => 'date'
+            'expiration_date' => 'date',
         ],
         'update' => [
             'email' => 'required|unique:users,email,%s',
@@ -20,11 +22,9 @@ class ClientFormValidator extends Validator {
             'available_maps' => 'required',
             'group_id' => 'required|in:1,2,3,4,5,6',
             'devices_limit' => 'integer',
-            'expiration_date' => 'date'
-        ]
+            'expiration_date' => 'date',
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

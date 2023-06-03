@@ -2,10 +2,7 @@
 
 namespace Tobuli\Entities\File;
 
-
-use Eloquent;
 use Illuminate\Support\Facades\File;
-
 
 abstract class FileEntity
 {
@@ -15,20 +12,17 @@ abstract class FileEntity
         'path',
         'name',
         'size',
-        'created_at'
+        'created_at',
     ];
 
     protected $attrValues = [];
 
-
     abstract protected function getDirectory($entity);
-
 
     public function __construct($file = null)
     {
         $this->fillAttributes($file);
     }
-
 
     public static function setEntity($entity)
     {
@@ -37,15 +31,18 @@ abstract class FileEntity
         return new static;
     }
 
-
     public function fillAttributes($file)
     {
-        if (!$file) return $this;
+        if (! $file) {
+            return $this;
+        }
 
         foreach ($this->attributes as $key => $attribute) {
-            $method = camel_case('fill' . ucfirst($attribute));
+            $method = camel_case('fill'.ucfirst($attribute));
 
-            if (!method_exists($this, $method)) continue;
+            if (! method_exists($this, $method)) {
+                continue;
+            }
 
             $this->attrValues[$attribute] = call_user_func_array(['self', $method], [$file]);
         }
@@ -53,30 +50,25 @@ abstract class FileEntity
         return $this;
     }
 
-
     public function fillPath($file)
     {
         return $file;
     }
 
-
     public function fillname($file)
     {
-        return File::name($file) . '.' . File::extension($file);
+        return File::name($file).'.'.File::extension($file);
     }
-
 
     public function fillSize($file)
     {
         $bytes = sprintf('%u', filesize($file));
 
-        if ($bytes > 0)
-        {
+        if ($bytes > 0) {
             $unit = intval(log($bytes, 1024));
-            $units = array('B', 'KB', 'MB', 'GB');
+            $units = ['B', 'KB', 'MB', 'GB'];
 
-            if (array_key_exists($unit, $units) === true)
-            {
+            if (array_key_exists($unit, $units) === true) {
                 return sprintf('%d %s', $bytes / pow(1024, $unit), $units[$unit]);
             }
         }
@@ -84,12 +76,10 @@ abstract class FileEntity
         return $bytes;
     }
 
-
     public function fillCreatedAt($file)
     {
         return date('Y-m-d h:i:s', File::lastModified($file));
     }
-
 
     public function isImage()
     {
@@ -100,13 +90,13 @@ abstract class FileEntity
         }
     }
 
-
     public function imageQuality()
     {
-        if (!$this->isImage())
+        if (! $this->isImage()) {
             return '-';
+        }
 
-        list($width, $height) = getimagesize($this->path);
+        [$width, $height] = getimagesize($this->path);
 
         switch (true) {
             case $width >= 1280 && $height >= 720:
@@ -122,7 +112,6 @@ abstract class FileEntity
         return $Q;
     }
 
-
     public function delete()
     {
         try {
@@ -132,12 +121,10 @@ abstract class FileEntity
         }
     }
 
-
     public function __get($key)
     {
         return $this->attrValues[$key];
     }
-
 
     public function __call($method, $parameters)
     {
@@ -150,14 +137,12 @@ abstract class FileEntity
         return call_user_func_array([$query, $method], $parameters);
     }
 
-
     public static function __callStatic($method, $parameters)
     {
         $instance = new static;
 
         return call_user_func_array([$instance, $method], $parameters);
     }
-
 
     private function newFileQuery()
     {

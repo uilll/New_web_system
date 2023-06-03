@@ -1,17 +1,16 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
 
+namespace App\Http\Controllers\Frontend;
+
+use App\Http\Controllers\Controller;
+use Facades\Repositories\DeviceGroupRepo;
+use Facades\Repositories\UserRepo;
+use Facades\Validators\DeviceGroupFormValidator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-
-use Facades\Repositories\UserRepo;
-use Facades\Repositories\DeviceGroupRepo;
-use Facades\Validators\DeviceGroupFormValidator;
-use Tobuli\Exceptions\ValidationException;
 
 class DevicesGroupsController extends Controller
 {
-
     public function create()
     {
         $this->checkException('devices_groups', 'create');
@@ -33,7 +32,7 @@ class DevicesGroupsController extends Controller
 
         $item = DeviceGroupRepo::create($data);
 
-        if ( $device = $request->input('devices', [])) {
+        if ($device = $request->input('devices', [])) {
             DB::table('user_device_pivot')
                 ->where([
                     'user_id' => $this->user->id,
@@ -54,7 +53,7 @@ class DevicesGroupsController extends Controller
         $this->checkException('devices_groups', 'edit', $item);
 
         $data = [
-            'item'   => $item,
+            'item' => $item,
             'devices' => UserRepo::getDevices($this->user->id),
         ];
 
@@ -74,13 +73,13 @@ class DevicesGroupsController extends Controller
         DB::table('user_device_pivot')
             ->where([
                 'user_id' => $this->user->id,
-                'group_id' => $item->id
+                'group_id' => $item->id,
             ])
             ->update([
                 'group_id' => null,
             ]);
 
-        if ( $device = $request->input('devices', [])) {
+        if ($device = $request->input('devices', [])) {
             DB::table('user_device_pivot')
                 ->where([
                     'user_id' => $this->user->id,

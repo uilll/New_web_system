@@ -40,9 +40,9 @@
 	getLocation();
 </script>
 <?php
-	//$retorno =  '<script>document.write(getCookie(coord_phone));</script>';
-	//echo $retorno;
-	//return $retorno;
+    //$retorno =  '<script>document.write(getCookie(coord_phone));</script>';
+    //echo $retorno;
+    //return $retorno;
 ?>
 
 

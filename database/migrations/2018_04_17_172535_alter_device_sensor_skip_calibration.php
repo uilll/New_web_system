@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AlterDeviceSensorSkipCalibration extends Migration
@@ -12,7 +11,7 @@ class AlterDeviceSensorSkipCalibration extends Migration
      */
     public function up()
     {
-        if( ! Schema::hasColumn('device_sensors', 'skip_calibration')) {
+        if (! Schema::hasColumn('device_sensors', 'skip_calibration')) {
             Schema::table('device_sensors', function ($table) {
                 $table->boolean('skip_calibration')->nullable();
             });
@@ -26,7 +25,7 @@ class AlterDeviceSensorSkipCalibration extends Migration
      */
     public function down()
     {
-        Schema::table('device_sensors', function($table) {
+        Schema::table('device_sensors', function ($table) {
             $table->dropColumn('skip_calibration');
         });
     }

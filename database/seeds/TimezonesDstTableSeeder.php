@@ -3,16 +3,15 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class TimezonesDstTableSeeder extends Seeder {
-
+class TimezonesDstTableSeeder extends Seeder
+{
     public function __construct()
     {
-
     }
 
-	public function run()
-	{
-            DB::statement("INSERT INTO timezones_dst (id, country, from_period, from_time, to_period, to_time) VALUES
+    public function run()
+    {
+        DB::statement("INSERT INTO timezones_dst (id, country, from_period, from_time, to_period, to_time) VALUES
 (1, 'Akrotiri and Dhekelia(UK)', 'Last Sunday of March', NULL, 'Last Sunday of October', NULL),
 (2, 'Albania', 'Last Sunday of March', NULL, 'Last Sunday of October', NULL),
 (3, 'Andorra', 'Last Sunday of March', NULL, 'Last Sunday of October', NULL),
@@ -87,6 +86,5 @@ class TimezonesDstTableSeeder extends Seeder {
 (72, 'United Kingdom', 'last Sunday of March', '01:00', 'last Sunday of October', '01:00'),
 (73, 'United States', 'Second Sunday of March', NULL, 'First Sunday of November', NULL),
 (74, 'Western Sahara', 'Last Sunday of March', NULL, 'Last Sunday of October', NULL);");
-	}
-
+    }
 }

@@ -1,9 +1,11 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use App\Exceptions\DeviceLimitException;
+use App\Monitoring;
 use Facades\ModalHelpers\SensorModalHelper;
 use Facades\ModalHelpers\ServiceModalHelper;
-use Facades\Repositories\DeviceFuelMeasurementRepo;
 use Facades\Repositories\DeviceGroupRepo;
 use Facades\Repositories\DeviceIconRepo;
 use Facades\Repositories\DeviceRepo;
@@ -12,21 +14,13 @@ use Facades\Repositories\EventRepo;
 use Facades\Repositories\SensorGroupRepo;
 use Facades\Repositories\SensorGroupSensorRepo;
 use Facades\Repositories\TimezoneRepo;
-use Facades\Repositories\TraccarDeviceRepo;
-use Facades\Repositories\UserDriverRepo;
 use Facades\Repositories\UserRepo;
 use Facades\Validators\DeviceFormValidator;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Tobuli\Entities\Device;
-use Tobuli\Entities\DeviceIcon;
 use Tobuli\Exceptions\ValidationException;
-use App\Exceptions\ResourseNotFoundException;
-use App\Exceptions\PermissionException;
-use App\Monitoring;
 
 class DeviceModalHelper extends ModalHelper
 {
@@ -48,16 +42,17 @@ class DeviceModalHelper extends ModalHelper
                 'title' => trans('front.mpg'),
                 'fuel_title' => strtolower(trans('front.gallon')),
                 'distance_title' => trans('front.miles'),
-            ]
+            ],
         ];
     }
 
-    public function createData() {
-
+    public function createData()
+    {
         if (request()->get('perm') == null || (request()->get('perm') != null && request()->get('perm') != 1)) {
             if (request()->get('perm') != null && request()->get('perm') != 2) {
-                if ($this->checkDevicesLimit())
+                if ($this->checkDevicesLimit()) {
                     throw new DeviceLimitException();
+                }
             }
 
             $this->checkException('devices', 'create');
@@ -66,26 +61,28 @@ class DeviceModalHelper extends ModalHelper
         $icons_type = [
             'arrow' => trans('front.arrow'),
             'rotating' => trans('front.rotating_icon'),
-            'icon' => trans('front.icon')
+            'icon' => trans('front.icon'),
         ];
 
         $device_icon_colors = [
-            'green'  => trans('front.green'),
+            'green' => trans('front.green'),
             'yellow' => trans('front.yellow'),
-            'red'    => trans('front.red'),
-            'blue'   => trans('front.blue'),
+            'red' => trans('front.red'),
+            'blue' => trans('front.blue'),
             'orange' => trans('front.orange'),
-            'black'  => trans('front.black'),
+            'black' => trans('front.black'),
         ];
         $device_icons = DeviceIconRepo::getMyIcons($this->user->id);
         $device_icons_grouped = [];
 
         foreach ($device_icons as $dicon) {
-            if ($dicon['type'] == 'arrow')
+            if ($dicon['type'] == 'arrow') {
                 continue;
+            }
 
-            if (!array_key_exists($dicon['type'], $device_icons_grouped))
+            if (! array_key_exists($dicon['type'], $device_icons_grouped)) {
                 $device_icons_grouped[$dicon['type']] = [];
+            }
 
             $device_icons_grouped[$dicon['type']][] = $dicon;
         }
@@ -94,14 +91,15 @@ class DeviceModalHelper extends ModalHelper
         $device_groups = ['0' => trans('front.ungrouped')] + DeviceGroupRepo::getWhere(['user_id' => $this->user->id])->lists('title', 'id')->all();
         $expiration_date_select = [
             '0000-00-00' => trans('front.unlimited'),
-            '1' => trans('validation.attributes.expiration_date')
+            '1' => trans('validation.attributes.expiration_date'),
         ];
         $timezones = ['0' => trans('front.default')] + TimezoneRepo::order()->lists('title', 'id')->all();
         $timezones_arr = [];
         foreach ($timezones as $key => &$timezone) {
             $timezone = str_replace('UTC ', '', $timezone);
-            if ($this->api)
+            if ($this->api) {
                 array_push($timezones_arr, ['id' => $key, 'value' => $timezone]);
+            }
         }
 
         $sensor_groups = [];
@@ -114,9 +112,10 @@ class DeviceModalHelper extends ModalHelper
 
         $device_fuel_measurements = $this->device_fuel_measurements;
 
-        $device_fuel_measurements_select =  [];
-        foreach ($device_fuel_measurements as $dfm)
+        $device_fuel_measurements_select = [];
+        foreach ($device_fuel_measurements as $dfm) {
             $device_fuel_measurements_select[$dfm['id']] = $dfm['title'];
+        }
 
         if ($this->api) {
             $timezones = $timezones_arr;
@@ -150,7 +149,7 @@ class DeviceModalHelper extends ModalHelper
             'automatic_treatment'=> 'false'
             ]);
         $Monitorings->save(); */
-        
+
         /*$this->checkException('devices', 'store');
 
         if ($this->checkDevicesLimit())
@@ -254,14 +253,17 @@ class DeviceModalHelper extends ModalHelper
         }*/
     }
 
-    public function editData() {
-        if (array_key_exists('id', $this->data))
+    public function editData()
+    {
+        if (array_key_exists('id', $this->data)) {
             $device_id = $this->data['id'];
-        else
+        } else {
             $device_id = request()->route('id');
+        }
 
-        if (empty($device_id))
-            $device_id = empty($this->data['device_id']) ? NULL : $this->data['device_id'];
+        if (empty($device_id)) {
+            $device_id = empty($this->data['device_id']) ? null : $this->data['device_id'];
+        }
 
         $item = DeviceRepo::find($device_id);
 
@@ -287,28 +289,30 @@ class DeviceModalHelper extends ModalHelper
         $icons_type = [
             'arrow' => trans('front.arrow'),
             'rotating' => trans('front.rotating_icon'),
-            'icon' => trans('front.icon')
+            'icon' => trans('front.icon'),
         ];
 
         $device_icon_colors = [
-            'green'  => trans('front.green'),
+            'green' => trans('front.green'),
             'yellow' => trans('front.yellow'),
-            'red'    => trans('front.red'),
-            'blue'   => trans('front.blue'),
+            'red' => trans('front.red'),
+            'blue' => trans('front.blue'),
             'orange' => trans('front.orange'),
-            'black'  => trans('front.black'),
+            'black' => trans('front.black'),
         ];
 
         $device_icons = DeviceIconRepo::getMyIcons($this->user->id);
-        
+
         $device_icons_grouped = [];
 
         foreach ($device_icons as $dicon) {
-            if ($dicon['type'] == 'arrow')
+            if ($dicon['type'] == 'arrow') {
                 continue;
+            }
 
-            if (!array_key_exists($dicon['type'], $device_icons_grouped))
+            if (! array_key_exists($dicon['type'], $device_icons_grouped)) {
                 $device_icons_grouped[$dicon['type']] = [];
+            }
 
             $device_icons_grouped[$dicon['type']][] = $dicon;
         }
@@ -318,7 +322,7 @@ class DeviceModalHelper extends ModalHelper
         $services = ServiceModalHelper::paginated($item->id);
         $expiration_date_select = [
             '0000-00-00' => trans('front.unlimited'),
-            '1' => trans('validation.attributes.expiration_date')
+            '1' => trans('validation.attributes.expiration_date'),
         ];
 
         $has_sensors = DeviceSensorRepo::getWhereInWhere([
@@ -326,7 +330,7 @@ class DeviceModalHelper extends ModalHelper
             'acc',
             'engine',
             'ignition',
-            'engine_hours'
+            'engine_hours',
         ], 'type', ['device_id' => $item->id]);
 
         $arr = parseSensorsSelect($has_sensors);
@@ -335,8 +339,9 @@ class DeviceModalHelper extends ModalHelper
         unset($item->sensors);
 
         $timezones = ['0' => trans('front.default')] + TimezoneRepo::order()->lists('title', 'id')->all();
-        foreach ($timezones as $key => &$timezone)
+        foreach ($timezones as $key => &$timezone) {
             $timezone = str_replace('UTC ', '', $timezone);
+        }
 
         $sensor_groups = [];
         if (isAdmin()) {
@@ -348,9 +353,10 @@ class DeviceModalHelper extends ModalHelper
 
         $device_fuel_measurements = $this->device_fuel_measurements;
 
-        $device_fuel_measurements_select =  [];
-        foreach ($device_fuel_measurements as $dfm)
+        $device_fuel_measurements_select = [];
+        foreach ($device_fuel_measurements as $dfm) {
             $device_fuel_measurements_select[$dfm['id']] = $dfm['title'];
+        }
 
         if ($this->api) {
             $device_groups = apiArray($device_groups);
@@ -361,54 +367,58 @@ class DeviceModalHelper extends ModalHelper
         return compact('device_id', 'engine_hours', 'detect_engine', 'device_groups', 'sensor_groups', 'item', 'device_fuel_measurements', 'device_icons', 'sensors', 'services', 'expiration_date_select', 'timezones', 'expiration_date_select', 'users', 'sel_users', 'group_id', 'timezone_id', 'device_fuel_measurements_select', 'icons_type', 'device_icons_grouped', 'device_icon_colors');
     }
 
-    public function edit() {
-        if (empty($this->data['id']))
-            $this->data['id'] = empty($this->data['device_id']) ? NULL : $this->data['device_id'];
+    public function edit()
+    {
+        if (empty($this->data['id'])) {
+            $this->data['id'] = empty($this->data['device_id']) ? null : $this->data['device_id'];
+        }
 
         $item = DeviceRepo::find($this->data['id']);
 
         $this->checkException('devices', 'update', $item);
 
-        $this->data['group_id'] = !empty($this->data['group_id']) ? $this->data['group_id'] : null;
+        $this->data['group_id'] = ! empty($this->data['group_id']) ? $this->data['group_id'] : null;
         $this->data['snap_to_road'] = isset($this->data['snap_to_road']);
         $this->data['fuel_quantity'] = empty($this->data['fuel_quantity']) ? 0 : $this->data['fuel_quantity'];
 
-        if (isAdmin() && ! empty($this->data['user_id']))
-        {
+        if (isAdmin() && ! empty($this->data['user_id'])) {
             $this->data['user_id'] = array_combine($this->data['user_id'], $this->data['user_id']);
 
             if ($this->user->isManager()) {
                 $users = $this->user->subusers()->lists('id', 'id')->all() + [$this->user->id => $this->user->id];
 
                 foreach ($item->users as $user) {
-                    if (array_key_exists($user->id, $users) && !array_key_exists($user->id, $this->data['user_id']))
+                    if (array_key_exists($user->id, $users) && ! array_key_exists($user->id, $this->data['user_id'])) {
                         unset($this->data['user_id'][$user->id]);
+                    }
 
-                    if (!array_key_exists($user->id, $users) && !array_key_exists($user->id, $this->data['user_id']))
+                    if (! array_key_exists($user->id, $users) && ! array_key_exists($user->id, $this->data['user_id'])) {
                         $this->data['user_id'][$user->id] = $user->id;
+                    }
                 }
             }
-        }
-        else {
+        } else {
             unset($this->data['user_id']);
         }
 
         if (isAdmin()) {
-            if (empty($this->data['enable_expiration_date']))
+            if (empty($this->data['enable_expiration_date'])) {
                 $this->data['expiration_date'] = '0000-00-00';
-        }
-        else
+            }
+        } else {
             unset($this->data['expiration_date']);
+        }
 
         $prev_timezone_id = $item->timezone_id;
 
-        try
-        {
-            if ( ! empty($this->data['timezone_id']) && $this->data['timezone_id'] != 57 && $item->isCorrectUTC())
+        try {
+            if (! empty($this->data['timezone_id']) && $this->data['timezone_id'] != 57 && $item->isCorrectUTC()) {
                 throw new ValidationException(['timezone_id' => 'Device time is correct. Check your timezone Setup -> Main -> Timezone']);
+            }
 
-            if (array_key_exists('device_icons_type', $this->data) && $this->data['device_icons_type'] == 'arrow')
+            if (array_key_exists('device_icons_type', $this->data) && $this->data['device_icons_type'] == 'arrow') {
                 $this->data['icon_id'] = 0;
+            }
 
             DeviceFormValidator::validate('update', $this->data, $item->id);
 
@@ -419,12 +429,12 @@ class DeviceModalHelper extends ModalHelper
                 $this->data['gprs_templates_only'] = (array_key_exists('gprs_templates_only', $this->data) && $this->data['gprs_templates_only'] == 1 ? 1 : 0);
 
                 $device_icon_colors = [
-                    'green'  => trans('front.green'),
+                    'green' => trans('front.green'),
                     'yellow' => trans('front.yellow'),
-                    'red'    => trans('front.red'),
-                    'blue'   => trans('front.blue'),
+                    'red' => trans('front.red'),
+                    'blue' => trans('front.blue'),
                     'orange' => trans('front.orange'),
-                    'black'  => trans('front.black'),
+                    'black' => trans('front.black'),
                 ];
 
                 $this->data['icon_colors'] = [
@@ -434,17 +444,21 @@ class DeviceModalHelper extends ModalHelper
                     'engine' => 'blue',
                 ];
 
-                if (array_key_exists('icon_moving', $this->data) && array_key_exists($this->data['icon_moving'], $device_icon_colors))
+                if (array_key_exists('icon_moving', $this->data) && array_key_exists($this->data['icon_moving'], $device_icon_colors)) {
                     $this->data['icon_colors']['moving'] = $this->data['icon_moving'];
+                }
 
-                if (array_key_exists('icon_stopped', $this->data) && array_key_exists($this->data['icon_stopped'], $device_icon_colors))
+                if (array_key_exists('icon_stopped', $this->data) && array_key_exists($this->data['icon_stopped'], $device_icon_colors)) {
                     $this->data['icon_colors']['stopped'] = $this->data['icon_stopped'];
+                }
 
-                if (array_key_exists('icon_offline', $this->data) && array_key_exists($this->data['icon_offline'], $device_icon_colors))
+                if (array_key_exists('icon_offline', $this->data) && array_key_exists($this->data['icon_offline'], $device_icon_colors)) {
                     $this->data['icon_colors']['offline'] = $this->data['icon_offline'];
+                }
 
-                if (array_key_exists('icon_engine', $this->data) && array_key_exists($this->data['icon_engine'], $device_icon_colors))
+                if (array_key_exists('icon_engine', $this->data) && array_key_exists($this->data['icon_engine'], $device_icon_colors)) {
                     $this->data['icon_colors']['engine'] = $this->data['icon_engine'];
+                }
 
                 //DTRefactor
                 //DeviceRepo::update($item->id, $this->data);
@@ -454,29 +468,26 @@ class DeviceModalHelper extends ModalHelper
 
                 $this->deviceSyncUsers($item);
                 $this->createSensors($item->id);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 rollbackTransaction();
                 throw new ValidationException(['id' => trans('global.unexpected_db_error').$e->getMessage()]);
             }
 
             commitTransaction();
 
-            if ($prev_timezone_id != $item->timezone_id){
+            if ($prev_timezone_id != $item->timezone_id) {
                 $item->applyPositionsTimezone();
             }
 
             return ['status' => 1, 'id' => $item->id];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
 
     public function destroy()
     {
-        $device_id = array_key_exists('id', $this->data) ? $this->data['id'] : (empty($this->data['device_id']) ? NULL : $this->data['device_id']);
+        $device_id = array_key_exists('id', $this->data) ? $this->data['id'] : (empty($this->data['device_id']) ? null : $this->data['device_id']);
 
         $item = DeviceRepo::find($device_id);
 
@@ -496,14 +507,14 @@ class DeviceModalHelper extends ModalHelper
             DB::table('device_services')->where('device_id', $item->id)->delete();
             DB::table('user_drivers')->where('device_id', $item->id)->update(['device_id' => null]);
 
-            if (Schema::connection('traccar_mysql')->hasTable('positions_'.$item->traccar_device_id))
+            if (Schema::connection('traccar_mysql')->hasTable('positions_'.$item->traccar_device_id)) {
                 DB::connection('traccar_mysql')->table('positions_'.$item->traccar_device_id)->truncate();
+            }
 
             Schema::connection('traccar_mysql')->dropIfExists('positions_'.$item->traccar_device_id);
 
             commitTransaction();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             rollbackTransaction();
         }
 
@@ -512,24 +523,26 @@ class DeviceModalHelper extends ModalHelper
 
     public function changeActive()
     {
-        if ( ! array_key_exists('id', $this->data))
+        if (! array_key_exists('id', $this->data)) {
             throw new ValidationException(['id' => 'No id provided']);
+        }
 
-        if (is_array($this->data['id']))
+        if (is_array($this->data['id'])) {
             $devices = DeviceRepo::getWhereIn($this->data['id']);
-        else
+        } else {
             $devices = DeviceRepo::getWhereIn([$this->data['id']]);
+        }
 
-        $filtered = $devices->filter(function($device) {
+        $filtered = $devices->filter(function ($device) {
             return $this->user->can('active', $device);
         });
 
-        if ( ! empty($filtered)) {
+        if (! empty($filtered)) {
             DB::table('user_device_pivot')
                 ->where('user_id', $this->user->id)
                 ->whereIn('device_id', $filtered->pluck('id')->all())
                 ->update([
-                    'active' => (isset($this->data['active']) && $this->data['active'] != 'false') ? 1 : 0
+                    'active' => (isset($this->data['active']) && $this->data['active'] != 'false') ? 1 : 0,
                 ]);
         }
 
@@ -541,7 +554,7 @@ class DeviceModalHelper extends ModalHelper
         $this->checkException('devices', 'view');
 
         $time = time();
-        if ( empty($this->data['time']) ) {
+        if (empty($this->data['time'])) {
             $this->data['time'] = $time - 5;
         }
 
@@ -549,15 +562,15 @@ class DeviceModalHelper extends ModalHelper
 
         $devices = UserRepo::getDevicesHigherTime($this->user, $this->data['time']);
 
-        $items = array();
-        if (!empty($devices)) {
+        $items = [];
+        if (! empty($devices)) {
             foreach ($devices as $item) {
-                $items[] = $this->generateJson($item, TRUE, TRUE);
+                $items[] = $this->generateJson($item, true, true);
             }
         }
 
         $events = EventRepo::getHigherTime($this->user->id, $this->data['time']);
-        !empty($events) && $events = $events->toArray();
+        ! empty($events) && $events = $events->toArray();
 
         foreach ($events as $key => $event) {
             $events[$key]['time'] = tdate($event['time']);
@@ -567,26 +580,28 @@ class DeviceModalHelper extends ModalHelper
             $events[$key]['device_name'] = empty($events[$key]['device']['name']) ? null : $events[$key]['device']['name'];
             $events[$key]['sound'] = array_get($event, 'alert.notifications.sound.active', false) ? asset('assets/audio/hint.mp3') : null;
 
-            if (empty($event['geofence']))
+            if (empty($event['geofence'])) {
                 continue;
+            }
 
             $name = htmlentities($events[$key]['geofence']['name']);
             $events[$key]['geofence'] = [
                 'id' => $events[$key]['geofence']['id'],
-                'name' => $name
+                'name' => $name,
             ];
 
             $name = htmlentities($events[$key]['device']['name']);
             $events[$key]['device'] = [
                 'id' => $events[$key]['device']['id'],
-                'name' => $name
+                'name' => $name,
             ];
         }
 
         return ['items' => $items, 'events' => $events, 'time' => $time, 'version' => Config::get('tobuli.version')];
     }
 
-    public function generateJson($device, $json = TRUE, $device_info = FALSE) {
+    public function generateJson($device, $json = true, $device_info = false)
+    {
         $status = $device->getStatus();
 
         $data = [];
@@ -602,9 +617,9 @@ class DeviceModalHelper extends ModalHelper
                 $device_data['users'] = $this->formatUserList($filtered_users);
             }
 
-            $device_data['lastValidLatitude']  = floatval($device->lat);
+            $device_data['lastValidLatitude'] = floatval($device->lat);
             $device_data['lastValidLongitude'] = floatval($device->lng);
-            $device_data['latest_positions']   = $device->latest_positions;
+            $device_data['latest_positions'] = $device->latest_positions;
             $device_data['icon_type'] = $device->icon->type;
 
             $device_data['active'] = intval($device->pivot->active);
@@ -636,110 +651,117 @@ class DeviceModalHelper extends ModalHelper
             //$device_data['pivot']['timezone_id'] = is_null($device->pivot->timezone_id) ? null : intval($device->pivot->timezone_id);
             $device_data['pivot']['timezone_id'] = null;
             $device_data['pivot']['active'] = intval($device->pivot->active);
-            
+
             $device_data['time'] = $device->getTime();
             $device_data['course'] = isset($device->course) ? $device->course : null;
             $device_data['speed'] = $device->getSpeed();
 
             $data = [
-                'device_data' => $device_data
+                'device_data' => $device_data,
             ];
         }
 
         $driver = $device->driver;
 
         return [
-                'id'            => intval($device->id),
-                'alarm'         => is_null($this->user->alarm) ? 0 : $this->user->alarm,
-                'name'          => $device->name,
-                'online'        => $status,
-                'time'          => $device->time,
-                'timestamp'     => $device->timestamp,
-                'acktimestamp'  => $device->ack_timestamp,
-                'lat'           => floatval($device->lat),
-                'lng'           => floatval($device->lng),
-                'course'        => (isset($device->course) ? $device->course : '-'),
-                'speed'         => $device->getSpeed(),
-                'altitude'      => $device->altitude,
-                'icon_type'     => $device->icon->type,
-                'icon_color'    => $device->getStatusColor(),
-                'icon_colors'   => $device->icon_colors,
-                'icon'          => $device->icon->toArray(),
-                'power'         => '-',
-                'address'       => '-',
-                'protocol'      => $device->getProtocol() ? $device->getProtocol() : '-',
-                'driver'        => ($driver ? $driver->name : '-'),
-                'driver_data'   => $driver ? $driver : [
-                    'id' => NULL,
-                    'user_id' => NULL,
-                    'device_id' => NULL,
-                    'name' => NULL,
-                    'rfid' => NULL,
-                    'phone' => NULL,
-                    'email' => NULL,
-                    'description' => NULL,
-                    'created_at' => NULL,
-                    'updated_at' => NULL,
-                ],
-                'sensors'            => $json ? json_encode($device->getFormatSensors()) : $device->getFormatSensors(),
-                'services'           => $json ? json_encode($device->getFormatServices()) : $device->getFormatServices(),
-                'tail'               => $json ? json_encode($device->tail) : $device->tail,
-                'distance_unit_hour' => $this->user->unit_of_speed,
-                'unit_of_distance'   => $this->user->unit_of_distance,
-                'unit_of_altitude'   => $this->user->unit_of_altitude,
-                'unit_of_capacity'   => $this->user->unit_of_capacity,
-                'stop_duration'      => $device->stop_duration,
-                'moved_timestamp'    => $device->moved_timestamp,
-                'engine_status'      => $device->getEngineSensor() ? $device->getEngineStatus() : null,
-                'detect_engine'      => $device->detect_engine,
-                'engine_hours'       => $device->engine_hours,
-            ] + $data;
+            'id' => intval($device->id),
+            'alarm' => is_null($this->user->alarm) ? 0 : $this->user->alarm,
+            'name' => $device->name,
+            'online' => $status,
+            'time' => $device->time,
+            'timestamp' => $device->timestamp,
+            'acktimestamp' => $device->ack_timestamp,
+            'lat' => floatval($device->lat),
+            'lng' => floatval($device->lng),
+            'course' => (isset($device->course) ? $device->course : '-'),
+            'speed' => $device->getSpeed(),
+            'altitude' => $device->altitude,
+            'icon_type' => $device->icon->type,
+            'icon_color' => $device->getStatusColor(),
+            'icon_colors' => $device->icon_colors,
+            'icon' => $device->icon->toArray(),
+            'power' => '-',
+            'address' => '-',
+            'protocol' => $device->getProtocol() ? $device->getProtocol() : '-',
+            'driver' => ($driver ? $driver->name : '-'),
+            'driver_data' => $driver ? $driver : [
+                'id' => null,
+                'user_id' => null,
+                'device_id' => null,
+                'name' => null,
+                'rfid' => null,
+                'phone' => null,
+                'email' => null,
+                'description' => null,
+                'created_at' => null,
+                'updated_at' => null,
+            ],
+            'sensors' => $json ? json_encode($device->getFormatSensors()) : $device->getFormatSensors(),
+            'services' => $json ? json_encode($device->getFormatServices()) : $device->getFormatServices(),
+            'tail' => $json ? json_encode($device->tail) : $device->tail,
+            'distance_unit_hour' => $this->user->unit_of_speed,
+            'unit_of_distance' => $this->user->unit_of_distance,
+            'unit_of_altitude' => $this->user->unit_of_altitude,
+            'unit_of_capacity' => $this->user->unit_of_capacity,
+            'stop_duration' => $device->stop_duration,
+            'moved_timestamp' => $device->moved_timestamp,
+            'engine_status' => $device->getEngineSensor() ? $device->getEngineStatus() : null,
+            'detect_engine' => $device->detect_engine,
+            'engine_hours' => $device->engine_hours,
+        ] + $data;
     }
 
-    private function checkDevicesLimit($user = NULL) {
-        if (is_null($user))
+    private function checkDevicesLimit($user = null)
+    {
+        if (is_null($user)) {
             $user = $this->user;
-
-        if (isset($_ENV['limit']) && $_ENV['limit'] > 1)
-        {
-            $devices_count = DeviceRepo::countwhere(['deleted' => 0]);
-
-            if ($devices_count >= $_ENV['limit'])
-                return false;
         }
 
-        if ( ! is_null($user->devices_limit))
-        {
+        if (isset($_ENV['limit']) && $_ENV['limit'] > 1) {
+            $devices_count = DeviceRepo::countwhere(['deleted' => 0]);
+
+            if ($devices_count >= $_ENV['limit']) {
+                return false;
+            }
+        }
+
+        if (! is_null($user->devices_limit)) {
             $user_devices_count = $user->isManager() ? getManagerUsedLimit($user->id) : $user->devices->count();
 
-            if ($user_devices_count >= $user->devices_limit)
+            if ($user_devices_count >= $user->devices_limit) {
                 return true;
+            }
         }
 
         return false;
     }
 
-    # Sensor groups
-    private function createSensors($device_id) {
-        if ( ! isAdmin())
+    // Sensor groups
+    private function createSensors($device_id)
+    {
+        if (! isAdmin()) {
             return;
-        if ( ! isset($this->data['sensor_group_id']))
+        }
+        if (! isset($this->data['sensor_group_id'])) {
             return;
+        }
 
         $group_sensors = SensorGroupSensorRepo::getWhere(['group_id' => $this->data['sensor_group_id']]);
 
-        if (empty($group_sensors))
+        if (empty($group_sensors)) {
             return;
+        }
 
-        foreach ($group_sensors as $sensor)
-        {
+        foreach ($group_sensors as $sensor) {
             $sensor = $sensor->toArray();
 
-            if ( ! $sensor['show_in_popup'])
+            if (! $sensor['show_in_popup']) {
                 unset($sensor['show_in_popup']);
+            }
 
-            if (in_array($sensor['type'], ['harsh_acceleration', 'harsh_breaking']))
+            if (in_array($sensor['type'], ['harsh_acceleration', 'harsh_breaking'])) {
                 $sensor['parameter_value'] = $sensor['on_value'];
+            }
 
             SensorModalHelper::setData(array_merge([
                 'user_id' => $this->user->id,
@@ -752,10 +774,10 @@ class DeviceModalHelper extends ModalHelper
         }
     }
 
-    private function deviceSyncUsers($device) {
-        if (isset($this->data['user_id']))
-        {
-            if ( ! $this->user->isGod()) {
+    private function deviceSyncUsers($device)
+    {
+        if (isset($this->data['user_id'])) {
+            if (! $this->user->isGod()) {
                 $admin_user = DB::table('users')
                     ->select('users.id')
                     ->join('user_device_pivot', 'users.id', '=', 'user_device_pivot.user_id')
@@ -763,8 +785,9 @@ class DeviceModalHelper extends ModalHelper
                     ->where(['user_device_pivot.device_id' => $device->id])
                     ->first();
 
-                if ($admin_user)
+                if ($admin_user) {
                     $this->data['user_id'][$admin_user->id] = $admin_user->id;
+                }
             }
 
             $device->users()->sync($this->data['user_id']);
@@ -773,7 +796,7 @@ class DeviceModalHelper extends ModalHelper
         DB::table('user_device_pivot')
             ->where([
                 'device_id' => $device->id,
-                'user_id' => $this->user->id
+                'user_id' => $this->user->id,
             ])
             ->update([
                 'group_id' => $this->data['group_id'],
@@ -783,11 +806,13 @@ class DeviceModalHelper extends ModalHelper
 
     private function formatUserList($users)
     {
-        if (! count($users))
+        if (! count($users)) {
             return [];
+        }
 
-        foreach ($users as $user)
+        foreach ($users as $user) {
             $users_array[] = ['id' => intval($user['id']), 'email' => $user['email']];
+        }
 
         return $users_array;
     }

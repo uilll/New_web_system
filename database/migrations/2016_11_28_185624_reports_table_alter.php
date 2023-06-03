@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class ReportsTableAlter extends Migration {
-
+class ReportsTableAlter extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -27,5 +26,4 @@ class ReportsTableAlter extends Migration {
     {
         //
     }
-
 }

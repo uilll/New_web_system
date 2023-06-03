@@ -19,6 +19,6 @@ class Technician extends Model
         'money_with_hands',
         'manager_id',
         'created_at',
-        'updated_at' 
+        'updated_at',
     ];
 }

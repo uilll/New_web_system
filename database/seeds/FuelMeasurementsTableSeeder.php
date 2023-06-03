@@ -1,8 +1,10 @@
 <?php
-use Tobuli\Repositories\DeviceFuelMeasurement\DeviceFuelMeasurementRepositoryInterface as DeviceFuelMeasurement;
-use Illuminate\Database\Seeder;
 
-class FuelMeasurementsTableSeeder extends Seeder {
+use Illuminate\Database\Seeder;
+use Tobuli\Repositories\DeviceFuelMeasurement\DeviceFuelMeasurementRepositoryInterface as DeviceFuelMeasurement;
+
+class FuelMeasurementsTableSeeder extends Seeder
+{
     /**
      * @var DeviceFuelMeasurement
      */
@@ -13,19 +15,18 @@ class FuelMeasurementsTableSeeder extends Seeder {
         $this->DeviceFuelMeasurement = $DeviceFuelMeasurement;
     }
 
-	public function run()
-	{
-			$this->DeviceFuelMeasurement->create([
-                'title' => 'l/100km',
-                'fuel_title' => 'liter',
-                'distance_title' => 'Kilometers'
-			]);
+    public function run()
+    {
+        $this->DeviceFuelMeasurement->create([
+            'title' => 'l/100km',
+            'fuel_title' => 'liter',
+            'distance_title' => 'Kilometers',
+        ]);
 
-            $this->DeviceFuelMeasurement->create([
-                'title' => 'MPG',
-                'fuel_title' => 'gallon',
-                'distance_title' => 'Miles'
-            ]);
-	}
-
+        $this->DeviceFuelMeasurement->create([
+            'title' => 'MPG',
+            'fuel_title' => 'gallon',
+            'distance_title' => 'Miles',
+        ]);
+    }
 }

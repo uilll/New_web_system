@@ -3,10 +3,8 @@
 namespace App\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-
 use Illuminate\Database\Eloquent\Model;
 use Tobuli\Entities\User;
-
 
 class DevicePolicy extends Policy
 {

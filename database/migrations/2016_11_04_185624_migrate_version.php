@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class MigrateVersion extends Migration {
-
+class MigrateVersion extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,8 +11,7 @@ class MigrateVersion extends Migration {
      */
     public function up()
     {
-        if( ! Schema::hasColumn('device_icons', 'type'))
-        {
+        if (! Schema::hasColumn('device_icons', 'type')) {
             Schema::table('device_icons', function ($table) {
                 $table->string('type', 20)->default('icon')->after('id');
             });
@@ -24,8 +22,7 @@ class MigrateVersion extends Migration {
             ]);
         }
 
-        if( ! Schema::hasColumn('devices', 'icon_colors'))
-        {
+        if (! Schema::hasColumn('devices', 'icon_colors')) {
             Schema::table('devices', function ($table) {
                 $table->string('icon_colors')
                       ->default('{"moving":"green","stopped":"yellow","offline":"red","engine":"yellow"}')
@@ -34,17 +31,13 @@ class MigrateVersion extends Migration {
             });
         }
 
-        if( ! Schema::hasColumn('users', 'top_toolbar_open'))
-        {
-
+        if (! Schema::hasColumn('users', 'top_toolbar_open')) {
             Schema::table('users', function ($table) {
                 $table->string('map_controls', 500)->default('{}')->after('week_start_day');
                 $table->tinyInteger('top_toolbar_open')->default('1')->after('week_start_day');
             });
         }
-
     }
-
 
     /**
      * Reverse the migrations.
@@ -55,5 +48,4 @@ class MigrateVersion extends Migration {
     {
         //
     }
-
 }

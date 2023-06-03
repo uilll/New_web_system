@@ -10,16 +10,14 @@ namespace Tobuli\Entities;
 
 use Eloquent;
 
-use Tobuli\Entities\User;
-use Tobuli\Entities\Device;
-
 class ChatParticipant extends Eloquent
 {
-    protected $fillable = ['chat_id', 'chattable_id','chattable_type'];
+    protected $fillable = ['chat_id', 'chattable_id', 'chattable_type'];
 
     protected $hidden = ['created_at', 'updated_at'];
 
-    public function chattable() {
+    public function chattable()
+    {
         return $this->morphTo();
     }
 
@@ -37,5 +35,4 @@ class ChatParticipant extends Eloquent
     {
         return $this->chattable_type == Device::class;
     }
-
 }

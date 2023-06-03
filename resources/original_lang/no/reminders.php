@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'password' => 'Passord må være minst seks tegn og samsvar med bekreftelsen.',
     'user' => 'Vi kan ikke finne en bruker med den e-postadressen.',
@@ -8,4 +8,4 @@ return array(
     'sent' => 'Passord påminnelse sendt!',
     'reset' => 'Passordet ditt har blitt tilbakestilt',
     'reset_link' => 'Klikk her for å tilbakestille passordet ditt',
-);
+];

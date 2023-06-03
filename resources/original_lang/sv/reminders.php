@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'password' => 'Lösenord måste bestå av minst 6 tecken och matcha bekräftande fältet.',
     'user' => 'Vi kan ej hitta en användare med den email adressen.',
@@ -8,4 +8,4 @@ return array(
     'sent' => 'Lösenordspåminnelse skickad.',
     'reset' => 'Ditt lösenord har blivit återställt',
     'reset_link' => 'Klicka här för att återställa ditt lösenord',
-);
+];

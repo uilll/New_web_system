@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'Edit',
     'add_new' => 'Tambah Baru',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Akhir pekan',
     'always' => 'Selalu',
     'advanced' => 'Maju',
-);
+];

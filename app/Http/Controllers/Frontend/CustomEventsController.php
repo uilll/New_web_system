@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\CustomEventModalHelper;
@@ -11,14 +13,14 @@ class CustomEventsController extends Controller
     {
         $data = CustomEventModalHelper::get();
 
-        return !$this->api ? view('front::CustomEvents.index')->with($data) : ['items' => $data];
+        return ! $this->api ? view('front::CustomEvents.index')->with($data) : ['items' => $data];
     }
 
     public function create()
     {
         $data = CustomEventModalHelper::createData();
 
-        return !$this->api ? view('front::CustomEvents.create')->with($data) : $data;
+        return ! $this->api ? view('front::CustomEvents.create')->with($data) : $data;
     }
 
     public function store()
@@ -30,7 +32,7 @@ class CustomEventsController extends Controller
     {
         $data = CustomEventModalHelper::editData();
 
-        return is_array($data) && !$this->api ? view('front::CustomEvents.edit')->with($data) : $data;
+        return is_array($data) && ! $this->api ? view('front::CustomEvents.edit')->with($data) : $data;
     }
 
     public function update()
@@ -42,14 +44,14 @@ class CustomEventsController extends Controller
     {
         $protocols = SensorModalHelper::getProtocols();
 
-        return !$this->api ? Form::select('event_protocol', $protocols, null, ['class' => 'form-control']) : apiArray($protocols);
+        return ! $this->api ? Form::select('event_protocol', $protocols, null, ['class' => 'form-control']) : apiArray($protocols);
     }
 
     public function getEvents()
     {
         $events = SensorModalHelper::getEvents();
 
-        return !$this->api ? Form::select('event_id', $events, null, ['class' => 'form-control']) : apiArray($events);
+        return ! $this->api ? Form::select('event_id', $events, null, ['class' => 'form-control']) : apiArray($events);
     }
 
     public function getEventsByDevices()
@@ -58,7 +60,9 @@ class CustomEventsController extends Controller
 
         $events = CustomEventModalHelper::getGroupedEvents($devices);
 
-        array_walk($events, function(&$v){ $v['items'] = apiArray($v['items']); });
+        array_walk($events, function (&$v) {
+        $v['items'] = apiArray($v['items']);
+        });
 
         return $events;
     }
@@ -74,5 +78,4 @@ class CustomEventsController extends Controller
     {
         return CustomEventModalHelper::destroy();
     }
-
 }

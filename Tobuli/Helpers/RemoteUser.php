@@ -11,11 +11,12 @@ class RemoteUser
     {
         $response = $this->remote(config('tobuli.frontend_curl').'/get_user', [
             'hash' => $hash,
-            'password' => config('tobuli.frontend_curl_password')
+            'password' => config('tobuli.frontend_curl_password'),
         ]);
 
-        if (empty($response['status']))
+        if (empty($response['status'])) {
             return null;
+        }
 
         return $this->createOrUpdate($response);
     }
@@ -24,11 +25,12 @@ class RemoteUser
     {
         $response = $this->remote(config('tobuli.frontend_curl').'/get_user', [
             'user_api_hash' => $api_hash,
-            'password' => config('tobuli.frontend_curl_password')
+            'password' => config('tobuli.frontend_curl_password'),
         ]);
 
-        if (empty($response['status']))
+        if (empty($response['status'])) {
             return null;
+        }
 
         $response['user_api_hash'] = $api_hash;
 
@@ -39,11 +41,12 @@ class RemoteUser
     {
         $response = $this->remote(config('tobuli.frontend_curl').'/login', [
             'email' => $email,
-            'password' => $password
+            'password' => $password,
         ]);
 
-        if (empty($response['status']))
+        if (empty($response['status'])) {
             return null;
+        }
 
         return $this->getByApiHash($response['user_api_hash']);
     }
@@ -53,19 +56,19 @@ class RemoteUser
         $user_id = $data['id'];
 
         $user_data = [
-            'email'                   => $data['email'],
-            'devices_limit'           => $data['devices_limit'] == 'free' ? 1 : $data['devices_limit'],
-            'group_id'                => $data['group_id'],
+            'email' => $data['email'],
+            'devices_limit' => $data['devices_limit'] == 'free' ? 1 : $data['devices_limit'],
+            'group_id' => $data['group_id'],
             'subscription_expiration' => $data['subscription_expiration'],
-            'billing_plan_id'         => $data['billing_plan_id'],
-            'open_geofence_groups'    => '["0"]',
-            'open_device_groups'      => '["0"]'
+            'billing_plan_id' => $data['billing_plan_id'],
+            'open_geofence_groups' => '["0"]',
+            'open_device_groups' => '["0"]',
         ];
 
-        if ( ! empty($data['user_api_hash'])) {
+        if (! empty($data['user_api_hash'])) {
             $user_data = $user_data + [
-                'api_hash'            => $data['user_api_hash'],
-                'api_hash_expire'     => date('Y-m-d H:i:s', time() + 600)
+                'api_hash' => $data['user_api_hash'],
+                'api_hash_expire' => date('Y-m-d H:i:s', time() + 600),
             ];
         }
 
@@ -74,10 +77,10 @@ class RemoteUser
         if (empty($user)) {
             UserRepo::create($user_data + ['id' => $user_id]);
         } else {
-            if ( ! empty($user['open_geofence_groups'])) {
+            if (! empty($user['open_geofence_groups'])) {
                 unset($user_data['open_geofence_groups']);
             }
-            if ( ! empty($user['open_device_groups'])) {
+            if (! empty($user['open_device_groups'])) {
                 unset($user_data['open_geofence_groups']);
             }
 
@@ -93,13 +96,14 @@ class RemoteUser
     {
         $curl = new Curl;
         $curl->follow_redirects = false;
-        $curl->options['CURLOPT_SSL_VERIFYPEER'] = FALSE;
+        $curl->options['CURLOPT_SSL_VERIFYPEER'] = false;
         $curl->options['CURLOPT_FRESH_CONNECT'] = 1;
-        if ($_ENV['server'] == 'us')
+        if ($_ENV['server'] == 'us') {
             $curl->options['CURLOPT_PROXY'] = '185.69.52.20:3128';
+        }
 
         $response = $curl->post($url, $data);
 
-        return json_decode($response,TRUE);
+        return json_decode($response, true);
     }
 }

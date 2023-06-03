@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class SensorFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class SensorFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -116,7 +118,7 @@ class SensorFormValidator extends Validator {
             'sensor_name' => 'required',
             'sensor_type' => 'required',
             'tag_name' => 'required',
-            'formula' => 'required'
+            'formula' => 'required',
         ],
         'temperature' => [
             'sensor_name' => 'required',
@@ -216,7 +218,7 @@ class SensorFormValidator extends Validator {
             'sensor_name' => 'required',
             'sensor_type' => 'required',
             'tag_name' => 'required',
-            'formula' => 'required'
+            'formula' => 'required',
         ],
         'textual' => [
             'sensor_name' => 'required',
@@ -229,10 +231,8 @@ class SensorFormValidator extends Validator {
             'tag_name' => 'required',
             'on_tag_value' => 'required',
             'off_tag_value' => 'required',
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

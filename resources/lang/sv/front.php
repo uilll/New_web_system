@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Lägg till spårare',
     'per_one' => 'Per 1',
@@ -664,4 +664,4 @@ SMS gateway URL example: http://SMS_GATEWAY/sendsms.php?username=USER&password=P
     'do_objects_delete' => 'Vill du verkligen radera dessa enheter? <br> All tillhörande data kommer att gå vilse.',
     'ignition_off' => 'Tändning av',
     'forward' => 'Framåt',
-);
+];

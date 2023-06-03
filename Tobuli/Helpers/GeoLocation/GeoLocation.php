@@ -7,30 +7,32 @@ use Illuminate\Support\Facades\Cache;
 class GeoLocation
 {
     private $service;
+
     private $cache;
+
     private $cacheExpiration;
+
     private $cacheMethods;
 
     public function __construct()
     {
-        $class = 'Tobuli\Helpers\GeoLocation\GeoServices\Geo' . ucfirst(settings('main_settings.geocoder_api'));
+        $class = 'Tobuli\Helpers\GeoLocation\GeoServices\Geo'.ucfirst(settings('main_settings.geocoder_api'));
 
-        if ( ! class_exists($class, true)) {
+        if (! class_exists($class, true)) {
             throw new \Exception('GeoService class not found!');
         }
 
         $this->service = new $class;
 
         $this->cacheMethods = ['byCoordinates'];
-        $this->cacheExpiration = (int)settings('main_settings.geocoder_cache_days') * 24 * 60 * 60;
+        $this->cacheExpiration = (int) settings('main_settings.geocoder_cache_days') * 24 * 60 * 60;
 
         $this->cacheDrive();
     }
 
-
     public function __call($method, $parameters)
     {
-        $parameters = call_user_func_array([$this, $method . 'Normalize'], $parameters);
+        $parameters = call_user_func_array([$this, $method.'Normalize'], $parameters);
 
         if ($this->cache && in_array($method, $this->cacheMethods)) {
             return $this->cache->remember(
@@ -49,8 +51,9 @@ class GeoLocation
     {
         $this->cache = null;
 
-        if ( ! (bool)settings('main_settings.geocoder_cache_enabled'))
+        if (! (bool) settings('main_settings.geocoder_cache_enabled')) {
             return;
+        }
 
         try {
             $this->cache = Cache::store(config('tobuli.geocoder_cache_driver'));
@@ -58,16 +61,16 @@ class GeoLocation
             $this->cache = null;
         }
 
-        return;
     }
 
     private function cacheKey($method, $parameters)
     {
-        if ( ! is_array($parameters))
+        if (! is_array($parameters)) {
             $parameters = [$parameters];
+        }
 
         $parameters[] = $method;
-        $parameters[] = config('tobuli.languages.' . config('app.locale') . '.iso', 'en');
+        $parameters[] = config('tobuli.languages.'.config('app.locale').'.iso', 'en');
 
         return implode(',', $parameters);
     }
@@ -84,7 +87,7 @@ class GeoLocation
 
     private function byCoordinatesNormalize($lat, $lng)
     {
-        if ( ! is_numeric($lat) || ! is_numeric($lng)) {
+        if (! is_numeric($lat) || ! is_numeric($lng)) {
             throw new \Exception('Bad coordinates input!');
         }
 

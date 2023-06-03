@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class AdminSensorGroupFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class AdminSensorGroupFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -11,10 +13,8 @@ class AdminSensorGroupFormValidator extends Validator {
         ],
         'update' => [
             'title' => 'required|unique:sensor_groups,title,%s',
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

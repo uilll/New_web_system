@@ -13,17 +13,17 @@ class AlterBackupsEmptyToAuto extends Migration
     {
         $ftp_server = settings('backups.ftp_server');
 
-        if ( ! empty($ftp_server)) {
+        if (! empty($ftp_server)) {
             return;
         }
 
         settings('backups', [
             'type' => 'auto',
-            'ftp_server'   => null,
+            'ftp_server' => null,
             'ftp_username' => null,
             'ftp_password' => null,
-            'ftp_port'     => null,
-            'ftp_path'     => null,
+            'ftp_port' => null,
+            'ftp_path' => null,
         ]);
     }
 
@@ -34,6 +34,5 @@ class AlterBackupsEmptyToAuto extends Migration
      */
     public function down()
     {
-
     }
 }

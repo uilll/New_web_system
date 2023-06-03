@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'Upravit',
     'add_new' => 'Přidat nový',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Víkend',
     'always' => 'Vždy',
     'advanced' => 'Pokročilý',
-);
+];

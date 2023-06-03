@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => 'De :attribute moet worden aanvaard.',
     'active_url' => 'De :attribute is geen geldig URL.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => 'De :attribute mag alleen letters en cijfers bevatten.',
     'array' => 'De :attribute moet een reeks zijn.',
     'before' => 'De :attribute moet een datum zijn voor :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => 'De :attribute moet tussen :min en :max zijn.',
         'file' => 'De :attribute moet tussen :min en :max kilobytes zijn.',
         'string' => 'De :attribute moet tussen :min and :max karakters zijn.',
         'array' => 'De :attribute moet tussen de :min en :max items zijn.',
-    ),
+    ],
     'confirmed' => 'De :attribute bevestiging komt niet overeen.',
     'date' => 'De :attribute is geen geldige datum.',
     'date_format' => 'De :attribute opmaak komt niet overeen met :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'De geselecteerde :attribute is ongeldig.',
     'integer' => 'De :attribute moet een geheel (getal) zijn.',
     'ip' => 'De :attribute moet een geldig IP adres zijn',
-    'max'  => array(
+    'max' => [
         'numeric' => 'De :attribute mag niet groter dan :max zijn.',
         'file' => 'De :attribute mag niet groter dan :max kilobytes zijn.',
         'string' => 'De :attribute mag niet groter dan :max karakters zijn.',
         'array' => 'De :attribute mag niet meer dan :max items hebben.',
-    ),
+    ],
     'mimes' => 'De :attribute moet een bestand of type: :values zijn.',
-    'min'  => array(
+    'min' => [
         'numeric' => 'De :attribute moet minimaal :min zijn.',
         'file' => 'De :attribute moet minimaal :min kilobytes zijn.',
         'string' => 'De :attribute moet minimaal :min karakters hebben.',
         'array' => 'De :attribute moet minimaal :min items hebben.',
-    ),
+    ],
     'not_in' => 'De geselcteerde :attribute is ongeldig.',
     'numeric' => 'De :attribute moet een getal zijn.',
     'regex' => 'De :attribute formaat is ongeldig.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => 'Het :attribute veld is noodzakelijk wanneer :values niet aanwezig is.',
     'required_without_all' => 'Het :attribute veld is noodzakelijk wanneer geen van :values aanwezig is.',
     'same' => 'De :attribute en :other moet overeenkomen.',
-    'size'  => array(
+    'size' => [
         'numeric' => 'De :attribute moet :size zijn.',
         'file' => 'De :attribute moet :size kilobytes zijn.',
         'string' => 'De :attribute moet :size karakters zijn.',
         'array' => 'De :attribute moet :size items bevatten.',
-    ),
+    ],
     'unique' => 'De :attribute is reeds bezet.',
     'url' => 'De :attribute formaat is ongeldig.',
     'array_max' => 'De :attribute maximale aantal items :max.',
     'lesser_than' => 'De :attribute moet kleiner zijn dan :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'aangepast bericht',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'E-mail',
         'password' => 'Wachtwoord',
         'password_confirmation' => 'Wachtwoord bevestiging',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Offline statuspictogram',
         'icon_status_ack' => 'Ack-statuspictogram',
         'icon_status_engine' => 'Pictogram van de motorstatus',
-    ),
+    ],
     'same_protocol' => 'De apparaten moeten van hetzelfde protocol zijn.',
     'contains' => 'Het :attribute moet de :value bevatten.',
     'ip_port' => 'Het :attribute komt niet overeen met het formaat IP:PORT',
-);
+];

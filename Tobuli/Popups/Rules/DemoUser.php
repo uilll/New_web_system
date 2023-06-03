@@ -8,26 +8,28 @@
 
 namespace Tobuli\Popups\Rules;
 
-use Facades\Repositories\BillingPlanRepo;
 use Illuminate\Html\FormFacade;
-use Tobuli\Entities\User;
 
-
-class DemoUser extends BaseRule {
-    public function getFields() {
+class DemoUser extends BaseRule
+{
+    public function getFields()
+    {
         return [
             FormFacade::label('rules['.self::class.']', trans('front.demo')),
             FormFacade::hidden('rules['.self::class.'][active]', 1),
         ];
     }
 
-    public  function doesApply() {
-        if ( ! $this->user) return false;
-
-        if ( ! $this->user->isDemo())
+    public function doesApply()
+    {
+        if (! $this->user) {
             return false;
+        }
+
+        if (! $this->user->isDemo()) {
+            return false;
+        }
 
         return true;
     }
-
 }

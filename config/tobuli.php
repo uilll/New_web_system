@@ -1,7 +1,8 @@
 <?php
+
 return [
-    'version' => '0.3.2.2.9.77', 
-    'key'  => env('key', 'Hdaiohaguywhga12344hdsbsdsfsd'),
+    'version' => '0.3.2.2.9.77',
+    'key' => env('key', 'Hdaiohaguywhga12344hdsbsdsfsd'),
     'type' => env('APP_TYPE', 'ss3'),
 
     'logs_path' => env('logs_path', '/opt/traccar/logs'),
@@ -12,7 +13,7 @@ return [
     'main_settings' => [
         'server_name' => env('title', 'GPS Tracker'),
         'available_maps' => [
-            1, 4, 5, 2
+            1, 4, 5, 2,
         ],
         'default_language' => 'en',
         'default_timezone' => 16,
@@ -37,7 +38,7 @@ return [
         'stripe_secret_key' => '',
         'stripe_public_key' => '',
         'stripe_currency' => '',
-        'dst' => NULL,
+        'dst' => null,
         'dst_date_from' => '',
         'dst_date_to' => '',
         'geocoder_api' => 'default',
@@ -50,29 +51,29 @@ return [
         'geocoder_cache_days' => 90,
 
         'template_color' => 'light-blue',
-        'welcome_text' => "BEM VINDO!",
+        'welcome_text' => 'BEM VINDO!',
         'bottom_text' => null,
         'apple_store_link' => null,
         'google_play_link' => null,
     ],
 
-  # Minutes before device is offline
+    // Minutes before device is offline
     'device_offline_minutes' => 3,
     'check_frequency' => env('APP_CHECK_FREQUENCY', 5),
-    #Groups
+    //Groups
     'group_admin' => 1,
     'group_client' => 2,
     'alert_zones' => [
         '1' => 'Zone in',
-        '2' => 'Zone Out'
+        '2' => 'Zone Out',
     ],
     'alert_fuel_type' => [
         '1' => 'L',
-        '2' => 'Gal'
+        '2' => 'Gal',
     ],
     'alert_distance' => [
         '1' => 'km',
-        '2' => 'mi'
+        '2' => 'mi',
     ],
     'history_time' => [
         '00:00' => '00:00', '00:15' => '00:15', '00:30' => '00:30', '00:45' => '00:45', '01:00' => '01:00', '01:15' => '01:15', '01:30' => '01:30', '01:45' => '01:45',
@@ -86,7 +87,7 @@ return [
         '16:00' => '16:00', '16:15' => '16:15', '16:30' => '16:30', '16:45' => '16:45', '17:00' => '17:00', '17:15' => '17:15', '17:30' => '17:30', '17:45' => '17:45',
         '18:00' => '18:00', '18:15' => '18:15', '18:30' => '18:30', '18:45' => '18:45', '19:00' => '19:00', '19:15' => '19:15', '19:30' => '19:30', '19:45' => '19:45',
         '20:00' => '20:00', '20:15' => '20:15', '20:30' => '20:30', '20:45' => '20:45', '21:00' => '21:00', '21:15' => '21:15', '21:30' => '21:30', '21:45' => '21:45',
-        '22:00' => '22:00', '22:15' => '22:15', '22:30' => '22:30', '22:45' => '22:45', '23:00' => '23:00', '23:15' => '23:15', '23:30' => '23:30', '23:45' => '23:45'
+        '22:00' => '22:00', '22:15' => '22:15', '22:30' => '22:30', '22:45' => '22:45', '23:00' => '23:00', '23:15' => '23:15', '23:30' => '23:30', '23:45' => '23:45',
     ],
 
     'maps' => [
@@ -122,7 +123,7 @@ return [
     'additional_protocols' => [
         'gpsdata' => 'gpsdata',
         'ios' => 'ios',
-        'android' => 'android'
+        'android' => 'android',
     ],
     'protocols' => [
         'gps103' => 'gps103',
@@ -208,7 +209,7 @@ return [
         'xirgo' => 'xirgo',
         'calamp' => 'calamp',
         'mtx' => 'mtx',
-        'gpsdata' => 'gpsdata'
+        'gpsdata' => 'gpsdata',
     ],
     'sensors' => [],
     'units_of_distance' => [],
@@ -217,7 +218,7 @@ return [
     'date_formats' => [
         'Y-m-d' => 'yyyy-mm-dd',
         'm-d-Y' => 'mm-dd-yyyy',
-        'd-m-Y' => 'dd-mm-yyyy'
+        'd-m-Y' => 'dd-mm-yyyy',
     ],
     'time_formats' => [
         'H:i:s' => '24 hour clock',
@@ -254,34 +255,34 @@ return [
             'remove' => 1,
         ],
         'reports' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 1,
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 1,
         ],
         'finances' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 1,
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 1,
         ],
         'monitoring' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 1,
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 1,
         ],
         'share_device' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 0,
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 0,
         ],
         'clients' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 1,
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 1,
         ],
         'super_admin' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 1,
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 1,
         ],
         'sms_gateway' => [
             'view' => 0,
@@ -309,30 +310,30 @@ return [
             'remove' => 0,
         ],
         'camera' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 1,
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 1,
         ],
         'tasks' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 1,
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 1,
         ],
         'chat' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 0,
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 0,
         ],
         'forward' => [
-            'view'  => 1,
-            'edit'  => 1,
-            'remove'  => 0,
-        ]
+            'view' => 1,
+            'edit' => 1,
+            'remove' => 0,
+        ],
     ],
     'permissions_modes' => [
         'view' => 1,
         'edit' => 1,
-        'remove' => 1
+        'remove' => 1,
     ],
 
     'numeric_sensors' => [
@@ -345,76 +346,76 @@ return [
         'satellites',
         'odometer',
         'gsm',
-        'numerical'
+        'numerical',
     ],
     'listview_fields' => [
         'name' => [
             'field' => 'name',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'imei' => [
             'field' => 'imei',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'status' => [
             'field' => 'status',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'speed' => [
             'field' => 'speed',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'time' => [
             'field' => 'time',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'protocol' => [
             'field' => 'protocol',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'position' => [
             'field' => 'position',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'address' => [
             'field' => 'address',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'sim_number' => [
             'field' => 'sim_number',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'device_model' => [
             'field' => 'device_model',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'plate_number' => [
             'field' => 'plate_number',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'vin' => [
             'field' => 'vin',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'registration_number' => [
             'field' => 'registration_number',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'object_owner' => [
             'field' => 'object_owner',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'group' => [
             'field' => 'group',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'fuel' => [
             'field' => 'fuel',
-            'class' => 'device'
+            'class' => 'device',
         ],
         'stop_duration' => [
             'field' => 'stop_duration',
-            'class' => 'device'
+            'class' => 'device',
         ],
     ],
     'listview' => [
@@ -422,21 +423,21 @@ return [
         'columns' => [
             'name' => [
                 'field' => 'name',
-                'class' => 'device'
+                'class' => 'device',
             ],
             'status' => [
                 'field' => 'status',
-                'class' => 'device'
+                'class' => 'device',
             ],
             'time' => [
                 'field' => 'time',
-                'class' => 'device'
+                'class' => 'device',
             ],
             'position' => [
                 'field' => 'position',
-                'class' => 'device'
-            ]
-        ]
+                'class' => 'device',
+            ],
+        ],
     ],
 
     'plugins' => [
@@ -450,18 +451,18 @@ return [
             'status' => 0,
             'options' => [
                 'business_color' => [
-                    'value' => 'blue'
+                    'value' => 'blue',
                 ],
                 'private_color' => [
-                    'value' => 'red'
-                ]
-            ]
+                    'value' => 'red',
+                ],
+            ],
         ],
         'route_color' => [
             'status' => 0,
             'options' => [
-                'value' => 'orange'
-            ]
+                'value' => 'orange',
+            ],
         ],
         'birla_report' => [
             'status' => 0,
@@ -482,364 +483,364 @@ return [
     ],
 
     'template_colors' => [
-        'light-blue'        => 'Light Blue',
-        'light-green'       => 'Light Green',
-        'light-red'         => 'Light Red',
-        'light-orange'      => 'Light Orange',
-        'light-pink'        => 'Light Pink',
-        'light-win10-blue'  => 'Light Win10 Blue',
-        'light-black'       => 'Light Black',
-        'dark-blue'         => 'Dark Blue',
-        'dark-green'        => 'Dark Green',
-        'dark-red'          => 'Dark Red',
-        'dark-orange'       => 'Dark Orange',
-        'dark-pink'         => 'Dark Pink',
-        'dark-win10-blue'   => 'Dark Win10 Blue',
+        'light-blue' => 'Light Blue',
+        'light-green' => 'Light Green',
+        'light-red' => 'Light Red',
+        'light-orange' => 'Light Orange',
+        'light-pink' => 'Light Pink',
+        'light-win10-blue' => 'Light Win10 Blue',
+        'light-black' => 'Light Black',
+        'dark-blue' => 'Dark Blue',
+        'dark-green' => 'Dark Green',
+        'dark-red' => 'Dark Red',
+        'dark-orange' => 'Dark Orange',
+        'dark-pink' => 'Dark Pink',
+        'dark-win10-blue' => 'Dark Win10 Blue',
     ],
 
     'widgets' => [
         'default' => true,
         'status' => true,
         'list' => [
-            'device', 'sensors', 'services'
-        ]
+            'device', 'sensors', 'services',
+        ],
     ],
 
     'db_clear' => [
         'status' => true,
-        'days' => 90
+        'days' => 90,
     ],
 
     'limits' => [
-        'alert_phones'   => env('LIMIT_ALERT_PHONES', 5),
-        'alert_emails'   => env('LIMIT_ALERT_EMAILS', 5),
+        'alert_phones' => env('LIMIT_ALERT_PHONES', 5),
+        'alert_emails' => env('LIMIT_ALERT_EMAILS', 5),
         'alert_webhooks' => env('LIMIT_ALERT_WEBHOOKS', 2),
     ],
 
     'languages' => [
         'en' => [
-            'key'    => 'en',
-            'iso'    => 'en',
-            'title'  => 'English(USA)',
+            'key' => 'en',
+            'iso' => 'en',
+            'title' => 'English(USA)',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'en.png',
+            'dir' => 'ltr',
+            'flag' => 'en.png',
         ],
         'au' => [
-            'key'    => 'au',
-            'iso'    => 'en',
-            'title'  => 'Australian',
+            'key' => 'au',
+            'iso' => 'en',
+            'title' => 'Australian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'au.png'
+            'dir' => 'ltr',
+            'flag' => 'au.png',
         ],
         'az' => [
-            'key'    => 'az',
-            'iso'    => 'az',
-            'title'  => 'Azerbaijan',
+            'key' => 'az',
+            'iso' => 'az',
+            'title' => 'Azerbaijan',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'az.png'
+            'dir' => 'ltr',
+            'flag' => 'az.png',
         ],
         'ar' => [
-            'key'    => 'ar',
-            'iso'    => 'ar',
-            'title'  => 'Arabic',
+            'key' => 'ar',
+            'iso' => 'ar',
+            'title' => 'Arabic',
             'active' => true,
-            'dir'    => 'rtl',
-            'flag'   => 'ar.png'
+            'dir' => 'rtl',
+            'flag' => 'ar.png',
         ],
         'sk' => [
-            'key'    => 'sk',
-            'iso'    => 'sk',
-            'title'  => 'Slovakian',
+            'key' => 'sk',
+            'iso' => 'sk',
+            'title' => 'Slovakian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'sk.png'
+            'dir' => 'ltr',
+            'flag' => 'sk.png',
         ],
         'th' => [
-            'key'    => 'th',
-            'iso'    => 'th',
-            'title'  => 'Thai',
+            'key' => 'th',
+            'iso' => 'th',
+            'title' => 'Thai',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'th.png'
+            'dir' => 'ltr',
+            'flag' => 'th.png',
         ],
         'nl' => [
-            'key'    => 'nl',
-            'iso'    => 'nl',
-            'title'  => 'Dutch',
+            'key' => 'nl',
+            'iso' => 'nl',
+            'title' => 'Dutch',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'nl.png'
+            'dir' => 'ltr',
+            'flag' => 'nl.png',
         ],
         'de' => [
-            'key'    => 'de',
-            'iso'    => 'de',
-            'title'  => 'German',
+            'key' => 'de',
+            'iso' => 'de',
+            'title' => 'German',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'de.png'
+            'dir' => 'ltr',
+            'flag' => 'de.png',
         ],
         'gr' => [
-            'key'    => 'gr',
-            'iso'    => 'el',
-            'title'  => 'Greek',
+            'key' => 'gr',
+            'iso' => 'el',
+            'title' => 'Greek',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'gr.png'
+            'dir' => 'ltr',
+            'flag' => 'gr.png',
         ],
         'pl' => [
-            'key'    => 'pl',
-            'iso'    => 'pl',
-            'title'  => 'Polish',
+            'key' => 'pl',
+            'iso' => 'pl',
+            'title' => 'Polish',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'pl.png'
+            'dir' => 'ltr',
+            'flag' => 'pl.png',
         ],
         'uk' => [
-            'key'    => 'uk',
-            'iso'    => 'gb',
-            'title'  => 'English(UK)',
+            'key' => 'uk',
+            'iso' => 'gb',
+            'title' => 'English(UK)',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'uk.png'
+            'dir' => 'ltr',
+            'flag' => 'uk.png',
         ],
         'fr' => [
-            'key'    => 'fr',
-            'iso'    => 'fr',
-            'title'  => 'French',
+            'key' => 'fr',
+            'iso' => 'fr',
+            'title' => 'French',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'fr.png'
+            'dir' => 'ltr',
+            'flag' => 'fr.png',
         ],
         'br' => [
-            'key'    => 'br',
-            'iso'    => 'pt',
-            'title'  => 'Brazilian',
+            'key' => 'br',
+            'iso' => 'pt',
+            'title' => 'Brazilian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'br.png'
+            'dir' => 'ltr',
+            'flag' => 'br.png',
         ],
         'pt' => [
-            'key'    => 'pt',
-            'iso'    => 'pt',
-            'title'  => 'Portuguese',
+            'key' => 'pt',
+            'iso' => 'pt',
+            'title' => 'Portuguese',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'pt.png'
+            'dir' => 'ltr',
+            'flag' => 'pt.png',
         ],
         'es' => [
-            'key'    => 'es',
-            'iso'    => 'es',
-            'title'  => 'Spanish',
+            'key' => 'es',
+            'iso' => 'es',
+            'title' => 'Spanish',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'es.png'
+            'dir' => 'ltr',
+            'flag' => 'es.png',
         ],
         'it' => [
-            'key'    => 'it',
-            'iso'    => 'it',
-            'title'  => 'Italian',
+            'key' => 'it',
+            'iso' => 'it',
+            'title' => 'Italian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'it.png'
+            'dir' => 'ltr',
+            'flag' => 'it.png',
         ],
         'ch' => [
-            'key'    => 'ch',
-            'iso'    => 'es',
-            'title'  => 'Chile',
+            'key' => 'ch',
+            'iso' => 'es',
+            'title' => 'Chile',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'ch.png'
+            'dir' => 'ltr',
+            'flag' => 'ch.png',
         ],
         'sr' => [
-            'key'    => 'sr',
-            'iso'    => 'sr',
-            'title'  => 'Serbian',
+            'key' => 'sr',
+            'iso' => 'sr',
+            'title' => 'Serbian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'sr.png'
+            'dir' => 'ltr',
+            'flag' => 'sr.png',
         ],
         'fi' => [
-            'key'    => 'fi',
-            'iso'    => 'fi',
-            'title'  => 'Finnish',
+            'key' => 'fi',
+            'iso' => 'fi',
+            'title' => 'Finnish',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'fi.png'
+            'dir' => 'ltr',
+            'flag' => 'fi.png',
         ],
         'dk' => [
-            'key'    => 'dk',
-            'iso'    => 'dk',
-            'title'  => 'Danish',
+            'key' => 'dk',
+            'iso' => 'dk',
+            'title' => 'Danish',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'dk.png'
+            'dir' => 'ltr',
+            'flag' => 'dk.png',
         ],
         'ph' => [
-            'key'    => 'ph',
-            'iso'    => 'en',
-            'title'  => 'Philippines',
+            'key' => 'ph',
+            'iso' => 'en',
+            'title' => 'Philippines',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'ph.png'
+            'dir' => 'ltr',
+            'flag' => 'ph.png',
         ],
         'sv' => [
-            'key'    => 'sv',
-            'iso'    => 'sv',
-            'title'  => 'Swedish',
+            'key' => 'sv',
+            'iso' => 'sv',
+            'title' => 'Swedish',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'sv.png'
+            'dir' => 'ltr',
+            'flag' => 'sv.png',
         ],
         'ro' => [
-            'key'    => 'ro',
-            'iso'    => 'ro',
-            'title'  => 'Romanian',
+            'key' => 'ro',
+            'iso' => 'ro',
+            'title' => 'Romanian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'ro.png'
+            'dir' => 'ltr',
+            'flag' => 'ro.png',
         ],
         'bg' => [
-            'key'    => 'bg',
-            'iso'    => 'bg',
-            'title'  => 'Bulgarian',
+            'key' => 'bg',
+            'iso' => 'bg',
+            'title' => 'Bulgarian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'bg.png'
+            'dir' => 'ltr',
+            'flag' => 'bg.png',
         ],
         'hr' => [
-            'key'    => 'hr',
-            'iso'    => 'hr',
-            'title'  => 'Croatian',
+            'key' => 'hr',
+            'iso' => 'hr',
+            'title' => 'Croatian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'hr.png'
+            'dir' => 'ltr',
+            'flag' => 'hr.png',
         ],
         'cw' => [
-            'key'    => 'cw',
-            'iso'    => 'pt',
-            'title'  => 'Papiamento',
+            'key' => 'cw',
+            'iso' => 'pt',
+            'title' => 'Papiamento',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'cw.png'
+            'dir' => 'ltr',
+            'flag' => 'cw.png',
         ],
         'id' => [
-            'key'    => 'id',
-            'iso'    => 'id',
-            'title'  => 'Indonesian',
+            'key' => 'id',
+            'iso' => 'id',
+            'title' => 'Indonesian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'id.png'
+            'dir' => 'ltr',
+            'flag' => 'id.png',
         ],
         'ru' => [
-            'key'    => 'ru',
-            'iso'    => 'ru',
-            'title'  => 'Russian',
+            'key' => 'ru',
+            'iso' => 'ru',
+            'title' => 'Russian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'ru.png'
+            'dir' => 'ltr',
+            'flag' => 'ru.png',
         ],
         'mk' => [
-            'key'    => 'mk',
-            'iso'    => 'mk',
-            'title'  => 'Macedonian',
+            'key' => 'mk',
+            'iso' => 'mk',
+            'title' => 'Macedonian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'mk.png'
+            'dir' => 'ltr',
+            'flag' => 'mk.png',
         ],
         'ir' => [
-            'key'    => 'ir',
-            'iso'    => 'fa',
-            'title'  => 'Persian',
+            'key' => 'ir',
+            'iso' => 'fa',
+            'title' => 'Persian',
             'active' => true,
-            'dir'    => 'rtl',
-            'flag'   => 'ir.png'
+            'dir' => 'rtl',
+            'flag' => 'ir.png',
         ],
         'cn' => [
-            'key'    => 'cn',
-            'iso'    => 'zh',
-            'title'  => 'Chinese',
+            'key' => 'cn',
+            'iso' => 'zh',
+            'title' => 'Chinese',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'cn.png'
+            'dir' => 'ltr',
+            'flag' => 'cn.png',
         ],
         'nz' => [
-            'key'    => 'nz',
-            'iso'    => 'en',
-            'title'  => 'New Zealand',
+            'key' => 'nz',
+            'iso' => 'en',
+            'title' => 'New Zealand',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'nz.png'
+            'dir' => 'ltr',
+            'flag' => 'nz.png',
         ],
         'cz' => [
-            'key'    => 'cz',
-            'iso'    => 'cs',
-            'title'  => 'Czech',
+            'key' => 'cz',
+            'iso' => 'cs',
+            'title' => 'Czech',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'cz.png'
+            'dir' => 'ltr',
+            'flag' => 'cz.png',
         ],
         'he' => [
-            'key'    => 'he',
-            'iso'    => 'he',
-            'title'  => 'Hebrew',
+            'key' => 'he',
+            'iso' => 'he',
+            'title' => 'Hebrew',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'il.png'
+            'dir' => 'ltr',
+            'flag' => 'il.png',
         ],
         'hu' => [
-            'key'    => 'hu',
-            'iso'    => 'hu',
-            'title'  => 'Hungarian',
+            'key' => 'hu',
+            'iso' => 'hu',
+            'title' => 'Hungarian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'hu.png'
+            'dir' => 'ltr',
+            'flag' => 'hu.png',
         ],
         'ka' => [
-            'key'    => 'ka',
-            'iso'    => 'ka',
-            'title'  => 'Georgian',
+            'key' => 'ka',
+            'iso' => 'ka',
+            'title' => 'Georgian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'ka.png'
+            'dir' => 'ltr',
+            'flag' => 'ka.png',
         ],
         'no' => [
-            'key'    => 'no',
-            'iso'    => 'no',
-            'title'  => 'Norwegian',
+            'key' => 'no',
+            'iso' => 'no',
+            'title' => 'Norwegian',
             'active' => true,
-            'dir'    => 'ltr',
-            'flag'   => 'no.png'
+            'dir' => 'ltr',
+            'flag' => 'no.png',
         ],
     ],
 
     'sms_gateway' => [
-        'enabled'         => false,
-        'request_method'  => '',
+        'enabled' => false,
+        'request_method' => '',
         'sms_gateway_url' => '',
-        'custom_headers'  => '',
-        'authentication'  => '0',
-        'username'        => '',
-        'password'        => '',
-        'encoding'        => '',
-        'auth_id'         => '',
-        'auth_token'      => '',
-        'senders_phone'   => '',
-        'user_id' => null
+        'custom_headers' => '',
+        'authentication' => '0',
+        'username' => '',
+        'password' => '',
+        'encoding' => '',
+        'auth_id' => '',
+        'auth_token' => '',
+        'senders_phone' => '',
+        'user_id' => null,
     ],
 
     'object_delete_pass' => env('object_delete_pass'),
 
     'backups' => [
-        'type'         => 'auto',
-        'period'       => 1,
-        'hour'         => '00:00',
-        'ftp_server'   => null,
+        'type' => 'auto',
+        'period' => 1,
+        'hour' => '00:00',
+        'ftp_server' => null,
         'ftp_username' => null,
         'ftp_password' => null,
-        'ftp_port'     => null,
-        'ftp_path'     => null,
-    ]
+        'ftp_port' => null,
+        'ftp_path' => null,
+    ],
 ];

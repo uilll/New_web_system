@@ -1,18 +1,18 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class SmsTemplateFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class SmsTemplateFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
     public $rules = [
         'update' => [
             'title' => 'required',
-            'note' => 'required'
-        ]
+            'note' => 'required',
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

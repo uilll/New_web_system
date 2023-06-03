@@ -8,10 +8,11 @@ class Monitoring extends Model
 {
     //
     protected $table = 'monitorings';
-    protected $primaryKey = "id";
+
+    protected $primaryKey = 'id';
+
     protected $fillable = [
-        'customer', 
+        'customer',
         'owner',
     ];
 }
- 

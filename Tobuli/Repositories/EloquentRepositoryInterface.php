@@ -1,6 +1,9 @@
-<?php namespace Tobuli\Repositories;
+<?php
 
-interface EloquentRepositoryInterface {
+namespace Tobuli\Repositories;
+
+interface EloquentRepositoryInterface
+{
     public function all();
 
     public function find($id);
@@ -25,9 +28,9 @@ interface EloquentRepositoryInterface {
 
     public function deleteWhereNotIn($arr, $id = 'id');
 
-    public function getWhere(array $where, $sort = NULL, $sort_t = 'asc');
+    public function getWhere(array $where, $sort = null, $sort_t = 'asc');
 
-    public function getWhereSelect(array $where, array $select, $sort = NULL, $sort_t = 'asc');
+    public function getWhereSelect(array $where, array $select, $sort = null, $sort_t = 'asc');
 
     public function searchAndPaginate(array $data, $sort_by, $sort = 'asc', $limit = '10');
 
@@ -37,6 +40,5 @@ interface EloquentRepositoryInterface {
 
     public function getWhereInWith($arr, $id = 'id', $with = []);
 
-    public function getWhereInWhere($arr, $id = 'id', $where);
-
+    public function getWhereInWhere($arr, $id, $where);
 }

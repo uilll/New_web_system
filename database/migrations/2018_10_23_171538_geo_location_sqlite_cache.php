@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\File;
 
 class GeoLocationSqliteCache extends Migration
@@ -15,7 +15,7 @@ class GeoLocationSqliteCache extends Migration
     {
         $database = config('database.connections.sqlite.database');
 
-        if ( ! File::exists($database)) {
+        if (! File::exists($database)) {
             File::put($database, '');
             exec("chmod -R 0777 $database");
         }

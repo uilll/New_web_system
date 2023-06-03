@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'clients' => 'Klijenti',
     'content' => 'Sadržaj',
@@ -93,4 +93,4 @@ return array(
     'languages' => 'Језици',
     'translate' => 'превести',
     'group_4' => 'Демо',
-);
+];

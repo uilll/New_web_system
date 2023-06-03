@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class SendTestSmsFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class SendTestSmsFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -9,10 +11,8 @@ class SendTestSmsFormValidator extends Validator {
         'create' => [
             'mobile_phone' => 'required',
             'message' => 'required',
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

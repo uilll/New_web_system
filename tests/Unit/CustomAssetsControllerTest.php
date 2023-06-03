@@ -1,15 +1,13 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\CustomAssetsController as CustomAssetsController;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class CustomAssetsControllerTest extends TestCase
 {
     protected $baseUrl = 'http://194.135.83.18';
+
     protected $controller;
 
     public function setUp()
@@ -52,9 +50,8 @@ class CustomAssetsControllerTest extends TestCase
         $this->assertResponseOk();
         $this->assertViewHas($script);
 
-        $folderExists = !File::isDirectory(storage_path('custom')) ? false : true;
+        $folderExists = ! File::isDirectory(storage_path('custom')) ? false : true;
 
         $this->assertTrue($folderExists);
-
     }
 }

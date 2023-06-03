@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AlterTasksForgeinKey extends Migration
@@ -12,7 +11,6 @@ class AlterTasksForgeinKey extends Migration
      */
     public function up()
     {
-
         DB::statement('ALTER TABLE `tasks` CHANGE `user_id` `user_id` INT(10) UNSIGNED NOT NULL;');
         DB::statement('ALTER TABLE `tasks` CHANGE `device_id` `device_id` INT(10) UNSIGNED NOT NULL;');
 
@@ -22,7 +20,7 @@ class AlterTasksForgeinKey extends Migration
         });
 
         DB::statement('ALTER TABLE `task_status` CHANGE `task_id` `task_id` INT(10) UNSIGNED NOT NULL;');
-        
+
         Schema::table('task_status', function ($table) {
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
         });

@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Repositories\PositionGeofence;
+<?php
+
+namespace Tobuli\Repositories\PositionGeofence;
 
 use Tobuli\Repositories\EloquentRepositoryInterface;
 
-interface PositionGeofenceRepositoryInterface extends EloquentRepositoryInterface {
-
+interface PositionGeofenceRepositoryInterface extends EloquentRepositoryInterface
+{
 }

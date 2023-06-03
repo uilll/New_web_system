@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'password' => 'Le mot de passe doit comporter au moins six caractères et correspondre à la confirmation.',
     'user' => 'Nous ne pouvons pas trouver un utilisateur avec cette adresse e-mail.',
@@ -8,4 +8,4 @@ return array(
     'sent' => 'Mot de passe oublié envoyé!',
     'reset' => 'Votre mot de passe a été réinitialisé',
     'reset_link' => 'Cliquez ici pour réinitialiser votre mot de passe',
-);
+];

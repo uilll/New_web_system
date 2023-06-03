@@ -13,7 +13,7 @@ class GeoLocation extends Facade
      */
     protected static function getFacadeAccessor()
     {
-		/* Função para buscar os dados do Array Location*/
+        /* Função para buscar os dados do Array Location*/
         return 'Tobuli\Helpers\GeoLocation\GeoLocation';
     }
 }

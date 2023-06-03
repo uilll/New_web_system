@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => 'На :attribute мора да биде прифатен.',
     'active_url' => 'На :attribute не е валидна URL.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => 'На :attribute може да содржи само букви и броеви.',
     'array' => 'На :attribute мора да биде низа.',
     'before' => 'На :attribute мора да биде пред :date.',
-    'between'  => array(
+    'between' => [
         'file' => 'На :attribute мора да биде помеѓу :min и :max.',
         'string' => 'На :attribute мора да биде помеѓу :min и :max карактери.',
         'array' => 'На :attribute мора да биде помеѓу :min и :max предмети.',
         'numeric' => ':attribute мора да биде помеѓу :min И :max .',
-    ),
+    ],
     'confirmed' => 'На :attribute на атрибутот не се совпаѓа.',
     'date' => 'На :attribute не е валиден датум.',
     'date_format' => 'На :attribute не се совпаѓа со форматот :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'На избраниот :attribute е неважечки.',
     'integer' => 'На :attribute мора да биде цел број.',
     'ip' => 'На :attribute мора да биде валидна IP адреса.',
-    'max'  => array(
+    'max' => [
         'numeric' => 'На :attribute не може да биде поголем од :max.',
         'file' => 'На :attribute не може да биде поголем од :max килобајти.',
         'string' => 'На :attribute не може да биде поголем од :max карактери.',
         'array' => 'На :attribute не може да биде поголем од :max предмети.',
-    ),
+    ],
     'mimes' => 'На :attribute мора да биде датотека од типот: :values.',
-    'min'  => array(
+    'min' => [
         'numeric' => 'На :attribute мора да биде најмалку :min.',
         'file' => 'На :attribute мора да биде најмалку :min килобајти.',
         'string' => 'На :attribute мора да биде најмалку :min карактери.',
         'array' => 'На :attribute мора да биде најмалку :min предмети.',
-    ),
+    ],
     'not_in' => 'На избраниот :attribute е неважечки.',
     'numeric' => 'На :attribute мора да биде број.',
     'regex' => 'На :attribute е неважечки формат.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => 'На :attribute поле е потребно кога :values не се присутни.',
     'required_without_all' => 'На :attribute поле е потребно кога никој од :values се присутни.',
     'same' => 'На :attribute и :other мора да одговараат.',
-    'size'  => array(
+    'size' => [
         'numeric' => 'На :attribute мора да е :size.',
         'file' => 'На :attribute мора да е :size на килобајти.',
         'string' => 'На :attribute мора да е :size на карактери.',
         'array' => 'На :attribute мора да содржи :size на предмети.',
-    ),
+    ],
     'unique' => 'На :attribute веќе е преземен.',
     'url' => 'На :attribute е неважечки формат.',
     'array_max' => 'На :attribute мах предмети :max.',
     'lesser_than' => 'На :attribute мора да е помал :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'прилагодена-порака',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'Емаил',
         'password' => 'Лозинка',
         'password_confirmation' => 'Конформација за лозинка',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Икона за статус на Offline',
         'icon_status_ack' => 'Ack статус икона',
         'icon_status_engine' => 'Икона за статус на моторот',
-    ),
+    ],
     'same_protocol' => 'На уредите мора да бидат од ист протокол.',
     'contains' => ':attribute мора да содржи :value .',
     'ip_port' => ':attribute не се совпаѓа со формат IP:PORT',
-);
+];

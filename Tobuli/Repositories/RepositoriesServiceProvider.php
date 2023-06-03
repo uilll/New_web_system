@@ -1,10 +1,13 @@
-<?php namespace Tobuli\Repositories;
+<?php
+
+namespace Tobuli\Repositories;
 
 use Illuminate\Support\ServiceProvider;
 
-class RepositoriesServiceProvider extends ServiceProvider {
-
-    public function register() {
+class RepositoriesServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
         $this->app->bind('Tobuli\Repositories\PositionGeofence\PositionGeofenceRepositoryInterface', 'Tobuli\Repositories\PositionGeofence\EloquentPositionGeofenceRepository');
         $this->app->bind('Tobuli\Repositories\EventCustom\EventCustomRepositoryInterface', 'Tobuli\Repositories\EventCustom\EloquentEventCustomRepository');
         $this->app->bind('Tobuli\Repositories\Subscription\SubscriptionRepositoryInterface', 'Tobuli\Repositories\Subscription\EloquentSubscriptionRepository');
@@ -40,14 +43,13 @@ class RepositoriesServiceProvider extends ServiceProvider {
         $this->app->bind('Tobuli\Repositories\BillingPlan\BillingPlanRepositoryInterface', 'Tobuli\Repositories\BillingPlan\EloquentBillingPlanRepository');
         $this->app->bind('Tobuli\Repositories\SensorGroup\SensorGroupRepositoryInterface', 'Tobuli\Repositories\SensorGroup\EloquentSensorGroupRepository');
         $this->app->bind('Tobuli\Repositories\SensorGroupSensor\SensorGroupSensorRepositoryInterface', 'Tobuli\Repositories\SensorGroupSensor\EloquentSensorGroupSensorRepository');
-		$this->app->bind('Tobuli\Repositories\ReportLog\ReportLogRepositoryInterface', 'Tobuli\Repositories\ReportLog\EloquentReportLogRepository');
-		$this->app->bind('Tobuli\Repositories\Notification\NotificationRepositoryInterface', 'Tobuli\Repositories\Notification\EloquentNotificationRepository');
-		$this->app->bind('Tobuli\Repositories\Tasks\TasksRepositoryInterface', 'Tobuli\Repositories\Tasks\EloquentTasksRepository');
+        $this->app->bind('Tobuli\Repositories\ReportLog\ReportLogRepositoryInterface', 'Tobuli\Repositories\ReportLog\EloquentReportLogRepository');
+        $this->app->bind('Tobuli\Repositories\Notification\NotificationRepositoryInterface', 'Tobuli\Repositories\Notification\EloquentNotificationRepository');
+        $this->app->bind('Tobuli\Repositories\Tasks\TasksRepositoryInterface', 'Tobuli\Repositories\Tasks\EloquentTasksRepository');
     }
 
     public function provides()
     {
-        return array("repositories");
+        return ['repositories'];
     }
-
 }

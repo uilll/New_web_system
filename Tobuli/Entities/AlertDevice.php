@@ -1,13 +1,17 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class AlertDevice extends Eloquent {
-	protected $table = 'alert_device';
+class AlertDevice extends Eloquent
+{
+    protected $table = 'alert_device';
 
-    protected $fillable = array('alert_id', 'device_id', 'overspeed');
+    protected $fillable = ['alert_id', 'device_id', 'overspeed'];
 
-    public function device() {
+    public function device()
+    {
         return $this->hasOne('Tobuli\Entities\Device', 'id', 'device_id');
     }
 

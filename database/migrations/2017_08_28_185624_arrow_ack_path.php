@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class ArrowAckPath extends Migration {
-
+class ArrowAckPath extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -15,7 +14,6 @@ class ArrowAckPath extends Migration {
         DB::update('UPDATE device_icons SET path = REPLACE(path, "images/arrow-ack.png", "assets/images/arrow-ack.png") WHERE path = "images/arrow-ack.png"');
     }
 
-
     /**
      * Reverse the migrations.
      *
@@ -25,5 +23,4 @@ class ArrowAckPath extends Migration {
     {
         //
     }
-
 }

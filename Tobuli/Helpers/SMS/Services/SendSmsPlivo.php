@@ -8,7 +8,9 @@ use Tobuli\Exceptions\ValidationException;
 class SendSmsPlivo extends SendSmsManager
 {
     private $senderPhone;
+
     private $senderId;
+
     private $senderToken;
 
     public function __construct($gateway_args)
@@ -28,8 +30,9 @@ class SendSmsPlivo extends SendSmsManager
             'text' => $message_body,
         ]);
 
-        if (isset($response['response']['error']))
+        if (isset($response['response']['error'])) {
             throw new ValidationException(['request_method' => $response['response']['error']]);
+        }
 
         return $response;
     }

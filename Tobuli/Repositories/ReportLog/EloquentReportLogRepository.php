@@ -1,11 +1,13 @@
-<?php namespace Tobuli\Repositories\ReportLog;
+<?php
+
+namespace Tobuli\Repositories\ReportLog;
 
 use Tobuli\Entities\ReportLog as Entity;
 use Tobuli\Repositories\EloquentRepository;
 
-class EloquentReportLogRepository extends EloquentRepository implements ReportLogRepositoryInterface {
-
-    public function __construct( Entity $entity )
+class EloquentReportLogRepository extends EloquentRepository implements ReportLogRepositoryInterface
+{
+    public function __construct(Entity $entity)
     {
         $this->entity = $entity;
     }
@@ -15,7 +17,7 @@ class EloquentReportLogRepository extends EloquentRepository implements ReportLo
         $data = $this->generateSearchData($data);
         $sort = array_merge([
             'sort' => $sort,
-            'sort_by' => $sort_by
+            'sort_by' => $sort_by,
         ], $data['sorting']);
 
         $items = $this->entity
@@ -27,18 +29,18 @@ class EloquentReportLogRepository extends EloquentRepository implements ReportLo
         }
 
         $items = $items->where(function ($query) use ($data) {
-                if (!empty($data['search_phrase'])) {
-                    foreach ($this->searchable as $column) {
-                        $query->orWhere($column, 'like', '%' . $data['search_phrase'] . '%');
-                    }
+            if (! empty($data['search_phrase'])) {
+                foreach ($this->searchable as $column) {
+                    $query->orWhere($column, 'like', '%'.$data['search_phrase'].'%');
                 }
+            }
 
-                if (count($data['filter'])) {
-                    foreach ($data['filter'] as $key=>$value) {
-                        $query->where($key, $value);
-                    }
+            if (count($data['filter'])) {
+                foreach ($data['filter'] as $key => $value) {
+                    $query->where($key, $value);
                 }
-            })
+            }
+        })
             ->paginate($limit);
 
         $items->sorting = $sort;

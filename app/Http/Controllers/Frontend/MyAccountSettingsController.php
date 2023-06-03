@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\MyAccountSettingsModalHelper;
@@ -20,7 +22,7 @@ class MyAccountSettingsController extends Controller
     {
         return MyAccountSettingsModalHelper::edit();
     }
-    
+
     public function ChangePassword()
     {
         return MyAccountSettingsModalHelper::changePassword();
@@ -30,14 +32,15 @@ class MyAccountSettingsController extends Controller
     {
         Session::put('language', $lang);
 
-        if ( !isDemoUser() && $user_id = $this->user->id ) {
+        if (! isDemoUser() && $user_id = $this->user->id) {
             UserRepo::update($user_id, ['lang' => $lang]);
         }
 
         return redirect()->route('home');
     }
 
-    public function changeTopToolbar() {
+    public function changeTopToolbar()
+    {
         $status = request()->get('status');
         $status = $status == 1 ? 1 : 0;
 
@@ -46,9 +49,11 @@ class MyAccountSettingsController extends Controller
         return ['status' => 1];
     }
 
-    public function changeMapSettings(Request $request) {
-        if ( isDemoUser() )
+    public function changeMapSettings(Request $request)
+    {
+        if (isDemoUser()) {
             return ['status' => 1];
+        }
 
         $settings = array_flip([
             'm_open',

@@ -2,28 +2,28 @@
 
 namespace Tobuli\Helpers\SMS;
 
-
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 use Tobuli\Entities\User;
 use Tobuli\Exceptions\ValidationException;
-use Tobuli\Helpers\SMS\Services\SendSmsPlivo;
 use Tobuli\Helpers\SMS\Services\HTTP\SendSmsGET;
 use Tobuli\Helpers\SMS\Services\HTTP\SendSmsPOST;
 use Tobuli\Helpers\SMS\Services\SendSmsApp;
+use Tobuli\Helpers\SMS\Services\SendSmsPlivo;
 
 class SMSGatewayManager
 {
     /**
-     * @param $user_id
-     * @param null $test_args
+     * @param  null  $test_args
      * @return mixed
+     *
      * @throws ValidationException
      */
     public function loadSender($user_id, $gateway_args = null)
     {
-        if (is_null($gateway_args))
+        if (is_null($gateway_args)) {
             $gateway_args = $this->getGatewayArguments($user_id);
+        }
 
         switch ($gateway_args['request_method']) {
             case 'get':
@@ -41,8 +41,9 @@ class SMSGatewayManager
             case 'server':
                 $settings = settings('sms_gateway');
 
-                if (empty($settings['enabled']))
+                if (empty($settings['enabled'])) {
                     throw new ValidationException(['sender_service' => trans('validation.sms_gateway_error')]);
+                }
 
                 return $this->loadSender($user_id, $settings);
             default:
@@ -53,7 +54,6 @@ class SMSGatewayManager
     }
 
     /**
-     * @param $user_id
      * @param $test_args
      * @return mixed
      */
@@ -63,7 +63,6 @@ class SMSGatewayManager
     }
 
     /**
-     * @param $user_id
      * @return mixed
      */
     protected function getUserGatewayArgs($user_id)
@@ -79,16 +78,17 @@ class SMSGatewayManager
     }
 
     /**
-     * @param $user_id
      * @return User
      */
     private function getUser($user_id)
     {
-        if ( ! is_null($user_id))
+        if (! is_null($user_id)) {
             return User::find($user_id);
+        }
 
-        if (auth()->check())
+        if (auth()->check()) {
             return Auth::user();
+        }
 
         throw new NotFoundResourceException('No user found loading SMS gateway arguments.');
     }

@@ -2,25 +2,25 @@
 
 // Composer: "fzaninotto/faker": "v1.3.0"
 use Faker\Factory as Faker;
-use Tobuli\Repositories\User\UserRepositoryInterface as User;
 use Illuminate\Database\Seeder;
+use Tobuli\Repositories\User\UserRepositoryInterface as User;
 
-class UsersTableSeeder extends Seeder {
-
+class UsersTableSeeder extends Seeder
+{
     /**
      * @var User
      */
     private $user;
 
-    function __construct(User $user)
+    public function __construct(User $user)
     {
         // TODO: Implement __construct() method.
         $this->user = $user;
     }
 
-	public function run()
-	{
-		$users = [];
+    public function run()
+    {
+        $users = [];
 
         $user = $this->user->create([
             //'email' => 'admin@gpswox.com',
@@ -38,9 +38,9 @@ class UsersTableSeeder extends Seeder {
                 '9' => 9,
             ],
             'open_device_groups' => '["0"]',
-            'open_geofence_groups' => '["0"]'
+            'open_geofence_groups' => '["0"]',
         ]);
-        
+
         $users[$user->id] = $user->id;
 
         $user = $this->user->create([
@@ -59,16 +59,15 @@ class UsersTableSeeder extends Seeder {
                 '9' => 9,
             ],
             'open_device_groups' => '["0"]',
-            'open_geofence_groups' => '["0"]'
+            'open_geofence_groups' => '["0"]',
         ]);
 
         $users[$user->id] = $user->id;
-        
+
         foreach ($users as $key => $user) {
             $permissions = [];
 
-            foreach (config('tobuli.permissions') as $name => $modes)
-            {
+            foreach (config('tobuli.permissions') as $name => $modes) {
                 $permissions[] = array_merge([
                     'user_id' => $user,
                     'name' => $name,
@@ -77,6 +76,5 @@ class UsersTableSeeder extends Seeder {
 
             DB::table('user_permissions')->insert($permissions);
         }
-
-	}
+    }
 }

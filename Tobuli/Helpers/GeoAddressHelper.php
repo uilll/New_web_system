@@ -19,12 +19,12 @@ class GeoAddressHelper
             switch (settings('main_settings.geocoder_api')) {
                 case 'default':
                     $data = $curl->get('http://173.212.206.125/geo/address.php', [
-                        'q'      => $address,
+                        'q' => $address,
                         'format' => 'json',
-                        'lang'   => config('app.locale'),
+                        'lang' => config('app.locale'),
                     ]);
                     $response = @json_decode($data->body, true);
-                    if ( ! empty($response) && is_array($response)) {
+                    if (! empty($response) && is_array($response)) {
                         $first = current($response);
 
                         $location = [
@@ -37,11 +37,11 @@ class GeoAddressHelper
                 case 'google':
                     $data = $curl->get('https://maps.googleapis.com/maps/api/geocode/json', [
                         'address' => $address,
-                        'key'     => settings('main_settings.api_key'),
+                        'key' => settings('main_settings.api_key'),
                     ]);
                     $response = @json_decode($data->body, true);
 
-                    if ( ! empty($response['results'])) {
+                    if (! empty($response['results'])) {
                         $first = current($response['results']);
 
                         $location = [
@@ -63,13 +63,13 @@ class GeoAddressHelper
                     break;
                 case 'openstreet':
                     $data = $curl->get('https://nominatim.openstreetmap.org/search', [
-                        'q'      => $address,
+                        'q' => $address,
                         'format' => 'json',
-                        'lang'   => config('app.locale'),
+                        'lang' => config('app.locale'),
                     ]);
 
                     $response = @json_decode($data->body, true);
-                    if ( ! empty($response) && is_array($response)) {
+                    if (! empty($response) && is_array($response)) {
                         $first = current($response);
 
                         $location = [
@@ -81,13 +81,13 @@ class GeoAddressHelper
                 case 'locationiq':
                     $data = $curl->get('http://locationiq.org/v1/search.php', [
                         'format' => 'json',
-                        'key'    => settings('main_settings.api_key'),
-                        'q'      => $address,
+                        'key' => settings('main_settings.api_key'),
+                        'q' => $address,
                     ]);
 
                     $response = @json_decode($data->body, true);
 
-                    if ( ! empty($response) && is_array($response)) {
+                    if (! empty($response) && is_array($response)) {
                         $first = current($response);
 
                         $location = [
@@ -98,8 +98,8 @@ class GeoAddressHelper
                     break;
                 case 'nominatim':
                     $data = $curl->get(settings('main_settings.api_url'), [
-                        'q'               => $address,
-                        'format'          => 'json',
+                        'q' => $address,
+                        'format' => 'json',
                         'accept-language' => config('app.locale'),
                     ]);
                     $arr = @json_decode($data->body, true);
@@ -119,7 +119,11 @@ class GeoAddressHelper
 
         return $location;
     }
-    private function getAddressLatLngFromApi($placeId){}
+
+    private function getAddressLatLngFromApi($placeId)
+    {
+    }
+
     private function autocompleteAddressFromApi($address)
     {
         $curl = new \Curl;
@@ -130,9 +134,9 @@ class GeoAddressHelper
             switch (settings('main_settings.geocoder_api')) {
                 case 'default':
                     $data = $curl->get('http://173.212.206.125/geo/address.php', [
-                        'q'      => $address,
+                        'q' => $address,
                         'format' => 'json',
-                        'lang'   => config('app.locale'),
+                        'lang' => config('app.locale'),
                     ]);
                     $arr = @json_decode($data->body, true);
                     if (is_array($arr) && ! empty($arr)) {
@@ -146,9 +150,9 @@ class GeoAddressHelper
 
                     break;
                 case 'google':
-                                        $data = $curl->get('https://maps.googleapis.com/maps/api/place/autocomplete/json', [
+                    $data = $curl->get('https://maps.googleapis.com/maps/api/place/autocomplete/json', [
                         'input' => $address,
-                        'key'   => settings('main_settings.api_key'),
+                        'key' => settings('main_settings.api_key'),
                     ]);
                     $arr = @json_decode($data->body, true);
                     if (is_array($arr)) {
@@ -160,17 +164,17 @@ class GeoAddressHelper
                             foreach ($arr['predictions'] as $key => $prediction) {
                                 $data = $curl->get('https://maps.googleapis.com/maps/api/place/autocomplete/json', [
                                     'placeid' => $addressCollection[$key]['id'],
-                                    'key'   => settings('main_settings.api_key'),
-                                ]);                                
+                                    'key' => settings('main_settings.api_key'),
+                                ]);
                             }
                             $arr = @json_decode($data->body, true);
                             if (array_key_exists('predictions', $arr) && ! empty($arr['predictions'])) {
-                            foreach ($arr['predictions'] as $key => $prediction) {
-                                $addressCollection[$key]['description'] = $prediction['description'];
-                                $addressCollection[$key]['id'] = $prediction['id'];
-                            }
+                                foreach ($arr['predictions'] as $key => $prediction) {
+                                    $addressCollection[$key]['description'] = $prediction['description'];
+                                    $addressCollection[$key]['id'] = $prediction['id'];
+                                }
                             } else {
-                            if (array_key_exists('error_message', $arr)) {
+                                if (array_key_exists('error_message', $arr)) {
                                     return $arr['error_message'];
                                 }
                             }
@@ -185,14 +189,14 @@ class GeoAddressHelper
                     $client = new Client(settings('main_settings.api_key'));
                     $address = $client->geocode($address)->response;
                     if (isset($address->results['0'])) {
-                        $addressCollection[0]['description'] = $address->results['0']->formatted_address . ', ' . $address->results['0']->address_components->county;
+                        $addressCollection[0]['description'] = $address->results['0']->formatted_address.', '.$address->results['0']->address_components->county;
                     }
-                    $addressCollection[0]['id'] = md5($address->results['0']->formatted_address . ', ' . $address->results['0']->address_components->county);
+                    $addressCollection[0]['id'] = md5($address->results['0']->formatted_address.', '.$address->results['0']->address_components->county);
 
                     break;
                 case 'openstreet':
                     $data = $curl->get('https://nominatim.openstreetmap.org/search', [
-                        'q'      => $address,
+                        'q' => $address,
                         'addressdetails' => 1,
                         'format' => 'json',
                     ]);
@@ -209,8 +213,8 @@ class GeoAddressHelper
                 case 'locationiq':
                     $data = $curl->get('http://locationiq.org/v1/search.php', [
                         'format' => 'json',
-                        'key'    => settings('main_settings.api_key'),
-                        'q'      => $address,
+                        'key' => settings('main_settings.api_key'),
+                        'q' => $address,
                     ]);
 
                     $arr = @json_decode($data->body, true);
@@ -225,8 +229,8 @@ class GeoAddressHelper
                     break;
                 case 'nominatim':
                     $data = $curl->get(settings('main_settings.api_url'), [
-                        'q'               => $address,
-                        'format'          => 'json',
+                        'q' => $address,
+                        'format' => 'json',
                         'accept-language' => config('app.locale'),
                     ]);
                     $arr = @json_decode($data->body, true);
@@ -246,6 +250,7 @@ class GeoAddressHelper
 
         return $addressCollection;
     }
+
     private function getGeoAddressFromApi($lat, $lon, $address = null)
     {
         $curl = new \Curl;
@@ -256,10 +261,10 @@ class GeoAddressHelper
             switch (settings('main_settings.geocoder_api')) {
                 case 'default':
                     $data = $curl->get('http://173.212.206.125/geo/', [
-                        'lat'    => $lat,
-                        'lon'    => $lon,
+                        'lat' => $lat,
+                        'lon' => $lon,
                         'format' => 'json',
-                        'lang'   => config('app.locale'),
+                        'lang' => config('app.locale'),
                     ]);
                     $arr = @json_decode($data->body, true);
                     if (is_array($arr) && array_key_exists('display_name', $arr) && ! empty($arr['display_name'])) {
@@ -268,8 +273,8 @@ class GeoAddressHelper
                     break;
                 case 'google':
                     $data = $curl->get('https://maps.googleapis.com/maps/api/geocode/json', [
-                        'latlng' => $lat . ',' . $lon,
-                        'key'    => settings('main_settings.api_key'),
+                        'latlng' => $lat.','.$lon,
+                        'key' => settings('main_settings.api_key'),
                     ]);
                     $arr = @json_decode($data->body, true);
                     if (is_array($arr)) {
@@ -284,9 +289,9 @@ class GeoAddressHelper
                     break;
                 case 'geocodio':
                     $client = new Client(settings('main_settings.api_key'));
-                    $address = $client->reverse($lat . ',' . $lon)->response;
+                    $address = $client->reverse($lat.','.$lon)->response;
                     if (isset($address->results['0'])) {
-                        $address = $address->results['0']->formatted_address . ', ' . $address->results['0']->address_components->county;
+                        $address = $address->results['0']->formatted_address.', '.$address->results['0']->address_components->county;
                     } else {
                         $address = '';
                     }
@@ -294,10 +299,10 @@ class GeoAddressHelper
                     break;
                 case 'openstreet':
                     $data = $curl->get('https://nominatim.openstreetmap.org/reverse', [
-                        'lat'            => $lat,
-                        'lon'            => $lon,
+                        'lat' => $lat,
+                        'lon' => $lon,
                         'addressdetails' => 1,
-                        'format'         => 'json',
+                        'format' => 'json',
                     ]);
                     $arr = @json_decode($data->body, true);
                     if (is_array($arr) && array_key_exists('display_name', $arr) && ! empty($arr['display_name'])) {
@@ -308,10 +313,10 @@ class GeoAddressHelper
                 case 'locationiq':
                     $data = $curl->get('http://locationiq.org/v1/reverse.php', [
                         'format' => 'json',
-                        'key'    => settings('main_settings.api_key'),
-                        'lat'    => $lat,
-                        'lon'    => $lon,
-                        'zoom'   => 18,
+                        'key' => settings('main_settings.api_key'),
+                        'lat' => $lat,
+                        'lon' => $lon,
+                        'zoom' => 18,
                     ]);
 
                     $arr = @json_decode($data->body, true);
@@ -321,9 +326,9 @@ class GeoAddressHelper
                     break;
                 case 'nominatim':
                     $data = $curl->get(settings('main_settings.api_url'), [
-                        'lat'             => $lat,
-                        'lon'             => $lon,
-                        'format'          => 'json',
+                        'lat' => $lat,
+                        'lon' => $lon,
+                        'format' => 'json',
                         'accept-language' => config('app.locale'),
                     ]);
                     $arr = @json_decode($data->body, true);
@@ -344,11 +349,11 @@ class GeoAddressHelper
     // get from cache or empty method???
     public function getAddressLatLng($placeId)
     {
-        $cacheEnabled = (bool)settings('main_settings.geocoder_cache_enabled');
+        $cacheEnabled = (bool) settings('main_settings.geocoder_cache_enabled');
 
         if ($cacheEnabled) {
             $latLng = $this->getAddressLatLngFromCache($placeId);
-            if ( ! empty($latLng)) {
+            if (! empty($latLng)) {
                 return $latLng;
             }
         }
@@ -369,7 +374,7 @@ class GeoAddressHelper
         $cacheEnabled = false; //(bool)settings('main_settings.geocoder_cache_enabled');
         if ($cacheEnabled) {
             $addressCollection = $this->autocompleteAddressFromCache($address);
-            if ( ! empty($addressCollection)) {
+            if (! empty($addressCollection)) {
                 return $addressCollection;
             }
         }
@@ -380,10 +385,11 @@ class GeoAddressHelper
 
         return $addressCollection;
     }
+
     private function autocompleteAddressFromCache($address)
     {
         // Protection if Memcached not installed
-        if ( ! class_exists('Memcached')) {
+        if (! class_exists('Memcached')) {
             return '';
         }
 
@@ -392,7 +398,7 @@ class GeoAddressHelper
         try {
             $server = Cache::store('memcached')->getMemcached();
             $value = $server->get($cacheKey);
-            if ( ! $value) {
+            if (! $value) {
                 return '';
             }
         } catch (\Exception $e) {
@@ -401,15 +407,16 @@ class GeoAddressHelper
 
         return $value;
     }
+
     private function saveAutocompleteAddressToCache($addressCollection, $address)
     {
         // Protection if Memcached not installed
-        if ( ! class_exists('Memcached')) {
+        if (! class_exists('Memcached')) {
             return false;
         }
 
         $cacheKey = $this->addressToCacheKey($address);
-        $cacheDays = (int)settings('main_settings.geocoder_cache_days'); // How long to keep cache
+        $cacheDays = (int) settings('main_settings.geocoder_cache_days'); // How long to keep cache
 
         $expiration = $cacheDays * 24 * 60 * 60;
         $maxExpiration = 60 * 60 * 24 * 30; // 30 days
@@ -434,10 +441,10 @@ class GeoAddressHelper
         $lon = $this->normalizeGeoValue($lonOrig);
 
         // Check first if geo address caching enabled in settings
-        $cacheEnabled = (bool)settings('main_settings.geocoder_cache_enabled');
+        $cacheEnabled = (bool) settings('main_settings.geocoder_cache_enabled');
         if ($cacheEnabled) {
             $address = $this->findGeoAddressFromCache($lat, $lon);
-            if ( ! empty($address)) {
+            if (! empty($address)) {
                 return $address;
             }
         }
@@ -451,8 +458,6 @@ class GeoAddressHelper
         return $address;
     }
 
-
-
     private function addressToCacheKey($address)
     {
         return md5($address);
@@ -460,12 +465,13 @@ class GeoAddressHelper
 
     /**
      * Deletes all cache items
+     *
      * @return bool
      */
     public function flushAllCache()
     {
         // Protection if Memcached not installed
-        if ( ! class_exists('Memcached')) {
+        if (! class_exists('Memcached')) {
             return false;
         }
 
@@ -480,12 +486,13 @@ class GeoAddressHelper
 
     /**
      * Returns geocoder cache memory usage in bytes
+     *
      * @return int|bool
      */
     public function getCacheMemoryUsed()
     {
         // Protection if Memcached not installed
-        if ( ! class_exists('Memcached')) {
+        if (! class_exists('Memcached')) {
             return false;
         }
 
@@ -502,12 +509,13 @@ class GeoAddressHelper
 
     /**
      * Returns memcached server uptime in seconds
+     *
      * @return int|bool
      */
     public function getCacheServerUptime()
     {
         // Protection if Memcached not installed
-        if ( ! class_exists('Memcached')) {
+        if (! class_exists('Memcached')) {
             return false;
         }
 
@@ -523,14 +531,12 @@ class GeoAddressHelper
     }
 
     /**
-     * @param $lat
-     * @param $lon
      * @return string
      */
     private function findGeoAddressFromCache($lat, $lon)
     {
         // Protection if Memcached not installed
-        if ( ! class_exists('Memcached')) {
+        if (! class_exists('Memcached')) {
             return '';
         }
 
@@ -539,7 +545,7 @@ class GeoAddressHelper
         try {
             $server = Cache::store('memcached')->getMemcached();
             $value = $server->get($cacheKey);
-            if ( ! $value) {
+            if (! $value) {
                 return '';
             }
         } catch (\Exception $e) {
@@ -551,20 +557,18 @@ class GeoAddressHelper
 
     /**
      * Saves geo address to cache
-     * @param $lat
-     * @param $lon
-     * @param $address
+     *
      * @return bool
      */
     private function saveGeoAddressToCache($lat, $lon, $address)
     {
         // Protection if Memcached not installed
-        if ( ! class_exists('Memcached')) {
+        if (! class_exists('Memcached')) {
             return false;
         }
 
         $cacheKey = $this->latLonToCacheKey($lat, $lon);
-        $cacheDays = (int)settings('main_settings.geocoder_cache_days'); // How long to keep cache
+        $cacheDays = (int) settings('main_settings.geocoder_cache_days'); // How long to keep cache
 
         $expiration = $cacheDays * 24 * 60 * 60;
         $maxExpiration = 60 * 60 * 24 * 30; // 30 days
@@ -583,20 +587,18 @@ class GeoAddressHelper
     }
 
     /**
-     * @param $lat
-     * @param $lon
      * @return string
      */
     private function latLonToCacheKey($lat, $lon)
     {
-        $key = $lat . ':' . $lon;
+        $key = $lat.':'.$lon;
 
         return $key;
     }
 
     /**
      * Normalizes(rounds fraction part) of latitude|longitude
-     * @param $value
+     *
      * @return int
      */
     private function normalizeGeoValue($value)

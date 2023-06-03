@@ -1,9 +1,12 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class ReportLog extends Eloquent {
-	protected $table = 'report_logs';
+class ReportLog extends Eloquent
+{
+    protected $table = 'report_logs';
 
     protected $fillable = [
         'user_id',
@@ -21,7 +24,7 @@ class ReportLog extends Eloquent {
     {
         parent::boot();
 
-        static::creating(function($model) {
+        static::creating(function ($model) {
             $model->updateTimestamps();
 
             $model->saveFile($model->data);
@@ -31,7 +34,7 @@ class ReportLog extends Eloquent {
             return true;
         });
 
-        static::updating(function($model) {
+        static::updating(function ($model) {
             $model->saveFile($model->data);
 
             $model->data = false;
@@ -39,43 +42,49 @@ class ReportLog extends Eloquent {
             return true;
         });
 
-        static::deleting(function($model) {
+        static::deleting(function ($model) {
             $model->deleteFile();
 
             return true;
         });
     }
-	
-	public function getDataAttribute( $value ) 
-	{
-        if (!$this->exists)
+
+    public function getDataAttribute($value)
+    {
+        if (! $this->exists) {
             return $value;
+        }
 
         $data = $this->getFile();
 
-		return $data ? $data : base64_decode($value);
-	}
+        return $data ? $data : base64_decode($value);
+    }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('Tobuli\Entities\User', 'user_id', 'id');
     }
 
-    public function getFile() {
+    public function getFile()
+    {
         $file = $this->getFilePath();
 
-        if ( file_exists($file) )
+        if (file_exists($file)) {
             return @file_get_contents($file);
+        }
 
         return null;
     }
 
-    public function saveFile($data) {
+    public function saveFile($data)
+    {
         $file = $this->getFilePath();
 
         return file_put_contents($file, $data);
     }
 
-    public function deleteFile() {
+    public function deleteFile()
+    {
         $file = $this->getFilePath();
 
         @unlink($file);
@@ -88,14 +97,14 @@ class ReportLog extends Eloquent {
             $this->title,
             $this->type,
             $this->format,
-            date('Y-m-d H:i:s', strtotime($this->created_at))
+            date('Y-m-d H:i:s', strtotime($this->created_at)),
         ]);
 
-        return 'report.' . md5($unique);
+        return 'report.'.md5($unique);
     }
 
-    public function getFilePath() {
-        return storage_path('app/' . $this->getFilename());
+    public function getFilePath()
+    {
+        return storage_path('app/'.$this->getFilename());
     }
-
 }

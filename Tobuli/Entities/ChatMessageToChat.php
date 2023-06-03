@@ -8,11 +8,9 @@
 
 namespace Tobuli\Entities;
 
-
 use Eloquent;
 
-class ChatMessageToChat extends Eloquent {
-
+class ChatMessageToChat extends Eloquent
+{
     protected $fillable = ['chat_id', 'message_id'];
-
 }

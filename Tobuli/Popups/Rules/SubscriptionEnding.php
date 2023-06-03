@@ -7,9 +7,8 @@
  */
 
 namespace Tobuli\Popups\Rules;
-use Illuminate\Html\FormFacade;
-use Tobuli\Entities\User;
 
+use Illuminate\Html\FormFacade;
 
 class SubscriptionEnding extends BaseRule
 {
@@ -23,24 +22,26 @@ class SubscriptionEnding extends BaseRule
         ];
     }
 
-
-    public  function doesApply()
+    public function doesApply()
     {
-        if (!$this->user)
+        if (! $this->user) {
             return false;
+        }
 
         $daysLeft = $this->rule->field_value;
 
-        if (is_null($this->user->subscription_expiration))
+        if (is_null($this->user->subscription_expiration)) {
             return false;
+        }
 
-        if ($this->user->subscription_expiration == '0000-00-00 00:00:00')
+        if ($this->user->subscription_expiration == '0000-00-00 00:00:00') {
             return false;
+        }
 
-        if (strtotime($this->user->subscription_expiration) - time() > ($daysLeft*86400) )
+        if (strtotime($this->user->subscription_expiration) - time() > ($daysLeft * 86400)) {
             return false;
+        }
 
         return true;
     }
-
 }

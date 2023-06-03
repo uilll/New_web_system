@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'password' => 'Salasanan täytyy olla vähintään kuusi merkki ja vastata toisiaan.',
     'user' => 'Tällä sähköpostiosoitteella ei löydy käyttäjää.',
@@ -8,4 +8,4 @@ return array(
     'sent' => 'Salasana muistutus lähetetty!',
     'reset' => 'Salasanasi on palautettu',
     'reset_link' => 'Napsauta tätä, jos haluat nollata salasanasi',
-);
+];

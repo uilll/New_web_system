@@ -2,11 +2,10 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Entities\Device;
-use Tobuli\Entities\UserGprsTemplate;
-use Tobuli\Protocols\Protocol;
-use Tobuli\Protocols\Commands;
 use Facades\Repositories\UserGprsTemplateRepo;
+use Tobuli\Entities\UserGprsTemplate;
+use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class BaseProtocol implements Protocol
 {
@@ -17,7 +16,7 @@ class BaseProtocol implements Protocol
     protected function commands()
     {
         return [
-            $this->initCommand(Commands::TYPE_CUSTOM)
+            $this->initCommand(Commands::TYPE_CUSTOM),
         ];
     }
 
@@ -36,8 +35,9 @@ class BaseProtocol implements Protocol
     {
         $commands = [];
 
-        if ( ! $templates)
+        if (! $templates) {
             return $commands;
+        }
 
         foreach ($templates as $template) {
             $commands[] = $this->initTemplateCommand($template, $display);
@@ -49,43 +49,44 @@ class BaseProtocol implements Protocol
     public function initTemplateCommand(UserGprsTemplate $template, $display)
     {
         $command = [
-            'type'  => 'template_' . $template->id,
-            'title' => trans('validation.attributes.gprs_template_id') . ' ' . $template->title,
+            'type' => 'template_'.$template->id,
+            'title' => trans('validation.attributes.gprs_template_id').' '.$template->title,
         ];
 
-        if ($display)
+        if ($display) {
             $command['attributes'] = [
                 [
-                    'title'       => trans('validation.attributes.message'),
-                    'name'        => Commands::KEY_DATA,
-                    'type'        => 'text',
-                    'description' => trans('front.raw_command_supports') .'<br><br>'. trans('front.gprs_template_variables'),
-                    'default'     => $template->message
-                ]
+                    'title' => trans('validation.attributes.message'),
+                    'name' => Commands::KEY_DATA,
+                    'type' => 'text',
+                    'description' => trans('front.raw_command_supports').'<br><br>'.trans('front.gprs_template_variables'),
+                    'default' => $template->message,
+                ],
             ];
+        }
 
         return $command;
     }
 
     protected function initCommand($type, $attributes = [])
     {
-        if ( ! $this->commandsManager)
+        if (! $this->commandsManager) {
             $this->commandsManager = new Commands();
+        }
 
         return $this->commandsManager->get($type, $attributes);
     }
 
     protected function appendPasswordAttribute($commands)
     {
-        foreach ($commands as &$command)
-        {
+        foreach ($commands as &$command) {
             $attributes = empty($command['attributes']) ? [] : $command['attributes'];
 
             $attributes[Commands::KEY_DEVICE_PASSWORD] = [
                 'title' => trans('validation.attributes.password'),
-                'name'  => Commands::KEY_DEVICE_PASSWORD,
-                'type'  => 'string',
-                'validation' => ''
+                'name' => Commands::KEY_DEVICE_PASSWORD,
+                'type' => 'string',
+                'validation' => '',
             ];
 
             $command['attributes'] = $attributes;
@@ -98,18 +99,19 @@ class BaseProtocol implements Protocol
     {
         $rules = [];
 
-        foreach ($commands as $command)
-        {
-            if ($command['type'] != $type)
+        foreach ($commands as $command) {
+            if ($command['type'] != $type) {
                 continue;
+            }
 
-            if (empty($command['attributes']))
+            if (empty($command['attributes'])) {
                 continue;
+            }
 
-            foreach ($command['attributes'] as $attribute)
-            {
-                if (empty($attribute['validation']))
+            foreach ($command['attributes'] as $attribute) {
+                if (empty($attribute['validation'])) {
                     continue;
+                }
 
                 $rules[$attribute['name']] = $attribute['validation'];
             }
@@ -133,7 +135,7 @@ class BaseProtocol implements Protocol
             Commands::KEY_INDEX,
             Commands::KEY_PHONE,
             Commands::KEY_SERVER,
-            Commands::KEY_PORT
+            Commands::KEY_PORT,
         ]);
 
         foreach ($attributes as $key => $value) {
@@ -142,11 +144,11 @@ class BaseProtocol implements Protocol
                 case Commands::KEY_RADIUS:
                 case Commands::KEY_INDEX:
                 case Commands::KEY_PORT:
-                    $attributes[$key] = (int)$value;
+                    $attributes[$key] = (int) $value;
                     break;
 
                 case Commands::KEY_ENABLE:
-                    $attributes[$key] = (boolean)$value;
+                    $attributes[$key] = (bool) $value;
                     break;
             }
         }
@@ -156,32 +158,35 @@ class BaseProtocol implements Protocol
             'type' => $data['type'],
         ];
 
-        if ( ! empty($attributes))
+        if (! empty($attributes)) {
             $data['attributes'] = $attributes;
+        }
 
         return $data;
     }
 
     protected function _buildCommand($device, $data)
     {
-        if (starts_with($data['type'], 'template_'))
-            list($data['type'], $data['gprs_template_id']) = explode('_', $data['type']);
+        if (starts_with($data['type'], 'template_')) {
+            [$data['type'], $data['gprs_template_id']] = explode('_', $data['type']);
+        }
 
-        $method = 'buildCommand' . ucfirst($data['type']);
+        $method = 'buildCommand'.ucfirst($data['type']);
 
-        if (method_exists($this,$method))
-            $data = call_user_func([$this,$method], $device, $data);
+        if (method_exists($this, $method)) {
+            $data = call_user_func([$this, $method], $device, $data);
+        }
 
         return $data;
     }
 
     protected function buildCommandPositionPeriodic($device, $data)
     {
-        if (empty($data['unit']))
+        if (empty($data['unit'])) {
             return $data;
+        }
 
-        switch ($data['unit'])
-        {
+        switch ($data['unit']) {
             case 'minute':
                 $data['frequency'] *= 60;
                 break;
@@ -195,11 +200,11 @@ class BaseProtocol implements Protocol
 
     protected function buildCommandPositionLog($device, $data)
     {
-        if (empty($data['unit']))
+        if (empty($data['unit'])) {
             return $data;
+        }
 
-        switch ($data['unit'])
-        {
+        switch ($data['unit']) {
             case 'minute':
                 $data['frequency'] *= 60;
                 break;
@@ -216,11 +221,11 @@ class BaseProtocol implements Protocol
         $imei = $device->imei;
 
         if ($device->protocol == 'tk103') {
-            $imei = '0' . substr($imei, -11);
+            $imei = '0'.substr($imei, -11);
         }
 
         $command = strtr($data[Commands::KEY_DATA], [
-            '[%IMEI%]' => $imei
+            '[%IMEI%]' => $imei,
         ]);
 
         $data[Commands::KEY_DATA] = $command;
@@ -232,15 +237,17 @@ class BaseProtocol implements Protocol
     {
         $where = ['id' => $data['gprs_template_id']];
 
-        if (auth()->user())
+        if (auth()->user()) {
             $where['user_id'] = auth()->user()->id;
+        }
 
         $grps_template = UserGprsTemplateRepo::findWhere($where);
 
         $message = $grps_template ? $grps_template->message : '';
 
-        if ( ! $device->gprs_templates_only && isset($data[Commands::KEY_DATA]))
+        if (! $device->gprs_templates_only && isset($data[Commands::KEY_DATA])) {
             $message = $data[Commands::KEY_DATA];
+        }
 
         $data[Commands::KEY_TYPE] = Commands::TYPE_CUSTOM;
         $data[Commands::KEY_DATA] = $message;

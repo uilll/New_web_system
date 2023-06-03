@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class MeitrackProtocol extends BaseProtocol implements Protocol
 {
@@ -19,32 +19,32 @@ class MeitrackProtocol extends BaseProtocol implements Protocol
             $this->initCommand(Commands::TYPE_REQUEST_PHOTO, [
                 [
                     'title' => Commands::KEY_INDEX,
-                    'name'  => Commands::KEY_INDEX,
-                    'type'  => 'select',
+                    'name' => Commands::KEY_INDEX,
+                    'type' => 'select',
                     'options' => [
                         [
                             'id' => 1,
-                            'title' => '1'
+                            'title' => '1',
                         ],
                         [
                             'id' => 2,
-                            'title' => '2'
+                            'title' => '2',
                         ],
                         [
                             'id' => 3,
-                            'title' => '3'
+                            'title' => '3',
                         ],
                         [
                             'id' => 4,
-                            'title' => '4'
-                        ]
+                            'title' => '4',
+                        ],
                     ],
                     'default' => 1,
-                    'validation' => 'required'
+                    'validation' => 'required',
                 ],
             ]),
             $this->initCommand(Commands::TYPE_SEND_SMS),
-            $this->initCommand(Commands::TYPE_CUSTOM)
+            $this->initCommand(Commands::TYPE_CUSTOM),
         ];
     }
 }

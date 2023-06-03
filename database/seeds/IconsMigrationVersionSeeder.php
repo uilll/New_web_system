@@ -1,15 +1,13 @@
 <?php
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\DB;
+
 use Illuminate\Database\Seeder;
-use Tobuli\Repositories\MapIcon\MapIconRepositoryInterface as MapIcon;
-use Tobuli\Repositories\DeviceIcon\DeviceIconRepositoryInterface as DeviceIcon;
+use Illuminate\Support\Facades\DB;
 
-class IconsMigrationVersionSeeder extends Seeder {
-
+class IconsMigrationVersionSeeder extends Seeder
+{
     public function run()
     {
-        exec("cp -R ".base_path('images')." /var/www/html/");
+        exec('cp -R '.base_path('images').' /var/www/html/');
 
         $oldDeviceIconsPath = [
             'frontend/images/device_icons/1.png',
@@ -57,14 +55,13 @@ class IconsMigrationVersionSeeder extends Seeder {
             'frontend/images/device_icons/99-person.png',
         ];
 
-        DB::table('device_icons')->whereIn('path', $oldDeviceIconsPath)->orWhere('id', "0")->delete();
+        DB::table('device_icons')->whereIn('path', $oldDeviceIconsPath)->orWhere('id', '0')->delete();
 
         $this->call('DeviceIconsTableSeeder');
 
         DB::table('devices')->whereNull('icon_id')->update([
             'icon_id' => 0,
         ]);
-
 
         $oldMapIconsPath = [
             'frontend/images/map_icons/543ccabd1373b8.41756394.png',
@@ -120,7 +117,7 @@ class IconsMigrationVersionSeeder extends Seeder {
             'frontend/images/map_icons/robbery.png',
             'frontend/images/map_icons/sleddog.png',
             'frontend/images/map_icons/test-2.png',
-            'frontend/images/map_icons/velocimeter.png'
+            'frontend/images/map_icons/velocimeter.png',
         ];
 
         $oldMapIcons = DB::table('map_icons')->whereIn('path', $oldMapIconsPath)->lists('id');

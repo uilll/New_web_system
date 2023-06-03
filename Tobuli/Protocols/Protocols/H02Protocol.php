@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class H02Protocol extends BaseProtocol implements Protocol
 {
@@ -15,7 +15,7 @@ class H02Protocol extends BaseProtocol implements Protocol
             $this->initCommand(Commands::TYPE_ALARM_ARM),
             $this->initCommand(Commands::TYPE_ALARM_DISARM),
             $this->initCommand(Commands::TYPE_POSITION_PERIODIC),
-            $this->initCommand(Commands::TYPE_CUSTOM)
+            $this->initCommand(Commands::TYPE_CUSTOM),
         ];
     }
 }

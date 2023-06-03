@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute უნდა მიიღოთ.',
     'active_url' => ':attribute არ არის სწორი URL.',
@@ -11,12 +11,12 @@ return array(
     'alpha_num' => ':attribute შეიძლება შეიცავდეს მხოლოდ ასოებსა და ნომრებს.',
     'array' => ':attribute უნდა იყოს მასივი.',
     'before' => ':attribute უნდა იყოს თარიღი :date .',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute უნდა იყოს შორის :min და :max .',
         'file' => ':attribute უნდა იყოს შორის :min და :max kilobytes.',
         'string' => ':attribute უნდა იყოს შორის :min და :max სიმბოლოები.',
         'array' => ':attribute უნდა ჰქონდეს :min და :max .',
-    ),
+    ],
     'confirmed' => ':attribute დადასტურება არ ემთხვევა.',
     'date' => ':attribute არ არის სწორი თარიღი.',
     'date_format' => ':attribute არ შეესაბამება ფორმატს :format .',
@@ -29,19 +29,19 @@ return array(
     'in' => 'შერჩეული :attribute არასწორია.',
     'integer' => ':attribute უნდა იყოს მთელი რიცხვი.',
     'ip' => ':attribute უნდა იყოს სწორი IP მისამართი.',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute შეიძლება იყოს უფრო მეტი, ვიდრე :max .',
         'file' => ':attribute შეიძლება იყოს უფრო მეტი ვიდრე :max kilobytes.',
         'string' => ':attribute შეიძლება იყოს უფრო მეტი, ვიდრე :max სიმბოლო.',
         'array' => ':attribute შეიძლება არ ჰქონდეს მეტი :max ელემენტი.',
-    ),
+    ],
     'mimes' => ':attribute უნდა იყოს ტიპის ტიპი :values .',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute უნდა იყოს მინიმუმ :min .',
         'file' => ':attribute უნდა იყოს მინიმუმ :min kilobytes.',
         'string' => ':attribute უნდა იყოს მინიმუმ :min სიმბოლოები.',
         'array' => ':attribute უნდა ჰქონდეს მინიმუმ :min ელემენტები.',
-    ),
+    ],
     'not_in' => 'შერჩეული :attribute არასწორია.',
     'numeric' => ':attribute უნდა იყოს რიცხვი.',
     'regex' => ':attribute ფორმატი არასწორია.',
@@ -52,22 +52,22 @@ return array(
     'required_without' => ':attribute ველი საჭიროა, როდესაც :values არ არის წარმოდგენილი.',
     'required_without_all' => ':attribute ველი საჭიროა, როდესაც არც ერთი :values არის.',
     'same' => ':attribute და :other უნდა ემთხვეოდეს.',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute უნდა იყოს :size .',
         'file' => ':attribute უნდა იყოს :size kilobytes.',
         'string' => ':attribute უნდა იყოს :size სიმბოლოები.',
         'array' => ':attribute უნდა შეიცავდეს :size ნივთებს.',
-    ),
+    ],
     'unique' => ':attribute უკვე მიღებულია.',
     'url' => ':attribute ფორმატი არასწორია.',
     'array_max' => ':attribute მაქსიმალური ელემენტი :max .',
     'lesser_than' => ':attribute უნდა იყოს ნაკლები, ვიდრე :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'საბაჟო შეტყობინება',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'ელ.ფოსტა',
         'password' => 'პაროლი',
         'password_confirmation' => 'პაროლის დადასტურება',
@@ -321,8 +321,8 @@ return array(
         'icon_status_offline' => 'ოფლაინ სტატუსის ხატი',
         'icon_status_ack' => 'Ack სტატუსი ხატი',
         'icon_status_engine' => 'ძრავის სტატუსის ხატი',
-    ),
+    ],
     'same_protocol' => 'მოწყობილობები უნდა იყოს იგივე პროტოკოლი.',
     'contains' => ':attribute უნდა შეიცავდეს :value .',
     'ip_port' => ':attribute არ შეესაბამება  ფორმა IP:PORT',
-);
+];

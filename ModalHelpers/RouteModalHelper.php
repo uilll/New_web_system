@@ -1,8 +1,9 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use Facades\Repositories\RouteRepo;
 use Facades\Validators\RouteFormValidator;
-use Tobuli\Exceptions\ValidationException;
 
 class RouteModalHelper extends ModalHelper
 {

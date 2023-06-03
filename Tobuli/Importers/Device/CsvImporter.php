@@ -17,9 +17,9 @@ class CsvImporter extends Importer
 
         $csv = str_getcsv($source, "\n");
 
-        foreach ($csv as &$row)
-            $row = str_getcsv($row, ";");
-
+        foreach ($csv as &$row) {
+            $row = str_getcsv($row, ';');
+        }
 
         $this->header = array_shift($csv);
         $this->rows = $csv;
@@ -43,19 +43,21 @@ class CsvImporter extends Importer
 
     public function validFormat()
     {
-        if (empty($this->header))
+        if (empty($this->header)) {
             return false;
+        }
 
-        if ( ! is_array($this->header))
+        if (! is_array($this->header)) {
             return false;
+        }
 
-        if (false === array_search('imei', $this->header))
+        if (false === array_search('imei', $this->header)) {
             return false;
+        }
 
-        if (false === array_search('name', $this->header))
+        if (false === array_search('name', $this->header)) {
             return false;
-
-
+        }
 
         return true;
     }

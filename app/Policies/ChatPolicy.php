@@ -11,16 +11,18 @@ class ChatPolicy extends Policy
 
     protected function ownership(User $user, Model $entity = null)
     {
-        if ( ! $entity->participants)
+        if (! $entity->participants) {
             return false;
+        }
 
-        foreach ($entity->participants as $participant)
-        {
-            if ( ! $participant->isUser())
+        foreach ($entity->participants as $participant) {
+            if (! $participant->isUser()) {
                 continue;
+            }
 
-            if ($participant->chattable_id == $user->id)
+            if ($participant->chattable_id == $user->id) {
                 return true;
+            }
         }
 
         return false;

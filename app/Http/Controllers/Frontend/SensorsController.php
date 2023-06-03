@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\SensorModalHelper;
@@ -9,28 +11,30 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Form;
 use Tobuli\Services\Sensors\ParameterSuggestionService;
 
-class SensorsController extends Controller {
-
-    public function index($device_id = NULL)
+class SensorsController extends Controller
+{
+    public function index($device_id = null)
     {
-        if (is_null($device_id))
+        if (is_null($device_id)) {
             $device_id = empty($this->data['device_id']) ? null : $this->data['device_id'];
-        
+        }
+
         $data = SensorModalHelper::paginated($device_id);
-        
-        return !$this->api ? view('front::Sensors.index')->with(['sensors' => $data, 'device_id' => $device_id]) : $data;
+
+        return ! $this->api ? view('front::Sensors.index')->with(['sensors' => $data, 'device_id' => $device_id]) : $data;
     }
 
-    public function create($device_id = NULL)
+    public function create($device_id = null)
     {
-        if (is_null($device_id))
+        if (is_null($device_id)) {
             $device_id = empty($this->data['device_id']) ? null : $this->data['device_id'];
-        
+        }
+
         $data = array_merge(SensorModalHelper::createData($device_id), [
-            'route' => 'sensors.store'
+            'route' => 'sensors.store',
         ]);
 
-        return !$this->api ? view('front::Sensors.create')->with($data) : $data;
+        return ! $this->api ? view('front::Sensors.create')->with($data) : $data;
     }
 
     public function store()
@@ -41,10 +45,10 @@ class SensorsController extends Controller {
     public function edit()
     {
         $data = array_merge(SensorModalHelper::editData(), [
-            'route' => 'sensors.update'
+            'route' => 'sensors.update',
         ]);
 
-        return is_array($data) && !$this->api ? view('front::Sensors.edit')->with($data) : $data;
+        return is_array($data) && ! $this->api ? view('front::Sensors.edit')->with($data) : $data;
     }
 
     public function update()
@@ -56,22 +60,23 @@ class SensorsController extends Controller {
     {
         $protocols = SensorModalHelper::getProtocols();
 
-        return !$this->api ? Form::select('event_protocol', $protocols, null, ['class' => 'form-control']) : ['items' => $protocols];
+        return ! $this->api ? Form::select('event_protocol', $protocols, null, ['class' => 'form-control']) : ['items' => $protocols];
     }
 
     public function getEvents()
     {
         $events = SensorModalHelper::getEvents();
 
-        return !$this->api ? Form::select('event_id', $events, null, ['class' => 'form-control']) : apiArray($events);
+        return ! $this->api ? Form::select('event_id', $events, null, ['class' => 'form-control']) : apiArray($events);
     }
 
     public function doDestroy($id)
     {
         $item = DeviceSensorRepo::find($id);
         $device = DeviceRepo::find($item->device_id);
-        if (empty($item) || (!isAdmin() && !$device->users->contains(Auth::User()->id)))
+        if (empty($item) || (! isAdmin() && ! $device->users->contains(Auth::User()->id))) {
             return modal(dontExist('front.sensor'), 'danger');
+        }
 
         return view('front::Sensors.destroy')->with(compact('item'));
     }
@@ -81,20 +86,22 @@ class SensorsController extends Controller {
         return SensorModalHelper::destroy();
     }
 
-    public function getEngineHours($device_id = NULL)
+    public function getEngineHours($device_id = null)
     {
-        if (is_null($device_id))
+        if (is_null($device_id)) {
             $device_id = empty($this->data['device_id']) ? null : $this->data['device_id'];
+        }
 
         $data = SensorModalHelper::getVirtualEngineHours($device_id);
 
-        return is_array($data) && !$this->api ? view('front::Sensors.engine_hours')->with($data) : $data;
+        return is_array($data) && ! $this->api ? view('front::Sensors.engine_hours')->with($data) : $data;
     }
 
-    public function setEngineHours($device_id = NULL)
+    public function setEngineHours($device_id = null)
     {
-        if (is_null($device_id))
+        if (is_null($device_id)) {
             $device_id = empty($this->data['device_id']) ? null : $this->data['device_id'];
+        }
 
         return SensorModalHelper::setVirtualEngineHours($device_id);
     }

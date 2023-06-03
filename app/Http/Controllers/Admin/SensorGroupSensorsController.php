@@ -1,6 +1,7 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
 
-use Facades\Repositories\DeviceSensorRepo;
+namespace App\Http\Controllers\Admin;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
@@ -8,35 +9,37 @@ use ModalHelpers\SensorModalHelper;
 use Tobuli\Exceptions\ValidationException;
 use Tobuli\Repositories\SensorGroup\SensorGroupRepositoryInterface as SensorGroup;
 use Tobuli\Repositories\SensorGroupSensor\SensorGroupSensorRepositoryInterface as SensorGroupSensor;
-use Tobuli\Validation\AdminSensorGroupFormValidator;
 
-class SensorGroupSensorsController extends BaseController {
-
-    public function index($id, $ajax = 0, SensorGroupSensor $sensorGroupSensorRepo) {
+class SensorGroupSensorsController extends BaseController
+{
+    public function index($id, $ajax, SensorGroupSensor $sensorGroupSensorRepo)
+    {
         $items = $sensorGroupSensorRepo->getWhere(['group_id' => $id], 'name');
 
         $sensors_arr = Config::get('tobuli.sensors');
 
-        foreach ($items as &$item)
+        foreach ($items as &$item) {
             $item->type_title = $sensors_arr[$item->type];
+        }
 
         return view('admin::SensorGroupSensors.'.($ajax ? 'table' : 'index'))->with(compact('items', 'id'));
     }
 
-    public function create($id, SensorModalHelper $sensorModalHelper) {
+    public function create($id, SensorModalHelper $sensorModalHelper)
+    {
         $data = array_merge($sensorModalHelper->createData(null), [
             'route' => 'admin.sensor_group_sensors.store',
-            'id' => $id
+            'id' => $id,
         ]);
 
         return view('front::Sensors.create')->with($data);
     }
-    
-    public function store(Request $request, SensorModalHelper $sensorModalHelper, SensorGroup $sensorGroupRepo, SensorGroupSensor $sensorGroupSensorRepo) {
+
+    public function store(Request $request, SensorModalHelper $sensorModalHelper, SensorGroup $sensorGroupRepo, SensorGroupSensor $sensorGroupSensorRepo)
+    {
         $input = $request->all();
 
-        try
-        {
+        try {
             $sensorModalHelper->validate($input, 'create', null);
 
             $arr = $sensorModalHelper->formatInput($input, Auth::User()->id);
@@ -47,21 +50,20 @@ class SensorGroupSensorsController extends BaseController {
             $count = $sensorGroupSensorRepo->countwhere(['group_id' => $arr['group_id']]);
 
             $sensorGroupRepo->update($arr['group_id'], [
-                'count' => $count
+                'count' => $count,
             ]);
 
             return ['status' => 1];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
 
-    public function edit($id, SensorGroupSensor $sensorGroupSensorRepo, SensorModalHelper $sensorModalHelper) {
+    public function edit($id, SensorGroupSensor $sensorGroupSensorRepo, SensorModalHelper $sensorModalHelper)
+    {
         $data = array_merge($sensorModalHelper->createData(null), [
             'route' => 'admin.sensor_group_sensors.update',
-            'id' => $id
+            'id' => $id,
         ]);
 
         $data['item'] = $sensorGroupSensorRepo->find($id);
@@ -69,11 +71,11 @@ class SensorGroupSensorsController extends BaseController {
         return view('front::Sensors.edit')->with($data);
     }
 
-    public function update(Request $request, SensorModalHelper $sensorModalHelper, SensorGroupSensor $sensorGroupSensorRepo) {
+    public function update(Request $request, SensorModalHelper $sensorModalHelper, SensorGroupSensor $sensorGroupSensorRepo)
+    {
         $input = $request->all();
 
-        try
-        {
+        try {
             $sensorModalHelper->validate($input, 'create', null);
 
             $arr = $sensorModalHelper->formatInput($input, Auth::User()->id);
@@ -81,21 +83,21 @@ class SensorGroupSensorsController extends BaseController {
             $sensorGroupSensorRepo->update($input['id'], $arr);
 
             return ['status' => 1];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
 
-    public function destroy(Request $request, SensorGroup $sensorGroupRepo, SensorGroupSensor $sensorGroupSensorRepo) {
+    public function destroy(Request $request, SensorGroup $sensorGroupRepo, SensorGroupSensor $sensorGroupSensorRepo)
+    {
         $input = $request->all();
-        if (!isset($input['id']) || empty($input['id']))
+        if (! isset($input['id']) || empty($input['id'])) {
             return response()->json(['status' => 0]);
+        }
 
         $ids = $input['id'];
 
-        if (!is_array($ids)) {
+        if (! is_array($ids)) {
             $ids = [$ids];
         }
 
@@ -106,7 +108,7 @@ class SensorGroupSensorsController extends BaseController {
 
         $count = $sensorGroupSensorRepo->countwhere(['group_id' => $item->group_id]);
         $sensorGroupRepo->update($item->group_id, [
-            'count' => $count
+            'count' => $count,
         ]);
 
         return response()->json(['status' => 1, 'trigger' => 'updateSensorGroupsTable']);

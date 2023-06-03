@@ -1,20 +1,23 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class MapIcon extends Eloquent {
-	protected $table = 'map_icons';
+class MapIcon extends Eloquent
+{
+    protected $table = 'map_icons';
 
-    protected $fillable = array('path', 'width', 'height');
+    protected $fillable = ['path', 'width', 'height'];
 
     public $timestamps = false;
 
     protected $appends = [
-        'url'
+        'url',
     ];
 
     public function getUrlAttribute($value)
     {
-        return asset( $this->path );
+        return asset($this->path);
     }
 }

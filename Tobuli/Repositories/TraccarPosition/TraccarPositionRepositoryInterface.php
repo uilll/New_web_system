@@ -1,8 +1,10 @@
-<?php namespace Tobuli\Repositories\TraccarPosition;
+<?php
 
-interface TraccarPositionRepositoryInterface {
+namespace Tobuli\Repositories\TraccarPosition;
 
-    public function search($user_id, $data, $paginate = FALSE, $limit = 50);
+interface TraccarPositionRepositoryInterface
+{
+    public function search($user_id, $data, $paginate = false, $limit = 50);
 
     public function sumDistance($device_id, $range);
 
@@ -15,5 +17,4 @@ interface TraccarPositionRepositoryInterface {
     public function getBetween($device_id, $from, $to);
 
     public function getOlder($deviceId, $positionId = 0, $limit = 5);
-
 }

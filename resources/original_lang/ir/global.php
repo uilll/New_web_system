@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'ویرایش',
     'add_new' => 'افزودن جدید',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'تعطیلات آخر هفته',
     'always' => 'همیشه',
     'advanced' => 'پیشرفته',
-);
+];

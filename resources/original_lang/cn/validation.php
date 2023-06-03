@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute：属性
 
@@ -29,7 +29,7 @@ URL: 网址
 :date:日期
 
 该属性必须是一个日期之前的：日期。',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute:该属性 :min：最少 :max:最多
 
 该属性必须介于最少和最多之间。',
@@ -42,7 +42,7 @@ URL: 网址
         'array' => ':attribute:该属性 :min：最少 :max:最多
 
 该属性的项目必须介于最少和最多之间。',
-    ),
+    ],
     'confirmed' => ':attribute:该属性
 
 该属性确认不匹配。',
@@ -84,7 +84,7 @@ URL: 网址
 该属性必须是有效的IP地址。
 
 ',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute:该属性  
 :max:最大
 
@@ -101,12 +101,12 @@ URL: 网址
 :max:最大 
 
 该属性不可以超过：最大项目。',
-    ),
+    ],
     'mimes' => ':attribute:该属性 
 :values:价值
 
 该属性必须是类型为一个文件：价值。',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute:该属性 
 :min:最少
 
@@ -123,7 +123,7 @@ URL: 网址
 :min:最少
 
 该属性必须至少：最少项目。',
-    ),
+    ],
     'not_in' => ':attribute:该属性 
 该被选择的属性无效。',
     'numeric' => ':attribute:该属性 
@@ -147,7 +147,7 @@ URL: 网址
     'required_without_all' => ':attribute:该属性 :values:价值 该属性字段必须的当没有：价值存在。',
     'same' => ':attribute:该属性 :other:其他
 该属性与其他必须匹配',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute:该属性
 :size:大小
 
@@ -161,7 +161,7 @@ URL: 网址
         'array' => ':attribute:该属性 :size:大小 
 
 该属性必须包含：大小项目。',
-    ),
+    ],
     'unique' => ':attribute:该属性 
 该属性已被采用。',
     'url' => ':attribute:该属性
@@ -175,12 +175,12 @@ URL: 网址
 :other:其他
 
 该属性必须少于：其他。',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => '定制消息',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => '电子邮件',
         'password' => '密码',
         'password_confirmation' => '确认密码',
@@ -430,8 +430,8 @@ URL: 网址
         'icon_status_offline' => '离线状态图标',
         'icon_status_ack' => '确认状态图标',
         'icon_status_engine' => '引擎状态图标',
-    ),
+    ],
     'same_protocol' => '这些设备必须具有相同的协议。',
     'contains' => ':attribute必须包含:value 。',
     'ip_port' => ':attribute与格式IP:PORT不匹配',
-);
+];

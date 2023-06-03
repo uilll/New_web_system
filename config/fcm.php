@@ -1,4 +1,5 @@
 <?php
+
 return [
     'driver' => env('FCM_PROTOCOL', 'http'),
     'log_enabled' => false,

@@ -1,7 +1,7 @@
 <?php
 
-return array(
+return [
 
     'previous' => '&laquo; Previous',
     'next' => ' << הַבָּא',
-);
+];

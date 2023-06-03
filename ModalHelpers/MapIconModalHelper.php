@@ -1,6 +1,7 @@
-<?php namespace ModalHelpers;
+<?php
 
-use App\Exceptions\DemoAccountException;
+namespace ModalHelpers;
+
 use Facades\Repositories\MapIconRepo;
 use Facades\Repositories\UserMapIconRepo;
 use Facades\Validators\UserMapIconFormValidator;
@@ -62,8 +63,9 @@ class MapIconModalHelper extends ModalHelper
     private function validate($type)
     {
         // Limited acc
-        if (isLimited($this->user, 'poi'))
+        if (isLimited($this->user, 'poi')) {
             throw new ValidationException(['id' => trans('front.limited_acc')]);
+        }
 
         UserMapIconFormValidator::validate($type, $this->data);
     }
@@ -71,13 +73,13 @@ class MapIconModalHelper extends ModalHelper
     public function changeActive()
     {
         $id = array_key_exists('map_icon_id', $this->data) ? $this->data['map_icon_id'] : $this->data['id'];
-        
+
         $item = UserMapIconRepo::find($id);
 
         $this->checkException('poi', 'active', $item);
 
         UserMapIconRepo::update($item->id, ['active' => ($this->data['active'] == 'true')]);
-        
+
         return ['status' => 1];
     }
 
@@ -90,26 +92,29 @@ class MapIconModalHelper extends ModalHelper
         $this->checkException('poi', 'remove', $item);
 
         UserMapIconRepo::delete($id);
-        
+
         return ['status' => 1];
     }
 
-    public function import($content = NULL, $map_icon_id = NULL)
+    public function import($content = null, $map_icon_id = null)
     {
         $this->checkException('poi', 'store');
 
-        if (is_null($content))
+        if (is_null($content)) {
             $content = $this->data['content'];
+        }
 
-        if (is_null($map_icon_id))
+        if (is_null($map_icon_id)) {
             $map_icon_id = $this->data['map_icon_id'];
+        }
 
         libxml_use_internal_errors(true);
 
         $xml = simplexml_load_string($content);
 
-        if (!$xml)
+        if (! $xml) {
             return ['status' => 0, 'error' => trans('front.unsupported_format')];
+        }
 
         $icon_count = 0;
         $icon_exists_count = 0;
@@ -121,70 +126,71 @@ class MapIconModalHelper extends ModalHelper
 
                 $folders = $xml->xpath('//kml:Folder');
 
-                if ( $folders ) {
-                    foreach ( $folders as $folder ) {
-
-                        foreach ( $folder->Placemark as $mark) {
-
+                if ($folders) {
+                    foreach ($folders as $folder) {
+                        foreach ($folder->Placemark as $mark) {
                             $mark = json_decode(json_encode($mark), true);
 
-                            if (empty($mark['name']))
+                            if (empty($mark['name'])) {
                                 continue;
+                            }
 
-                            if (empty($mark['Point']['coordinates']))
+                            if (empty($mark['Point']['coordinates'])) {
                                 continue;
+                            }
 
-                            list($lng, $lat, $unknow) = explode(',', $mark['Point']['coordinates']);
+                            [$lng, $lat, $unknow] = explode(',', $mark['Point']['coordinates']);
                             $coordinates = ['lat' => $lat, 'lng' => $lng];
 
                             $item = UserMapIconRepo::findWhere(['coordinates' => json_encode($coordinates), 'user_id' => $this->user->id]);
                             if (empty($item)) {
                                 $icon_count++;
                                 UserMapIconRepo::create([
-                                    'active'      => 0,
-                                    'user_id'     => $this->user->id,
+                                    'active' => 0,
+                                    'user_id' => $this->user->id,
                                     'map_icon_id' => $map_icon_id,
-                                    'name'        => $mark['name'],
+                                    'name' => $mark['name'],
                                     'description' => empty($mark['description']) ? '' : $mark['description'],
-                                    'coordinates' => json_encode($coordinates)
+                                    'coordinates' => json_encode($coordinates),
                                 ]);
-                            }
-                            else
+                            } else {
                                 $icon_exists_count++;
+                            }
                         }
                     }
                 } else {
-                    foreach ( $xml->xpath('//kml:Placemark') as $mark) {
+                    foreach ($xml->xpath('//kml:Placemark') as $mark) {
                         $mark = json_decode(json_encode($mark), true);
 
-                        if (empty($mark['name']))
+                        if (empty($mark['name'])) {
                             continue;
+                        }
 
-                        if (empty($mark['Point']['coordinates']))
+                        if (empty($mark['Point']['coordinates'])) {
                             continue;
+                        }
 
-                        list($lng, $lat, $unknow) = explode(',', $mark['Point']['coordinates']);
+                        [$lng, $lat, $unknow] = explode(',', $mark['Point']['coordinates']);
                         $coordinates = ['lat' => $lat, 'lng' => $lng];
 
                         $item = UserMapIconRepo::findWhere(['coordinates' => json_encode($coordinates), 'user_id' => $this->user->id]);
                         if (empty($item)) {
                             $icon_count++;
                             UserMapIconRepo::create([
-                                'active'      => 0,
-                                'user_id'     => $this->user->id,
+                                'active' => 0,
+                                'user_id' => $this->user->id,
                                 'map_icon_id' => $map_icon_id,
-                                'name'        => $mark['name'],
+                                'name' => $mark['name'],
                                 'description' => empty($mark['description']) ? '' : $mark['description'],
-                                'coordinates' => json_encode($coordinates)
+                                'coordinates' => json_encode($coordinates),
                             ]);
-                        }
-                        else
+                        } else {
                             $icon_exists_count++;
+                        }
                     }
                 }
             }
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return ['status' => 0, 'error' => trans('front.unsupported_format')];
         }
 

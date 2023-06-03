@@ -1,8 +1,14 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 ini_set('memory_limit', env('REPORT_MEMORY_LIMIT', '2048M'));
 set_time_limit(18000);
 
+use Barryvdh\DomPDF\Facade as PDF;
+use Bugsnag\BugsnagLaravel\BugsnagFacade as Bugsnag;
+use Carbon\Carbon;
+use Dompdf\Dompdf;
 use Facades\Repositories\DeviceRepo;
 use Facades\Repositories\EventRepo;
 use Facades\Repositories\GeofenceRepo;
@@ -12,35 +18,26 @@ use Facades\Repositories\TraccarPositionRepo;
 use Facades\Repositories\UserRepo;
 use Facades\Validators\ReportFormValidator;
 use Facades\Validators\ReportSaveFormValidator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Schema;
-use Maatwebsite\Excel\Facades\Excel;
-use Barryvdh\DomPDF\Facade as PDF;
-use Bugsnag\BugsnagLaravel\BugsnagFacade as Bugsnag;
-use Tobuli\Exceptions\ValidationException;
-use Tobuli\Helpers\ReportHelper;
 use Illuminate\Support\Facades\Auth;
-
-use Carbon\Carbon;
-use TCPDF;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
+use Tobuli\Exceptions\ValidationException;
 //use SnappyPDF;
-use Dompdf\Dompdf;
-
+use Tobuli\Helpers\ReportHelper;
 
 class ReportModalHelper extends ModalHelper
 {
     private $types = [];
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
-        $this->types = [			
+        $this->types = [
             '1' => trans('front.general_information'),
             '2' => trans('front.general_information_merged'),
             '16' => trans('front.general_information_merged_custom'),
-			'25' => trans('front.object_history'), 
+            '25' => trans('front.object_history'),
             '3' => trans('front.drives_and_stops'),
             '19' => trans('front.drives_and_stops').' / '.trans('front.drivers'),
             '18' => trans('front.drives_and_stops').' / '.trans('front.geofences'),
@@ -61,10 +58,10 @@ class ReportModalHelper extends ModalHelper
             '13' => trans('front.temperature'),
             '14' => trans('front.rag'),
             '23' => trans('front.rag').' / '.trans('front.seatbelt'),
-            //'24' => 'Birla ' . trans('global.custom'),            
+            //'24' => 'Birla ' . trans('global.custom'),
             //'26' => trans('front.object_history'),
             //'27' => 'Automon ' . trans('global.custom'),
-            '29' => trans('front.engine_hours') . ' ' . trans('validation.attributes.daily'),
+            '29' => trans('front.engine_hours').' '.trans('validation.attributes.daily'),
             '30' => trans('front.ignition_on_off'),
         ];
     }
@@ -104,12 +101,12 @@ class ReportModalHelper extends ModalHelper
             ->pluck('plate_number', 'id')
             ->all();
 
-
-            //dd($devices);
+        //dd($devices);
         //debugar(true,$devices);
 
-        if (empty($devices))
+        if (empty($devices)) {
             return $this->api ? ['status' => 0, 'errors' => ['id' => trans('front.no_devices')]] : modal(trans('front.no_devices'), 'alert');
+        }
 
         $geofences = GeofenceRepo::getWhere(['user_id' => $this->user->id]);
 
@@ -119,7 +116,7 @@ class ReportModalHelper extends ModalHelper
             'pdf' => trans('front.pdf'),
             'pdf_land' => trans('front.pdf_land'),
         ];
-        
+
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'Mobi') !== false) {
             // usuário está usando um celular, então definimos PDF como a primeira opção
             $formats = [
@@ -128,7 +125,6 @@ class ReportModalHelper extends ModalHelper
                 'xls' => trans('front.xls'),
             ];
         }
-        
 
         $stops = [
             '1' => '> 1 '.trans('front.minute_short'),
@@ -157,20 +153,20 @@ class ReportModalHelper extends ModalHelper
         $types = $this->types;
         $types_list = $this->types;
 
-        if ( ! settings('plugins.business_private_drive.status') ) {
-            unset( $types_list['21'], $types_list['22'] );
+        if (! settings('plugins.business_private_drive.status')) {
+            unset($types_list['21'], $types_list['22']);
         }
 
-        if ( ! settings('plugins.birla_report.status') ) {
-            unset( $types_list['24'] );
+        if (! settings('plugins.birla_report.status')) {
+            unset($types_list['24']);
         }
 
-        if ( ! settings('plugins.object_history_report.status') ) {
-            unset( $types_list['25'] );
+        if (! settings('plugins.object_history_report.status')) {
+            unset($types_list['25']);
         }
 
-        if ( ! settings('plugins.automon_report.status') ) {
-            unset( $types_list['27'] );
+        if (! settings('plugins.automon_report.status')) {
+            unset($types_list['27']);
         }
 
         if ($this->api) {
@@ -187,7 +183,7 @@ class ReportModalHelper extends ModalHelper
             $reports = $reports->toArray();
             $reports['url'] = route('api.get_reports');
             $geofences = $geofences->toArray();
-            $devices = array_values( $devices->all() );
+            $devices = array_values($devices->all());
         }
 
         return compact('devices', 'geofences', 'formats', 'stops', 'filters', 'types', 'types_list', 'reports');
@@ -195,103 +191,108 @@ class ReportModalHelper extends ModalHelper
 
     public function create()
     {
-        if (empty($this->data['id']))
+        if (empty($this->data['id'])) {
             $this->checkException('reports', 'store');
-        else
+        } else {
             $this->checkException('reports', 'update', ReportRepo::find($this->data['id']));
+        }
 
-        try
-        {
-
+        try {
             if ($this->api) {
-                if (isset($this->data['devices']) && !is_array($this->data['devices']))
-                    $this->data['devices'] = json_decode($this->data['devices'], TRUE);
+                if (isset($this->data['devices']) && ! is_array($this->data['devices'])) {
+                    $this->data['devices'] = json_decode($this->data['devices'], true);
+                }
 
-                if (isset($this->data['geofences']) && !is_array($this->data['geofences']))
-                    $this->data['geofences'] = json_decode($this->data['geofences'], TRUE);
+                if (isset($this->data['geofences']) && ! is_array($this->data['geofences'])) {
+                    $this->data['geofences'] = json_decode($this->data['geofences'], true);
+                }
             }
 
             $this->validate($this->data);
 
             ReportSaveFormValidator::validate('create', $this->data);
 
-            $now = Carbon::parse( tdate(date('d-m-Y H:i:s'), NULL, FALSE, 'd-m-Y') );
-            $days = $now->diffInDays( Carbon::parse( $this->data['date_from'] ) , false);
-            $this->data['from_format'] = $days . ' days ' . (empty($this->data['from_time']) ? '00:00' : $this->data['from_time']);
-            $days = $now->diffInDays( Carbon::parse( $this->data['date_to'] ) , false);
-            $this->data['to_format'] = $days . ' days ' . (empty($this->data['to_time']) ? '00:00' : $this->data['to_time']);
+            $now = Carbon::parse(tdate(date('d-m-Y H:i:s'), null, false, 'd-m-Y'));
+            $days = $now->diffInDays(Carbon::parse($this->data['date_from']), false);
+            $this->data['from_format'] = $days.' days '.(empty($this->data['from_time']) ? '00:00' : $this->data['from_time']);
+            $days = $now->diffInDays(Carbon::parse($this->data['date_to']), false);
+            $this->data['to_format'] = $days.' days '.(empty($this->data['to_time']) ? '00:00' : $this->data['to_time']);
 
-            if ( ! $this->api ) {
-                $this->data['date_from'] .= ' ' . (empty($this->data['from_time']) ? '00:00' : $this->data['from_time']);
-                $this->data['date_to']   .= ' ' . (empty($this->data['to_time']) ? '00:00' : $this->data['to_time']);
+            if (! $this->api) {
+                $this->data['date_from'] .= ' '.(empty($this->data['from_time']) ? '00:00' : $this->data['from_time']);
+                $this->data['date_to'] .= ' '.(empty($this->data['to_time']) ? '00:00' : $this->data['to_time']);
             }
 
             $this->data['email'] = $this->data['send_to_email'];
 
             $daily_time = '00:00';
-            if (isset($this->data['daily_time']) && preg_match("/(2[0-4]|[01][1-9]|10):([0-5][0-9])/", $this->data['daily_time']))
+            if (isset($this->data['daily_time']) && preg_match('/(2[0-4]|[01][1-9]|10):([0-5][0-9])/', $this->data['daily_time'])) {
                 $daily_time = $this->data['daily_time'];
+            }
 
             $this->data['daily_time'] = $daily_time;
 
             $weekly_time = '00:00';
-            if (isset($this->data['weekly_time']) && preg_match("/(2[0-4]|[01][1-9]|10):([0-5][0-9])/", $this->data['weekly_time']))
+            if (isset($this->data['weekly_time']) && preg_match('/(2[0-4]|[01][1-9]|10):([0-5][0-9])/', $this->data['weekly_time'])) {
                 $weekly_time = $this->data['weekly_time'];
+            }
 
             $this->data['weekly_time'] = $weekly_time;
 
-            if ( !empty($this->data['id']) && empty(ReportRepo::find($this->data['id'])) ) {
+            if (! empty($this->data['id']) && empty(ReportRepo::find($this->data['id']))) {
                 unset($this->data['id']);
             }
 
-            if (empty($this->data['id']))
+            if (empty($this->data['id'])) {
                 $item = ReportRepo::create($this->data + [
-                        'user_id' => $this->user->id,
-                        'daily_email_sent' => date('d-m-Y', strtotime('-1 day')),
-                        'weekly_email_sent' => date("d-m-Y",strtotime('monday this week'))
-                    ]);
-            else {
+                    'user_id' => $this->user->id,
+                    'daily_email_sent' => date('d-m-Y', strtotime('-1 day')),
+                    'weekly_email_sent' => date('d-m-Y', strtotime('monday this week')),
+                ]);
+            } else {
                 $item = ReportRepo::findWhere(['id' => $this->data['id'], 'user_id' => $this->user->id]);
-                if (!empty($item))
+                if (! empty($item)) {
                     ReportRepo::update($item->id, $this->data);
+                }
             }
 
-            if (!empty($item)) {
-                if (isset($this->data['devices']) && is_array($this->data['devices']) && !empty($this->data['devices']))
+            if (! empty($item)) {
+                if (isset($this->data['devices']) && is_array($this->data['devices']) && ! empty($this->data['devices'])) {
                     $item->devices()->sync($this->data['devices']);
+                }
 
-                if (isset($this->data['geofences']) && is_array($this->data['geofences']) && !empty($this->data['geofences']))
+                if (isset($this->data['geofences']) && is_array($this->data['geofences']) && ! empty($this->data['geofences'])) {
                     $item->geofences()->sync($this->data['geofences']);
+                }
             }
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
 
         return ['status' => $this->api ? 1 : 2];
     }
 
-    public function generate($data = NULL)
+    public function generate($data = null)
     {
         $this->checkException('reports', 'view');
 
-        if (is_null($data))
+        if (is_null($data)) {
             $data = $this->data;
+        }
 
-        try
-        {
+        try {
             ReportFormValidator::validate('create', $this->data);
 
-            $data['date_from'] .= ( empty($data['from_time']) ? '' : ' ' . $data['from_time']);
-            $data['date_to']   .= ( empty($data['to_time']) ? '' : ' ' . $data['to_time']);
+            $data['date_from'] .= (empty($data['from_time']) ? '' : ' '.$data['from_time']);
+            $data['date_to'] .= (empty($data['to_time']) ? '' : ' '.$data['to_time']);
 
             $this->validate($data);
 
-            if (!isset($data['generate'])) {
+            if (! isset($data['generate'])) {
                 unset($data['_token']);
                 unset($data['from_time']);
                 unset($data['to_time']);
+
                 return ['status' => 3, 'url' => route($this->api ? 'api.generate_report' : 'reports.update').'?'.http_build_query($data + ['generate' => 1], '', '&')];
             }
 
@@ -303,7 +304,7 @@ class ReportModalHelper extends ModalHelper
             $data['user_id'] = $this->user->id;
             $data['logo'] = 1;
             $data['lang'] = $this->user->lang;
-            require(base_path('Tobuli/Helpers/Arabic.php'));
+            require base_path('Tobuli/Helpers/Arabic.php');
             $data['arabic'] = new \I18N_Arabic('Glyphs');
 
             $report_name = mb_convert_encoding($this->types[$data['type']].'_'.$data['date_from'].'_'.$data['date_to'].'_'.$data['user_id'].'_'.time(), 'ASCII');
@@ -316,51 +317,51 @@ class ReportModalHelper extends ModalHelper
                 "\r" => '',
             ]);
 
-            # Devices
+            // Devices
             $devices = DeviceRepo::getWhereInWith($data['devices'], 'id', ['sensors', 'users']);
 
-            # User geofences
-            if ($data['type'] != 7 && $data['type'] != 15 && $data['type'] != 20 && $data['type'] != 28)
+            // User geofences
+            if ($data['type'] != 7 && $data['type'] != 15 && $data['type'] != 20 && $data['type'] != 28) {
                 $geofences = GeofenceRepo::getWhere(['user_id' => $data['user_id']]);
-            else
+            } else {
                 $geofences = GeofenceRepo::getWhereIn($data['geofences']);
+            }
 
             $reportHelper = new ReportHelper($data, $geofences);
 
-            foreach ($devices as $device)
-            {
+            foreach ($devices as $device) {
                 $timezone = $this->user->timezone->zone;
                 $reportHelper->setData([
-                    'zone' => $timezone
+                    'zone' => $timezone,
                 ]);
                 $date_from = tdate($data['date_from'], timezoneReverse($timezone));
                 $date_to = tdate($data['date_to'], timezoneReverse($timezone));
 
-
                 $reportHelper->data['stop_speed'] = $device->min_moving_speed;
-                if ($data['type'] == 7) { # Geofence in/out
+                if ($data['type'] == 7) { // Geofence in/out
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
 
-                    if (!empty($items_result))
+                    if (! empty($items_result)) {
                         $items[$device->id] = $reportHelper->generateGeofences($items_result, $date_from, $date_to);
+                    }
 
                     unset($items_result);
-                }
-                elseif ($data['type'] == 8) { # Events
+                } elseif ($data['type'] == 8) { // Events
                     $items_result = EventRepo::getBetween($this->user->id, $device->id, $date_from, $date_to);
-                    if (!empty($items_result))
+                    if (! empty($items_result)) {
                         $items[$device->id] = $reportHelper->generateEvents($items_result->toArray());
+                    }
 
                     unset($items_result);
-                }
-                elseif ($data['type'] == 14) { # RAG
+                } elseif ($data['type'] == 14) { // RAG
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
 
-                    $driver_history = getDevicesDrivers($data['user_id'], $device->id, $date_from, $date_to, '>=', NULL, TRUE);
-                    $last_dr = getDevicesDrivers($data['user_id'], $device->id, $date_from, NULL, '<=', 1);
-                    if (!empty($last_dr)) {
-                        if (!is_array($driver_history))
+                    $driver_history = getDevicesDrivers($data['user_id'], $device->id, $date_from, $date_to, '>=', null, true);
+                    $last_dr = getDevicesDrivers($data['user_id'], $device->id, $date_from, null, '<=', 1);
+                    if (! empty($last_dr)) {
+                        if (! is_array($driver_history)) {
                             $driver_history = [];
+                        }
 
                         $last_dr = end($last_dr);
                         $driver_history[] = $last_dr;
@@ -371,15 +372,15 @@ class ReportModalHelper extends ModalHelper
                     });
 
                     $items[$device->id] = $reportHelper->generateRag($items_result, $driver_history, $device, $rag_sensors, $date_from, $date_to);
-                }
-                elseif ($data['type'] == 23) { # RAG Seatbelt
+                } elseif ($data['type'] == 23) { // RAG Seatbelt
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
 
-                    $driver_history = getDevicesDrivers($data['user_id'], $device->id, $date_from, $date_to, '>=', NULL, TRUE);
-                    $last_dr = getDevicesDrivers($data['user_id'], $device->id, $date_from, NULL, '<=', 1);
-                    if (!empty($last_dr)) {
-                        if (!is_array($driver_history))
+                    $driver_history = getDevicesDrivers($data['user_id'], $device->id, $date_from, $date_to, '>=', null, true);
+                    $last_dr = getDevicesDrivers($data['user_id'], $device->id, $date_from, null, '<=', 1);
+                    if (! empty($last_dr)) {
+                        if (! is_array($driver_history)) {
                             $driver_history = [];
+                        }
 
                         $last_dr = end($last_dr);
                         $driver_history[] = $last_dr;
@@ -390,107 +391,100 @@ class ReportModalHelper extends ModalHelper
                     });
 
                     $items[$device->id] = $reportHelper->generateRagSeatBelt($items_result, $driver_history, $device, $rag_sensors, $date_from, $date_to);
-                }
-                elseif ($data['type'] == 15) { # Geofence in/out 24 mode
+                } elseif ($data['type'] == 15) { // Geofence in/out 24 mode
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
 
-                    if (!empty($items_result))
+                    if (! empty($items_result)) {
                         $items[$device->id] = $reportHelper->generateGeofences24($items_result, $date_from, $date_to);
+                    }
 
                     unset($items_result);
-                }
-                elseif ($data['type'] == 16) {
+                } elseif ($data['type'] == 16) {
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
 
-                    if (!empty($items_result))
+                    if (! empty($items_result)) {
                         $items[$device->id] = $reportHelper->generateGeneralCustom($items_result, $date_from, $date_to, $device, $device->sensors);
+                    }
                     unset($items_result);
-                }
-                elseif ($data['type'] == 20) { # Geofence in/out engine on/off
+                } elseif ($data['type'] == 20) { // Geofence in/out engine on/off
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
 
-                    if (!empty($items_result))
+                    if (! empty($items_result)) {
                         $items[$device->id] = $reportHelper->generateGeofencesEngine($items_result, $date_from, $date_to, $device, $device->sensors);
+                    }
 
                     unset($items_result);
-                }
-                elseif ($data['type'] == 24) { # Birla Custom
+                } elseif ($data['type'] == 24) { // Birla Custom
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
 
                     $items[$device->id] = $reportHelper->generateBirlaCustom($items_result, $date_from, $date_to, $device);
 
                     unset($items_result);
-                }
-                elseif ($data['type'] == 25) { # Object history
-
+                } elseif ($data['type'] == 25) { // Object history
                     $items[$device->id] = $reportHelper->generateObjectHistory($date_from, $date_to, $device, $this->user);
-                    //if (Auth::User()->id == 6) {   
-                        
-                        // Filtrar as posições
-                        $filteredPositions = $this->filterPositions($items[$device->id]['positions']);
-                        //dump($items[$device->id]['positions'], $filteredPositions);
-                        $items[$device->id]['positions'] = $filteredPositions;
-                        //dd($items);
+                    //if (Auth::User()->id == 6) {
+
+                    // Filtrar as posições
+                    $filteredPositions = $this->filterPositions($items[$device->id]['positions']);
+                    //dump($items[$device->id]['positions'], $filteredPositions);
+                    $items[$device->id]['positions'] = $filteredPositions;
+                    //dd($items);
                     //}
 
-                    if (empty($data['parameters']))
+                    if (empty($data['parameters'])) {
                         $data['parameters'] = [];
+                    }
 
                     $data['parameters'] = array_unique($data['parameters'] + $items[$device->id]['parameters']);
-                }
-                elseif ($data['type'] == 27) { # Automon Custom
+                } elseif ($data['type'] == 27) { // Automon Custom
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
 
                     $items[$device->id] = $reportHelper->generateAutomonCustom($items_result, $date_from, $date_to, $device);
 
                     unset($items_result);
-                }
-                elseif ($data['type'] == 28) { # Geofence Shift
+                } elseif ($data['type'] == 28) { // Geofence Shift
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
 
                     $items[$device->id] = $reportHelper->generateGeofencesShift($items_result, $date_from, $date_to, $data['parameters']);
 
                     unset($items_result);
-                }
-                elseif ($data['type'] == 29) { # Engine hours 24
+                } elseif ($data['type'] == 29) { // Engine hours 24
                     $items_result = TraccarPositionRepo::searchObj($device->traccar_device_id, $date_from, $date_to);
 
                     $items[$device->id] = $reportHelper->generateEngineHours24($items_result);
 
                     unset($items_result);
-                }
-                elseif ($data['type'] == 30) { # Ignition on/off
+                } elseif ($data['type'] == 30) { // Ignition on/off
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
-                    
 
-                    $driver_history = getDevicesDrivers($data['user_id'], $device->id, $date_from, $date_to, '>=', NULL, TRUE);
-                    $last_dr = getDevicesDrivers($data['user_id'], $device->id, $date_from, NULL, '<=', 1);
-                    if (!empty($last_dr)) {
-                        if (!is_array($driver_history))
+                    $driver_history = getDevicesDrivers($data['user_id'], $device->id, $date_from, $date_to, '>=', null, true);
+                    $last_dr = getDevicesDrivers($data['user_id'], $device->id, $date_from, null, '<=', 1);
+                    if (! empty($last_dr)) {
+                        if (! is_array($driver_history)) {
                             $driver_history = [];
+                        }
 
                         $last_dr = end($last_dr);
                         $driver_history[] = $last_dr;
                     }
 
-                    if (!empty($items_result))
+                    if (! empty($items_result)) {
                         $items[$device->id] = $reportHelper->generateIgnitionOnOff(
                             $items_result, $date_from, $date_to, $device, $device->sensors, $driver_history);
+                    }
 
                     unset($items_result);
-                }
-                else {
+                } else {
                     $items_result = TraccarPositionRepo::searchWithSensors($this->user->id, $device->traccar_device_id, $date_from, $date_to);
-                    
 
-                    if (!empty($items_result)) {
+                    if (! empty($items_result)) {
                         $engine_status = $device->getEngineStatusFrom($date_from);
 
-                        $sensors = NULL;
-                        $driver_history = NULL;
+                        $sensors = null;
+                        $driver_history = null;
 
                         if (in_array($data['type'], [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 18, 19, 21, 22])) {
-                            # Odometer
+                            // Odometer
                             if (count($device->sensors)) {
                                 foreach ($device->sensors as $key => $sensor) {
                                     if ($sensor['type'] == 'odometer') {
@@ -505,11 +499,12 @@ class ReportModalHelper extends ModalHelper
                         }
 
                         if (in_array($data['type'], [1, 2, 3, 4, 10, 11, 12, 13, 14, 18, 19, 21, 22])) {
-                            $driver_history = getDevicesDrivers($data['user_id'], $device->id, $date_from, $date_to, '>=', NULL, TRUE);
-                            $last_dr = getDevicesDrivers($data['user_id'], $device->id, $date_from, NULL, '<=', 1);
-                            if (!empty($last_dr)) {
-                                if (!is_array($driver_history))
+                            $driver_history = getDevicesDrivers($data['user_id'], $device->id, $date_from, $date_to, '>=', null, true);
+                            $last_dr = getDevicesDrivers($data['user_id'], $device->id, $date_from, null, '<=', 1);
+                            if (! empty($last_dr)) {
+                                if (! is_array($driver_history)) {
                                     $driver_history = [];
+                                }
 
                                 $last_dr = end($last_dr);
                                 $driver_history[] = $last_dr;
@@ -518,8 +513,9 @@ class ReportModalHelper extends ModalHelper
 
                         $items[$device->id] = $reportHelper->generate($items_result, $sensors, $driver_history, $device, $date_from, $date_to, $engine_status);
 
-                        if (in_array($data['type'], [3, 18]))
+                        if (in_array($data['type'], [3, 18])) {
                             $items[$device->id]->events = EventRepo::getBetweenCount($data['user_id'], $device->id, $date_from, $date_to);
+                        }
                     }
 
                     unset($items_result);
@@ -535,25 +531,24 @@ class ReportModalHelper extends ModalHelper
             $devices = $arr;
             unset($arr);
 
-
             if (in_array($data['type'], [19, 21, 22])) {
                 $arr = [
                     'items' => [],
                     'devices' => $devices,
-                    'data' => $data
+                    'data' => $data,
                 ];
 
                 foreach ($items as $device_id => $item) {
                     foreach ($item->getItems() as $it) {
                         $arr['items'][$it['driver']]['items'][strtotime($it['raw_time'])] = $it + ['device' => $device_id];
-                        if (!array_key_exists('total', $arr['items'][$it['driver']])) {
+                        if (! array_key_exists('total', $arr['items'][$it['driver']])) {
                             $arr['items'][$it['driver']]['total'] = [
                                 'drive' => 0,
                                 'stop' => 0,
                                 'distance' => 0,
                                 'fuel' => 0,
                                 'engine_work' => 0,
-                                'engine_idle' => 0
+                                'engine_idle' => 0,
                             ];
                         }
                         $arr['items'][$it['driver']]['total']['distance'] += $it['distance'];
@@ -562,12 +557,11 @@ class ReportModalHelper extends ModalHelper
                         $arr['items'][$it['driver']]['total']['engine_idle'] += $it['engine_idle'];
                         if ($it['status'] == 1) {
                             $arr['items'][$it['driver']]['total']['drive'] += $it['time_seconds'];
-                        }
-                        elseif ($it['status'] == 2) {
+                        } elseif ($it['status'] == 2) {
                             $arr['items'][$it['driver']]['total']['stop'] += $it['time_seconds'];
                         }
 
-                        if ( empty($arr['items'][$it['driver']]['total']['fuel_sensor']) ) {
+                        if (empty($arr['items'][$it['driver']]['total']['fuel_sensor'])) {
                             $fuel_sensor_id = null;
 
                             if (isset($item->fuel_consumption) && is_array($item->fuel_consumption)) {
@@ -575,45 +569,42 @@ class ReportModalHelper extends ModalHelper
                                 $fuel_sensor_id = key($item->fuel_consumption);
                             }
 
-                            if ( isset($item->sensors_arr[$fuel_sensor_id]) ) {
+                            if (isset($item->sensors_arr[$fuel_sensor_id])) {
                                 $arr['items'][$it['driver']]['total']['fuel_sensor'] = $item->sensors_arr[$fuel_sensor_id];
                             }
                         }
                     }
-
-
                 }
                 $items = $arr;
             }
 
             $types = $this->types;
 
-
             if ($data['format'] == 'html') {
                 $type = $data['type'] == 13 ? 10 : $data['type'];
-                if ($data['type'] == 13 || $data['type'] == 10)
+                if ($data['type'] == 13 || $data['type'] == 10) {
                     $data['sensors_var'] = $data['type'] == 13 ? 'temperature_sensors' : 'fuel_tank_sensors';
+                }
 
                 $html = view('front::Reports.parse.type_'.$type)->with(compact('devices', 'items', 'types', 'data'))->render();
                 header('Content-disposition: attachment; filename="'.utf8_encode($report_name).'.html"');
                 header('Content-type: text/html');
                 echo $html;
-            }
-            elseif ($data['format'] == 'pdf' || $data['format'] == 'pdf_land') {
-                    //UILMO FAZER MELHORIA NA QUESTÃO DE GERAR O PDF,PODE ATÉ ENVIAR OS DADOS PARA O SERVIDOR bd E FAZER A GERAÇÃO POR LÁ
-                    /*
+            } elseif ($data['format'] == 'pdf' || $data['format'] == 'pdf_land') {
+                //UILMO FAZER MELHORIA NA QUESTÃO DE GERAR O PDF,PODE ATÉ ENVIAR OS DADOS PARA O SERVIDOR bd E FAZER A GERAÇÃO POR LÁ
+                /*
                 $stop = false;
                 $change_page_size = ($data['format'] == 'pdf_land');
                 $tries = 1;
                 $view = view('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))->render();
 
-                    // Caminho completo para o diretório de destino
+                // Caminho completo para o diretório de destino
                 $pdfDirectory = '/home/centos/wkhtmltopdf/';
-                    // Caminho completo para o arquivo PDF
+                // Caminho completo para o arquivo PDF
                 //$pdfFilePath = $pdfDirectory . $report_name.'.pdf';
-                
+
                 /*
-                
+
 
                 $pdf = SnappyPDF::loadHTML($view);
                 $pdf->setOption('dpi', '72'); // Defina um valor baixo para a opção dpi
@@ -628,88 +619,85 @@ class ReportModalHelper extends ModalHelper
 
                 return $dompdf->stream('meu_pdf.pdf');*/
 
-                if($data['type'] == 25){
-                        return redirect()->back()->with('error', 'Desculpe, não foi possível gerar o RELATÓRIO! Tente o formato HTML ou XLS')->header('Refresh', '5');
-                        //UILMO FAZER MELHORIA NA QUESTÃO DE GERAR O PDF,PODE ATÉ ENVIAR OS DADOS PARA O SERVIDOR bd E FAZER A GERAÇÃO POR LÁ
-                        $stop = false;
-                        $change_page_size = ($data['format'] == 'pdf_land');
-                        $tries = 1;
-                        while (!$stop) {
-                            try {
-                                if ($change_page_size)
-                                    $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))
-                                                ->setPaper(array(0,0,950,950), 'landscape')
-                                                ->setOptions(['dpi' => 72,
-                                                                'isHtml5ParserEnabled' => true]);
-                                else
-                                    $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))
-                                                ->setOptions([  'dpi' => 72,
-                                                                'isHtml5ParserEnabled' => true]);
-
-                                return $pdf->stream($report_name.'.pdf');
-                            }
-                            catch (\Exception $e) {
-                                if ($e instanceof \DOMPDF_Exception && $e->getMessage() == 'Frame not found in cellmap') {
-                                    $change_page_size = TRUE;
-                                } else {
-                                    Bugsnag::notifyException($e);
-                                }
-
-                                $tries++;
-                                if ($tries > 2)
-                                    $stop = TRUE;
-                                sleep(1);
-                            }
-                        }
-                }
-                else{
+                if ($data['type'] == 25) {
+                    return redirect()->back()->with('error', 'Desculpe, não foi possível gerar o RELATÓRIO! Tente o formato HTML ou XLS')->header('Refresh', '5');
+                    //UILMO FAZER MELHORIA NA QUESTÃO DE GERAR O PDF,PODE ATÉ ENVIAR OS DADOS PARA O SERVIDOR bd E FAZER A GERAÇÃO POR LÁ
                     $stop = false;
-                        $change_page_size = ($data['format'] == 'pdf_land');
-                        $tries = 1;
-                        while (!$stop) {
-                            try {
-                                if ($change_page_size)
-                                    $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))
-                                                ->setPaper(array(0,0,950,950), 'landscape');
-                                else
-                                    $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'));
-
-                                return $pdf->stream($report_name.'.pdf');
+                    $change_page_size = ($data['format'] == 'pdf_land');
+                    $tries = 1;
+                    while (! $stop) {
+                        try {
+                            if ($change_page_size) {
+                                $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))
+                                            ->setPaper([0, 0, 950, 950], 'landscape')
+                                            ->setOptions(['dpi' => 72,
+                                                'isHtml5ParserEnabled' => true]);
+                            } else {
+                                $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))
+                                            ->setOptions(['dpi' => 72,
+                                                'isHtml5ParserEnabled' => true]);
                             }
-                            catch (\Exception $e) {
-                                if ($e instanceof \DOMPDF_Exception && $e->getMessage() == 'Frame not found in cellmap') {
-                                    $change_page_size = TRUE;
-                                } else {
-                                    Bugsnag::notifyException($e);
-                                }
 
-                                $tries++;
-                                if ($tries > 2)
-                                    $stop = TRUE;
-                                sleep(1);
+                            return $pdf->stream($report_name.'.pdf');
+                        } catch (\Exception $e) {
+                            if ($e instanceof \DOMPDF_Exception && $e->getMessage() == 'Frame not found in cellmap') {
+                                $change_page_size = true;
+                            } else {
+                                Bugsnag::notifyException($e);
                             }
+
+                            $tries++;
+                            if ($tries > 2) {
+                                $stop = true;
+                            }
+                            sleep(1);
                         }
-                }
-                return 'Desculpe não poder gerar o RELATÓRIO!';
-                
+                    }
+                } else {
+                    $stop = false;
+                    $change_page_size = ($data['format'] == 'pdf_land');
+                    $tries = 1;
+                    while (! $stop) {
+                        try {
+                            if ($change_page_size) {
+                                $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'))
+                                            ->setPaper([0, 0, 950, 950], 'landscape');
+                            } else {
+                                $pdf = PDF::loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'));
+                            }
 
-            }
-            elseif ($data['format'] == 'xls') {
+                            return $pdf->stream($report_name.'.pdf');
+                        } catch (\Exception $e) {
+                            if ($e instanceof \DOMPDF_Exception && $e->getMessage() == 'Frame not found in cellmap') {
+                                $change_page_size = true;
+                            } else {
+                                Bugsnag::notifyException($e);
+                            }
+
+                            $tries++;
+                            if ($tries > 2) {
+                                $stop = true;
+                            }
+                            sleep(1);
+                        }
+                    }
+                }
+
+                return 'Desculpe não poder gerar o RELATÓRIO!';
+            } elseif ($data['format'] == 'xls') {
                 try {
-                    Excel::create($report_name, function($excel) use ($items, $devices, $types, $data) {
-                        $excel->sheet('Report', function($sheet) use ($items, $devices, $types, $data) {
+                    Excel::create($report_name, function ($excel) use ($items, $devices, $types, $data) {
+                        $excel->sheet('Report', function ($sheet) use ($items, $devices, $types, $data) {
                             $sheet->loadView('front::Reports.parse.type_'.$data['type'], compact('devices', 'items', 'types', 'data'));
                         });
                     })->export('xls');
-                }
-                catch(\Exception $e) {
+                } catch(\Exception $e) {
                     Bugsnag::notifyException($e);
+
                     return 'Sorry can\'t generate, too mutch data.';
                 }
             }
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
@@ -740,12 +728,13 @@ class ReportModalHelper extends ModalHelper
     {
         $types = $this->getTypes();
 
-        $filtered = array_filter($types, function($value) use ($type){
+        $filtered = array_filter($types, function ($value) use ($type) {
             return $value['type'] == $type;
         });
 
-        if (empty($filtered))
+        if (empty($filtered)) {
             throw new \Exception('Not found');
+        }
 
         return reset($filtered);
     }
@@ -756,112 +745,112 @@ class ReportModalHelper extends ModalHelper
 
         $types = [];
 
-        foreach ($this->types as $type => $name)
-        {
+        foreach ($this->types as $type => $name) {
             $types[$type] = [
                 'type' => $type,
                 'name' => $name,
                 'formats' => [
-                    'html', 'xls', 'pdf', 'pdf_land'
+                    'html', 'xls', 'pdf', 'pdf_land',
                 ],
-                'fields' => $fields
+                'fields' => $fields,
             ];
 
             switch ($type) {
-                case "1":
-                case "2":
-                case "16":
+                case '1':
+                case '2':
+                case '16':
                     $types[$type]['fields'] = array_diff($fields, ['geofences', 'show_addresses', 'zones_instead']);
                     break;
-                case "3":
-                case "4":
+                case '3':
+                case '4':
                     $types[$type]['fields'] = array_diff($fields, ['geofences', 'speed_limit']);
                     break;
-                case "5":
-                case "6":
+                case '5':
+                case '6':
                     $types[$type]['fields'] = array_diff($fields, ['geofences', 'stops']);
                     break;
-                case "7":
+                case '7':
                     $types[$type]['fields'] = array_diff($fields, ['speed_limit', 'stops']);
                     break;
-                case "8":
+                case '8':
                     $types[$type]['fields'] = array_diff($fields, ['geofences', 'speed_limit', 'stops']);
                     break;
-                case "9":
-                case "29":
+                case '9':
+                case '29':
                     $types[$type]['fields'] = array_diff($fields, ['geofences', 'speed_limit', 'stops', 'show_addresses', 'zones_instead']);
                     break;
-                case "10":
-                case "11":
-                case "12":
-                case "13":
+                case '10':
+                case '11':
+                case '12':
+                case '13':
                     $types[$type]['fields'] = array_diff($fields, ['geofences', 'speed_limit', 'stops']);
-                    if (in_array($type, [10, 13]))
+                    if (in_array($type, [10, 13])) {
                         $types[$type]['formats'] = ['html'];
+                    }
 
                     break;
-                case "14":
-                case "23":
+                case '14':
+                case '23':
                     $types[$type]['fields'] = array_diff($fields, ['geofences', 'stops', 'show_addresses', 'zones_instead']);
                     break;
-                case "18":
+                case '18':
                     $types[$type]['fields'] = array_diff($fields, ['stops']);
                     break;
-				case "19":
-				$types[$type]['fields'] = array_diff($fields, ['geofences']);
-				break;
-                case "28":
+                case '19':
+                    $types[$type]['fields'] = array_diff($fields, ['geofences']);
+                    break;
+                case '28':
                     $types[$type]['fields'] = array_diff($fields, ['speed_limit', 'stops', 'show_addresses', 'zones_instead']);
 
                     $types[$type]['parameters'] = [
                         [
                             'title' => trans('validation.attributes.shift_start'),
-                            'name'  => 'shift_start',
-                            'type'  => 'select',
+                            'name' => 'shift_start',
+                            'type' => 'select',
                             'default' => '08:00',
                             'options' => toOptions(config('tobuli.history_time')),
-                            'validation' => 'required|date_format:H:i'
+                            'validation' => 'required|date_format:H:i',
                         ],
                         [
                             'title' => trans('validation.attributes.shift_finish'),
-                            'name'  => 'shift_finish',
-                            'type'  => 'select',
+                            'name' => 'shift_finish',
+                            'type' => 'select',
                             'default' => '17:00',
                             'options' => toOptions(config('tobuli.history_time')),
-                            'validation' => 'required|date_format:H:i'
+                            'validation' => 'required|date_format:H:i',
                         ],
                         [
                             'title' => trans('validation.attributes.shift_start_tolerance'),
-                            'name'  => 'shift_start_tolerance',
-                            'type'  => 'select',
+                            'name' => 'shift_start_tolerance',
+                            'type' => 'select',
                             'options' => toOptions(config('tobuli.minutes')),
-                            'validation' => 'required|integer'
+                            'validation' => 'required|integer',
                         ],
                         [
                             'title' => trans('validation.attributes.shift_finish_tolerance'),
-                            'name'  => 'shift_finish_tolerance',
-                            'type'  => 'select',
+                            'name' => 'shift_finish_tolerance',
+                            'type' => 'select',
                             'options' => toOptions(config('tobuli.minutes')),
-                            'validation' => 'required|integer'
+                            'validation' => 'required|integer',
                         ],
                         [
                             'title' => trans('validation.attributes.excessive_exit'),
-                            'name'  => 'excessive_exit',
-                            'type'  => 'integer',
+                            'name' => 'excessive_exit',
+                            'type' => 'integer',
                             'default' => 10,
-                            'validation' => 'required|integer'
+                            'validation' => 'required|integer',
                         ],
                     ];
 
                     break;
-                case "30":
+                case '30':
                     $types[$type]['fields'] = array_diff($fields, ['speed_limit', 'stops', 'zones_instead', 'geofences']);
 
                     $types[$type]['parameters'] = [
                         [
                             'title' => trans('front.ignition_off'),
-                            'name'  => 'ignition_off',
-                            'type'  => 'select',
+                            'name' => 'ignition_off',
+                            'type' => 'select',
                             'default' => 1,
                             'options' => toOptions([
                                 '1' => '> 1 '.trans('front.minute_short'),
@@ -874,7 +863,7 @@ class ReportModalHelper extends ModalHelper
                                 '120' => '> 2 '.trans('front.hour_short'),
                                 '300' => '> 5 '.trans('front.hour_short'),
                             ]),
-                            'validation' => 'required|integer'
+                            'validation' => 'required|integer',
                         ],
                     ];
                     break;
@@ -886,31 +875,35 @@ class ReportModalHelper extends ModalHelper
         return array_values($types);
     }
 
-    public function validate( & $data)
+    public function validate(&$data)
     {
         $validator = Validator::make($data, ['type' => 'required']);
-        if ($validator->fails())
+        if ($validator->fails()) {
             throw new ValidationException(['type' => $validator->errors()->first()]);
+        }
 
-        if (empty($data['send_to_email']))
+        if (empty($data['send_to_email'])) {
             $data['send_to_email'] = '';
+        }
         $arr['send_to_email'] = array_flip(explode(';', $data['send_to_email']));
         unset($arr['send_to_email']['']);
         $arr['send_to_email'] = array_flip($arr['send_to_email']);
         $arr['send_to_email'] = array_map('trim', $arr['send_to_email']);
 
-        # Regenerate string
+        // Regenerate string
         $data['send_to_email'] = implode(';', $arr['send_to_email']);
 
         $validator = Validator::make($arr, ['send_to_email' => 'array_max:5']);
         $validator->each('send_to_email', ['email']);
-        if ($validator->fails())
+        if ($validator->fails()) {
             throw new ValidationException(['send_to_email' => $validator->errors()->first()]);
+        }
 
         if (isset($data['daily']) || isset($data['weekly'])) {
             $validator = Validator::make($arr, ['send_to_email' => 'required']);
-            if ($validator->fails())
+            if ($validator->fails()) {
                 throw new ValidationException(['send_to_email' => $validator->errors()->first()]);
+            }
         }
 
         if (strtotime($data['date_from']) > strtotime($data['date_to'])) {
@@ -921,33 +914,36 @@ class ReportModalHelper extends ModalHelper
 
         if (in_array($data['type'], ['7', '15', '20', '28'])) {
             $validator = Validator::make($data, ['geofences' => 'required']);
-            if ($validator->fails())
+            if ($validator->fails()) {
                 throw new ValidationException(['geofences' => $validator->errors()->first()]);
+            }
         }
 
         if (in_array($data['type'], ['5', '6'])) {
             $validator = Validator::make($data, ['speed_limit' => 'required']);
-            if ($validator->fails())
+            if ($validator->fails()) {
                 throw new ValidationException(['speed_limit' => $validator->errors()->first()]);
+            }
         }
 
         if ($data['type'] == '25') {
             $validator = Validator::make($data, ['devices' => 'same_protocol']);
-            if ($validator->fails())
+            if ($validator->fails()) {
                 throw new ValidationException(['devices' => $validator->errors()->first()]);
+            }
         }
 
         $type = $this->getType($data['type']);
 
-        if ( ! empty($type['parameters'])) {
+        if (! empty($type['parameters'])) {
             $parameters = [];
             $rules = [];
-            foreach ($type['parameters'] as $parameter)
-            {
+            foreach ($type['parameters'] as $parameter) {
                 $parameters[] = $parameter['name'];
 
-                if (empty($parameter['validation']))
+                if (empty($parameter['validation'])) {
                     continue;
+                }
 
                 //html attribute name to validation name
                 $name = preg_replace(['/\[\]/', '/\[([^\[\]]+)\]/'], ['.*', '.$1'], $parameter['name']);
@@ -957,8 +953,9 @@ class ReportModalHelper extends ModalHelper
 
             if ($rules) {
                 $validator = Validator::make($data, $rules);
-                if ($validator->fails())
+                if ($validator->fails()) {
                     throw new ValidationException($validator->errors());
+                }
             }
 
             $data['parameters'] = array_only($data, $parameters);
@@ -970,11 +967,11 @@ class ReportModalHelper extends ModalHelper
     {
         // Última posição válida
         $lastValidPosition = null;
-    
+
         // Posições filtradas
         $filteredPositions = [];
         $previousTime = null;
-    
+
         foreach ($positions as $position) {
             $currentTime = Carbon::createFromFormat('d-m-Y H:i:s', $position['time']);
             if ($previousTime !== null && $currentTime->diffInMinutes($previousTime) < 3) {
@@ -984,8 +981,7 @@ class ReportModalHelper extends ModalHelper
             $filteredPositions[] = $position;
             $previousTime = $currentTime;
         }
-    
+
         return $filteredPositions;
     }
-    
 }

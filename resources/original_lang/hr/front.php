@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'expires_in_days' => 'Istječe u% s danima',
     'extended_info' => 'Proširene informacije',
@@ -663,4 +663,4 @@ return array(
     'do_objects_delete' => 'Želite li stvarno izbrisati te uređaje? <br> Svi povezani podaci bit će izgubljeni.',
     'ignition_off' => 'Paljenje isključeno',
     'forward' => 'Naprijed',
-);
+];

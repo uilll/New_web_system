@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tobuli\Helpers\SMS\SendSmsInterface;
 use Tobuli\Helpers\SMS\Services\HTTP\SendSmsGET;
 use Tobuli\Helpers\SMS\SMSGatewayManager;
@@ -59,5 +56,4 @@ class SMSGatewayManagerTest extends TestCase
 
         var_dump($res);
     }
-
 }

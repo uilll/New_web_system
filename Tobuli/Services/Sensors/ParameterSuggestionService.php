@@ -10,8 +10,9 @@ class ParameterSuggestionService
     {
         $values = $this->parameterValues($selected_parameter, $device_id);
 
-        if ( ! count($values))
+        if (! count($values)) {
             return trans('front.none');
+        }
 
         return $this->formatSuggestion($values);
     }
@@ -24,8 +25,9 @@ class ParameterSuggestionService
             ->take(200)
             ->get();
 
-        if (!count($positions))
+        if (! count($positions)) {
             return null;
+        }
 
         return $this->valuesFromEveryPosition($positions, $parameter);
     }
@@ -37,11 +39,13 @@ class ParameterSuggestionService
         foreach ($positions as $position) {
             $value = $position->getParameter($parameter);
 
-            if (empty($value))
+            if (empty($value)) {
                 continue;
+            }
 
-            if (in_array($value, $values))
+            if (in_array($value, $values)) {
                 continue;
+            }
 
             $values[] = $value;
         }
@@ -55,9 +59,10 @@ class ParameterSuggestionService
 
         $limit = 15;
 
-        if (count($values) > $limit)
-            return implode(", ", array_slice($values, 0, $limit)) . ' ...';
+        if (count($values) > $limit) {
+            return implode(', ', array_slice($values, 0, $limit)).' ...';
+        }
 
-        return implode(", ", $values);
+        return implode(', ', $values);
     }
 }

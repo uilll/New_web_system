@@ -4,8 +4,8 @@ namespace Tobuli\Helpers\Settings;
 
 use Cache;
 
-abstract class Settings {
-
+abstract class Settings
+{
     protected $prefix;
 
     protected $cache;
@@ -13,7 +13,9 @@ abstract class Settings {
     protected $parent;
 
     abstract protected function _has($key);
+
     abstract protected function _get($key);
+
     abstract protected function _set($key, $value);
 
     public function __construct()
@@ -25,7 +27,7 @@ abstract class Settings {
     {
         return $this->cache->rememberForever(
             $this->getCahceKey($key),
-            function() use($key, $merge) {
+            function () use ($key, $merge) {
                 return $merge ? $this->merge($key) : $this->_get($key);
             }
         );
@@ -49,12 +51,10 @@ abstract class Settings {
 
         $value = $parent_value;
 
-        if ($this->_has($key))
-        {
+        if ($this->_has($key)) {
             $value = $this->_get($key);
 
-            if (is_array($value))
-            {
+            if (is_array($value)) {
                 $parent_value = $parent_value ? $parent_value : [];
                 $value = array_merge_recursive_distinct($parent_value, $value);
             }
@@ -70,7 +70,7 @@ abstract class Settings {
 
     public function getCahceKey($key)
     {
-        return $this->getPrefix() . $key;
+        return $this->getPrefix().$key;
     }
 
     public function setPrefix($prefix)

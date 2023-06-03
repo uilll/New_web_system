@@ -1,7 +1,7 @@
 <?php
 
-return array(
+return [
 
     'previous' => '&laquo; Edellinen',
     'next' => 'Seuraava &raquo;',
-);
+];

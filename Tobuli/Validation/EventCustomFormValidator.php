@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class EventCustomFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class EventCustomFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -13,10 +15,8 @@ class EventCustomFormValidator extends Validator {
         'update' => [
             'protocol' => 'required',
             'message' => 'required',
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

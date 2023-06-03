@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute måste accepteras.',
     'active_url' => ':attribute är ej en giltig URL.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => ':attribute får endast innehålla bokstäver och nummer.',
     'array' => ':attribute måste vara ett spann.',
     'before' => ':attribute måste vara ett datum före :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute måste vara ett spann mellan :min och :max.',
         'file' => ':attribute måste vara ett spann mellan :min och :max kb.',
         'string' => ':attribute måste vara ett spann mellan :min och :max tecken.',
         'array' => ':attribute måste vara ett spann mellan :min och :max föremål.',
-    ),
+    ],
     'confirmed' => ':attribute bekräftelse matchar ej.',
     'date' => ':attribute är ej ett giltigt datum.',
     'date_format' => ':attribute matchar ej formatet :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'Vald :attribute är ej giltig.',
     'integer' => ':attribute måste vara ett heltal.',
     'ip' => ':attribute måste vara en giltig IP adress.',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute får ej överskrida :max.',
         'file' => ':attribute får ej överskrida :max kb.',
         'string' => ':attribute får ej överskrida :max tecken.',
         'array' => ':attribute får ej överskrida than :max föremål.',
-    ),
+    ],
     'mimes' => ':attribute måste vara av filtyp: :values.',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute får ej underskrida :min.',
         'file' => ':attribute får ej underskrida :min kb.',
         'string' => ':attribute får ej underskrida :min tecken.',
         'array' => ':attribute får ej underskrida :min föremål.',
-    ),
+    ],
     'not_in' => 'Vald :attribute är ej giltig.',
     'numeric' => ':attribute måste vara en siffra.',
     'regex' => ':attribute format är ej giltigt.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => ':attribute måste fyllas i när when :values ej är aktuellt.',
     'required_without_all' => ':attribute måste fyllas i när ingen av :values är aktuella.',
     'same' => ':attribute och :other måste matcha.',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute måste vara :size.',
         'file' => ':attribute måste vara :size kb.',
         'string' => ':attribute måste vara :size tecken.',
         'array' => ':attribute måste innehålla :size föremål.',
-    ),
+    ],
     'unique' => ':attribute existerar redan.',
     'url' => ':attribute format är ej giltigt.',
     'array_max' => ':attribute max föremål :max.',
     'lesser_than' => ':attribute måste vara färre än :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'custom-message',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'Email',
         'password' => 'Lösenord',
         'password_confirmation' => 'Bekräftelse av lösenord',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Offline statusikonen',
         'icon_status_ack' => 'Ack statusikonen',
         'icon_status_engine' => 'Motorstatusikonen',
-    ),
+    ],
     'same_protocol' => 'Enheterna måste vara av samma protokoll.',
     'contains' => ':attribute måste innehålla :value .',
     'ip_port' => ':attribute motsvarar inte formatet IP:PORT',
-);
+];

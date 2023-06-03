@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class TotemProtocol extends BaseProtocol implements Protocol
 {
@@ -14,7 +14,7 @@ class TotemProtocol extends BaseProtocol implements Protocol
         return [
             $this->initCommand(Commands::TYPE_ENGINE_STOP),
             $this->initCommand(Commands::TYPE_ENGINE_RESUME),
-            $this->initCommand(Commands::TYPE_CUSTOM)
+            $this->initCommand(Commands::TYPE_CUSTOM),
         ];
     }
 }

@@ -1,13 +1,16 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class UserSmsTemplate extends Eloquent {
-	protected $table = 'user_sms_templates';
+class UserSmsTemplate extends Eloquent
+{
+    protected $table = 'user_sms_templates';
 
-    protected $fillable = array(
+    protected $fillable = [
         'user_id',
         'title',
-        'message'
-    );
+        'message',
+    ];
 }

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'clients' => '客户端',
     'content' => '内容',
@@ -94,4 +94,4 @@ return array(
     'languages' => '语言',
     'translate' => '翻译',
     'group_4' => '演示',
-);
+];

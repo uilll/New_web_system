@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Dodaj urządzenie',
     'per_one' => 'na 1',
@@ -665,4 +665,4 @@ Przykład adresu bramki SMS: http://SMS_GATEWAY/sendsms.php?username=USER&passwo
     'do_objects_delete' => 'Czy na pewno chcesz usunąć te urządzenia? <br> Wszystkie powiązane dane zostaną utracone.',
     'ignition_off' => 'Zapłon wyłączony',
     'forward' => 'Naprzód',
-);
+];

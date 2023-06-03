@@ -1,11 +1,14 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class DeviceService extends Eloquent {
-	protected $table = 'device_services';
+class DeviceService extends Eloquent
+{
+    protected $table = 'device_services';
 
-    protected $fillable = array(
+    protected $fillable = [
         'user_id',
         'device_id',
         'name',
@@ -21,18 +24,20 @@ class DeviceService extends Eloquent {
         'event_sent',
         'expired',
         'email',
-        'mobile_phone'
-    );
+        'mobile_phone',
+    ];
 
     protected $sensors;
 
     public $timestamps = false;
 
-    public function device() {
+    public function device()
+    {
         return $this->hasOne('Tobuli\Entities\Device', 'id', 'device_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->hasOne('Tobuli\Entities\User', 'id', 'user_id');
     }
 
@@ -55,15 +60,15 @@ class DeviceService extends Eloquent {
     {
         $sensor = $this->getSensor();
 
-        switch ($this->expiration_by)
-        {
+        switch ($this->expiration_by) {
             case 'days':
                 return dateDiff($this->expires_date, date('Y-m-d'));
 
             case 'odometer':
             case 'engine_hours':
-                if ( ! $sensor)
+                if (! $sensor) {
                     return null;
+                }
 
                 return $this->expires - $sensor->getValueCurrent();
 
@@ -74,23 +79,24 @@ class DeviceService extends Eloquent {
 
     public function left_formated()
     {
-        $left  = $this->getLeft();
+        $left = $this->getLeft();
         $sensor = $this->getSensor();
 
-        if (is_null($left))
+        if (is_null($left)) {
             return '-';
+        }
 
-        if ($left < 0)
+        if ($left < 0) {
             return trans('front.expired');
+        }
 
-        switch ($this->expiration_by)
-        {
+        switch ($this->expiration_by) {
             case 'days':
-                return $left . 'd.';
+                return $left.'d.';
 
             case 'odometer':
             case 'engine_hours':
-                return round($left) . $sensor->unit_of_measurement;
+                return round($left).$sensor->unit_of_measurement;
 
             default:
                 return '-';
@@ -99,27 +105,28 @@ class DeviceService extends Eloquent {
 
     public function expiration()
     {
-        $left   = $this->getLeft();
+        $left = $this->getLeft();
         $sensor = $this->getSensor();
 
-        switch ($this->expiration_by)
-        {
+        switch ($this->expiration_by) {
             case 'days':
                 return  $left > 0
                     ? trans('validation.attributes.days').' '.trans('front.left').' ('.$this->left_formated().')'
                     : trans('validation.attributes.days').' '.strtolower(trans('front.expired'));
 
             case 'odometer':
-                if ( ! $sensor)
+                if (! $sensor) {
                     return dontExist('front.sensor');
+                }
 
                 return  $left > 0
                     ? trans('front.odometer').' '.trans('front.left').' ('.$this->left_formated().')'
                     : trans('front.odometer').' '.strtolower(trans('front.expired'));
 
             case 'engine_hours':
-                if ( ! $sensor)
+                if (! $sensor) {
                     return dontExist('front.sensor');
+                }
 
                 return  $left > 0
                     ? trans('validation.attributes.engine_hours').' '.trans('front.left').' ('.$this->left_formated().')'
@@ -144,31 +151,35 @@ class DeviceService extends Eloquent {
     {
         $left = $this->getLeft();
 
-        if (empty($left))
+        if (empty($left)) {
             return 0;
+        }
 
-        if (empty($this->interval))
+        if (empty($this->interval)) {
             return 0;
+        }
 
         $percentage = $left * 100 / $this->interval;
 
-        if ( $percentage < 0 )
+        if ($percentage < 0) {
             $percentage = 0;
+        }
 
-        if ( $percentage > 100 )
+        if ($percentage > 100) {
             $percentage = 100;
+        }
 
         return round($percentage);
     }
 
     private function getSensor()
     {
-        if (isset($this->sensor))
+        if (isset($this->sensor)) {
             return $this->sensor;
+        }
 
         if ($this->sensors) {
-            switch ($this->expiration_by)
-            {
+            switch ($this->expiration_by) {
                 case 'odometer':
                     return $this->sensor = $this->getSensorByType('odometer');
                 case 'engine_hours':
@@ -177,8 +188,7 @@ class DeviceService extends Eloquent {
                     return $this->sensor = null;
             }
         } else {
-            switch ($this->expiration_by)
-            {
+            switch ($this->expiration_by) {
                 case 'odometer':
                     return $this->sensor = $this->device->getOdometerSensor();
                 case 'engine_hours':
@@ -191,8 +201,9 @@ class DeviceService extends Eloquent {
 
     private function getSensorByType($type)
     {
-        if (empty($this->sensors))
+        if (empty($this->sensors)) {
             return null;
+        }
 
         foreach ($this->sensors as $sensor) {
             if ($sensor['type'] == $type) {
@@ -201,8 +212,9 @@ class DeviceService extends Eloquent {
             }
         }
 
-        if (empty($type_sensor))
+        if (empty($type_sensor)) {
             return null;
+        }
 
         return $type_sensor;
     }

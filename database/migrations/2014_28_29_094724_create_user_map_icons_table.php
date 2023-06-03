@@ -3,19 +3,20 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateUserMapIconsTable extends Migration {
+class CreateUserMapIconsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        if (Schema::hasTable('user_map_icons')) {
+            return;
+        }
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-        if (Schema::hasTable('user_map_icons')) { return; }
-
-		Schema::create('user_map_icons', function(Blueprint $table)
-		{
+        Schema::create('user_map_icons', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('map_icon_id')->unsigned();
@@ -26,18 +27,16 @@ class CreateUserMapIconsTable extends Migration {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('map_icon_id')->references('id')->on('map_icons')->onDelete('cascade');
             $table->timestamps();
-		});
-	}
+        });
+    }
 
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::drop('user_map_icons');
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('user_map_icons');
+    }
 }

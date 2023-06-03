@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'Редактиране',
     'add_new' => 'Добави нов',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Уикенд',
     'always' => 'Винаги',
     'advanced' => 'напреднал',
-);
+];

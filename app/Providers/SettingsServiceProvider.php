@@ -1,12 +1,13 @@
-<?php namespace App\Providers;
+<?php
+
+namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
 use Tobuli\Helpers\Settings\SettingsConfig;
 use Tobuli\Helpers\Settings\SettingsDB;
 
-class SettingsServiceProvider extends ServiceProvider {
-
+class SettingsServiceProvider extends ServiceProvider
+{
     /**
      * Register bindings in the container.
      *
@@ -21,5 +22,4 @@ class SettingsServiceProvider extends ServiceProvider {
             return $settings;
         });
     }
-
 }

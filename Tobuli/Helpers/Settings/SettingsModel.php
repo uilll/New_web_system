@@ -2,8 +2,8 @@
 
 namespace Tobuli\Helpers\Settings;
 
-class SettingsModel extends Settings {
-
+class SettingsModel extends Settings
+{
     protected $prefix = 'SettingsModel';
 
     protected $values;
@@ -18,76 +18,85 @@ class SettingsModel extends Settings {
         $this->values = $values;
     }
 
-    protected function _has($key) {
-        if (empty($key))
+    protected function _has($key)
+    {
+        if (empty($key)) {
             return false;
+        }
 
         $keys = explode('.', $key);
 
         $group = array_shift($keys);
 
-        if (empty($group))
+        if (empty($group)) {
             return false;
+        }
 
         $settings = $this->getValues();
 
-        if ( ! isset($settings[$group]))
+        if (! isset($settings[$group])) {
             return false;
+        }
 
         try {
-            $has = has_array_value( $settings[$group], $keys );
-        }
-        catch (\Exception $e) {
+            $has = has_array_value($settings[$group], $keys);
+        } catch (\Exception $e) {
             $has = true;
         }
 
         return $has;
     }
 
-    protected function _get($key) {
-        if (empty($key))
+    protected function _get($key)
+    {
+        if (empty($key)) {
             return null;
+        }
 
         $keys = explode('.', $key);
 
         $group = array_shift($keys);
 
-        if (empty($group))
+        if (empty($group)) {
             return null;
+        }
 
         $settings = $this->getValues();
 
         $item = isset($settings[$group]) ? $settings[$group] : null;
 
-        if (empty($item))
+        if (empty($item)) {
             return null;
+        }
 
         try {
-            $value = get_array_value( $item, $keys );
-        }
-        catch (\Exception $e) {
+            $value = get_array_value($item, $keys);
+        } catch (\Exception $e) {
             $value = $item;
         }
 
         return $value;
     }
 
-    protected function _set($key, $value) {
-        if (empty($key))
+    protected function _set($key, $value)
+    {
+        if (empty($key)) {
             return false;
+        }
 
         $keys = explode('.', $key);
 
         $group = array_shift($keys);
 
-        if (empty($group))
+        if (empty($group)) {
             return false;
+        }
 
         $settings = $this->getValues();
 
         $item = empty($settings[$group]) ? [] : $settings[$group];
 
-        set_array_value( $item, $keys, $value );
+        set_array_value($item, $keys, $value);
 
         $settings[$group] = $item;
 

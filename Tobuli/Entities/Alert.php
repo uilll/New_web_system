@@ -1,12 +1,15 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Auth;
 use Eloquent;
 
-class Alert extends Eloquent {
-	protected $table = 'alerts';
+class Alert extends Eloquent
+{
+    protected $table = 'alerts';
 
-    protected $fillable = array(
+    protected $fillable = [
         'active',
         'user_id',
         'type',
@@ -19,8 +22,8 @@ class Alert extends Eloquent {
         'overspeed',
         'stop_duration',
         'offline_duration',
-        'command'
-    );
+        'command',
+    ];
 
     protected $casts = [
         'data' => 'array',
@@ -30,18 +33,20 @@ class Alert extends Eloquent {
     protected $appends = [
         'zone',
         'schedule',
-        'command'
+        'command',
     ];
 
     protected $hidden = [
-        'data'
+        'data',
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('Tobuli\Entities\User', 'user_id', 'id');
     }
 
-    public function devices() {
+    public function devices()
+    {
         return $this->belongsToMany('Tobuli\Entities\Device')
             // escape deattached users devices
             ->join('alerts', 'alerts.id', '=', 'alert_device.alert_id')
@@ -52,23 +57,28 @@ class Alert extends Eloquent {
             });
     }
 
-    public function geofences() {
+    public function geofences()
+    {
         return $this->belongsToMany('Tobuli\Entities\Geofence');
     }
 
-    public function zones() {
+    public function zones()
+    {
         return $this->belongsToMany('Tobuli\Entities\Geofence', 'alert_zone', 'alert_id', 'geofence_id');
     }
 
-    public function fuel_consumptions() {
+    public function fuel_consumptions()
+    {
         return $this->hasMany('Tobuli\Entities\AlertFuelConsumption', 'alert_id');
     }
 
-    public function drivers() {
+    public function drivers()
+    {
         return $this->belongsToMany('Tobuli\Entities\UserDriver', 'alert_driver_pivot', 'alert_id', 'driver_id');
     }
 
-    public function events_custom() {
+    public function events_custom()
+    {
         return $this->belongsToMany('Tobuli\Entities\EventCustom', 'alert_event_pivot', 'alert_id', 'event_id');
     }
 
@@ -140,16 +150,18 @@ class Alert extends Eloquent {
     {
         $overspeed = array_get($this->data, 'overspeed', 0);
 
-        if ( Auth::check() && Auth::user()->unit_of_distance == 'mi')
+        if (Auth::check() && Auth::user()->unit_of_distance == 'mi') {
             $overspeed = kilometersToMiles($overspeed);
+        }
 
         return $overspeed;
     }
 
     public function setOverspeedAttribute($value)
     {
-        if ( Auth::check() && Auth::user()->unit_of_distance == 'mi')
+        if (Auth::check() && Auth::user()->unit_of_distance == 'mi') {
             $value = milesToKilometers($value);
+        }
 
         $this->setData('overspeed', $value);
     }
@@ -178,32 +190,35 @@ class Alert extends Eloquent {
     {
         $data = $this->data;
 
-        if ($value)
+        if ($value) {
             array_set($data, $key, $value);
-        else
+        } else {
             array_forget($data, $key);
+        }
 
         $this->data = $data;
     }
 
     private function convertSchedules($schedules, $reverse = false)
     {
-        if (empty($schedules))
+        if (empty($schedules)) {
             return null;
+        }
 
-        if ( ! (Auth::check() && Auth::user()->timezone_id != 57))
+        if (! (Auth::check() && Auth::user()->timezone_id != 57)) {
             return $schedules;
+        }
 
         $zone = Auth::user()->timezone->zone;
 
         $result = [];
 
-        foreach($schedules as $weekday => $times) {
+        foreach ($schedules as $weekday => $times) {
             foreach ($times as $time) {
-                $_time = strtotime($weekday . ' ' . $time);
+                $_time = strtotime($weekday.' '.$time);
                 $_time = tdate(date('Y-m-d H:i:s', $_time), $zone, $reverse, 'l H:i');
 
-                list($_weekday, $_time) = explode(' ', $_time);
+                [$_weekday, $_time] = explode(' ', $_time);
 
                 $_weekday = strtolower($_weekday);
 

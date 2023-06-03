@@ -1,41 +1,42 @@
-<?php namespace App\Console\Commands;
+<?php
+
+namespace App\Console\Commands;
+
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Config as LaravelConfig;
 use Tobuli\Repositories\Config\ConfigRepositoryInterface as Config;
 use Tobuli\Repositories\TraccarDevice\TraccarDeviceRepositoryInterface as TraccarDevice;
 
-class CheckAlertsCommand extends Command {
+class CheckAlertsCommand extends Command
+{
     /**
      * @var Config
      */
     private $config;
+
     /**
      * @var TraccarDevice
      */
     private $traccarDevice;
+
     /**
      * The console command name.
      *
      * @var string
      */
     protected $name = 'alerts:check';
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Command description.';
+
     /**
      * Create a new command instance.
-     *
-     * @param Config $config
-     * @param TraccarDevice $traccarDevice
      */
     public function __construct(Config $config, TraccarDevice $traccarDevice)
     {
@@ -43,6 +44,7 @@ class CheckAlertsCommand extends Command {
         $this->config = $config;
         $this->traccarDevice = $traccarDevice;
     }
+
     /**
      * Execute the console command.
      *
@@ -57,7 +59,7 @@ class CheckAlertsCommand extends Command {
             ->table('devices')
             ->select('devices.*', 'device_sensors.odometer_value', 'web_devices.id as device_id')
             ->join('gpswox_web.devices as web_devices', 'devices.id', '=', 'web_devices.traccar_device_id')
-            ->join('gpswox_web.device_sensors', function($query) {
+            ->join('gpswox_web.device_sensors', function ($query) {
                 $query->on('web_devices.id', '=', 'device_sensors.device_id');
                 $query->where('device_sensors.type', '=', 'odometer');
                 $query->where('device_sensors.odometer_value_by', '=', 'virtual_odometer');
@@ -76,10 +78,10 @@ class CheckAlertsCommand extends Command {
 
             $lastItem = null;
 
-            foreach ($items as $item)
-            {
+            foreach ($items as $item) {
                 if (is_null($lastItem)) {
                     $lastItem = $item;
+
                     continue;
                 }
 
@@ -96,8 +98,7 @@ class CheckAlertsCommand extends Command {
                 $lastItem = $item;
             }
 
-            if ($device->odometer_value != $distance)
-            {
+            if ($device->odometer_value != $distance) {
                 DB::table('device_sensors')
                     ->where('device_id', '=', $device->device_id)
                     ->where('type', '=', 'odometer')
@@ -110,6 +111,7 @@ class CheckAlertsCommand extends Command {
 
         echo "DONE\n";
     }
+
     /**
      * Get the console command arguments.
      *
@@ -117,8 +119,9 @@ class CheckAlertsCommand extends Command {
      */
     protected function getArguments()
     {
-        return array();
+        return [];
     }
+
     /**
      * Get the console command options.
      *
@@ -126,6 +129,6 @@ class CheckAlertsCommand extends Command {
      */
     protected function getOptions()
     {
-        return array();
+        return [];
     }
 }

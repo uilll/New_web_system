@@ -1,12 +1,12 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Adicionar dispositivo',
     'per_one' => 'por 1',
     'cost_for' => 'Custo para 1',
     'last_update' => 'Última atualização',
-	'nothing_selected' => 'Selecione aqui',
+    'nothing_selected' => 'Selecione aqui',
     'kph' => 'km/h',
     'failed_to_recover_devices' => 'Falha ao recuperar os dispositivos.',
     'remove_device' => 'Remover dispositivo',
@@ -610,7 +610,7 @@ SMS exemplo URL de gateway: http://SMS_GATEWAY/sendsms.php?username=USER&passwor
     'object_history' => 'Histórico de posições',
     'birla_report' => 'Relatório Birla',
     'object_history_report' => 'Relatório de histórico de posições',
-    'underspeeds' => 'Abaixo da velocidade', 
+    'underspeeds' => 'Abaixo da velocidade',
     'main_server_settings' => 'Configurações do servidor principal',
     'favicon_dim' => 'O Favicon deve ser 16px por 16px.',
     'frontpage_logo_dim' => 'Frontpage logo max height é 60px.',
@@ -670,7 +670,7 @@ SMS exemplo URL de gateway: http://SMS_GATEWAY/sendsms.php?username=USER&passwor
     'do_objects_delete' => 'Você realmente deseja excluir esses dispositivos? <br> Todos os dados associados serão perdidos.',
     'ignition_off' => 'Ignição desligada',
     'forward' => 'Frente',
-	'seatbelt_off_duration' => 'Duração sem o cinto',
-	'seatbelt_off_score' => 'Pontuação do cinto',
-    'share_device' => 'Compartilhar'
-);
+    'seatbelt_off_duration' => 'Duração sem o cinto',
+    'seatbelt_off_score' => 'Pontuação do cinto',
+    'share_device' => 'Compartilhar',
+];

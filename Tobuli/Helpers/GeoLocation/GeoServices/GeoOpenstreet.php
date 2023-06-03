@@ -2,8 +2,6 @@
 
 namespace Tobuli\Helpers\GeoLocation\GeoServices;
 
-
-
 class GeoOpenstreet extends GeoNominatim
 {
     public function __construct()

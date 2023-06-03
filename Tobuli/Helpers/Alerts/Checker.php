@@ -2,10 +2,10 @@
 
 namespace Tobuli\Helpers\Alerts;
 
-
-class Checker {
-
+class Checker
+{
     protected $alerts;
+
     protected $device;
 
     public function __construct($device, $alerts)
@@ -28,13 +28,14 @@ class Checker {
     {
         $events = [];
 
-        if (empty($this->alerts))
+        if (empty($this->alerts)) {
             return $events;
+        }
 
-        foreach ($this->alerts as $alert)
-        {
-            if (empty($alert->type))
+        foreach ($this->alerts as $alert) {
+            if (empty($alert->type)) {
                 continue;
+            }
 
             switch($alert->type) {
                 case 'overspeed':
@@ -64,14 +65,16 @@ class Checker {
                     //throw new \Exception('Alert type "'.$alert->type.'" doesnt have check class.');
             }
 
-            if (empty($checker))
+            if (empty($checker)) {
                 continue;
+            }
 
             $checker->setCurrentPosition($position);
             $checker->setPreviousPosition($prevPosition);
 
-            if ($_events = $checker->getEvents())
+            if ($_events = $checker->getEvents()) {
                 $events = array_merge($events, $_events);
+            }
         }
 
         return $events;

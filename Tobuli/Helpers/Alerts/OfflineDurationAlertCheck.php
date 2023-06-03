@@ -2,15 +2,15 @@
 
 namespace Tobuli\Helpers\Alerts;
 
-
 use Tobuli\Entities\Event;
 
 class OfflineDurationAlertCheck extends AlertCheck
 {
     public function checkEvents($position, $prevPosition)
     {
-        if ( ! $this->check())
+        if (! $this->check()) {
             return null;
+        }
 
         $event = $this->formatEvent($this->getEvent());
 
@@ -19,24 +19,28 @@ class OfflineDurationAlertCheck extends AlertCheck
 
     public function check()
     {
-        if ( $this->alert->offline_duration < 1 )
+        if ($this->alert->offline_duration < 1) {
             return false;
+        }
 
         $offline_duration = $this->offlineDuration();
 
-        if ( ! $offline_duration)
+        if (! $offline_duration) {
             return false;
+        }
 
-        if ($offline_duration < $this->alert->offline_duration)
+        if ($offline_duration < $this->alert->offline_duration) {
             return false;
+        }
 
         if (Event::where('time', '>=', $this->device->last_connect_time)
             ->where('user_id', $this->alert->user_id)
             ->where('alert_id', $this->alert->id)
             ->where('device_id', $this->device->id)
             ->where('type', 'offline_duration')
-            ->first(['id']))
+            ->first(['id'])) {
             return false;
+        }
 
         return true;
     }
@@ -45,8 +49,9 @@ class OfflineDurationAlertCheck extends AlertCheck
     {
         $last_connection = $this->device->last_connect_timestamp;
 
-        if (empty($last_connection))
+        if (empty($last_connection)) {
             return false;
+        }
 
         return round((time() - $last_connection) / 60);
     }
@@ -55,8 +60,9 @@ class OfflineDurationAlertCheck extends AlertCheck
     {
         $position = $this->device->positionTraccar();
 
-        if ( ! $position)
+        if (! $position) {
             return null;
+        }
 
         $position->time = date('Y-m-d H:i:s');
 
@@ -65,7 +71,6 @@ class OfflineDurationAlertCheck extends AlertCheck
 
     private function getLastConnectionTime()
     {
-
     }
 
     private function formatEvent($event)
@@ -76,12 +81,12 @@ class OfflineDurationAlertCheck extends AlertCheck
 
         $event->message = json_encode([
             'offline_duration' => $offline_duration,
-            'now_time'         => date('Y-m-d H:i:s')
+            'now_time' => date('Y-m-d H:i:s'),
         ]);
 
         $event->additionalQueueData = array_merge($event->additionalQueueData, [
-            'offline_duration'  => $offline_duration,
-            'device_name'       => htmlentities($this->device->name)
+            'offline_duration' => $offline_duration,
+            'device_name' => htmlentities($this->device->name),
         ]);
 
         return $event;

@@ -1,19 +1,21 @@
-<?php namespace App\Console\Commands;
+<?php
+
+namespace App\Console\Commands;
+
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 
+use App\Console\PositionsKeys;
+use App\Console\PositionsStack;
+use App\Console\PositionsWriter;
+use App\Console\ProcessManager;
+use Facades\Repositories\DeviceRepo;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 use Symfony\Component\Console\Input\InputArgument;
-use Facades\Repositories\DeviceRepo;
-use App\Console\PositionsKeys;
-use App\Console\PositionsStack;
-use App\Console\ProcessManager;
-use App\Console\PositionsWriter;
 
 class InsertBulkCommand extends Command
 {
-
     protected $redis;
 
     protected $processManager;
@@ -21,6 +23,7 @@ class InsertBulkCommand extends Command
     protected $debug = false;
 
     protected $positionsKeys;
+
     protected $positionsStack;
 
     /**
@@ -37,7 +40,6 @@ class InsertBulkCommand extends Command
      */
     protected $description = 'Command description.';
 
-
     public function __construct()
     {
         parent::__construct();
@@ -45,7 +47,7 @@ class InsertBulkCommand extends Command
         try {
             $this->redis = Redis::connection();
         } catch (\Exception $e) {
-            $this->redis = FALSE;
+            $this->redis = false;
         }
 
         $this->positionsKeys = new PositionsKeys();
@@ -61,8 +63,9 @@ class InsertBulkCommand extends Command
     {
         $this->debug = ! empty($this->argument('debug'));
 
-        if (!$this->redis) {
-            echo "Redis not running";
+        if (! $this->redis) {
+            echo 'Redis not running';
+
             return;
         }
 
@@ -71,18 +74,18 @@ class InsertBulkCommand extends Command
 
         $this->processManager = new ProcessManager($this->name, $timeout, $limit);
 
-        if ( ! $this->processManager->canProcess()) {
-            echo "Cant process.";
+        if (! $this->processManager->canProcess()) {
+            echo 'Cant process.';
+
             return;
         }
 
-        while ($this->processManager->canProcess())
-        {
+        while ($this->processManager->canProcess()) {
             $imei = $this->process();
 
-            if ($imei)
-            {
+            if ($imei) {
                 $this->processManager->unlock($imei);
+
                 continue;
             }
 
@@ -94,8 +97,9 @@ class InsertBulkCommand extends Command
     {
         $imei = $this->processByKeys();
 
-        if ($imei)
+        if ($imei) {
             return $imei;
+        }
 
         return $this->processByList();
     }
@@ -104,20 +108,22 @@ class InsertBulkCommand extends Command
     {
         $imei = $this->getListUnlockedImei();
 
-        if ( ! $imei)
+        if (! $imei) {
             return false;
+        }
 
         $data = $this->positionsStack->getData($imei, false);
 
-        if ( ! $data)
+        if (! $data) {
             return $imei;
+        }
 
         $device = DeviceRepo::getByImeiProtocol($data['imei'], $data['protocol']);
 
-        if ( ! $device) {
+        if (! $device) {
             DeviceRepo::setUnregisterdDevice($data, $this->positionsStack->count($imei));
             $this->positionsStack->deleteImei($imei);
-        } elseif ( ! $device->active) {
+        } elseif (! $device->active) {
             $this->positionsStack->deleteImei($imei);
         } else {
             $writer = new PositionsWriter($device, $this->debug);
@@ -131,25 +137,28 @@ class InsertBulkCommand extends Command
     {
         $imei = $this->getKeysUnlockedImei();
 
-        if (!$imei)
+        if (! $imei) {
             return false;
+        }
 
         $keys = $this->positionsKeys->getImeiKeys($imei);
 
-        if ( ! $keys)
+        if (! $keys) {
             return $imei;
+        }
 
         $first = $this->positionsKeys->getKeyData(reset($keys), false);
 
-        if (!$first)
+        if (! $first) {
             return $imei;
+        }
 
         $device = DeviceRepo::getByImeiProtocol($first['imei'], $first['protocol']);
 
-        if ( ! $device) {
+        if (! $device) {
             DeviceRepo::setUnregisterdDevice($first, count($keys));
             $this->redis->del($keys);
-        } elseif ( ! $device->active) {
+        } elseif (! $device->active) {
             $this->redis->del($keys);
         } else {
             $writer = new PositionsWriter($device, $this->debug);
@@ -163,43 +172,49 @@ class InsertBulkCommand extends Command
     {
         $keys = $this->positionsKeys->getKeys();
 
-        if (!is_array($keys)) {
+        if (! is_array($keys)) {
             $keys = [];
         }
 
-        if (count($keys) < 1000)
+        if (count($keys) < 1000) {
             asort($keys);
+        }
 
         $locked = [];
 
         foreach ($keys as $key) {
-            list($_prefix, $_time, $_imei) = explode('.', $key, 3);
+            [$_prefix, $_time, $_imei] = explode('.', $key, 3);
 
             if (empty($_imei)) {
                 $this->redis->del($key);
+
                 continue;
             }
 
-            if (!$this->isValidImei($_imei)) {
+            if (! $this->isValidImei($_imei)) {
                 $this->redis->del($key);
+
                 continue;
             }
 
-            if (in_array($_imei, $locked))
+            if (in_array($_imei, $locked)) {
                 continue;
+            }
 
             $locked[] = $_imei;
 
-            if ( ! $this->processManager->lock($_imei))
+            if (! $this->processManager->lock($_imei)) {
                 continue;
+            }
 
             $imei = $_imei;
 
             break;
         }
 
-        if (empty($imei))
+        if (empty($imei)) {
             return null;
+        }
 
         return $imei;
     }
@@ -208,39 +223,42 @@ class InsertBulkCommand extends Command
     {
         $imeis = $this->positionsStack->getImeis();
 
-        if (empty($imeis))
+        if (empty($imeis)) {
             return null;
+        }
 
-        foreach ($imeis as $_imei)
-        {
-            if ( ! $this->isValidImei($_imei)) {
+        foreach ($imeis as $_imei) {
+            if (! $this->isValidImei($_imei)) {
                 $this->positionsStack->deleteImei($_imei);
+
                 continue;
             }
 
-            if ( ! $this->processManager->lock($_imei))
+            if (! $this->processManager->lock($_imei)) {
                 continue;
+            }
 
             $imei = $_imei;
 
             break;
         }
 
-        if (empty($imei))
+        if (empty($imei)) {
             return null;
+        }
 
         return $imei;
     }
 
     private function isValidImei($imei)
     {
-        return !preg_match('/[^A-Za-z0-9.#\\-$]/', $imei);
+        return ! preg_match('/[^A-Za-z0-9.#\\-$]/', $imei);
     }
 
     protected function getArguments()
     {
-        return array(
-            array('debug', InputArgument::OPTIONAL, 'Debug')
-        );
+        return [
+            ['debug', InputArgument::OPTIONAL, 'Debug'],
+        ];
     }
 }

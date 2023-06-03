@@ -7,8 +7,11 @@ use Tobuli\Entities\User;
 class Formatter
 {
     public $speed;
+
     public $distance;
+
     public $altitude;
+
     public $capacity;
 
     public function __construct()

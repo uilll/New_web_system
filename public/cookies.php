@@ -1,14 +1,15 @@
-<?php 
+<?php
+
 require '/var/www/html/releases/20190129073809/vendor/autoload.php';
 use GuzzleHttp\Client;
 
-$cookie_name = "uilmo";
+$cookie_name = 'uilmo';
 echo $cookie_name;
 
 $client = new \GuzzleHttp\Client();
-	$response = $client->request('GET', 'http://sistema.carseg.com.br/cookie/get/'.$cookie_name);
-	$response = $response->getBody()->getContents();
-	echo $response;
+$response = $client->request('GET', 'http://sistema.carseg.com.br/cookie/get/'.$cookie_name);
+$response = $response->getBody()->getContents();
+echo $response;
 
 //$response = file_get_contents('http://sistema.carseg.com.br/cookie/get/'.$cookie_name);
 
@@ -19,8 +20,8 @@ $promise = $client->sendAsync($request)->then(function ($response) {
 });
 
  */
- 
- // Create a client with a base URI
+
+// Create a client with a base URI
 /* $client = new GuzzleHttp\Client(['base_uri' => 'http://sistema.carseg.com.br/cookie/get/']);
 var_dump($client);
 // Send a request to https://foo.com/api/test
@@ -33,8 +34,8 @@ var_dump($client); */
 /* $client = new \GuzzleHttp\Client();
 
 $response = $client->request('POST', 'http://sistema.carseg.com.br/cookie/get/'.$cookie_name);
-	$response = $response->getBody()->getContents(); */
-	//var_dump ($client);
+    $response = $response->getBody()->getContents(); */
+//var_dump ($client);
 
 //$name="uilmo";
 
@@ -47,5 +48,3 @@ $response = $client->request('POST', 'http://sistema.carseg.com.br/cookie/get/'.
 // $responseBody = $response->getContent();
 
 // echo $responseBody;
-
-?>
