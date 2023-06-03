@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Bugsnag\BugsnagLaravel\BugsnagFacade as Bugsnag;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -19,6 +21,8 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
+        AuthorizationException::class,
+        ValidationException::class,
         HttpException::class,
         ModelNotFoundException::class,
 
