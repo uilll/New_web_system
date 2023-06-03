@@ -2,14 +2,13 @@
 
 namespace App\Jobs;
 
-use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Tobuli\Entities\TrackerPort;
 use Tobuli\Entities\User;
 
-class TrackerConfigWithRestart extends Job implements SelfHandling, ShouldQueue
+class TrackerConfigWithRestart extends Job implements ShouldQueue
 {
     use InteractsWithQueue, SerializesModels;
 
