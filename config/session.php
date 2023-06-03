@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'redis'),
+    'driver' => env('SESSION_DRIVER', 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,11 +29,9 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 120),
+    'lifetime' => 120,
 
-    'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
-
-    'remember_me' => env('SESSION_REMEMBER_ME', true),
+    'expire_on_close' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -59,7 +57,7 @@ return [
     |
     */
 
-    'files' => storage_path().'/framework/sessions',
+    'files' => storage_path('framework/sessions'),
 
     /*
     |--------------------------------------------------------------------------
@@ -150,14 +148,19 @@ return [
     |
     */
 
-    'secure' => true,
+    'secure' => false,
 
-    'path' => '/;SameSite=None; secure',
+    /*
+    |--------------------------------------------------------------------------
+    | HTTP Access Only
+    |--------------------------------------------------------------------------
+    |
+    | Setting this value to true will prevent JavaScript from accessing the
+    | value of the cookie and the cookie will only be accessible through
+    | the HTTP protocol. You are free to modify this option if needed.
+    |
+    */
 
-    /* tentei corrigir o erro de cros com o seguinte código:
-
-        'secure' => env('SESSION_SECURE_COOKIE', true),
-        'same_site' => 'none',
-        */
+    'http_only' => true,
 
 ];

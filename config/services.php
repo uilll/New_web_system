@@ -1,12 +1,5 @@
 <?php
 
-$hora_ = date('H');
-if ((int) $hora_ % 2 == 0) {
-    $google_key = 'AIzaSyCZ-pszuNy18ZMFBD-yf2vm1wAsothpD38';
-} else {
-    $google_key = 'AIzaSyBYs1o3hCH3BW2Fk_9Q3_maBuSeKelzZi8';
-}
-
 return [
 
     /*
@@ -22,38 +15,24 @@ return [
     */
 
     'mailgun' => [
-        'domain' => '',
-        'secret' => '',
-    ],
-
-    'mandrill' => [
-        'secret' => '',
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
     ],
 
     'ses' => [
-        'key' => '',
-        'secret' => '',
+        'key' => env('SES_KEY'),
+        'secret' => env('SES_SECRET'),
         'region' => 'us-east-1',
     ],
 
-    'stripe' => [
-        'model' => 'App\User',
-        'secret' => '',
-    ],
-
-    'streetview' => [
-        'key' => 'AIzaSyCZ-pszuNy18ZMFBD-yf2vm1wAsothpD38',
-    ],
-
-    'snaptoroad' => [
-        'key' => 'AIzaSyCZ-pszuNy18ZMFBD-yf2vm1wAsothpD38',
-    ],
-
-    'google_maps' => [
-        'key' => $google_key,
+    'sparkpost' => [
+        'secret' => env('SPARKPOST_SECRET'),
     ],
 
     'stripe' => [
-        'secret' => 'sk_test_odPohCSaa5k8MwD7ymewLC53',
+        'model' => App\User::class,
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
     ],
+
 ];

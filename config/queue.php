@@ -11,12 +11,11 @@ return [
     | API, giving you convenient access to each back-end using the same
     | syntax for each one. Here you may set the default queue driver.
     |
-    | Supported: "null", "sync", "database", "beanstalkd",
-    |            "sqs", "iron", "redis"
+    | Supported: "null", "sync", "database", "beanstalkd", "sqs", "redis"
     |
     */
 
-    'default' => env('QUEUE_DRIVER', 'database'),
+    'default' => env('QUEUE_DRIVER', 'sync'),
 
     /*
     |--------------------------------------------------------------------------
@@ -53,21 +52,14 @@ return [
             'driver' => 'sqs',
             'key' => 'your-public-key',
             'secret' => 'your-secret-key',
-            'queue' => 'your-queue-url',
-            'region' => 'us-east-1',
-        ],
-
-        'iron' => [
-            'driver' => 'iron',
-            'host' => 'mq-aws-us-east-1.iron.io',
-            'token' => 'your-token',
-            'project' => 'your-project-id',
+            'prefix' => 'https://sqs.us-east-1.amazonaws.com/your-account-id',
             'queue' => 'your-queue-name',
-            'encrypt' => true,
+            'region' => 'us-east-1',
         ],
 
         'redis' => [
             'driver' => 'redis',
+            'connection' => 'default',
             'queue' => 'default',
             'expire' => 60,
         ],
@@ -86,7 +78,8 @@ return [
     */
 
     'failed' => [
-        'database' => 'mysql', 'table' => 'jobs_failed',
+        'database' => env('DB_CONNECTION', 'mysql'),
+        'table' => 'failed_jobs',
     ],
 
 ];
