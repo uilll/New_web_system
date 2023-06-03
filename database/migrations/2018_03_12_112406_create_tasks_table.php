@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateTasksTable extends Migration
 {
@@ -12,7 +12,9 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('tasks')) { return; }
+        if (Schema::hasTable('tasks')) {
+            return;
+        }
 
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
@@ -44,6 +46,5 @@ class CreateTasksTable extends Migration
     public function down()
     {
         Schema::drop('tasks');
-
     }
 }

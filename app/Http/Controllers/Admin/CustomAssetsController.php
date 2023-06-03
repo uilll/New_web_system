@@ -19,7 +19,7 @@ class CustomAssetsController extends Controller
             $this->assetContent = File::get($assetFile);
         }
 
-        return view('admin::CustomAssets.' . $asset )->with($asset, $this->assetContent);
+        return view('admin::CustomAssets.'.$asset)->with($asset, $this->assetContent);
     }
 
     public function setCustomAsset(Request $request, $asset)
@@ -33,7 +33,8 @@ class CustomAssetsController extends Controller
         }
 
         File::put($assetFile, $this->assetContent);
-        return view('admin::CustomAssets.' . $asset )->with($asset, $this->assetContent);
+
+        return view('admin::CustomAssets.'.$asset)->with($asset, $this->assetContent);
     }
 
     public function whichAssetFile($asset)
@@ -49,9 +50,8 @@ class CustomAssetsController extends Controller
 
     public function checkIfDirectoryExists()
     {
-        if (!File::isDirectory(storage_path('custom'))) {
+        if (! File::isDirectory(storage_path('custom'))) {
             File::makeDirectory(storage_path('custom'));
         }
     }
 }
-

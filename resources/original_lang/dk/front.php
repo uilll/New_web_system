@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Tilføj enhed',
     'per_one' => 'per 1',
@@ -664,4 +664,4 @@ SMS gateway URL example: http://SMS_GATEWAY/sendsms.php?username=USER&password=P
     'do_objects_delete' => 'Vil du virkelig slette disse enheder? <br> Alle tilknyttede data vil gå tabt.',
     'ignition_off' => 'Tænding slukket',
     'forward' => 'Frem',
-);
+];

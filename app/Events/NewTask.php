@@ -2,9 +2,8 @@
 
 namespace App\Events;
 
-use App\Events\Event;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Queue\SerializesModels;
 use Tobuli\Entities\Task;
 
 class NewTask extends Event implements ShouldBroadcast
@@ -13,11 +12,13 @@ class NewTask extends Event implements ShouldBroadcast
 
     public $task;
 
-    public function __construct(Task $task) {
+    public function __construct(Task $task)
+    {
         $this->task = $task;
     }
 
-    public function broadcastOn() {
+    public function broadcastOn()
+    {
         return [md5('task_for_'. 1)];
     }
 

@@ -1,11 +1,14 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class DeviceSensor extends Eloquent {
+class DeviceSensor extends Eloquent
+{
     protected $table = 'device_sensors';
 
-    protected $fillable = array(
+    protected $fillable = [
         'user_id',
         'device_id',
         'name',
@@ -33,35 +36,39 @@ class DeviceSensor extends Eloquent {
         'on_type',
         'off_type',
         'calibrations',
-        'skip_calibration'
-    );
+        'skip_calibration',
+    ];
 
     public $timestamps = false;
 
     private $setflagfields = [];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('Tobuli\Entities\User', 'user_id', 'id');
     }
 
-    public function device() {
+    public function device()
+    {
         return $this->hasOne('Tobuli\Entities\Device', 'id', 'device_id');
     }
 
     public function getOdometerValueAttribute($value)
     {
-        if ($this->odometer_value_unit == 'mi')
+        if ($this->odometer_value_unit == 'mi') {
             return kilometersToMiles($value);
+        }
 
         return $value;
     }
 
     public function getUnitOfMeasurementAttribute($value)
     {
-        if ($this->type == 'gsm')
+        if ($this->type == 'gsm') {
             $value = '%';
-        elseif ($this->type == 'battery' && $this->shown_value_by == 'min_max_values')
+        } elseif ($this->type == 'battery' && $this->shown_value_by == 'min_max_values') {
             $value = '%';
+        }
 
         return $value;
     }
@@ -78,33 +85,34 @@ class DeviceSensor extends Eloquent {
 
     public function getHashAttribute($value)
     {
-        return md5($this->type . $this->name);
+        return md5($this->type.$this->name);
     }
 
     public function setValue($value)
     {
-        if (env('SENSOR_REMOTE', false))
+        if (env('SENSOR_REMOTE', false)) {
             $this->sendSensorChange($value);
+        }
 
         $this->value = $value;
 
-        if ($this->type == 'odometer' && $this->odometer_value_by == 'connected_odometer')
+        if ($this->type == 'odometer' && $this->odometer_value_by == 'connected_odometer') {
             $this->value_formula = $value;
+        }
     }
 
     public function getSetflag($field)
     {
-        if (!isset($this->setflagfields[$field]))
-        {
+        if (! isset($this->setflagfields[$field])) {
             $data = null;
 
             if ('formula' == $field) {
                 preg_match('/\%SETFLAG\[([0-9]+)\,([0-9]+)\]\%/', $this->{$field}, $match);
                 if (isset($match['1']) && isset($match['2'])) {
                     $data = [
-                        'start'   => $match['1'],
-                        'count'   => $match['2'],
-                        'formula' => str_replace($match['0'], '[value]', $this->{$field})
+                        'start' => $match['1'],
+                        'count' => $match['2'],
+                        'formula' => str_replace($match['0'], '[value]', $this->{$field}),
                     ];
                 }
             } else {
@@ -113,7 +121,7 @@ class DeviceSensor extends Eloquent {
                     $data = [
                         'start' => $match['1'],
                         'count' => $match['2'],
-                        'value' => $match['3']
+                        'value' => $match['3'],
                     ];
                 }
             }
@@ -126,8 +134,7 @@ class DeviceSensor extends Eloquent {
 
     public function getValueType()
     {
-        switch ($this->type)
-        {
+        switch ($this->type) {
             case 'gsm':
             case 'gps':
             case 'fuel_tank':
@@ -183,71 +190,74 @@ class DeviceSensor extends Eloquent {
 
     public function formatValue($value)
     {
-        if ( $this->isBooleanValue() )
+        if ($this->isBooleanValue()) {
             return $value ? trans('front.on') : trans('front.off');
+        }
 
-        if (is_null($value))
+        if (is_null($value)) {
             return '-';
+        }
 
-        if ($this->isFloatValue())
+        if ($this->isFloatValue()) {
             $value = round($value, 2);
+        }
 
-        if ($this->isIntegerValue())
+        if ($this->isIntegerValue()) {
             $value = round($value);
+        }
 
         if ($this->type == 'engine_hours' && $this->tag_name = 'enginehours') {
             $this->unit_of_measurement = trans('front.hour_short');
         }
 
-        return $value . ($this->unit_of_measurement ? ' ' . $this->unit_of_measurement : '');
+        return $value.($this->unit_of_measurement ? ' '.$this->unit_of_measurement : '');
     }
 
     public function formatName()
     {
         $description = '';
 
-        if (in_array($this->type, ['fuel_tank', 'fuel_tank_calibration']) && !empty($this->fuel_tank_name))
+        if (in_array($this->type, ['fuel_tank', 'fuel_tank_calibration']) && ! empty($this->fuel_tank_name)) {
             $description = '('.$this->fuel_tank_name.')';
+        }
 
-        return htmlentities($this->name . ($description ? ' ' . $description : ''));
+        return htmlentities($this->name.($description ? ' '.$description : ''));
     }
 
     public function getPercentage($other = null)
     {
         $percentage = 0;
 
-        if ($this->type == 'fuel_tank' && $this->full_tank)
-        {
+        if ($this->type == 'fuel_tank' && $this->full_tank) {
             $percentage = $this->getValue($other) * 100 / $this->full_tank;
         }
 
-        if ($this->type == 'fuel_tank_calibration')
-        {
+        if ($this->type == 'fuel_tank_calibration') {
             $calibrations = $this->getCalibrations();
 
-            if (!empty($calibrations['last_val']))
+            if (! empty($calibrations['last_val'])) {
                 $percentage = $this->getValue($other) * 100 / $calibrations['last_val'];
+            }
         }
 
-        if ($this->type == 'gsm' || $this->type == 'battery')
-        {
+        if ($this->type == 'gsm' || $this->type == 'battery') {
             $percentage = $this->getValue($other);
         }
 
-        if ( $percentage < 0 )
+        if ($percentage < 0) {
             $percentage = 0;
+        }
 
-        if ( $percentage > 100 )
+        if ($percentage > 100) {
             $percentage = 100;
+        }
 
         return round($percentage);
     }
 
-
     public function getValueScale($value)
     {
-        if ($this->type == 'gsm' || $this->type == 'battery')
-        {
+        if ($this->type == 'gsm' || $this->type == 'battery') {
             return ceil(($value ? $value : 0) / 20);
         }
 
@@ -259,7 +269,8 @@ class DeviceSensor extends Eloquent {
         return $this->getValue($other, true);
     }
 
-    public function getValueFormated($other, $newest = true, $default = null) {
+    public function getValueFormated($other, $newest = true, $default = null)
+    {
         $value = $this->getValue($other, $newest, $default);
 
         return $this->formatValue($value);
@@ -267,15 +278,16 @@ class DeviceSensor extends Eloquent {
 
     public function getValue($other, $newest = true, $default = null)
     {
-        if ($this->type == 'odometer' && $this->odometer_value_by == 'virtual_odometer')
+        if ($this->type == 'odometer' && $this->odometer_value_by == 'virtual_odometer') {
             return $this->odometer_value;
+        }
 
         $valueRaw = $this->getValueRaw($other);
 
-        if (is_null($valueRaw))
-        {
-            if ( ! $newest)
+        if (is_null($valueRaw)) {
+            if (! $newest) {
                 return $default;
+            }
 
             return $this->value;
         }
@@ -284,11 +296,13 @@ class DeviceSensor extends Eloquent {
 
         switch ($this->type) {
             case 'acc':
-                if ($this->checkLogical($valueRaw, 'on_value', 1))
+                if ($this->checkLogical($valueRaw, 'on_value', 1)) {
                     $sensor_value = true;
+                }
 
-                if (is_null($sensor_value) && $this->checkLogical($valueRaw, 'off_value', 1))
+                if (is_null($sensor_value) && $this->checkLogical($valueRaw, 'off_value', 1)) {
                     $sensor_value = false;
+                }
                 break;
 
             case 'door':
@@ -299,11 +313,13 @@ class DeviceSensor extends Eloquent {
             case 'drive_private':
             case 'route_color':
             case 'logical':
-                if ($this->checkLogical($valueRaw, 'on_tag_value', $this->on_type))
+                if ($this->checkLogical($valueRaw, 'on_tag_value', $this->on_type)) {
                     $sensor_value = true;
+                }
 
-                if (is_null($sensor_value) && $this->checkLogical($valueRaw, 'off_tag_value', $this->off_type))
+                if (is_null($sensor_value) && $this->checkLogical($valueRaw, 'off_tag_value', $this->off_type)) {
                     $sensor_value = false;
+                }
                 break;
 
             case 'battery':
@@ -339,10 +355,11 @@ class DeviceSensor extends Eloquent {
                 $value = $this->getValueFormula($valueRaw);
 
                 if (is_numeric($this->full_tank) && is_numeric($this->full_tank_value) && is_numeric($value)) {
-                    if ($this->full_tank != $this->full_tank_value)
+                    if ($this->full_tank != $this->full_tank_value) {
                         $sensor_value = $this->full_tank * (getPrc($this->full_tank_value, $value) / 100);
-                    else
+                    } else {
                         $sensor_value = $value;
+                    }
                 }
                 break;
 
@@ -353,33 +370,32 @@ class DeviceSensor extends Eloquent {
                 $value = $this->getValueFormula($valueRaw);
 
                 if (($value < $calibrations['first'] && $calibrations['order'] == 'dec') ||
-                    ($value > $calibrations['first'] && $calibrations['order'] == 'asc'))
-                {
+                    ($value > $calibrations['first'] && $calibrations['order'] == 'asc')) {
                     $sensor_value = $this->skip_calibration ? null : $calibrations['first_val'];
-                }
-                else {
+                } else {
                     $prev_item = [];
                     foreach ($calibrations['calibrations'] as $x => $y) {
-                        if (!empty($prev_item)) {
+                        if (! empty($prev_item)) {
                             if (($value < $x && $calibrations['order'] == 'dec') ||
-                                ($value > $x && $calibrations['order'] == 'asc'))
-                            {
+                                ($value > $x && $calibrations['order'] == 'asc')) {
                                 $sensor_value = calibrate($value, $prev_item['x'], $prev_item['y'], $x, $y);
                                 break;
                             }
                         }
                         $prev_item = [
                             'x' => $x,
-                            'y' => $y
+                            'y' => $y,
                         ];
                     }
 
-                    if ( ( ! $this->skip_calibration) && is_null($sensor_value))
+                    if ((! $this->skip_calibration) && is_null($sensor_value)) {
                         $sensor_value = $y;
+                    }
                 }
 
-                if ( ! is_null($sensor_value))
+                if (! is_null($sensor_value)) {
                     $sensor_value = round($sensor_value, 2);
+                }
 
                 break;
 
@@ -391,8 +407,9 @@ class DeviceSensor extends Eloquent {
 
             case 'engine_hours':
                 $sensor_value = $valueRaw;
-                if ($this->tag_name == 'enginehours')
+                if ($this->tag_name == 'enginehours') {
                     $sensor_value = round($sensor_value / 3600, 2);
+                }
                 break;
             case 'satellites':
             case 'textual':
@@ -403,15 +420,17 @@ class DeviceSensor extends Eloquent {
         return $sensor_value;
     }
 
-    function getValueRaw($other)
+    public function getValueRaw($other)
     {
-        $value = NULL;
-        if (empty($this->tag_name))
+        $value = null;
+        if (empty($this->tag_name)) {
             return $value;
+        }
 
-        preg_match('/<' . preg_quote($this->tag_name, '/') . '>(.*?)<\/' . preg_quote($this->tag_name, '/') . '>/s', $other, $matches);
-        if (isset($matches['1']))
+        preg_match('/<'.preg_quote($this->tag_name, '/').'>(.*?)<\/'.preg_quote($this->tag_name, '/').'>/s', $other, $matches);
+        if (isset($matches['1'])) {
             $value = $matches['1'];
+        }
 
         return $value;
     }
@@ -420,7 +439,7 @@ class DeviceSensor extends Eloquent {
     {
         $equal = $this->{$field};
 
-        if ( $setflag = $this->getSetflag($field) ) {
+        if ($setflag = $this->getSetflag($field)) {
             $value = substr($value, $setflag['start'], $setflag['count']);
             $equal = $setflag['value'];
         }
@@ -430,14 +449,15 @@ class DeviceSensor extends Eloquent {
 
     protected function getValueFormula($value)
     {
-        if (empty($this->formula) || $this->formula == '[value]')
+        if (empty($this->formula) || $this->formula == '[value]') {
             return parseNumber($value);
+        }
 
         $formula = $this->formula;
 
         if ($setflag = $this->getSetflag('formula')) {
             $formula = $setflag['formula'];
-            $value   = substr($value, $setflag['start'], $setflag['count']);
+            $value = substr($value, $setflag['start'], $setflag['count']);
         }
 
         return solveEquation(parseNumber($value), $formula);
@@ -447,36 +467,37 @@ class DeviceSensor extends Eloquent {
     {
         $value_number = parseNumber($value);
 
-        if (!(is_numeric($this->max_value) && is_numeric($this->min_value) && is_numeric($value_number)))
+        if (! (is_numeric($this->max_value) && is_numeric($this->min_value) && is_numeric($value_number))) {
             return null;
+        }
 
-        if ($value <= $this->min_value)
+        if ($value <= $this->min_value) {
             return 0;
+        }
 
-        if ($value >= $this->max_value)
+        if ($value >= $this->max_value) {
             return 100;
+        }
 
         return getPrc($this->max_value - $this->min_value, ($value_number - $this->min_value));
     }
 
     protected function getCalibrations()
     {
-        if (!isset($this->cacheCalibrations))
-        {
-            $calibrations = array_reverse($this->calibrations, TRUE);
+        if (! isset($this->cacheCalibrations)) {
+            $calibrations = array_reverse($this->calibrations, true);
 
             $calibrationsData = [
                 'calibrations' => $calibrations,
-                'first'        => key($calibrations),
-                'first_val'    => current($calibrations),
-                'last_val'     => end($calibrations),
-                'last'         => key($calibrations),
-                'order'        => 'asc'
+                'first' => key($calibrations),
+                'first_val' => current($calibrations),
+                'last_val' => end($calibrations),
+                'last' => key($calibrations),
+                'order' => 'asc',
             ];
 
             if ($calibrationsData['first_val'] > $calibrationsData['last_val'] &&
-                $calibrationsData['first'] < $calibrationsData['last'])
-            {
+                $calibrationsData['first'] < $calibrationsData['last']) {
                 $calibrationsData['order'] = 'dec';
             }
 
@@ -489,14 +510,15 @@ class DeviceSensor extends Eloquent {
     protected function sendSensorChange($value)
     {
         //if sensor value changed
-        if ( $this->value == $value)
+        if ($this->value == $value) {
             return;
+        }
 
         $options = [
-            'device'       => $this->device->imei,
-            'sensor_id'    => $this->id,
-            'sensor_type'  => $this->type,
-            'sensor_value' => $this->value
+            'device' => $this->device->imei,
+            'sensor_id' => $this->id,
+            'sensor_type' => $this->type,
+            'sensor_value' => $this->value,
         ];
 
         $this->sendSensorRemote($options);
@@ -510,7 +532,7 @@ class DeviceSensor extends Eloquent {
 
         $fields = [
             'token_ip' => $token_ip,
-            'method' => $method
+            'method' => $method,
         ];
 
         $data = array_merge($fields, $options);

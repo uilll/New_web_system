@@ -14,10 +14,10 @@ View::addLocation(base_path().'/Tobuli/Views');
 View::addNamespace('admin', base_path().'/Tobuli/Views/Admin');
 View::addNamespace('front', base_path().'/Tobuli/Views/Frontend');
 
-App::setLocale( settings('main_settings.default_language') );
+App::setLocale(settings('main_settings.default_language'));
 
-class CustomRules extends \Illuminate\Validation\Validator {
-
+class CustomRules extends \Illuminate\Validation\Validator
+{
     public function validatePhone($attribute, $value, $parameters)
     {
         return preg_match("/^\+\d[0-9]{10}/", $value);
@@ -33,8 +33,10 @@ class CustomRules extends \Illuminate\Validation\Validator {
         return str_replace(':max', $parameters[0], $message);
     }
 
-    protected function validateLesserThan($attribute, $value, $parameters) {
+    protected function validateLesserThan($attribute, $value, $parameters)
+    {
         $param = array_get($this->data, $parameters[0]);
+
         return $value < $param;
     }
 
@@ -42,11 +44,9 @@ class CustomRules extends \Illuminate\Validation\Validator {
     {
         return str_replace(':other', trans('validation.attributes.'.$parameters[0]), $message);
     }
-
 }
 
-Validator::resolver(function($translator, $data, $rules, $messages)
-{
+Validator::resolver(function ($translator, $data, $rules, $messages) {
     return new CustomRules($translator, $data, $rules, $messages);
 });
 
@@ -80,28 +80,27 @@ $sensors = [
     'route_color' => trans('front.route_color'),
 
 ];
-if ( settings('plugins.business_private_drive.status') ) {
+if (settings('plugins.business_private_drive.status')) {
     $sensors['drive_business'] = trans('front.drive_business');
     $sensors['drive_private'] = trans('front.drive_private');
 }
 
-if ( settings('plugins.route_color.status') ) {
+if (settings('plugins.route_color.status')) {
     $sensors['route_color'] = trans('front.route_color');
 }
 Config::set('tobuli.sensors', $sensors);
 
-
 Config::set('tobuli.units_of_distance', [
     'km' => trans('front.kilometer'),
-    'mi' => trans('front.mile')
+    'mi' => trans('front.mile'),
 ]);
 Config::set('tobuli.units_of_capacity', [
     'lt' => trans('front.liter'),
-    'gl' => trans('front.gallon')
+    'gl' => trans('front.gallon'),
 ]);
 Config::set('tobuli.units_of_altitude', [
     'mt' => trans('front.meter'),
-    'ft' => trans('front.feet')
+    'ft' => trans('front.feet'),
 ]);
 Config::set('tobuli.object_online_timeouts', [
     '1' => '1 '.trans('front.minute_short'),
@@ -165,11 +164,11 @@ Config::set('lists.widgets', [
 ]);
 
 $minutes = [];
-for($i = 0; $i < 16; $i += 1){
-    $minutes[$i] = $i . ' ' . trans('front.minute_short');
+for ($i = 0; $i < 16; $i += 1) {
+    $minutes[$i] = $i.' '.trans('front.minute_short');
 }
-for($i = 15; $i < 65; $i += 5){
-    $minutes[$i] = $i . ' ' . trans('front.minute_short');
+for ($i = 15; $i < 65; $i += 5) {
+    $minutes[$i] = $i.' '.trans('front.minute_short');
 }
 Config::set('tobuli.minutes', $minutes);
 
@@ -177,10 +176,8 @@ $format = settings('main_settings.default_time_format') == 'h:i:s A' ? 'h:i A' :
 //$format = 'h:i A';
 $date = Carbon::createMidnightDate();
 $times = [];
-for($i = 0; $i < 96; $i++){
+for ($i = 0; $i < 96; $i++) {
     $times[$date->format('H:i')] = $date->format($format);
     $date->addMinutes(15);
 }
 Config::set('tobuli.history_time', $times);
-
-

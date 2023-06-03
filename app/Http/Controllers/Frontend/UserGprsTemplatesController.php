@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\UserGprsTemplateModalHelper;
@@ -9,14 +11,14 @@ class UserGprsTemplatesController extends Controller
     {
         $data = UserGprsTemplateModalHelper::get();
 
-        return !$this->api ? view('front::UserGprsTemplates.index')->with($data) : ['items' => $data];
+        return ! $this->api ? view('front::UserGprsTemplates.index')->with($data) : ['items' => $data];
     }
 
     public function create()
     {
         $data = UserGprsTemplateModalHelper::createData();
 
-        return is_array($data) && !$this->api ? view('front::UserGprsTemplates.create')->with($data) : $data;
+        return is_array($data) && ! $this->api ? view('front::UserGprsTemplates.create')->with($data) : $data;
     }
 
     public function store()
@@ -28,7 +30,7 @@ class UserGprsTemplatesController extends Controller
     {
         $data = UserGprsTemplateModalHelper::editData();
 
-        return is_array($data) && !$this->api ? view('front::UserGprsTemplates.edit')->with($data) : $data;
+        return is_array($data) && ! $this->api ? view('front::UserGprsTemplates.edit')->with($data) : $data;
     }
 
     public function update()

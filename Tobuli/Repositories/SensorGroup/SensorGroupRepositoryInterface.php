@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Repositories\SensorGroup;
+<?php
+
+namespace Tobuli\Repositories\SensorGroup;
 
 use Tobuli\Repositories\EloquentRepositoryInterface;
 
-interface SensorGroupRepositoryInterface extends EloquentRepositoryInterface {
-
+interface SensorGroupRepositoryInterface extends EloquentRepositoryInterface
+{
 }

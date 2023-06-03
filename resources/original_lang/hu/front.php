@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Eszköz hozzáadása',
     'per_one' => 'Per 1',
@@ -663,4 +663,4 @@ return array(
     'do_objects_delete' => 'Tényleg törölni szeretné ezeket az eszközöket? <br> Minden kapcsolódó adat elvész.',
     'ignition_off' => 'Gyújtás le',
     'forward' => 'Előre',
-);
+];

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'הוסף מערכת',
     'per_one' => 'ליחידה',
@@ -666,4 +666,4 @@ SMS gateway URL example: http://SMS_GATEWAY/sendsms.php?username=USER&password=P
     'do_objects_delete' => 'האם אתה באמת רוצה למחוק את המכשירים האלה? <br> כל הנתונים המשויכים יאבדו.',
     'ignition_off' => 'הצתה כבוי',
     'forward' => 'קדימה',
-);
+];

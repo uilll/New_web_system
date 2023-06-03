@@ -1,23 +1,24 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
 
+namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\File;
-
-use Validator;
-use Tobuli\Exceptions\ValidationException;
 use App\Exceptions\ResourseNotFoundException;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\View;
+use Tobuli\Exceptions\ValidationException;
+use Validator;
 
 class LanguagesController extends BaseController
 {
     private $section = 'languages';
+
     private $languages;
 
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
 
-        $this->languages = array_sort(settings('languages'), function($language){
+        $this->languages = array_sort(settings('languages'), function ($language) {
             return $language['title'];
         });
     }
@@ -29,15 +30,16 @@ class LanguagesController extends BaseController
             'languages' => $this->languages,
         ];
 
-        return View::make('admin::'.ucfirst($this->section).'.' . (request()->ajax() ? 'table' : 'index'))->with($data);
+        return View::make('admin::'.ucfirst($this->section).'.'.(request()->ajax() ? 'table' : 'index'))->with($data);
     }
 
     public function edit($lang)
     {
         $language = settings('languages.'.$lang);
 
-        if (empty($language))
+        if (empty($language)) {
             throw new ResourseNotFoundException('global.language');
+        }
 
         $flags = [];
 
@@ -55,22 +57,26 @@ class LanguagesController extends BaseController
 
         $validator = Validator::make($input, [
             'title' => 'required',
-            'flag'  => 'required',
+            'flag' => 'required',
         ]);
 
         $language = settings('languages.'.$lang);
 
-        if (empty($language))
+        if (empty($language)) {
             throw new ResourseNotFoundException('global.language');
+        }
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             throw new ValidationException($validator->errors());
+        }
 
-        if ( ! File::exists(public_path("assets/images/header/{$input['flag']}")))
+        if (! File::exists(public_path("assets/images/header/{$input['flag']}"))) {
             throw new ValidationException(['flag' => trans('validation.exists')]);
+        }
 
-        if ( empty($input['active']) && settings('main_settings.default_language') == $language['key'])
+        if (empty($input['active']) && settings('main_settings.default_language') == $language['key']) {
             throw new ValidationException(['active' => trans('validation.attributes.default_language')]);
+        }
 
         $language = array_merge($language, $input);
 

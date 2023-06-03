@@ -20,6 +20,6 @@ class message_replies extends Model
 
     public function message()
     {
-        return $this->belongsTo('App\Message');
+        return $this->belongsTo(\App\Message::class);
     }
 }

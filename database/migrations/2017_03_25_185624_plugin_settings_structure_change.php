@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class PluginSettingsStructureChange extends Migration {
-
+class PluginSettingsStructureChange extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -38,5 +37,4 @@ class PluginSettingsStructureChange extends Migration {
     {
         //
     }
-
 }

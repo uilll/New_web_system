@@ -1,6 +1,9 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use App\Exceptions\DemoAccountException;
+use Carbon\Carbon;
 use Facades\Repositories\DeviceGroupRepo;
 use Facades\Repositories\EventCustomRepo;
 use Facades\Repositories\SmsEventQueueRepo;
@@ -12,24 +15,20 @@ use Facades\Repositories\UserSmsTemplateRepo;
 use Facades\Validators\SMSGatewayFormValidator;
 use Facades\Validators\UserAccountFormValidator;
 use Facades\Validators\UserAccountSettingsFormValidator;
-use Facades\ModalHelpers\SmsGatewayModalHelper;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use Tobuli\Exceptions\ValidationException;
-
-use Carbon\Carbon;
 
 class MyAccountSettingsModalHelper extends ModalHelper
 {
     private $data_group = [];
-    
+
     public function editData()
     {
         $item = UserRepo::find($this->user->id)->toArray();
-        $timezones = TimezoneRepo::order()->lists('title', 'id')->all();
+        $timezones = TimezoneRepo::order()->pluck('title', 'id')->all();
         $groups = DeviceGroupRepo::getWhere(['user_id' => $this->user->id], 'title');
-        if (!$this->api) {
+        if (! $this->api) {
             $drivers = UserDriverRepo::searchAndPaginate(['filter' => ['user_id' => $this->user->id]], 'id', 'desc', 15);
             $events = EventCustomRepo::searchAndPaginate(['filter' => ['user_id' => $this->user->id]], 'id', 'desc', 10);
             $user_sms_templates = UserSmsTemplateRepo::searchAndPaginate(['filter' => ['user_id' => $this->user->id]], 'id', 'desc', 10);
@@ -42,47 +41,54 @@ class MyAccountSettingsModalHelper extends ModalHelper
         $sms_queue_count = SmsEventQueueRepo::countwhere(['user_id' => $this->user->id]);
         $user_dst = DB::table('users_dst')->where('user_id', '=', $this->user->id)->first();
 
-        if (!$item['timezone_id'])
+        if (! $item['timezone_id']) {
             $item['timezone_id'] = 17;
+        }
 
-        if (!is_array($item['sms_gateway_params']) || !array_key_exists('request_method', $item['sms_gateway_params']))
+        if (! is_array($item['sms_gateway_params']) || ! array_key_exists('request_method', $item['sms_gateway_params'])) {
             $item['sms_gateway_params']['request_method'] = null;
+        }
 
-        if (!is_array($item['sms_gateway_params']) || !array_key_exists('encoding', $item['sms_gateway_params']))
+        if (! is_array($item['sms_gateway_params']) || ! array_key_exists('encoding', $item['sms_gateway_params'])) {
             $item['sms_gateway_params']['encoding'] = null;
+        }
 
-        if (!is_array($item['sms_gateway_params']) || !array_key_exists('authentication', $item['sms_gateway_params']))
+        if (! is_array($item['sms_gateway_params']) || ! array_key_exists('authentication', $item['sms_gateway_params'])) {
             $item['sms_gateway_params']['authentication'] = null;
+        }
 
-        if (!is_array($item['sms_gateway_params']) || !array_key_exists('custom_headers', $item['sms_gateway_params']))
+        if (! is_array($item['sms_gateway_params']) || ! array_key_exists('custom_headers', $item['sms_gateway_params'])) {
             $item['sms_gateway_params']['custom_headers'] = null;
+        }
 
-        if (!is_array($item['sms_gateway_params']) || !array_key_exists('username', $item['sms_gateway_params']))
+        if (! is_array($item['sms_gateway_params']) || ! array_key_exists('username', $item['sms_gateway_params'])) {
             $item['sms_gateway_params']['username'] = null;
+        }
 
         $units_of_distance = [
             'km' => trans('front.kilometer'),
-            'mi' => trans('front.mile')
+            'mi' => trans('front.mile'),
         ];
 
         $units_of_capacity = [
             'lt' => trans('front.liter'),
-            'gl' => trans('front.gallon')
+            'gl' => trans('front.gallon'),
         ];
 
         $units_of_altitude = [
             'mt' => trans('front.meter'),
-            'ft' => trans('front.feet')
+            'ft' => trans('front.feet'),
         ];
 
         $request_method_select = [
             'get' => 'GET',
             'post' => 'POST',
             'app' => trans('front.sms_gateway_app'),
-            'plivo' => 'Plivo'
+            'plivo' => 'Plivo',
         ];
-        if (settings('sms_gateway.enabled'))
+        if (settings('sms_gateway.enabled')) {
             $request_method_select = ['server' => 'Server gateway'] + $request_method_select;
+        }
 
         $encoding_select = [0 => trans('global.no'), 'json' => 'JSON'];
         $authentication_select = [0 => trans('global.no'), 1 => trans('global.yes')];
@@ -91,7 +97,7 @@ class MyAccountSettingsModalHelper extends ModalHelper
             'none' => trans('front.none'),
             'exact' => trans('front.exact_date'),
             'automatic' => trans('front.automatic'),
-            'other' => trans('front.other')
+            'other' => trans('front.other'),
         ];
         $months = [
             'january' => trans('front.january'),
@@ -105,7 +111,7 @@ class MyAccountSettingsModalHelper extends ModalHelper
             'september' => trans('front.september'),
             'october' => trans('front.october'),
             'november' => trans('front.november'),
-            'december' => trans('front.december')
+            'december' => trans('front.december'),
         ];
 
         $weekdays = [
@@ -115,7 +121,7 @@ class MyAccountSettingsModalHelper extends ModalHelper
             'thursday' => trans('front.thursday'),
             'friday' => trans('front.friday'),
             'saturday' => trans('front.saturday'),
-            'sunday' => trans('front.sunday')
+            'sunday' => trans('front.sunday'),
         ];
 
         $week_pos = [
@@ -125,8 +131,9 @@ class MyAccountSettingsModalHelper extends ModalHelper
 
         $dst_countries_q = DB::table('timezones_dst')->get();
         $dst_countries = [];
-        foreach ($dst_countries_q as $dst_c)
+        foreach ($dst_countries_q as $dst_c) {
             $dst_countries[$dst_c->id] = $dst_c->country;
+        }
 
         $week_start_days = [
             '1' => trans('front.monday'),
@@ -151,25 +158,26 @@ class MyAccountSettingsModalHelper extends ModalHelper
             $weekdays = apiArray($weekdays);
         }
 
-        if ($this->api)
+        if ($this->api) {
             return compact('item', 'timezones', 'units_of_distance', 'units_of_capacity', 'units_of_altitude', 'groups', 'sms_queue_count', 'request_method_select', 'encoding_select', 'authentication_select', 'dst_types', 'user_dst', 'months', 'weekdays', 'week_pos', 'dst_countries', 'week_start_days');
-        else
+        } else {
             return compact('item', 'timezones', 'units_of_distance', 'units_of_capacity', 'units_of_altitude', 'groups', 'sms_queue_count', 'request_method_select', 'encoding_select', 'authentication_select', 'drivers', 'events', 'user_sms_templates', 'user_gprs_templates', 'dst_types', 'user_dst', 'months', 'weekdays', 'week_pos', 'dst_countries', 'week_start_days', 'widgets');
+        }
     }
 
     public function edit()
     {
-        if (isDemoUser())
+        if (isDemoUser()) {
             throw new DemoAccountException();
+        }
 
         $this->data['sms_gateway'] = (isset($this->data['sms_gateway']) && $this->data['sms_gateway']);
         $this->data['sms_gateway_url'] = isset($this->data['sms_gateway_url']) ? $this->data['sms_gateway_url'] : '';
         $item = $this->user;
         $user_dst = DB::table('users_dst')->where('user_id', '=', $this->user->id)->first();
 
-        try
-        {
-            if ( ! empty($this->data['sms_gateway']) && isset($this->data['request_method'])) {
+        try {
+            if (! empty($this->data['sms_gateway']) && isset($this->data['request_method'])) {
                 SMSGatewayFormValidator::validate($this->data['request_method'], $this->data);
             }
 
@@ -198,16 +206,17 @@ class MyAccountSettingsModalHelper extends ModalHelper
                     'auth_id',
                     'auth_token',
                     'senders_phone',
-                    'custom_headers'
+                    'custom_headers',
                 ];
                 $update['sms_gateway_params'] = [];
                 foreach ($fields as $field) {
                     $value = '';
-                    if (isset($this->data[$field]))
+                    if (isset($this->data[$field])) {
                         $value = $this->data[$field];
-                    else {
-                        if (isset($item->sms_gateway_params[$field]))
+                    } else {
+                        if (isset($item->sms_gateway_params[$field])) {
                             $value = $item->sms_gateway_params[$field];
+                        }
                     }
                     $update['sms_gateway_params'][$field] = $value;
                 }
@@ -216,29 +225,28 @@ class MyAccountSettingsModalHelper extends ModalHelper
             UserRepo::update($item->id, $update);
 
             if (isset($this->data['dst_type'])) {
-                # Daylight saving time
+                // Daylight saving time
                 if ($this->data['dst_type'] == 'exact' || $this->data['dst_type'] == 'other' || $this->data['dst_type'] == 'automatic') {
                     $dst_arr = [
                         'user_id' => $this->user->id,
-                        'country_id' => NULL,
+                        'country_id' => null,
                         'type' => $this->data['dst_type'],
-                        'date_from' => NULL,
-                        'date_to' => NULL,
-                        'month_from' => NULL,
-                        'month_to' => NULL,
-                        'week_pos_from' => NULL,
-                        'week_pos_to' => NULL,
-                        'week_day_from' => NULL,
-                        'week_day_to' => NULL,
-                        'time_from' => NULL,
-                        'time_to' => NULL
+                        'date_from' => null,
+                        'date_to' => null,
+                        'month_from' => null,
+                        'month_to' => null,
+                        'week_pos_from' => null,
+                        'week_pos_to' => null,
+                        'week_day_from' => null,
+                        'week_day_to' => null,
+                        'time_from' => null,
+                        'time_to' => null,
                     ];
 
                     if ($this->data['dst_type'] == 'exact') {
                         $dst_arr['date_from'] = $this->data['date_from'];
                         $dst_arr['date_to'] = $this->data['date_to'];
-                    }
-                    elseif ($this->data['dst_type'] == 'other') {
+                    } elseif ($this->data['dst_type'] == 'other') {
                         $dst_arr['month_from'] = $this->data['month_from'];
                         $dst_arr['month_to'] = $this->data['month_to'];
                         $dst_arr['week_pos_from'] = $this->data['week_pos_from'];
@@ -247,32 +255,31 @@ class MyAccountSettingsModalHelper extends ModalHelper
                         $dst_arr['week_day_to'] = $this->data['week_day_to'];
                         $dst_arr['time_from'] = $this->data['time_from'];
                         $dst_arr['time_to'] = $this->data['time_to'];
-                    }
-                    elseif ($this->data['dst_type'] == 'automatic') {
+                    } elseif ($this->data['dst_type'] == 'automatic') {
                         $dst_arr['country_id'] = $this->data['dst_country_id'];
                     }
 
-                    if (!empty($user_dst)) {
-                        $unchanged = array_intersect_assoc(json_decode(json_encode($user_dst), TRUE), $dst_arr);
-                        if (count($unchanged) != count($dst_arr))
+                    if (! empty($user_dst)) {
+                        $unchanged = array_intersect_assoc(json_decode(json_encode($user_dst), true), $dst_arr);
+                        if (count($unchanged) != count($dst_arr)) {
                             DB::table('users_dst')->where('user_id', '=', $this->user->id)->update($dst_arr);
-                    }
-                    else
+                        }
+                    } else {
                         DB::table('users_dst')->insert($dst_arr);
-
-
-                }
-                else
+                    }
+                } else {
                     DB::table('users_dst')->where('user_id', '=', $this->user->id)->delete();
+                }
             }
 
-            # Object groups
-            if (!$this->api) {
+            // Object groups
+            if (! $this->api) {
                 $edit_group = isset($this->data['edit_group']) ? $this->data['edit_group'] : [];
                 $edit_arr = [];
                 foreach ($edit_group as $id => $title) {
-                    if (empty($title))
+                    if (empty($title)) {
                         continue;
+                    }
 
                     $edit_arr[$id] = $id;
                     DeviceGroupRepo::updateWhere(['id' => $id, 'user_id' => $this->user->id], ['title' => $title]);
@@ -282,38 +289,39 @@ class MyAccountSettingsModalHelper extends ModalHelper
 
                 $add_group = isset($this->data['add_group']) ? $this->data['add_group'] : [];
                 foreach ($add_group as $id => $title) {
-                    if (empty($title))
+                    if (empty($title)) {
                         continue;
+                    }
 
                     DeviceGroupRepo::create(['title' => $title, 'user_id' => $this->user->id]);
                 }
-            }
-            else {
+            } else {
                 $arr = [];
                 $groups = DeviceGroupRepo::getWhere(['user_id' => $item->id]);
-                if (!$groups->isEmpty())
-                    $groups = $groups->lists('id', 'id')->all();
+                if (! $groups->isEmpty()) {
+                    $groups = $groups->pluck('id', 'id')->all();
+                }
 
                 $this->data_group = [];
                 if (isset($this->data['groups'])) {
                     $this->data_group = $this->data['groups'];
 
-                    if ( ! is_array($this->data_group)) {
-                        $this->data_group = json_decode($this->data_group, TRUE);
+                    if (! is_array($this->data_group)) {
+                        $this->data_group = json_decode($this->data_group, true);
                     }
                 }
 
                 foreach ($this->data_group as $key => $group) {
                     $title = $group['title'];
                     $id = $group['id'];
-                    if (empty($title))
+                    if (empty($title)) {
                         continue;
+                    }
 
                     if (array_key_exists($group['id'], $groups)) {
                         $arr[$id] = $id;
                         DeviceGroupRepo::updateWhere(['id' => $id, 'user_id' => $this->user->id], ['title' => $title]);
-                    }
-                    else {
+                    } else {
                         $itemd = DeviceGroupRepo::create(['title' => $title, 'user_id' => $item->id]);
                         $id = $itemd->id;
                         $arr[$id] = $id;
@@ -323,49 +331,45 @@ class MyAccountSettingsModalHelper extends ModalHelper
                 DeviceGroupRepo::deleteUsersWhereNotIn($arr, $item->id);
             }
 
-            if (!$this->api) {
+            if (! $this->api) {
                 $widgets = empty($this->data['widgets']) ? null : $this->data['widgets'];
                 UserRepo::setSettings($item->id, 'widgets', $widgets);
             }
 
             return ['status' => 1, 'id' => $item->id];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
 
     public function changePassword()
     {
-        if (isDemoUser())
+        if (isDemoUser()) {
             throw new DemoAccountException();
+        }
 
         $item = UserRepo::find($this->user->id);
 
-        try
-        {
+        try {
             $this->data['email'] = $item->email;
 
             UserAccountFormValidator::validate('update', $this->data, $item->id);
 
             $update = [
-                'email' => $this->data['email']
+                'email' => $this->data['email'],
             ];
 
-            if (!empty($this->data['password'])) {
+            if (! empty($this->data['password'])) {
                 $update['password'] = $this->data['password'];
-                while(!empty(UserRepo::findWhere(['api_hash' => $hash = Hash::make($this->data['email'].':'.$this->data['password'])])));
+                while (! empty(UserRepo::findWhere(['api_hash' => $hash = Hash::make($this->data['email'].':'.$this->data['password'])])));
                 $update['api_hash'] = $hash;
                 $update['password_updated_at'] = Carbon::now();
             }
 
             UserRepo::update($item->id, $update);
-            
+
             return ['status' => 1, 'id' => $item->id, 'email_changed' => ($this->data['email'] != $item->email)];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }

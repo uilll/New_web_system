@@ -1,11 +1,13 @@
-<?php namespace Tobuli\Repositories\Tasks;
+<?php
+
+namespace Tobuli\Repositories\Tasks;
 
 use Tobuli\Entities\Task as Entity;
 use Tobuli\Repositories\EloquentRepository;
 
-class EloquentTasksRepository extends EloquentRepository implements TasksRepositoryInterface {
-
-    public function __construct( Entity $entity )
+class EloquentTasksRepository extends EloquentRepository implements TasksRepositoryInterface
+{
+    public function __construct(Entity $entity)
     {
         $this->entity = $entity;
     }
@@ -15,20 +17,20 @@ class EloquentTasksRepository extends EloquentRepository implements TasksReposit
         $data = $this->generateSearchData($data);
         $sort = array_merge([
             'sort' => $sort,
-            'sort_by' => $sort_by
+            'sort_by' => $sort_by,
         ], $data['sorting']);
 
         $items = $this->entity
             ->orderBy($sort['sort_by'], $sort['sort'])
             ->where(function ($query) use ($data) {
-                if (!empty($data['search_phrase'])) {
+                if (! empty($data['search_phrase'])) {
                     foreach ($this->searchable as $column) {
-                        $query->orWhere($column, 'like', '%' . $data['search_phrase'] . '%');
+                        $query->orWhere($column, 'like', '%'.$data['search_phrase'].'%');
                     }
                 }
 
                 if (count($data['filter'])) {
-                    foreach ($data['filter'] as $key=>$value) {
+                    foreach ($data['filter'] as $key => $value) {
                         switch ($key) {
                             case 'delivery_time_from':
                                 $query->where($key, '>', $value);
@@ -40,7 +42,6 @@ class EloquentTasksRepository extends EloquentRepository implements TasksReposit
                                 $query->where($key, $value);
                                 break;
                         }
-
                     }
                 }
             })
@@ -51,7 +52,8 @@ class EloquentTasksRepository extends EloquentRepository implements TasksReposit
         return $items;
     }
 
-    public function findWithAttributes($id) {
+    public function findWithAttributes($id)
+    {
         return Entity::where('id', $id)->with('statuses')->first();
     }
 }

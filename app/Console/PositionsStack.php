@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-
 use Illuminate\Support\Facades\Redis;
 
 class PositionsStack
@@ -18,14 +17,16 @@ class PositionsStack
 
     public function add($data)
     {
-        $this->redis->lPush(self::PREFIX . '.' . $data['imei'], json_encode($data));
+        $this->redis->lPush(self::PREFIX.'.'.$data['imei'], json_encode($data));
     }
 
     public function getImeis()
     {
         $keys = $this->getKeys();
 
-        $imeis = array_map(function($key) { return  str_replace(self::PREFIX . '.','', $key); }, $keys);
+        $imeis = array_map(function ($key) {
+        return  str_replace(self::PREFIX.'.', '', $key);
+        }, $keys);
 
         shuffle($imeis);
 
@@ -34,42 +35,48 @@ class PositionsStack
 
     public function getKeys()
     {
-        return $this->redis->keys(self::PREFIX . '.*');
+        return $this->redis->keys(self::PREFIX.'.*');
     }
 
     public function count($imei = null)
     {
-        if (is_null($imei))
+        if (is_null($imei)) {
             return $this->allCount();
+        }
 
-        return $this->oneCount(self::PREFIX . '.' . $imei);
+        return $this->oneCount(self::PREFIX.'.'.$imei);
     }
 
     public function getData($imei, $remove = true)
     {
-        return $this->getKeyData(self::PREFIX . '.' . $imei, $remove);
+        return $this->getKeyData(self::PREFIX.'.'.$imei, $remove);
     }
 
     public function getKeyData($key, $remove = true)
     {
-        if ($remove)
+        if ($remove) {
             $data = $this->redis->rPop($key);
-        else
+        } else {
             $data = $this->redis->lIndex($key, -1);
+        }
 
-        if ( ! $data)
+        if (! $data) {
             return null;
+        }
 
         $data = json_decode($data, true);
 
-        if ( ! empty($data['deviceId']))
+        if (! empty($data['deviceId'])) {
             $data['imei'] = $data['deviceId'];
+        }
 
-        if ( ! empty($data['uniqueId']))
+        if (! empty($data['uniqueId'])) {
             $data['imei'] = $data['uniqueId'];
+        }
 
-        if (empty($data['imei']))
+        if (empty($data['imei'])) {
             return false;
+        }
 
         $data['protocol'] = isset($data['protocol']) ? $data['protocol'] : null;
 
@@ -81,22 +88,25 @@ class PositionsStack
         return $this->redis->lLen($key);
     }
 
-    public function allCount() {
+    public function allCount()
+    {
         $count = 0;
 
         $keys = $this->getKeys();
 
-        if ( ! $keys)
+        if (! $keys) {
             return $count;
+        }
 
-        foreach ($keys as $key)
+        foreach ($keys as $key) {
             $count += $this->oneCount($key);
+        }
 
         return $count;
     }
 
     public function deleteImei($imei)
     {
-        $this->redis->del(self::PREFIX . '.' . $imei);
+        $this->redis->del(self::PREFIX.'.'.$imei);
     }
 }

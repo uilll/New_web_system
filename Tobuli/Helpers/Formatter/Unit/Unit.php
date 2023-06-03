@@ -5,6 +5,7 @@ namespace Tobuli\Helpers\Formatter\Unit;
 abstract class Unit
 {
     protected $ratio = 1;
+
     protected $unit;
 
     abstract public function byUnit($unit);

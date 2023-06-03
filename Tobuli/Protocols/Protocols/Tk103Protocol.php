@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class Tk103Protocol extends BaseProtocol implements Protocol
 {
@@ -18,7 +18,7 @@ class Tk103Protocol extends BaseProtocol implements Protocol
             $this->initCommand(Commands::TYPE_REBOOT_DEVICE),
             //$this->initCommand(Commands::TYPE_GET_VERSION),
             //$this->initCommand(Commands::TYPE_SET_ODOMETER),
-            $this->initCommand(Commands::TYPE_CUSTOM)
+            $this->initCommand(Commands::TYPE_CUSTOM),
         ];
     }
 }

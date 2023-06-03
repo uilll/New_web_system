@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'افزودن ردیاب',
     'per_one' => 'برای هر یک',
@@ -664,4 +664,4 @@ SMS gateway URL example: http://SMS_GATEWAY/sendsms.php?username=USER&password=P
     'do_objects_delete' => 'آیا واقعا می خواهید این دستگاه ها را حذف کنید؟ <br> تمام داده های مربوطه از بین خواهند رفت.',
     'ignition_off' => 'سوزش خاموش',
     'forward' => 'رو به جلو',
-);
+];

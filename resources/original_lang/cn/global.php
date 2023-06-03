@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => '编辑',
     'add_new' => '添新',
@@ -60,4 +60,4 @@ return array(
     'weekend' => '周末',
     'always' => '总是',
     'advanced' => '高级',
-);
+];

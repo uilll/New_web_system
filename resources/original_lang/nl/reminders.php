@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'password' => 'Wachtwoorden moeten minimaal zes tekens lang zijn en overeenkomstig zijn met de bevestiging',
     'user' => 'We kunnen geen gebruiker vinden met dit e-mailadres.',
@@ -8,4 +8,4 @@ return array(
     'sent' => 'Wachtwoord herinnering is verzonden!',
     'reset' => 'Je wachtwoord is gereset',
     'reset_link' => 'Klik hier om uw wachtwoord opnieuw in te stellen',
-);
+];

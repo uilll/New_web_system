@@ -8,8 +8,8 @@
 
 namespace Tobuli\Validation;
 
-
-class TasksFormValidator extends Validator {
+class TasksFormValidator extends Validator
+{
     public $rules = [
         'create' => [
             'title' => 'required',
@@ -21,7 +21,7 @@ class TasksFormValidator extends Validator {
             'delivery_address' => 'required',
             'delivery_time_from' => 'required|date',
             'delivery_time_to' => 'required|date|after:delivery_time_from',
-            ],
+        ],
         'update' => [
             'title' => 'required',
             'device_id' => 'required|exists:devices,id',

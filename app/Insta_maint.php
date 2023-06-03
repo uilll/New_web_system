@@ -8,12 +8,13 @@ class insta_maint extends Model
 {
     //
     public $timestamps = false;
+
     protected $fillable = [
         'active',
         'created_at',
         'updated_at',
         'device_id',
-        'technician_id', 
+        'technician_id',
         'recei_from_cli',
         'valor',
         'playable',
@@ -30,6 +31,6 @@ class insta_maint extends Model
         'os_number',
         'manager_id',
         'obs',
-        'occurrency_id'
+        'occurrency_id',
     ];
 }

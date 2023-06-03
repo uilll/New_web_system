@@ -19,7 +19,7 @@
             
             <div class="form-group">
                 {!! Form::label(null, "Tranferir para: ") !!}
-                {!! Form::select('new_id', $devices->lists('plate_number', 'id'), $item->id, ['class' => 'form-control', 'data-live-search' => true]) !!}
+                {!! Form::select('new_id', $devices->pluck('plate_number', 'id'), $item->id, ['class' => 'form-control', 'data-live-search' => true]) !!}
             </div>
         @endif
     </div>

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute må aksepteres.',
     'active_url' => ':attribute er ikke en gyldig nettadresse.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => ':attribute kan bare inneholde bokstaver og tall.',
     'array' => ':attribute må være en matrise.',
     'before' => ':attribute må være en dato før :date .',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute må være mellom :min og :max .',
         'file' => ':attribute må være mellom :min og :max kilobytes.',
         'string' => ':attribute må være mellom :min og :max tegn.',
         'array' => ':attribute må ha mellom :min og :max elementer.',
-    ),
+    ],
     'confirmed' => ':attribute stemmer ikke overens.',
     'date' => ':attribute er ikke en gyldig dato.',
     'date_format' => ':attribute ikke overens med formatet :format .',
@@ -28,19 +28,19 @@ return array(
     'in' => 'Det valgte :attribute er ugyldig.',
     'integer' => ':attribute må være et heltall.',
     'ip' => ':attribute må være en gyldig IP-adresse.',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute må ikke være større enn :max .',
         'file' => ':attribute ikke være større enn :max kilobytes.',
         'string' => ':attribute ikke være større enn :max Tegn.',
         'array' => ':attribute ikke ha mer enn :max Elementer.',
-    ),
+    ],
     'mimes' => ':attribute må være en fil av typen :values .',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute må være minst :min .',
         'file' => ':attribute må være minst :min kilobytes.',
         'string' => ':attribute må være minst :min tegn.',
         'array' => ':attribute må ha minst :min elementer.',
-    ),
+    ],
     'not_in' => 'Det valgte :attribute er ugyldig.',
     'numeric' => ':attribute må være et tall.',
     'regex' => ':attribute er ugyldig.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => ':attribute kreves når :values ikke er tilstede.',
     'required_without_all' => ':attribute kreves når ingen av :values er til stede.',
     'same' => ':attribute og :other må samsvare.',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute må være :size .',
         'file' => ':attribute må være :size kilobytes.',
         'string' => ':attribute må være :size tegn.',
         'array' => ':attribute må inneholde :size .',
-    ),
+    ],
     'unique' => ':attribute er allerede tatt.',
     'url' => ':attribute er ugyldig.',
     'array_max' => 'The :attribute maks. Elementer :max .',
     'lesser_than' => ':attribute må være mindre enn :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'Egendefinert melding',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'E-post',
         'password' => 'Passord',
         'password_confirmation' => 'Passord bekreftelse',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Frakoblet statusikon',
         'icon_status_ack' => 'Ack statusikon',
         'icon_status_engine' => 'Motorstatusikon',
-    ),
+    ],
     'same_protocol' => 'Enhetene må være av samme protokoll.',
     'contains' => ':attribute må inneholde :value .',
     'ip_port' => ':attribute samsvarer ikke med formatet IP :PORT',
-);
+];

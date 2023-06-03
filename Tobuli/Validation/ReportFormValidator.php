@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class ReportFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class ReportFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -13,10 +15,8 @@ class ReportFormValidator extends Validator {
             'format' => 'required|in:html,xls,pdf,pdf_land',
             'speed_limit' => 'numeric',
             'geofences' => 'array',
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

@@ -17,12 +17,10 @@ class ImporterManager
 
     public function resolve($file)
     {
-        foreach ($this->importers as $name => $class )
-        {
+        foreach ($this->importers as $name => $class) {
             $importer = $this->getImporter($name);
 
-            if ($importer->load($file)->validFormat())
-            {
+            if ($importer->load($file)->validFormat()) {
                 return $importer;
             }
         }

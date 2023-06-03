@@ -8,8 +8,6 @@
 
 namespace Tobuli\Protocols;
 
-
 interface Protocol
 {
-
 }

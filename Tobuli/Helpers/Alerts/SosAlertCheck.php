@@ -2,13 +2,13 @@
 
 namespace Tobuli\Helpers\Alerts;
 
-
 class SosAlertCheck extends AlertCheck
 {
     public function checkEvents($position, $prevPosition)
     {
-        if ( ! $this->check($position))
+        if (! $this->check($position)) {
             return null;
+        }
 
         $event = $this->getEvent();
 
@@ -16,7 +16,7 @@ class SosAlertCheck extends AlertCheck
         $event->message = 'SOS';
 
         $event->additionalQueueData = array_merge($event->additionalQueueData, [
-            'message' => 'SOS'
+            'message' => 'SOS',
         ]);
 
         return [$event];
@@ -24,14 +24,17 @@ class SosAlertCheck extends AlertCheck
 
     protected function check($position)
     {
-        if ( ! $position)
+        if (! $position) {
             return false;
+        }
 
-        if ( ! $this->checkAlertPosition($position))
+        if (! $this->checkAlertPosition($position)) {
             return false;
+        }
 
-        if ($position->getParameter('alarm') != 'sos')
+        if ($position->getParameter('alarm') != 'sos') {
             return false;
+        }
 
         return true;
     }

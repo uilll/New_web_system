@@ -1,73 +1,84 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use Illuminate\Support\Facades\File;
-use Tobuli\Repositories\DeviceIcon\DeviceIconRepositoryInterface as DeviceIcon;
-use Tobuli\Repositories\Device\DeviceRepositoryInterface as Device;
 use Tobuli\Exceptions\ValidationException;
+use Tobuli\Repositories\Device\DeviceRepositoryInterface as Device;
+use Tobuli\Repositories\DeviceIcon\DeviceIconRepositoryInterface as DeviceIcon;
 
-class MyIconModalHelper {
+class MyIconModalHelper
+{
     /**
      * @var DeviceIcon
      */
     private $deviceIcon;
+
     /**
      * @var Device
      */
     private $device;
 
-    function __construct(DeviceIcon $deviceIcon, Device $device) {
+    public function __construct(DeviceIcon $deviceIcon, Device $device)
+    {
         $this->deviceIcon = $deviceIcon;
         $this->device = $device;
     }
 
-    public function createData($user) {
+    public function createData($user)
+    {
         $icons = $this->deviceIcon->getWhere(['user_id' => $user->id]);
 
         return compact('icons');
     }
 
-    public function create($icons, $user) {
+    public function create($icons, $user)
+    {
         try {
-            if (isLimited($user, 'my_icons'))
+            if (isLimited($user, 'my_icons')) {
                 throw new ValidationException(['icons[]' => trans('front.limited_acc')]);
+            }
 
             $icons_nr = $this->deviceIcon->countwhere(['user_id' => $user->id]) + count($icons);
-            if ($icons_nr > 10)
+            if ($icons_nr > 10) {
                 throw new ValidationException(['icons[]' => trans('front.my_icons_limit')]);
+            }
 
             if (count($icons)) {
                 foreach ($icons as $file) {
-                    if (empty($file))
+                    if (empty($file)) {
                         continue;
-                    list($w, $h) = getimagesize($file);
-                    if (!$w)
+                    }
+                    [$w, $h] = getimagesize($file);
+                    if (! $w) {
                         throw new ValidationException(['icons[]' => trans('front.not_image')]);
+                    }
                 }
 
                 foreach ($icons as $file) {
-                    if (empty($file))
+                    if (empty($file)) {
                         continue;
+                    }
                     $destinationPath = 'images/device_icons';
-                    $filename = uniqid('', TRUE).'-'.$user->id.'.'.$file->getClientOriginalExtension();
+                    $filename = uniqid('', true).'-'.$user->id.'.'.$file->getClientOriginalExtension();
                     $file->move($destinationPath, $filename);
                     $this->deviceIcon->create([
                         'path' => $destinationPath.'/'.$filename,
                         'width' => $w,
                         'height' => $h,
-                        'user_id' => $user->id
+                        'user_id' => $user->id,
                     ]);
                 }
             }
 
             return ['status' => 1];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
 
-    public function destroy($id, $user) {
+    public function destroy($id, $user)
+    {
         $del_icon = $this->deviceIcon->find($id);
         if ($del_icon && $del_icon->user_id == $user->id) {
             $ids = [$id => $id];

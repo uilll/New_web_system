@@ -29,7 +29,7 @@
                 </div>
                 <div class="form-group">
                     {!! Form::label('user_id', trans('validation.attributes.user').'*:') !!}
-                    {!! Form::select('user_id[]', $users->lists('email', 'id'), $sel_users, ['class' => 'form-control', 'multiple' => 'multiple', 'data-live-search' => true]) !!}
+                    {!! Form::select('user_id[]', $users->pluck('email', 'id'), $sel_users, ['class' => 'form-control', 'multiple' => 'multiple', 'data-live-search' => true]) !!}
                 </div>
             @endif
 

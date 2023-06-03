@@ -1,9 +1,11 @@
-<?php namespace App\Console;
+<?php
+
+namespace App\Console;
 
 use App;
 
-class ProcessManager {
-
+class ProcessManager
+{
     protected $redis;
 
     protected $process_limit = 5;
@@ -34,29 +36,33 @@ class ProcessManager {
         $this->register();
     }
 
-    function __destruct()
+    public function __destruct()
     {
         $this->unregister();
     }
 
-    public function canProcess() {
-        if (App::isDownForMaintenance())
+    public function canProcess()
+    {
+        if (App::isDownForMaintenance()) {
             return false;
+        }
 
-        if ($this->reachedLimit())
+        if ($this->reachedLimit()) {
             return false;
+        }
 
         return $this->timeover > time();
     }
 
     public function lock($id)
     {
-        $key = 'processing.' . $this->group . '.' . $id;
+        $key = 'processing.'.$this->group.'.'.$id;
 
         $isSet = $this->redis->setnx($key, $this->key);
 
-        if ( ! $isSet)
+        if (! $isSet) {
             return false;
+        }
 
         $this->redis->setTimeout($key, $this->timeout);
 
@@ -65,23 +71,25 @@ class ProcessManager {
 
     public function unlock($id)
     {
-        $key = 'processing.' . $this->group . '.' . $id;
+        $key = 'processing.'.$this->group.'.'.$id;
 
         $this->redis->del($key);
     }
 
     private function unlockKeys($process_key = null)
     {
-        if ( ! $process_key)
+        if (! $process_key) {
             $process_key = $this->key;
+        }
 
-        $keys = $this->redis->keys('processing.' . $this->group . '.*');
+        $keys = $this->redis->keys('processing.'.$this->group.'.*');
 
-        foreach($keys as $key) {
+        foreach ($keys as $key) {
             $process = $this->redis->get($key);
 
-            if ($process != $process_key)
+            if ($process != $process_key) {
                 continue;
+            }
 
             $this->redis->del($key);
         }
@@ -89,34 +97,37 @@ class ProcessManager {
 
     private function reachedLimit()
     {
-        $processes = $this->redis->keys('process.' . $this->group . '.*');
+        $processes = $this->redis->keys('process.'.$this->group.'.*');
 
         return ($processes && count($processes) > $this->process_limit) ? true : false;
     }
 
     private function cleanKilledProcess()
     {
-        $keys = $this->redis->keys('process.' . $this->group . '.*');
+        $keys = $this->redis->keys('process.'.$this->group.'.*');
 
         foreach ($keys as $key) {
             $process = $this->redis->get($key);
 
             $process = json_decode($process);
 
-            if ( ! $process) {
+            if (! $process) {
                 $this->redis->del($key);
+
                 continue;
             }
 
             // 6h
             if (time() - $process->timeover > ($this->timeout * 5)) {
                 $this->unregister($process->key);
+
                 continue;
             }
 
             // process is running?
-            if (file_exists('/proc/'.$process->pid))
+            if (file_exists('/proc/'.$process->pid)) {
                 continue;
+            }
 
             $this->unregister($process->key);
         }
@@ -124,26 +135,25 @@ class ProcessManager {
 
     private function register()
     {
-        $this->key = md5( $this->group . time() . str_shuffle('QWERTYUIOOPASDFGHJKLZXCVBNMQWERTYUIOPASD') );
+        $this->key = md5($this->group.time().str_shuffle('QWERTYUIOOPASDFGHJKLZXCVBNMQWERTYUIOPASD'));
 
-        $key = 'process.' . $this->group . '.' . $this->key;
+        $key = 'process.'.$this->group.'.'.$this->key;
 
         $this->redis->set($key, json_encode([
-            'pid'      => posix_getpid(),
-            'key'      => $this->key,
-            'timeover' => $this->timeover
+            'pid' => posix_getpid(),
+            'key' => $this->key,
+            'timeover' => $this->timeover,
         ]));
     }
 
     public function unregister($process_key = null)
     {
-        if ( ! $process_key)
+        if (! $process_key) {
             $process_key = $this->key;
+        }
 
-        $this->redis->del('process.' . $this->group . '.' . $process_key);
+        $this->redis->del('process.'.$this->group.'.'.$process_key);
 
         $this->unlockKeys($process_key);
     }
-
-
 }

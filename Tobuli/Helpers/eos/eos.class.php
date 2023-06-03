@@ -92,15 +92,15 @@ class eqEOS {
      * Protected variables
      */
 	//What are opening and closing selectors
-	protected $SEP = array('open' => array('(', '['), 'close' => array(')', ']'));
+	protected $SEP = ['open' => ['(', '['], 'close' => [')', ']']];
 	//Top presedence following operator - not in use
-	protected $SGL = array('!');
+	protected $SGL = ['!'];
 	//Order of operations arrays follow
-	protected $ST = array('^', '!');
-	protected $ST1 = array('/', '*', '%');
-	protected $ST2 = array('+', '-');
+	protected $ST = ['^', '!'];
+	protected $ST1 = ['/', '*', '%'];
+	protected $ST2 = ['+', '-'];
 	//Allowed functions
-	protected $FNC = array('sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'abs', 'log', 'log10', 'sqrt');
+	protected $FNC = ['sin', 'cos', 'tan', 'csc', 'sec', 'cot', 'abs', 'log', 'log10', 'sqrt'];
     /**#@-*/
 	/**
 	 * Construct method
@@ -114,7 +114,7 @@ class eqEOS {
 	 */
 	public function __construct($inFix = null) {
 		$this->inFix = (isset($inFix)) ? $inFix : null;
-		$this->postFix = array();
+		$this->postFix = [];
 	}
 	
 	/**
@@ -164,7 +164,7 @@ class eqEOS {
 		
 		//check to make sure 'valid' equation
 		$this->checkInfix($infix);
-		$pf = array();
+		$pf = [];
 		$ops = new phpStack();
 		$vars = new phpStack();
 
@@ -278,7 +278,7 @@ class eqEOS {
 		$pf = (!is_array($pfArray)) ? $this->postFix : $pfArray;
 		
 		// create our temporary function variables
-		$temp = array();
+		$temp = [];
 		$tot = 0;
 		$hold = 0;
 
@@ -383,7 +383,7 @@ class eqEOS {
 			
 			//Make sure that the variable does have a replacement
             //First check for pi and e variables that wll automagically be replaced
-            if(in_array(strtolower($match[2]), array('pi', 'e'))) {
+            if(in_array(strtolower($match[2]), ['pi', 'e'])) {
                 $t = (strtolower($match[2])=='pi') ? pi() : exp(1);
                 $infix = str_replace($match[0], $match[1] . $front. $t. $back . $match[3], $infix);
             } elseif(!isset($vArray[$match[2]]) && (!is_array($vArray != "") && !is_numeric($vArray))) {
@@ -563,7 +563,7 @@ class eqGraph extends eqEOS {
 		//DEVELOPER, UNCOMMENT NEXT LINE IF WANTING TO PREVENT SLOW GRAPHS
 		//$xStep = ($xStep > .01) ? $xStep : 0.01;
 		if($xLow > $xHigh)
-			list($xLow, $xHigh) = array($xHigh, $xLow);	//swap function
+			list($xLow, $xHigh) = [$xHigh, $xLow];	//swap function
 		
 		$xScale = $this->width/($xHigh-$xLow);
 		$counter = 0;

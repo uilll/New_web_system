@@ -3,20 +3,21 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateEventsTable extends Migration {
+class CreateEventsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        if (Schema::hasTable('events')) {
+            return;
+        }
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-        if (Schema::hasTable('events')) { return; }
-
-		Schema::create('events', function(Blueprint $table)
-		{
-			$table->increments('id');
+        Schema::create('events', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('user_id')->unsigned()->nullable();
             $table->integer('device_id')->unsigned()->nullable();
             $table->integer('geofence_id')->unsigned()->nullable();
@@ -38,19 +39,17 @@ class CreateEventsTable extends Migration {
             $table->foreign('device_id')->references('id')->on('devices')->onDelete('cascade');
             $table->foreign('geofence_id')->references('id')->on('geofences')->onDelete('set null');
             $table->foreign('alert_id')->references('id')->on('alerts')->onDelete('cascade');
-			$table->timestamps();
-		});
-	}
+            $table->timestamps();
+        });
+    }
 
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::drop('events');
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('events');
+    }
 }

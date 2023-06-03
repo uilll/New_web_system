@@ -11,20 +11,23 @@ namespace Tobuli\Entities;
 use Eloquent;
 use Illuminate\Support\Facades\File;
 
-class TaskStatus extends Eloquent {
-
+class TaskStatus extends Eloquent
+{
     protected $table = 'task_status';
 
     const STATUS_NEW = 1;
+
     const STATUS_IN_PROGRESS = 2;
+
     const STATUS_FAILED = 3;
+
     const STATUS_COMPLETED = 9;
 
     public static $statuses = [
-        self::STATUS_NEW         => 'front.task_new',
+        self::STATUS_NEW => 'front.task_new',
         self::STATUS_IN_PROGRESS => 'front.task_in_progress',
-        self::STATUS_COMPLETED   => 'front.task_completed',
-        self::STATUS_FAILED      => 'front.task_failed'
+        self::STATUS_COMPLETED => 'front.task_completed',
+        self::STATUS_FAILED => 'front.task_failed',
     ];
 
     protected $fillable = ['task_id', 'status', 'comment'];
@@ -44,27 +47,26 @@ class TaskStatus extends Eloquent {
     {
         parent::boot();
 
-        static::saved(function($model)
-        {
+        static::saved(function ($model) {
             $directory = $model->mediaDir;
 
-            if ( ! is_dir($directory)) {
+            if (! is_dir($directory)) {
                 mkdir($directory);
             }
 
-            $filePath = $directory . $model->getSignatureName();
+            $filePath = $directory.$model->getSignatureName();
 
             File::put($filePath, base64_decode($model->signatureBase64));
 
             return true;
         });
 
-        static::deleting(function($model)
-        {
-            $filePath = $model->mediaDir . $model->getSignatureName();
+        static::deleting(function ($model) {
+            $filePath = $model->mediaDir.$model->getSignatureName();
 
-            if (File::exists($filePath))
+            if (File::exists($filePath)) {
                 File::delete($filePath);
+            }
 
             return true;
         });
@@ -72,7 +74,7 @@ class TaskStatus extends Eloquent {
 
     public function getSignatureName()
     {
-        return md5($this->id)  . '.jpeg';
+        return md5($this->id).'.jpeg';
     }
 
     public function getSignatureUrlAttribute()
@@ -82,10 +84,11 @@ class TaskStatus extends Eloquent {
 
     public function getSignatureAttribute()
     {
-        $filePath = $this->mediaDir . $this->getSignatureName();
+        $filePath = $this->mediaDir.$this->getSignatureName();
 
-        if ( ! File::exists($filePath))
+        if (! File::exists($filePath)) {
             return null;
+        }
 
         return File::get($filePath);
     }

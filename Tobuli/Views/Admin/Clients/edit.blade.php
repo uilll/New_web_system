@@ -143,7 +143,7 @@
         <div id="client-edit-form-objects" class="tab-pane">
             <div class="form-group">
                 {!! Form::label('objects', trans('validation.attributes.objects').'*:') !!}
-                {!! Form::select('objects[]', $devices, $item->devices->lists('id', 'id')->all(), ['class' => 'form-control multiexpand', 'multiple' => 'multiple', 'data-live-search' => true, 'data-actions-box' => true]) !!}
+                {!! Form::select('objects[]', $devices, $item->devices->pluck('id', 'id')->all(), ['class' => 'form-control multiexpand', 'multiple' => 'multiple', 'data-live-search' => true, 'data-actions-box' => true]) !!}
             </div>
         </div>
         <div id="client-edit-form-listview" class="tab-pane">

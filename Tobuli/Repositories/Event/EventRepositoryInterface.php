@@ -1,9 +1,11 @@
-<?php namespace Tobuli\Repositories\Event;
+<?php
+
+namespace Tobuli\Repositories\Event;
 
 use Tobuli\Repositories\EloquentRepositoryInterface;
 
-interface EventRepositoryInterface extends EloquentRepositoryInterface {
-
+interface EventRepositoryInterface extends EloquentRepositoryInterface
+{
     public function whereUserId($user_id);
 
     public function findWithAttributes($id);

@@ -1,52 +1,51 @@
-<?php namespace App\Console\Commands;
+<?php
+
+namespace App\Console\Commands;
+
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Tobuli\Entities\Config;
 
-use Exception;
+class CheckPositionsCommand extends Command
+{
+    /**
+     * The console command name.
+     *
+     * @var string
+     */
+    protected $name = 'positions:check';
 
-class CheckPositionsCommand extends Command {
-	/**
-	 * The console command name.
-	 *
-	 * @var string
-	 */
-	protected $name = 'positions:check';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description.';
 
-	/**
-	 * The console command description.
-	 *
-	 * @var string
-	 */
-	protected $description = 'Command description.';
-
-	/**
-	 * Create a new command instance.
-	 *
-	 * @return void
-	 */
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
     }
 
-	/**
-	 * Execute the console command.
-	 *
-	 * @return mixed
-	 */
-	public function fire(Config $config)
-	{
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function fire(Config $config)
+    {
         try {
             $this->redis = new \Redis();
             $this->redis->connect(config('database.redis.default.host'), config('database.redis.default.port'));
-        }
-        catch (\Exception $e) {
-            $this->redis = FALSE;
+        } catch (\Exception $e) {
+            $this->redis = false;
         }
 
         $devices = [];
@@ -61,9 +60,11 @@ class CheckPositionsCommand extends Command {
             $time = $part[1] / 1000;
             $imei = $part[2];
 
-            if ($time > 1504953144) $time = 0;
+            if ($time > 1504953144) {
+                $time = 0;
+            }
 
-            if ( empty($devices[$imei]) ) {
+            if (empty($devices[$imei])) {
                 $devices[$imei] = [
                     'all' => 0,
                     'count' => 0,
@@ -71,7 +72,7 @@ class CheckPositionsCommand extends Command {
                     'last' => $time,
                     'sum' => 0,
                     'min' => PHP_INT_MAX,
-                    'max' => 0
+                    'max' => 0,
                 ];
             }
 
@@ -83,14 +84,15 @@ class CheckPositionsCommand extends Command {
 
             $devices[$imei]['all'] += 1;
 
-            if (!$diff)
+            if (! $diff) {
                 continue;
+            }
 
             $devices[$imei]['count'] += 1;
-            $devices[$imei]['sum']   += $diff;
-            $devices[$imei]['last']   = $time;
-            $devices[$imei]['min']    = $diff < $devices[$imei]['min'] ? $diff : $devices[$imei]['min'];
-            $devices[$imei]['max']    = $diff > $devices[$imei]['max'] ? $diff : $devices[$imei]['max'];
+            $devices[$imei]['sum'] += $diff;
+            $devices[$imei]['last'] = $time;
+            $devices[$imei]['min'] = $diff < $devices[$imei]['min'] ? $diff : $devices[$imei]['min'];
+            $devices[$imei]['max'] = $diff > $devices[$imei]['max'] ? $diff : $devices[$imei]['max'];
         }
 
         $sorting = [];
@@ -106,33 +108,33 @@ class CheckPositionsCommand extends Command {
 
         foreach ($devices as $device) {
             echo
-                "IMEI: " . $device['imei'] . ";" .
-                "ALL: " . $device['all'] . ";" .
-                "POS: " . $device['count'] . ";" .
-                "AVG: " . $device['avg'] . ";" .
-                "MIN: " . $device['min'] . ";" .
-                "MAX: " . $device['max'] . ";" .
+                'IMEI: '.$device['imei'].';'.
+                'ALL: '.$device['all'].';'.
+                'POS: '.$device['count'].';'.
+                'AVG: '.$device['avg'].';'.
+                'MIN: '.$device['min'].';'.
+                'MAX: '.$device['max'].';'.
                 PHP_EOL;
         }
-	}
+    }
 
-	/**
-	 * Get the console command arguments.
-	 *
-	 * @return array
-	 */
-	protected function getArguments()
-	{
-		return array();
-	}
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [];
+    }
 
-	/**
-	 * Get the console command options.
-	 *
-	 * @return array
-	 */
-	protected function getOptions()
-	{
-		return array();
-	}
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [];
+    }
 }

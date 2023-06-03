@@ -1,24 +1,22 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-use Illuminate\Validation\Factory as IlluminateValidator;
+namespace Tobuli\Validation;
 
-class DeviceGroupFormValidator extends Validator {
-
+class DeviceGroupFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
     public $rules = [
         'create' => [
-            'title'   => 'required',
+            'title' => 'required',
             'devices' => 'required|array|exists:devices,id',
         ],
         'update' => [
-            'title'   => 'required',
-            'devices' => 'array|exists:devices,id'
-        ]
+            'title' => 'required',
+            'devices' => 'array|exists:devices,id',
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

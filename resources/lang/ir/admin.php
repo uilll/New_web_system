@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'clients' => 'مشترکین',
     'content' => 'محتوا',
@@ -93,4 +93,4 @@ return array(
     'languages' => 'زبان ها',
     'translate' => 'ترجمه کردن',
     'group_4' => 'نسخه ی نمایشی',
-);
+];

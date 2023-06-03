@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-
 use Tobuli\Entities\Popup;
 
 class PopupNotification extends Notification
@@ -12,6 +11,7 @@ class PopupNotification extends Notification
     use Queueable;
 
     public $popup;
+
     /**
      * Create a new notification instance.
      *

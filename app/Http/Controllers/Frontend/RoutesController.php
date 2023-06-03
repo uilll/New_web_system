@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\RouteModalHelper;
@@ -9,7 +11,7 @@ class RoutesController extends Controller
     {
         $data = RouteModalHelper::get();
 
-        return !$this->api ? view('front::Routes.index')->with($data) : $data;
+        return ! $this->api ? view('front::Routes.index')->with($data) : $data;
     }
 
     public function store()

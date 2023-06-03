@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class DevicesSensorsTableAlter extends Migration {
-
+class DevicesSensorsTableAlter extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -24,5 +23,4 @@ class DevicesSensorsTableAlter extends Migration {
     {
         //
     }
-
 }

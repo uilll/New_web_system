@@ -1,19 +1,21 @@
-<?php namespace Tobuli\Repositories\User;
+<?php
 
-use Tobuli\Repositories\EloquentRepository;
-use Tobuli\Entities\User as Entity;
+namespace Tobuli\Repositories\User;
+
+use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Pagination\LengthAwarePaginator as Paginator;
+use Tobuli\Entities\User as Entity;
+use Tobuli\Repositories\EloquentRepository;
 
-class EloquentUserRepository extends EloquentRepository implements UserRepositoryInterface {
-
-    public function __construct( Entity $entity )
+class EloquentUserRepository extends EloquentRepository implements UserRepositoryInterface
+{
+    public function __construct(Entity $entity)
     {
         $this->entity = $entity;
         $this->searchable = [
-            'users.email'
+            'users.email',
         ];
     }
 
@@ -22,13 +24,13 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         $data = $this->generateSearchData($data);
         $sort = array_merge([
             'sort' => $sort,
-            'sort_by' => $sort_by
+            'sort_by' => $sort_by,
         ], $data['sorting']);
 
-        if ( isset($_GET{'page'} ) ) {
-            $page = $_GET{'page'};
+        if (isset($_GET['page'])) {
+            $page = $_GET['page'];
             $offset = $limit * ($page - 1);
-        }else {
+        } else {
             $page = 1;
             $offset = 0;
         }
@@ -36,33 +38,31 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
         $items = $this->entity
             ->select(DB::Raw('COUNT(DISTINCT users.id) as count'))
             ->where(function ($query) use ($data) {
-                if (!empty($data['search_phrase']) && empty($date['search_device'])) {
+                if (! empty($data['search_phrase']) && empty($date['search_device'])) {
                     foreach ($this->searchable as $column) {
-                        $query->orWhere($column, 'like', '%' . $data['search_phrase'] . '%');
+                        $query->orWhere($column, 'like', '%'.$data['search_phrase'].'%');
                     }
                 }
 
                 if (count($data['filter'])) {
-                    foreach ($data['filter'] as $key=>$value) {
+                    foreach ($data['filter'] as $key => $value) {
                         $query->where($key, $value);
                     }
                 }
-
             })->where(function ($query) {
                 if (Auth::User()->isManager()) {
                     $user_id = Auth::User()->id;
                     //$query->whereRaw("(users.manager_id = '{$user_id}' OR users.id = '{$user_id}')");
                     $query->whereRaw("users.manager_id = '{$user_id}'");
-                }
-                else{
+                } else {
                     //$query->orWhere('users.manager_id', 0)->orWhereNull('users.manager_id');
                 }
             });
-        if (!empty($data['search_device'])) {
+        if (! empty($data['search_device'])) {
             $items = $items->leftJoin('user_device_pivot', 'users.id', '=', 'user_device_pivot.user_id')
-                ->join('devices', function($join) use ($data) {
-                $join->on('user_device_pivot.device_id', '=', 'devices.id')->where('devices.imei', 'LIKE', "%".$data['search_device']."%");
-            });
+                ->join('devices', function ($join) use ($data) {
+                    $join->on('user_device_pivot.device_id', '=', 'devices.id')->where('devices.imei', 'LIKE', '%'.$data['search_device'].'%');
+                });
         }
 
         $count = $items->first()->count;
@@ -78,18 +78,17 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->leftJoin('users as managers', 'users.manager_id', '=', 'managers.id')
             ->leftJoin('user_device_pivot', 'users.id', '=', 'user_device_pivot.user_id')
             ->where(function ($query) use ($data) {
-                if (!empty($data['search_phrase']) && empty($date['search_device'])) {
+                if (! empty($data['search_phrase']) && empty($date['search_device'])) {
                     foreach ($this->searchable as $column) {
-                        $query->orWhere($column, 'like', '%' . $data['search_phrase'] . '%');
+                        $query->orWhere($column, 'like', '%'.$data['search_phrase'].'%');
                     }
                 }
 
                 if (count($data['filter'])) {
-                    foreach ($data['filter'] as $key=>$value) {
+                    foreach ($data['filter'] as $key => $value) {
                         $query->where($key, $value);
                     }
                 }
-
             })->where(function ($query) {
                 if (Auth::User()->isManager()) {
                     $user_id = Auth::User()->id;
@@ -98,13 +97,12 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
                 }
             })
             ->groupBy('users.id');
-        if (!empty($data['search_device'])) {
-            $items->join('devices', function($join) use ($data) {
-                $join->on('user_device_pivot.device_id', '=', 'devices.id')->where('devices.imei', 'LIKE', "%".$data['search_device']."%");
+        if (! empty($data['search_device'])) {
+            $items->join('devices', function ($join) use ($data) {
+                $join->on('user_device_pivot.device_id', '=', 'devices.id')->where('devices.imei', 'LIKE', '%'.$data['search_device'].'%');
             });
-        }
-        else {
-            $items->leftJoin('devices', function($query) {
+        } else {
+            $items->leftJoin('devices', function ($query) {
                 $query->on('user_device_pivot.device_id', '=', 'devices.id');
                 $query->where('devices.deleted', '=', '0');
             });
@@ -117,19 +115,18 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
                     ->select(DB::Raw('COUNT(DISTINCT id) as count'))
                     ->where('manager_id', '=', $item->id)
                     ->first()->count;
-                $item->manager_email = NULL;
-            }
-            else {
+                $item->manager_email = null;
+            } else {
                 $item->subusers = 0;
                 $manager = DB::table('users')
                     ->select('email')
                     ->where('id', '=', $item->manager_id)
                     ->first();
-                $item->manager_email = !empty($manager) ? $manager->email : NULL;
+                $item->manager_email = ! empty($manager) ? $manager->email : null;
             }
         }
         $items = new Paginator($items, $count, $limit, $page, [
-            'path'  => Request::url(),
+            'path' => Request::url(),
             'query' => Request::query(),
         ]);
 
@@ -144,15 +141,17 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             'sorting' => [],
             'search_phrase' => '',
             'search_device',
-            'filter' => []
+            'filter' => [],
         ], $data);
     }
 
-    public function getOtherManagers($user_id) {
+    public function getOtherManagers($user_id)
+    {
         return $this->entity->where('group_id', 3)->where('id', '!=', $user_id)->get();
     }
 
-    public function getDevicesWithServices($user_id) {
+    public function getDevicesWithServices($user_id)
+    {
         return $this->entity
             ->with('devices.sensors', 'devices.services')
             ->find($user_id)
@@ -161,28 +160,34 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->get();
     }
 
-    public function getDevicesWith($user_id, $with) {
-        return $this->entity->with($with)->find($user_id)->devices;//->orderBy('object_owner', 'DESC');
+    public function getDevicesWith($user_id, $with)
+    {
+        return $this->entity->with($with)->find($user_id)->devices; //->orderBy('object_owner', 'DESC');
     }
 
-    public function getDevicesWithWhere($user_id, $with, $where) {
+    public function getDevicesWithWhere($user_id, $with, $where)
+    {
         return $this->entity->with($with)->find($user_id)->devices;
     }
 
-    public function getDevices($user_id) {
+    public function getDevices($user_id)
+    {
         return $this->entity->with('devices')->find($user_id)->devices;
     }
 
-    public function getDevice($user_id, $device_id) {
+    public function getDevice($user_id, $device_id)
+    {
         $user = $this->entity->find($user_id);
 
-        if (!$user)
+        if (! $user) {
             return null;
+        }
 
         return $user->devices()->with('sensors', 'services')->find($device_id);
     }
 
-    public function getDevicesProtocols($user_id) {
+    public function getDevicesProtocols($user_id)
+    {
         $items = DB::table('user_device_pivot')
             ->select('devices.id', 'traccar_devices.protocol')
             ->join('devices', 'user_device_pivot.device_id', '=', 'devices.id')
@@ -191,9 +196,10 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
             ->get();
 
         $arr = [];
-        if (!empty($items)) {
-            foreach ($items as $item)
+        if (! empty($items)) {
+            foreach ($items as $item) {
                 $arr[$item->id] = $item->protocol;
+            }
         }
 
         return $arr;
@@ -211,14 +217,17 @@ class EloquentUserRepository extends EloquentRepository implements UserRepositor
                 WHERE user_device_pivot.user_id='{$user->id}' AND (traccar.server_time >= '$date' OR traccar.ack_time >= '$date') GROUP BY traccar.id"));
 
         $device_ids = [];
-        foreach ($items as $item)
+        foreach ($items as $item) {
             $device_ids[] = $item->id;
+        }
 
-        if (empty($device_ids))
+        if (empty($device_ids)) {
             return [];
+        }
 
         return $user->devices()->with(['sensors', 'services', 'driver', 'traccar', 'icon'])->whereIn('id', $device_ids)->get();
     }
+
 /*
     public function _getDevicesHigherTime($user_id, $time)
     {
@@ -276,51 +285,58 @@ WHERE devices.id IN (" . implode($device_ids, ',') . ") GROUP BY devices.id"));
         return json_decode(json_encode($items), TRUE);
     }
 */
-    public function getDevicesSms($user_id) {
+    public function getDevicesSms($user_id)
+    {
         return $this->entity->with('devices_sms')->find($user_id)->devices_sms;
     }
 
     public function getUsers($user)
     {
-        if ($user->isAdmin())
+        if ($user->isAdmin()) {
             return $this->entity->orderby('email')->get();
+        }
 
-        if ($user->isManager())
+        if ($user->isManager()) {
             return $this->entity->where('manager_id', $user->id)->orWhere('id', $user->id)->orderby('email')->get();
-        
+        }
+
         return $this->entity->where('id', $user->id)->orderby('email')->get();
     }
 
-    public function getDrivers($user_id) {
+    public function getDrivers($user_id)
+    {
         return $this->entity->with('drivers')->find($user_id)->drivers;
     }
 
-    public function getSettings($user_id, $key) {
+    public function getSettings($user_id, $key)
+    {
         return $this->entity->find($user_id)->getSettings($key);
     }
 
-    public function setSettings($user_id, $key, $value) {
+    public function setSettings($user_id, $key, $value)
+    {
         return $this->entity->find($user_id)->setSettings($key, $value);
     }
 
     public function getListViewSettings($user_id)
     {
-        if (!is_null($user_id))
+        if (! is_null($user_id)) {
             $settings = $this->getSettings($user_id, 'listview');
+        }
 
-        $fields_trans  = config('tobuli.listview_fields_trans');
+        $fields_trans = config('tobuli.listview_fields_trans');
         $sensors_trans = config('tobuli.sensors');
 
         $defaults = config('tobuli.listview');
 
         $settings = empty($settings) ? $defaults : array_merge($defaults, $settings);
 
-        foreach($settings['columns'] as &$column) {
-            if ( ! empty($column['class']) && $column['class'] == 'sensor') {
-                $column['title'] = htmlentities( $sensors_trans[ $column['type'] ], ENT_QUOTES);
+        foreach ($settings['columns'] as &$column) {
+            if (! empty($column['class']) && $column['class'] == 'sensor') {
+                $column['title'] = htmlentities($sensors_trans[$column['type']], ENT_QUOTES);
             } else {
                 $column['class'] = 'device';
-                $column['title'] = htmlentities( $fields_trans[ $column['field'] ], ENT_QUOTES);
+                $column['title'] = htmlentities($fields_trans[$column['field']], ENT_QUOTES);
             }
         }
 

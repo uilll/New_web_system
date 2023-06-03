@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => '添加设备',
     'per_one' => '每一个',
@@ -680,4 +680,4 @@ return array(
     'do_objects_delete' => '你真的想删除这些设备吗？ <br>所有相关数据都将丢失。',
     'ignition_off' => '点火开关',
     'forward' => '向前',
-);
+];

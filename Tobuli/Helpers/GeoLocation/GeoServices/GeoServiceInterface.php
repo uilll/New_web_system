@@ -2,7 +2,6 @@
 
 namespace Tobuli\Helpers\GeoLocation\GeoServices;
 
-
 interface GeoServiceInterface
 {
     public function byAddress($address);

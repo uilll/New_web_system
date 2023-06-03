@@ -22,13 +22,5 @@ class customer extends Model
         'created_at',
         'id_app_ext',
         'updated_at',
-    ]; 
+    ];
 }
-
-
-
-
-
-
-
-

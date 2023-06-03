@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Exceptions;
+<?php
 
-class ValidationException extends BaseException {
+namespace Tobuli\Exceptions;
+
+class ValidationException extends BaseException
+{
 }   //end of class
-
 
 //EOF

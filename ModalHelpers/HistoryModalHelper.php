@@ -1,32 +1,25 @@
-<?php namespace ModalHelpers;
+<?php
 
-use Validator;
-use App\Exceptions\PermissionException;
+namespace ModalHelpers;
+
 use App\Exceptions\ResourseNotFoundException;
 use Facades\Repositories\DeviceRepo;
 use Facades\Repositories\EventRepo;
-use Facades\Repositories\TimezoneRepo;
 use Facades\Repositories\TraccarPositionRepo;
 use Facades\Validators\HistoryFormValidator;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Tobuli\Exceptions\ValidationException;
 use Tobuli\Helpers\HistoryHelper;
-
-use League\Flysystem\Filesystem;
-use Storage;
-use Illuminate\Support\Facades\File;
+use Validator;
 
 ini_set('memory_limit', '-1');
 set_time_limit(600);
 
-class HistoryModalHelper extends ModalHelper {
-
-    public function get() {
-
+class HistoryModalHelper extends ModalHelper
+{
+    public function get()
+    {
         $this->checkException('history', 'view');
 
         HistoryFormValidator::validate('create', $this->data);
@@ -37,12 +30,13 @@ class HistoryModalHelper extends ModalHelper {
 
         try {
             $diff = dateDiff($this->data['from_date'].' '.$this->data['from_time'], $this->data['to_date'].' '.$this->data['to_time']);
-            if ($diff > Config::get('tobuli.max_history_period_days'))
+            if ($diff > Config::get('tobuli.max_history_period_days')) {
                 throw new ValidationException(['id' => strtr(trans('front.to_large_date_diff'), [':days' => Config::get('tobuli.max_history_period_days')])]);
-            if ($device['expiration_date'] != '0000-00-00' && strtotime($device['expiration_date']) < strtotime(date('Y-m-d')))
-                throw new ValidationException(['id' =>  trans('front.expired')]);
-        }
-        catch (ValidationException $e) {
+            }
+            if ($device['expiration_date'] != '0000-00-00' && strtotime($device['expiration_date']) < strtotime(date('Y-m-d'))) {
+                throw new ValidationException(['id' => trans('front.expired')]);
+            }
+        } catch (ValidationException $e) {
             return $this->api ? ['status' => 0, 'errors' => $e->getErrors()] : current(current(current($e->getErrors())));
         }
 
@@ -56,10 +50,11 @@ class HistoryModalHelper extends ModalHelper {
         $date_from = tdate($this->data['from_date'].' '.$this->data['from_time'], $zone);
         $date_to = tdate($this->data['to_date'].' '.$this->data['to_time'], $zone);
         $driver_history = getDevicesDrivers($this->user->id, $device->id, $date_from, $date_to);
-        $last_dr = getDevicesDrivers($this->user->id, $device->id, $date_from, NULL, '<=', 1);
-        if (!empty($last_dr)) {
-            if (!is_array($driver_history))
+        $last_dr = getDevicesDrivers($this->user->id, $device->id, $date_from, null, '<=', 1);
+        if (! empty($last_dr)) {
+            if (! is_array($driver_history)) {
                 $driver_history = [];
+            }
 
             $last_dr = end($last_dr);
             $driver_history[] = $last_dr;
@@ -68,7 +63,7 @@ class HistoryModalHelper extends ModalHelper {
         $events = EventRepo::search(['device_id' => $device->id, 'user_id' => $this->user->id] + $this->data, $zone);
 
         $positions = TraccarPositionRepo::searchWithSensors($this->user->id, $this->data['device_id'], $date_from, $date_to);
-        
+
         $history = new HistoryHelper();
         $history->engine_status = $device->getEngineStatusFrom($date_from);
         $history->setEngineHoursType(['engine_hours' => $device['engine_hours'], 'detect_engine' => $device['detect_engine']]);
@@ -109,11 +104,10 @@ class HistoryModalHelper extends ModalHelper {
             reset($first_item['items']);
             $first = key($first_item['items']);
             if ($first_item['status'] == 1) {
-                if (!isset($cords[$first])) {
+                if (! isset($cords[$first])) {
                     $first = current($first_item['items']);
                     $time = $first['time'];
-                }
-                else {
+                } else {
                     $time = $cords[$first]['time'];
                 }
             }
@@ -125,30 +119,30 @@ class HistoryModalHelper extends ModalHelper {
                     'show' => $time,
                     'distance' => 0,
                     'raw_time' => $first_item['raw_time'],
-                    'items' => [current($first_item['items'])]
+                    'items' => [current($first_item['items'])],
                 ]);
 
                 $last = end($items);
                 end($last['items']);
                 $last_cord = current($last['items']);
-                if ($last['status'] == 2)
+                if ($last['status'] == 2) {
                     $last_cord['time'] = date('Y-m-d H:i:s', strtotime($last_cord['time']));
+                }
                 array_push($items, [
                     'status' => 4,
                     'time' => null,
                     'distance' => 0,
                     'show' => $last_cord['time'],
                     'raw_time' => $last_cord['raw_time'],
-                    'items' => [$last_cord]
+                    'items' => [$last_cord],
                 ]);
-            }
-            else {
+            } else {
                 array_unshift($items, [
                     'status' => 3,
                     'time' => 0,
                     'show' => $time,
                     'raw_time' => $first_item['raw_time'],
-                    'items' => [$first => '']
+                    'items' => [$first => ''],
                 ]);
 
                 $last = end($items);
@@ -161,7 +155,7 @@ class HistoryModalHelper extends ModalHelper {
                     'time' => 0,
                     'show' => $last_cord['time'],
                     'raw_time' => $last_cord['raw_time'],
-                    'items' => [$last_id => '']
+                    'items' => [$last_id => ''],
                 ]);
             }
 
@@ -173,7 +167,6 @@ class HistoryModalHelper extends ModalHelper {
                     $event = current($events);
                     $event['time'] = tdate($event['time'], $timezone);
 
-
                     // If Item time is higher than current event time, we insert all events with lower time, before item
                     if (strtotime($item['raw_time']) > strtotime($event['time'])) {
                         foreach ($events as $key => $event) {
@@ -184,35 +177,35 @@ class HistoryModalHelper extends ModalHelper {
                             } else {
                                 $event['speed'] = round($this->user->unit_of_distance == 'mi' ? kilometersToMiles($event['speed']) : $event['speed']);
                             }
-                            if (strtotime($item['raw_time']) < strtotime($event['time'])) // if event time is higher break cikle
+                            if (strtotime($item['raw_time']) < strtotime($event['time'])) { // if event time is higher break cikle
                                 break;
+                            }
                             // We add event to items list, and remove from events list
                             unset($events[$key]);
-                            $ev_id = 'event' . $event['id'];
+                            $ev_id = 'event'.$event['id'];
                             if ($this->api) {
                                 $new_arr[] = [
                                     'status' => 5,
                                     'time' => null,
                                     'distance' => 0,
-                                    'show' => datetime($event['time'], FALSE),
+                                    'show' => datetime($event['time'], false),
                                     'raw_time' => $event['time'],
                                     'items' => [[
                                         'other' => '',
                                         'speed' => $event['speed'],
-                                        'time' => datetime($event['time'], FALSE),
+                                        'time' => datetime($event['time'], false),
                                         'raw_time' => $event['time'],
                                         'lat' => strval($event['latitude']),
-                                        'lng' => strval($event['longitude'])
-                                    ]]
+                                        'lng' => strval($event['longitude']),
+                                    ]],
                                 ];
-                            }
-                            else {
+                            } else {
                                 $new_arr[] = [
                                     'status' => 5,
                                     'time' => 0,
-                                    'show' => datetime($event['time'], FALSE),
+                                    'show' => datetime($event['time'], false),
                                     'raw_time' => $event['time'],
-                                    'items' => [$ev_id => '']
+                                    'items' => [$ev_id => ''],
                                 ];
                                 $event['lat'] = $event['latitude'];
                                 $event['lng'] = $event['longitude'];
@@ -235,31 +228,30 @@ class HistoryModalHelper extends ModalHelper {
                             $event['speed'] = round($this->user->unit_of_distance == 'mi' ? kilometersToMiles($event['speed']) : $event['speed']);
                         }
                         unset($events[$key]);
-                        $ev_id = 'event' . $event['id'];
+                        $ev_id = 'event'.$event['id'];
                         if ($this->api) {
                             $new_arr[] = [
                                 'status' => 5,
                                 'time' => null,
                                 'distance' => 0,
-                                'show' => datetime($event['time'], FALSE),
+                                'show' => datetime($event['time'], false),
                                 'raw_time' => $event['time'],
                                 'items' => [[
                                     'other' => '',
                                     'speed' => $event['speed'],
-                                    'time' => datetime($event['time'], FALSE),
+                                    'time' => datetime($event['time'], false),
                                     'raw_time' => $event['time'],
                                     'lat' => strval($event['latitude']),
-                                    'lng' => strval($event['longitude'])
-                                ]]
+                                    'lng' => strval($event['longitude']),
+                                ]],
                             ];
-                        }
-                        else {
+                        } else {
                             $new_arr[] = [
                                 'status' => 5,
                                 'time' => 0,
-                                'show' => datetime($event['time'], FALSE),
+                                'show' => datetime($event['time'], false),
                                 'raw_time' => $event['time'],
-                                'items' => [$ev_id => '']
+                                'items' => [$ev_id => ''],
                             ];
                             $event['lat'] = $event['latitude'];
                             $event['lng'] = $event['longitude'];
@@ -275,61 +267,64 @@ class HistoryModalHelper extends ModalHelper {
 
         $driver_history = array_reverse($driver_history);
         foreach ($items as $key => &$item) {
-            $item['driver'] = NULL;
+            $item['driver'] = null;
 
-            if (!empty($driver_history)) {
-                foreach($driver_history as $driver) {
-                    if (strtotime($item['show']) < strtotime(tdate(date('Y-m-d H:i:s', $driver->date), $timezone)))
+            if (! empty($driver_history)) {
+                foreach ($driver_history as $driver) {
+                    if (strtotime($item['show']) < strtotime(tdate(date('Y-m-d H:i:s', $driver->date), $timezone))) {
                         break;
+                    }
 
                     $item['driver'] = $this->api ? $driver : $driver->name;
                 }
 
-                if (empty($item['driver']))
+                if (empty($item['driver'])) {
                     $item['driver'] = $this->api ? $driver : $driver->name;
+                }
             }
 
             unset($item['start_position'], $item['stop_position']);
         }
 
-        # Snap to road
-        if ($this->data['snap_to_road'])
+        // Snap to road
+        if ($this->data['snap_to_road']) {
             snapToRoad($items, $cords);
+        }
 
         $images = [
             '1' => asset('assets/images/route_drive.png'),
             '2' => asset('assets/images/route_stop.png'),
             '3' => asset('assets/images/route_start.png'),
             '4' => asset('assets/images/route_end.png'),
-            '5' => asset('assets/images/route_event.png')
+            '5' => asset('assets/images/route_event.png'),
         ];
 
         $item_class = [
             '1' => [
                 'tr' => 'drive-action',
                 'class' => 'action-icon blue',
-                'sym' => 'D'
+                'sym' => 'D',
             ],
             '2' => [
                 'tr' => 'park-action',
                 'class' => 'action-icon grey',
-                'sym' => 'P'
+                'sym' => 'P',
             ],
             '3' => [
                 'tr' => '',
                 'class' => 'action-icon white',
-                'sym' => '<i class="fa fa-arrow-down"></i>'
+                'sym' => '<i class="fa fa-arrow-down"></i>',
             ],
             '4' => [
                 'tr' => '',
                 'class' => 'action-icon white',
-                'sym' => '<i class="fa fa-flag-o"></i>'
+                'sym' => '<i class="fa fa-flag-o"></i>',
             ],
             '5' => [
                 'tr' => 'event-action',
                 'class' => 'action-icon red',
-                'sym' => 'E'
-            ]
+                'sym' => 'E',
+            ],
         ];
 
         if ($this->api) {
@@ -338,12 +333,12 @@ class HistoryModalHelper extends ModalHelper {
                 '2' => 'stop',
                 '3' => 'start',
                 '4' => 'end',
-                '5' => 'event'
+                '5' => 'event',
             ];
             $images = apiArray($images);
             $item_class = apiArray($item_class);
 
-            if( method_exists ( $device, 'toArray' ) ) {
+            if (method_exists($device, 'toArray')) {
                 $device = $device->toArray();
                 $arr = [];
                 foreach ($device['sensors'] as $key => $sensor) {
@@ -357,25 +352,29 @@ class HistoryModalHelper extends ModalHelper {
         $top_speed = number_format($top_speed, 2, '.', '').' '.$this->user->distance_unit_hour;
         $distance_sum = number_format(($this->user->unit_of_distance == 'mi' ? kilometersToMiles($distance_sum) : $distance_sum), 2, '.', '').' '.trans('front.'.$this->user->unit_of_distance);
 
-        if ($this->api)
+        if ($this->api) {
             unset($cords);
+        }
 
         $arr = [];
         if ($this->api) {
             foreach ($fuel_consumption_arr as $id => $value) {
-                $key = array_search('sensor_' . $id, array_column($sensors, 'id'));
+                $key = array_search('sensor_'.$id, array_column($sensors, 'id'));
 
-                if ($key === FALSE) continue;
+                if ($key === false) {
+                    continue;
+                }
 
-                array_push($arr, ['name' => $sensors[$key]['name'], 'value' => $value . ' ' . $sensors[$key]['sufix']]);
+                array_push($arr, ['name' => $sensors[$key]['name'], 'value' => $value.' '.$sensors[$key]['sufix']]);
             }
         } else {
-            foreach ($fuel_consumption_arr as $id => $value)
+            foreach ($fuel_consumption_arr as $id => $value) {
                 array_push($arr, [
                     'name' => $sensors[$id]['name'],
                     'value' => $value.' '.$sensors[$id]['sufix'],
-                    'unit' => $sensors[$id]['sufix']
+                    'unit' => $sensors[$id]['sufix'],
                 ]);
+            }
         }
 
         $fuel_consumption_arr = $arr;
@@ -384,11 +383,12 @@ class HistoryModalHelper extends ModalHelper {
         if ($this->api) {
             unset($device['users']);
         }
-        
+
         return compact('items', 'cords', 'distance_sum', 'top_speed', 'move_duration', 'stop_duration', 'fuel_consumption', 'device', 'sensors', 'item_class', 'images', 'sensors_values', 'fuel_consumption_arr');
     }
 
-    public function getMessages() {
+    public function getMessages()
+    {
         $device = DeviceRepo::find($this->data['device_id']);
         $sorting = isset($this->data['sorting']) && $this->data['sorting'] == 'true' ? 'desc' : 'asc';
         $sorting = isset($this->data['sorting']['sort']) && $this->data['sorting']['sort'] == 'desc' ? 'desc' : $sorting;
@@ -401,19 +401,20 @@ class HistoryModalHelper extends ModalHelper {
             '50' => 50,
             '100' => 100,
             '200' => 200,
-            '400' => 400
+            '400' => 400,
         ];
 
-        if ( ! isset($this->data['limit']) || ! isset($pagination_limits[$this->data['limit']]))
+        if (! isset($this->data['limit']) || ! isset($pagination_limits[$this->data['limit']])) {
             $this->data['limit'] = 50;
+        }
 
         if ($this->api) {
             $limit = $this->data['limit'];
-        }
-        else {
+        } else {
             $limit = 0;
-            if (Session::has('history_page_limit'))
+            if (Session::has('history_page_limit')) {
                 $limit = Session::get('history_page_limit');
+            }
 
             if ($this->data['limit'] != $limit) {
                 $limit = $this->data['limit'];
@@ -427,44 +428,47 @@ class HistoryModalHelper extends ModalHelper {
         $filter = [
             'device_id' => $this->data['device_id'],
             'date_from' => tdate($this->data['from_date'].' '.$this->data['from_time'], $zone),
-            'date_to'   => tdate($this->data['to_date'].' '.$this->data['to_time'], $zone),
+            'date_to' => tdate($this->data['to_date'].' '.$this->data['to_time'], $zone),
         ];
         $messages = TraccarPositionRepo::search($this->user->id, $filter, true, $limit, $sorting);
 
         $sensors = [];
         foreach ($device['sensors'] as $sensor) {
-            if ($sensor['show_in_popup'] || $sensor['add_to_history'])
+            if ($sensor['show_in_popup'] || $sensor['add_to_history']) {
                 $sensors[] = $sensor;
+            }
         }
 
         $parameters = [];
 
-        foreach ($messages as $key => &$message)
-        {
+        foreach ($messages as $key => &$message) {
             $message->device_id = $device->id;
             $message->time = datetime($message->time, true, $timezone);
 
-            if ($this->user->unit_of_distance == 'mi')
+            if ($this->user->unit_of_distance == 'mi') {
                 $message->speed = kilometersToMiles($message->speed);
+            }
 
             $message->speed = round($message->speed);
 
-            # Convert altitude if users unit of altitude is feets
-            if ($this->user->unit_of_altitude == 'ft')
+            // Convert altitude if users unit of altitude is feets
+            if ($this->user->unit_of_altitude == 'ft') {
                 $message->altitude = metersToFeets($message->altitude);
+            }
 
             $message->altitude = round($message->altitude);
 
             $message->other_arr = [];
-            if (!empty($message->other)) {
+            if (! empty($message->other)) {
                 $message->other_arr = parseXML($message->other);
             }
 
             $message->other_array = parseXMLToArray($message->other);
-            if (!empty($message->other_array)) {
-                foreach($message->other_array as $el => $oval) {
-                    if (array_key_exists($el, $parameters) || empty($el))
+            if (! empty($message->other_array)) {
+                foreach ($message->other_array as $el => $oval) {
+                    if (array_key_exists($el, $parameters) || empty($el)) {
                         continue;
+                    }
 
                     $parameters[$el] = '';
                 }
@@ -481,8 +485,9 @@ class HistoryModalHelper extends ModalHelper {
             }
         }
 
-        if (!isset($this->data['page']))
+        if (! isset($this->data['page'])) {
             $this->data['page'] = 1;
+        }
 
         if ($this->api) {
             $messages = $messages->toArray();
@@ -496,9 +501,9 @@ class HistoryModalHelper extends ModalHelper {
     {
         $validator = Validator::make($this->data, ['device_id' => 'required']);
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             throw new ValidationException($validator->errors());
-
+        }
 
         $device = DeviceRepo::find($this->data['device_id']);
 
@@ -507,34 +512,37 @@ class HistoryModalHelper extends ModalHelper {
 
         $sensors = [];
         foreach ($device['sensors'] as $sensor) {
-            if ($sensor['show_in_popup'])
+            if ($sensor['show_in_popup']) {
                 $sensors[] = $sensor;
+            }
         }
-
 
         $position = TraccarPositionRepo::getPosition($device->traccar_device_id, $this->data['position_id']);
 
-        if (empty($position))
+        if (empty($position)) {
             throw new ResourseNotFoundException('front.position');
+        }
 
         $position->lat = $position->latitude;
         $position->lng = $position->longitude;
         $position->time = datetime($position->time, true, $this->user->timezone->zone);
         $position->position_id = $position->id;
 
-        if ($this->user->unit_of_distance == 'mi')
+        if ($this->user->unit_of_distance == 'mi') {
             $position->speed = kilometersToMiles($position->speed);
+        }
 
         $position->speed = round($position->speed);
 
-        # Convert altitude if users unit of altitude is feets
-        if ($this->user->unit_of_altitude == 'ft')
+        // Convert altitude if users unit of altitude is feets
+        if ($this->user->unit_of_altitude == 'ft') {
             $position->altitude = metersToFeets($position->altitude);
+        }
 
         $position->altitude = round($position->altitude);
 
         $position->other_arr = [];
-        if (!empty($position->other)) {
+        if (! empty($position->other)) {
             $position->other_arr = parseXML($position->other);
         }
 
@@ -558,10 +566,10 @@ class HistoryModalHelper extends ModalHelper {
         $ids = empty($this->data['id']) ? $ids : $this->data['id'];
         $ids = empty($this->data['ids']) ? $ids : $this->data['ids'];
 
-        if ($ids)
-        {
-            if ( ! is_array($ids))
+        if ($ids) {
+            if (! is_array($ids)) {
                 $ids = [$ids];
+            }
 
             $device->positions()->whereIn('id', $ids)->delete();
             $device->generateTail();

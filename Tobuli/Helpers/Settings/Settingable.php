@@ -8,15 +8,13 @@
 
 namespace Tobuli\Helpers\Settings;
 
-use Tobuli\Helpers\Settings\SettingsModel;
-
 trait Settingable
 {
     protected $instanceSettings;
 
     protected function initSetting()
     {
-        if ( ! $this->instanceSettings) {
+        if (! $this->instanceSettings) {
             $this->instanceSettings = new SettingsModel();
         }
 
@@ -29,7 +27,7 @@ trait Settingable
 
     public function getSettigsPrefix()
     {
-        return 'Settings' . get_class($this) . $this->getKey();
+        return 'Settings'.get_class($this).$this->getKey();
     }
 
     public function getSettingsAttribute($value)
@@ -42,28 +40,32 @@ trait Settingable
         $this->attributes['settings'] = json_encode($value);
     }
 
-    public function getSettings($key) {
-        $this->initSetting()->setValues( $this->settings );
+    public function getSettings($key)
+    {
+        $this->initSetting()->setValues($this->settings);
 
         return $this->initSetting()->get($key);
     }
 
-    public function setSettings($key, $value) {
-        if (empty($key))
+    public function setSettings($key, $value)
+    {
+        if (empty($key)) {
             return false;
+        }
 
         $keys = explode('.', $key);
 
         $group = array_shift($keys);
 
-        if (empty($group))
+        if (empty($group)) {
             return false;
+        }
 
         $settings = $this->settings;
 
         $item = empty($settings[$group]) ? [] : $settings[$group];
 
-        set_array_value( $item, $keys, $value );
+        set_array_value($item, $keys, $value);
 
         $settings[$group] = $item;
 

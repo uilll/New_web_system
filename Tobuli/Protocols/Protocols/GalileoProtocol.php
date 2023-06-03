@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class GalileoProtocol extends BaseProtocol implements Protocol
 {

@@ -1,4 +1,6 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
@@ -33,11 +35,13 @@ class DeviceIcon extends Eloquent
 
     public function getPathAttribute($value)
     {
-        if ( ! $this->by_status)
+        if (! $this->by_status) {
             return $value;
+        }
 
-        if ( ! $this->deviceStatus)
+        if (! $this->deviceStatus) {
             return $value;
+        }
 
         $path_info = pathinfo($value);
 
@@ -45,7 +49,7 @@ class DeviceIcon extends Eloquent
         array_pop($filename_parts);
         $filename_parts[] = $this->deviceStatus;
 
-        $status_icons = glob($path_info['dirname'] . '/' . implode('_', $filename_parts) . '.*');
+        $status_icons = glob($path_info['dirname'].'/'.implode('_', $filename_parts).'.*');
 
         return empty($status_icons) ? $value : current($status_icons);
     }

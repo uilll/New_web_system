@@ -2,10 +2,9 @@
 
 namespace App\Services\Mail;
 
-
 use GuzzleHttp\Client as HttpClient;
+use Illuminate\Mail\TransportManager as IlluminateTransportManager;
 use Illuminate\Support\Arr;
-use Illuminate\Mail\TransportManager AS IlluminateTransportManager;
 
 //use App\Services\Mail\PostmarkTransport;
 //use App\Services\Mail\SendgridTransport;

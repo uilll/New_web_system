@@ -13,6 +13,6 @@ class MailHelper extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'App\Services\Mail\MailHelper';
+        return \App\Services\Mail\MailHelper::class;
     }
 }

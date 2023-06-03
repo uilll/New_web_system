@@ -1,13 +1,14 @@
-<?php namespace ModalHelpers;
+<?php
 
+namespace ModalHelpers;
+
+use Carbon\Carbon;
 use Facades\Repositories\UserDriverRepo;
 use Facades\Repositories\UserRepo;
 use Facades\Validators\UserDriverFormValidator;
 use Illuminate\Support\Facades\DB;
-use Tobuli\Exceptions\ValidationException;
-
 use Tobuli\Entities\Device;
-use Carbon\Carbon;
+use Tobuli\Exceptions\ValidationException;
 
 class UserDriverModalHelper extends ModalHelper
 {
@@ -26,7 +27,7 @@ class UserDriverModalHelper extends ModalHelper
 
     public function createData()
     {
-        $devices = UserRepo::getDevices($this->user->id)->lists('plate_number', 'id')->all();  
+        $devices = UserRepo::getDevices($this->user->id)->pluck('plate_number', 'id')->all();
 
         return compact('devices');
     }
@@ -37,15 +38,13 @@ class UserDriverModalHelper extends ModalHelper
 
         $item = UserDriverRepo::create($this->data + ['user_id' => $this->user->id]);
 
-        if (array_get($this->data, 'device_id') && array_get($this->data, 'current'))
-        {
+        if (array_get($this->data, 'device_id') && array_get($this->data, 'current')) {
             $user = $this->user;
-            $device = Device::whereHas('users', function($query) use ($user) {
+            $device = Device::whereHas('users', function ($query) use ($user) {
                 $query->where('id', $user->id);
             })->find($this->data['device_id']);
 
-            if ($device)
-            {
+            if ($device) {
                 //$device->changeDriver($item);
             }
         }
@@ -61,55 +60,50 @@ class UserDriverModalHelper extends ModalHelper
 
         $this->checkException('drivers', 'edit', $item);
 
-        $devices = UserRepo::getDevices($this->user->id)->lists('plate_number', 'id')->all();
+        $devices = UserRepo::getDevices($this->user->id)->pluck('plate_number', 'id')->all();
 
         return compact('item', 'devices');
     }
 
-    public function edit($passedId= null)
+    public function edit($passedId = null)
     {
         $id = ($passedId ? $passedId : $this->data['id']);
         $item = UserDriverRepo::find($id);
 
-                    // Verificando se a data de vencimento da CNH editada é maior que a data de hoje, se sim altera os status dos alertas
-                if(array_key_exists('cnh_expire',$this->data)){
-                    $now = date("Y-m-d H:i:s");
-                    $first = Carbon::createFromFormat('Y-m-d H:i:s', $now);
-                    $second = Carbon::createFromFormat('Y-m-d', $this->data['cnh_expire']);
-                    if($second->greaterThan($first)){
-                        DB::table('user_drivers')->where('id', $item->id)->update(['seeing' => 0, 'pre_alert' => 0, 'alert' => 0]);
-                        //if($first->diffDays($second)<30)
-                    }
-                }
-                        //###################################################################################################################
+        // Verificando se a data de vencimento da CNH editada é maior que a data de hoje, se sim altera os status dos alertas
+        if (array_key_exists('cnh_expire', $this->data)) {
+            $now = date('Y-m-d H:i:s');
+            $first = Carbon::createFromFormat('Y-m-d H:i:s', $now);
+            $second = Carbon::createFromFormat('Y-m-d', $this->data['cnh_expire']);
+            if ($second->greaterThan($first)) {
+                DB::table('user_drivers')->where('id', $item->id)->update(['seeing' => 0, 'pre_alert' => 0, 'alert' => 0]);
+                //if($first->diffDays($second)<30)
+            }
+        }
+        //###################################################################################################################
 
         $this->checkException('drivers', 'update', $item);
 
-        try
-        {
-            if (!$passedId) {
+        try {
+            if (! $passedId) {
                 $this->validate('silentUpdate');
             }
 
             UserDriverRepo::update($item->id, $this->data);
 
-            if (array_get($this->data, 'device_id') && array_get($this->data, 'current'))
-            {
+            if (array_get($this->data, 'device_id') && array_get($this->data, 'current')) {
                 $user = $this->user;
-                $device = Device::whereHas('users', function($query) use ($user) {
+                $device = Device::whereHas('users', function ($query) use ($user) {
                     $query->where('id', $user->id);
                 })->find($this->data['device_id']);
 
-                if ($device)
-                {
+                if ($device) {
                     $device->changeDriver($item);
                 }
             }
 
             return ['status' => 1];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }

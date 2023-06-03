@@ -27,37 +27,37 @@ class Manager
         $this->user = $user;
 
         $this->permissionMap = [
-            'show'   => 'edit',
-            'view'   => 'view',
+            'show' => 'edit',
+            'view' => 'view',
             'create' => 'edit',
-            'store'  => 'edit',
-            'edit'   => 'edit',
+            'store' => 'edit',
+            'edit' => 'edit',
             'update' => 'edit',
             'remove' => 'remove',
             'active' => 'edit',
-            'clean'  => 'remove',
+            'clean' => 'remove',
             'enable' => 'edit',
-            'disable' => 'edit'
+            'disable' => 'edit',
         ];
 
         $this->modelMap = [
-            'alerts'         => Alert::class,
-            'devices'        => Device::class,
+            'alerts' => Alert::class,
+            'devices' => Device::class,
             'devices_groups' => DeviceGroup::class,
-            'custom_events'  => EventCustom::class,
-            'geofences'      => Geofence::class,
-            'poi'            => UserMapIcon::class,
-            'events'         => Event::class,
-            'reports'        => Report::class,
-            'routes'         => Route::class,
-            'drivers'        => UserDriver::class,
-            'tasks'          => Task::class,
-            'chats'          => Chat::class,
-            'users'          => User::class,
+            'custom_events' => EventCustom::class,
+            'geofences' => Geofence::class,
+            'poi' => UserMapIcon::class,
+            'events' => Event::class,
+            'reports' => Report::class,
+            'routes' => Route::class,
+            'drivers' => UserDriver::class,
+            'tasks' => Task::class,
+            'chats' => Chat::class,
+            'users' => User::class,
 
-            'camera'         => null,
-            'history'        => null,
-            'send_command'   => null,
+            'camera' => null,
+            'history' => null,
+            'send_command' => null,
         ];
     }
 
@@ -72,8 +72,9 @@ class Manager
             case 'enable':
             case 'disable':
             case 'own':
-                if (empty($model) && $this->getModelClass($repo))
+                if (empty($model) && $this->getModelClass($repo)) {
                     throw new ResourseNotFoundException($this->getModelTrans($repo));
+                }
                 break;
             case 'view':
             case 'create':
@@ -84,11 +85,13 @@ class Manager
         }
 
         if (is_null($model)) {
-            if ( ! $this->user->perm($repo, $this->permissionMap[$action]))
+            if (! $this->user->perm($repo, $this->permissionMap[$action])) {
                 throw new PermissionException();
+            }
         } else {
-            if ( ! $this->user->can($action, $model))
+            if (! $this->user->can($action, $model)) {
                 throw new PermissionException();
+            }
         }
     }
 
@@ -96,16 +99,18 @@ class Manager
     {
         $class = $this->getModelClass($repo);
 
-        if ($class)
+        if ($class) {
             return new $class();
+        }
 
         return null;
     }
 
     protected function getModelClass($repo)
     {
-        if ( ! array_has($this->modelMap, $repo))
+        if (! array_has($this->modelMap, $repo)) {
             throw new \Exception('No model class declared');
+        }
 
         return array_get($this->modelMap, $repo);
     }
@@ -114,15 +119,15 @@ class Manager
     {
         switch ($repo) {
             case 'custom_events':
-                return "front.event";
+                return 'front.event';
             case 'reports':
-                return "front.report";
+                return 'front.report';
             case 'routes':
-                return "front.routes";
+                return 'front.routes';
             case 'poi':
-                return "front.marker";
+                return 'front.marker';
             case 'drivers':
-                return "front.driver";
+                return 'front.driver';
             default:
                 $singular = str_singular($repo);
 

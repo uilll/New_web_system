@@ -15,27 +15,26 @@
  * Example of Arabic-English Transliteration
  *
  * @category  I18N
- * @package   I18N_Arabic
+ *
  * @author    Khaled Al-Sham'aa <khaled@ar-php.org>
  * @copyright 2006-2016 Khaled Al-Sham'aa
- *
  * @license   LGPL <http://www.gnu.org/licenses/lgpl.txt>
+ *
  * @link      http://www.ar-php.org
  */
-
 error_reporting(E_STRICT);
 $time_start = microtime(true);
 
 require '../../Arabic.php';
 $Arabic = new I18N_Arabic('Transliteration');
 
-$ar_terms = array('خالِد الشَمعَة', 'جُبران خَليل جُبران', 'كاظِم الساهِر',
+$ar_terms = ['خالِد الشَمعَة', 'جُبران خَليل جُبران', 'كاظِم الساهِر',
     'ماجِدَة الرُومِي، نِزار قَبَّانِي', 'سُوق الحَمِيدِيَّة؟', 'مَغارَة
     جَعِيتَا', 'غُوطَة دِمَشق', 'حَلَب الشَهبَاء', 'جَزيرَة أَرواد', 'بِلاد
-    الرافِدَين', 'أهرامات الجِيزَة', 'دِرْع', 'عِيد', 'عُود', 'رِدْء', 
-    'إِيدَاء', 'هِبَة الله', 'قاضٍ');
+    الرافِدَين', 'أهرامات الجِيزَة', 'دِرْع', 'عِيد', 'عُود', 'رِدْء',
+    'إِيدَاء', 'هِبَة الله', 'قاضٍ'];
 
-echo <<< END
+echo <<< 'END'
 <center>
   <table border="0" cellspacing="2" cellpadding="5" width="500">
     <tr>
@@ -74,13 +73,13 @@ echo '</table></center>';
 <div class="Paragraph">
 <h2>Example Code:</h2>
 <?php
-$code = <<< ENDALL
+$code = <<< 'ENDALL'
 <?php
 <?php
     require '../../Arabic.php';
-    \$Arabic = new I18N_Arabic('Transliteration');
+    $Arabic = new I18N_Arabic('Transliteration');
 
-    \$ar_terms = array('خالِد الشَمعَة', 'جُبران خَليل جُبران', 'كاظِم الساهِر',
+    $ar_terms = array('خالِد الشَمعَة', 'جُبران خَليل جُبران', 'كاظِم الساهِر',
         'ماجِدَة الرُومِي، نِزار قَبَّانِي', 'سُوق الحَمِيدِيَّة؟', 'مَغارَة
         جَعِيتَا', 'غُوطَة دِمَشق', 'حَلَب الشَهبَاء', 'جَزيرَة أَرواد', 'بِلاد
         الرافِدَين', 'أهرامات الجِيزَة', 'دِرْع', 'عِيد', 'عُود', 'رِدْء', 
@@ -106,15 +105,15 @@ $code = <<< ENDALL
     </tr>
 END;
 
-    foreach (\$ar_terms as \$term) {
+    foreach ($ar_terms as $term) {
         echo '<tr><td bgcolor="#f5f5f5" align="left"><font face="Tahoma">';
-        echo \$Arabic->ar2en(\$term);
+        echo $Arabic->ar2en($term);
         echo '</font></td>';
-        echo '<td bgcolor="#f5f5f5" align="right">'.\$term.'</td></tr>';
+        echo '<td bgcolor="#f5f5f5" align="right">'.$term.'</td></tr>';
     }
 
     echo '<tr><td bgcolor="#d0d0f5" align="left"><font face="Tahoma">';
-    echo \$Arabic->enNum('0123,456.789');
+    echo $Arabic->enNum('0123,456.789');
     echo '</font></td>';
     echo '<td bgcolor="#d0d0f5" align="right">0123,456.789</td></tr>';
 
@@ -127,7 +126,7 @@ $time_end = microtime(true);
 $time = $time_end - $time_start;
 
 echo "<hr />Total execution time is $time seconds<br />\n";
-echo 'Amount of memory allocated to this script is ' . memory_get_usage() . ' bytes';
+echo 'Amount of memory allocated to this script is '.memory_get_usage().' bytes';
 
 $included_files = get_included_files();
 echo '<h4>Names of included or required files:</h4><ul>';

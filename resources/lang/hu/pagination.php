@@ -1,7 +1,7 @@
 <?php
 
-return array(
+return [
 
     'previous' => '«Előző',
     'next' => 'Következő &quot;',
-);
+];

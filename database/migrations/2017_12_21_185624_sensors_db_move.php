@@ -3,8 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Artisan;
 
-class SensorsDBMove extends Migration {
-
+class SensorsDBMove extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,19 +12,19 @@ class SensorsDBMove extends Migration {
      */
     public function up()
     {
-        if (Schema::connection('traccar_mysql')->hasTable('devices'))
-        {
+        if (Schema::connection('traccar_mysql')->hasTable('devices')) {
             Artisan::call('down');
 
             $devices = DB::connection('traccar_mysql')->table('devices')->get();
 
-            foreach ($devices as $device)
-            {
-                if (!Schema::connection('traccar_mysql')->hasTable('positions_'.$device->id))
+            foreach ($devices as $device) {
+                if (! Schema::connection('traccar_mysql')->hasTable('positions_'.$device->id)) {
                     continue;
+                }
 
-                if (!Schema::connection('sensors_mysql')->hasTable('sensors_'.$device->id))
+                if (! Schema::connection('sensors_mysql')->hasTable('sensors_'.$device->id)) {
                     continue;
+                }
 
                 DB::connection('traccar_mysql')->insert(
                     "INSERT INTO positions_{$device->id} (device_id, altitude, course, latitude, longitude, other, power, speed, time, server_time, valid, distance, protocol)
@@ -40,7 +40,6 @@ class SensorsDBMove extends Migration {
         }
     }
 
-
     /**
      * Reverse the migrations.
      *
@@ -50,5 +49,4 @@ class SensorsDBMove extends Migration {
     {
         //
     }
-
 }

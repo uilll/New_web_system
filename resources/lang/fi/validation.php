@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ' :attribute pitää tulla hyväksytyksi.',
     'active_url' => ' :attribute ei ole kelvollinen URL.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => ' :attribute voi sisältää vain kirjaimia, numeroita.',
     'array' => ' :attribute pitää olla joukko.',
     'before' => ' :attribute pitää olla päivämäärä ennen :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => ' :attribute pitää olla :min ja :max välistä.',
         'file' => ' :attribute pitää olla :min ja :max kilotavun väliltä.',
         'string' => ' :attribute pitää olla :min ja :max merkin väliltä.',
         'array' => ' :attribute pitää olla :min ja :max kohteen väliltä.',
-    ),
+    ],
     'confirmed' => ':attribute varmistus ei täsmää.',
     'date' => ':attribute ei ole kelvollinen päivämäärä.',
     'date_format' => ':attribute ei vastaa formaattia :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'valittu :attribute ei ole kelvollinen.',
     'integer' => ':attribute pitää olla kokonaisluku.',
     'ip' => ':attribute pitää olla kelvollinen IP-osoite.',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute ei voi olla suurempi kuin :max.',
         'file' => ':attribute ei voi olla suurempi kuin :max kilotavua.',
         'string' => ':attribute ei voi olla suurempi kuin :max merkkiä.',
         'array' => ':attribute ei voi olla suurempi kuin :max kohdetta.',
-    ),
+    ],
     'mimes' => ' :attribute pitää olla tiedosto tyyppiä: :values.',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute pitää olla vähintään :min.',
         'file' => ':attribute pitää olla vähintään :min kilotavua.',
         'string' => ':attribute pitää olla vähintään :min merkkiä.',
         'array' => ':attribute pitää olla vähintään :min kohdetta.',
-    ),
+    ],
     'not_in' => 'valittu :attribute ei ole kelvollinen.',
     'numeric' => ':attribute pitää olla numero.',
     'regex' => ':attribute formaatti ei kelpaa.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => ':attribute kenttä on pakollinen kun :values ei ole saatavilla.',
     'required_without_all' => ':attribute kenttä on pakollinen kun yksikään :values ei ole saatavilla.',
     'same' => ':attribute ja :other pitää olla samanlaiset.',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute pitää olla :size.',
         'file' => ':attribute pitää olla :size kilotavua.',
         'string' => ':attribute pitää olla :size merkkiä.',
         'array' => ':attribute pitää sisältää :size kohdetta.',
-    ),
+    ],
     'unique' => ':attribute on jo käytössä.',
     'url' => ':attribute formaatti ei kelpaa.',
     'array_max' => ':attribute max kohdetta :max.',
     'lesser_than' => ':attribute pitää olla vähemmän kuin :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'custom-message',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'Sähköposti',
         'password' => 'Salasana',
         'password_confirmation' => 'Salasanan vahvistus',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Offline-tilan kuvake',
         'icon_status_ack' => 'Ack-tilan kuvake',
         'icon_status_engine' => 'Moottorin tilan kuvake',
-    ),
+    ],
     'same_protocol' => 'Laitteiden on oltava samassa protokollassa.',
     'contains' => 'The :attribute on oltava :value .',
     'ip_port' => ':attribute ei vastaa muotoa IP:PORT',
-);
+];

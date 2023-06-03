@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Facades\Repositories\DeviceRepo;
 use Facades\Repositories\UserRepo;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Request;
 use Tobuli\Entities\File\DeviceMedia;
-
 
 class DeviceMediaController extends Controller
 {
@@ -18,13 +17,12 @@ class DeviceMediaController extends Controller
      */
     public function create()
     {
-        $search_input = Input::all();
+        $search_input = Request::all();
 
         $deviceCollection = DeviceRepo::searchAndPaginateSimple($search_input, 'name', 'asc', 15, [$this->user->id]);
 
         return view('front::DeviceMedia.create')->with(compact('deviceCollection'));
     }
-
 
     public function getImages($device_id)
     {
@@ -36,19 +34,19 @@ class DeviceMediaController extends Controller
 
             $images = DeviceMedia::setEntity($device)->orderByDate('desc')->paginate(15);
 
-            if (!$this->api)
+            if (! $this->api) {
                 return view('front::DeviceMedia.images', ['images' => $images, 'deviceId' => $device_id]);
+            }
 
             return response()->json(['success' => true, 'data' => $images]);
-
         } catch (\Exception $e) {
-            if (!$this->api)
+            if (! $this->api) {
                 return view('front::DeviceMedia.images', ['images' => []]);
+            }
 
             return response()->json(['success' => false]);
         }
     }
-
 
     public function getImage($filename, $device_id)
     {
@@ -62,16 +60,15 @@ class DeviceMediaController extends Controller
 
             $item = $this->objectForMapDisplay($device, $image);
 
-            if (!$this->api)
+            if (! $this->api) {
                 return view('front::DeviceMedia.image', ['image' => $image, 'item' => $item]);
+            }
 
             return response()->json(['success' => true, 'item' => $item, 'image' => $image->toArray()]);
-
         } catch (\Exception $e) {
             return view('front::DeviceMedia.image', ['image' => null]);
         }
     }
-
 
     public function deleteImage($filename, $device_id)
     {
@@ -82,12 +79,12 @@ class DeviceMediaController extends Controller
 
         $image = DeviceMedia::setEntity($device)->find($filename);
 
-        if ($image->delete())
+        if ($image->delete()) {
             return response()->json(['success' => true]);
+        }
 
         return response()->json(['success' => false]);
     }
-
 
     public function downloadFile($filename, $device_id)
     {
@@ -101,11 +98,10 @@ class DeviceMediaController extends Controller
         return response()->download($file->path);
     }
 
-
     private function objectForMapDisplay($device, $image)
     {
         $closest_position = $device->positions()
-            ->orderByRaw("abs(TIMESTAMPDIFF(second, time, '" . $image->created_at . "')) DESC")
+            ->orderByRaw("abs(TIMESTAMPDIFF(second, time, '".$image->created_at."')) DESC")
             ->first();
 
         $tail_collection = $device->positions()
@@ -114,8 +110,9 @@ class DeviceMediaController extends Controller
             ->take(10)->orderBy('id', 'DESC')->get();
 
         $tail_coords = [];
-        foreach ($tail_collection as $tail)
-            $tail_coords[] = ['lat' => (string)$tail->latitude, 'lng' => (string)$tail->longitude];
+        foreach ($tail_collection as $tail) {
+            $tail_coords[] = ['lat' => (string) $tail->latitude, 'lng' => (string) $tail->longitude];
+        }
 
         $item = new \stdClass();
         $item->org_id = $device->id;
@@ -125,8 +122,8 @@ class DeviceMediaController extends Controller
         $item->name = $device->name;
         $item->speed = $closest_position->speed;
         $item->course = $closest_position->course;
-        $item->lat = (string)$closest_position->latitude;
-        $item->lng = (string)$closest_position->longitude;
+        $item->lat = (string) $closest_position->latitude;
+        $item->lng = (string) $closest_position->longitude;
         $item->altitude = $device->altitude;
         $item->protocol = $device->getProtocol();
         $item->time = $device->time;

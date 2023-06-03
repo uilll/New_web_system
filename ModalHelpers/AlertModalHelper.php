@@ -1,21 +1,18 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use Facades\ModalHelpers\CustomEventModalHelper;
 use Facades\ModalHelpers\SendCommandModalHelper;
-use Facades\Repositories\AlertDeviceRepo;
-use Facades\Repositories\AlertGeofenceRepo;
 use Facades\Repositories\AlertRepo;
 use Facades\Repositories\DeviceRepo;
 use Facades\Repositories\EventCustomRepo;
 use Facades\Repositories\GeofenceRepo;
-use Facades\Repositories\UserGprsTemplateRepo;
 use Facades\Repositories\UserRepo;
 use Facades\Validators\AlertFormValidator;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Validator;
 use Tobuli\Exceptions\ValidationException;
 use Tobuli\Protocols\Commands;
-use Tobuli\Protocols\Manager as ProtocolsManager;
 
 class AlertModalHelper extends ModalHelper
 {
@@ -33,26 +30,30 @@ class AlertModalHelper extends ModalHelper
 
             foreach ($alerts as $key => $alert) {
                 $drivers = [];
-                foreach ($alert['drivers'] as $driver)
+                foreach ($alert['drivers'] as $driver) {
                     array_push($drivers, $driver['id']);
+                }
 
                 $alerts[$key]['drivers'] = $drivers;
 
                 $devices = [];
-                foreach ($alert['devices'] as $device)
+                foreach ($alert['devices'] as $device) {
                     array_push($devices, $device['id']);
+                }
 
                 $alerts[$key]['devices'] = $devices;
 
                 $geofences = [];
-                foreach ($alert['geofences'] as $geofence)
+                foreach ($alert['geofences'] as $geofence) {
                     array_push($geofences, $geofence['id']);
+                }
 
                 $alerts[$key]['geofences'] = $geofences;
 
                 $events_custom = [];
-                foreach ($alert['events_custom'] as $event)
+                foreach ($alert['events_custom'] as $event) {
                     array_push($events_custom, $event['id']);
+                }
 
                 $alerts[$key]['events_custom'] = $events_custom;
             }
@@ -67,11 +68,12 @@ class AlertModalHelper extends ModalHelper
     {
         $this->checkException('alerts', 'create');
 
-        $devices = UserRepo::getDevices($this->user->id)->lists('plate_number', 'id')->all();
-        $geofences = GeofenceRepo::whereUserId($this->user->id)->lists('name', 'id')->all();
+        $devices = UserRepo::getDevices($this->user->id)->pluck('plate_number', 'id')->all();
+        $geofences = GeofenceRepo::whereUserId($this->user->id)->pluck('name', 'id')->all();
 
-        if (empty($devices))
+        if (empty($devices)) {
             throw new ValidationException(['id' => trans('front.must_have_one_device')]);
+        }
 
         $types = $this->getTypes();
         $schedules = $this->getSchedules();
@@ -79,7 +81,7 @@ class AlertModalHelper extends ModalHelper
 
         $alert_zones = [
             '1' => trans('front.zone_in'),
-            '2' => trans('front.zone_out')
+            '2' => trans('front.zone_out'),
         ];
 
         if ($this->api) {
@@ -121,8 +123,7 @@ class AlertModalHelper extends ModalHelper
                 $events_custom = $events->pluck('id')->all();
             }
             $alert->events_custom()->sync($events_custom);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             rollbackTransaction();
             throw new ValidationException(['id' => trans('global.unexpected_db_error')]);
         }
@@ -134,9 +135,8 @@ class AlertModalHelper extends ModalHelper
 
     public function editData()
     {
-        
         $id = array_key_exists('alert_id', $this->data) ? $this->data['alert_id'] : request()->route('alerts');
-        
+
         $item = AlertRepo::findWithAttributes($id);
 
         $this->checkException('alerts', 'edit', $item);
@@ -146,27 +146,27 @@ class AlertModalHelper extends ModalHelper
             'devices.traccar',
         ]);
 
-        if (empty($devices))
+        if (empty($devices)) {
             throw new ValidationException(['id' => trans('front.must_have_one_device')]);
-
+        }
 
         $types = $this->getTypes($item);
         $schedules = $this->getSchedules($item);
         $notifications = $this->getNotifications($item);
-//dd('oi2');        
+        //dd('oi2');
         $commands = SendCommandModalHelper::getCommands($devices);
-//dd('oi2');
-        $devices = $devices->lists('plate_number', 'id')->all();
-        $geofences = GeofenceRepo::whereUserId($this->user->id)->lists('name', 'id')->all();
-//dd('oi');
+        //dd('oi2');
+        $devices = $devices->pluck('plate_number', 'id')->all();
+        $geofences = GeofenceRepo::whereUserId($this->user->id)->pluck('name', 'id')->all();
+        //dd('oi');
         $alert_zones = [
             '1' => trans('front.zone_in'),
-            '2' => trans('front.zone_out')
+            '2' => trans('front.zone_out'),
         ];
 
         if ($this->api) {
-            $devices     = apiArray($devices);
-            $geofences   = apiArray($geofences);
+            $devices = apiArray($devices);
+            $geofences = apiArray($geofences);
             $alert_zones = apiArray($alert_zones);
         }
 
@@ -207,8 +207,7 @@ class AlertModalHelper extends ModalHelper
                 $events_custom = $events->pluck('id')->all();
             }
             $alert->events_custom()->sync($events_custom);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             rollbackTransaction();
             throw new ValidationException(['id' => trans('global.unexpected_db_error')]);
         }
@@ -224,8 +223,7 @@ class AlertModalHelper extends ModalHelper
 
         AlertFormValidator::validate($type, $this->data, $alert_id);
 
-        foreach (array_get($this->data, 'schedules', []) as $weekday => $schedule)
-        {
+        foreach (array_get($this->data, 'schedules', []) as $weekday => $schedule) {
             $validator = null;
 
             switch ($weekday) {
@@ -237,7 +235,7 @@ class AlertModalHelper extends ModalHelper
                 case 'saturday':
                 case 'sunday':
                     $validator = Validator::make($this->data, ["schedules.$weekday" => 'required|array']);
-                    $validator->each("schedules.$weekday", ['in:' . implode(',',array_keys(config('tobuli.history_time')))]);
+                    $validator->each("schedules.$weekday", ['in:'.implode(',', array_keys(config('tobuli.history_time')))]);
                     break;
                 default:
                     throw new ValidationException(["schedules.$weekday" => 'Wrong week day.']);
@@ -248,8 +246,7 @@ class AlertModalHelper extends ModalHelper
             }
         }
 
-        foreach (array_get($this->data, 'notifications', []) as $name => $notification)
-        {
+        foreach (array_get($this->data, 'notifications', []) as $name => $notification) {
             $validator = null;
             $active = array_get($notification, 'active', false) ? true : false;
 
@@ -268,7 +265,7 @@ class AlertModalHelper extends ModalHelper
                 case 'webhook':
                     if ($active) {
                         $notification['input'] = semicol_explode(array_get($notification, 'input'));
-                        $validator = Validator::make($notification, ['input' => 'required|array_max:' . config('tobuli.limits.alert_webhooks')]);
+                        $validator = Validator::make($notification, ['input' => 'required|array_max:'.config('tobuli.limits.alert_webhooks')]);
                         $validator->each('input', ['url']);
                     }
 
@@ -276,21 +273,21 @@ class AlertModalHelper extends ModalHelper
                 case 'sms':
                     if ($active) {
                         $notification['input'] = semicol_explode(array_get($notification, 'input'));
-                        $validator = Validator::make($notification, ['input' => 'required|array_max:' . config('tobuli.limits.alert_phones')]);
+                        $validator = Validator::make($notification, ['input' => 'required|array_max:'.config('tobuli.limits.alert_phones')]);
                     }
                     break;
                 default:
                     throw new ValidationException(["notifications.$name" => 'Notification type not supported.']);
             }
 
-            if ($validator && $validator->fails())
+            if ($validator && $validator->fails()) {
                 throw new ValidationException(["notifications.$name.input" => $validator->errors()->first()]);
+            }
 
             $this->data['notifications'][$name] = array_only($this->data['notifications'][$name], ['active', 'input']);
         }
 
-        if (array_get($this->data, 'command.active'))
-        {
+        if (array_get($this->data, 'command.active')) {
             $devices = DeviceRepo::getWhereIn($this->data['devices']);
             $commands = SendCommandModalHelper::getCommands($devices);
             $rules = Commands::validationRules(array_get($this->data, 'command.type'), $commands);
@@ -306,7 +303,6 @@ class AlertModalHelper extends ModalHelper
                 );
             }
         }
-
     }
 
     public function changeActive()
@@ -320,7 +316,8 @@ class AlertModalHelper extends ModalHelper
         return ['status' => 1];
     }
 
-    public function doDestroy($id) {
+    public function doDestroy($id)
+    {
         $item = AlertRepo::find($id);
 
         $this->checkException('alerts', 'remove', $item);
@@ -344,21 +341,24 @@ class AlertModalHelper extends ModalHelper
     public function getTypes($alert = null)
     {
         $drivers = UserRepo::getDrivers($this->user->id);
-        $drivers->map(function($item) {
+        $drivers->map(function ($item) {
             $item['title'] = $item['name'];
+
             return $item;
         })->only('id', 'title')->all();
 
         $geofences = GeofenceRepo::whereUserId($this->user->id);
-        $geofences->map(function($item) {
+        $geofences->map(function ($item) {
             $item['title'] = $item['name'];
+
             return $item;
         })->only('id', 'title')->all();
 
-        if ($alert)
+        if ($alert) {
             $events_custom = CustomEventModalHelper::getGroupedEvents($alert->devices->pluck('id')->all());
-        else
+        } else {
             $events_custom = [];
+        }
 
         return [
             [
@@ -367,11 +367,11 @@ class AlertModalHelper extends ModalHelper
                 'attributes' => [
                     [
                         'name' => 'overspeed',
-                        'title' => trans('validation.attributes.overspeed'). "(".$this->user->unit_of_speed.")",
+                        'title' => trans('validation.attributes.overspeed').'('.$this->user->unit_of_speed.')',
                         'type' => 'integer',
                         'default' => $alert ? $alert->overspeed : '',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'type' => 'stop_duration',
@@ -381,9 +381,9 @@ class AlertModalHelper extends ModalHelper
                         'name' => 'stop_duration',
                         'title' => trans('validation.attributes.stop_duration_longer_than').'('.trans('front.minutes').')',
                         'type' => 'integer',
-                        'default' => $alert ? $alert->stop_duration : ''
-                    ]
-                ]
+                        'default' => $alert ? $alert->stop_duration : '',
+                    ],
+                ],
             ],
             [
                 'type' => 'offline_duration',
@@ -393,9 +393,9 @@ class AlertModalHelper extends ModalHelper
                         'name' => 'offline_duration',
                         'title' => trans('validation.attributes.offline_duration_longer_than').'('.trans('front.minutes').')',
                         'type' => 'integer',
-                        'default' => $alert ? $alert->offline_duration : ''
-                    ]
-                ]
+                        'default' => $alert ? $alert->offline_duration : '',
+                    ],
+                ],
             ],
             [
                 'type' => 'driver',
@@ -406,49 +406,49 @@ class AlertModalHelper extends ModalHelper
                         'title' => trans('front.drivers').':',
                         'type' => 'multiselect',
                         'options' => $drivers,
-                        'default' => $alert ? $alert->drivers->pluck('id')->all() : []
-                    ]
-                ]
+                        'default' => $alert ? $alert->drivers->pluck('id')->all() : [],
+                    ],
+                ],
             ],
 
             [
                 'type' => 'geofence_in',
-                'title' => trans('front.geofence') . ' ' . trans('global.in'),
+                'title' => trans('front.geofence').' '.trans('global.in'),
                 'attributes' => [
                     [
                         'name' => 'geofences',
                         'title' => trans('validation.attributes.geofences'),
                         'type' => 'multiselect',
                         'options' => $geofences,
-                        'default' => $alert ? $alert->geofences->pluck('id')->all() : []
-                    ]
-                ]
+                        'default' => $alert ? $alert->geofences->pluck('id')->all() : [],
+                    ],
+                ],
             ],
             [
                 'type' => 'geofence_out',
-                'title' => trans('front.geofence') . ' ' . trans('global.out'),
+                'title' => trans('front.geofence').' '.trans('global.out'),
                 'attributes' => [
                     [
                         'name' => 'geofences',
                         'title' => trans('validation.attributes.geofences'),
                         'type' => 'multiselect',
                         'options' => $geofences,
-                        'default' => $alert ? $alert->geofences->pluck('id')->all() : []
-                    ]
-                ]
+                        'default' => $alert ? $alert->geofences->pluck('id')->all() : [],
+                    ],
+                ],
             ],
             [
                 'type' => 'geofence_inout',
-                'title' => trans('front.geofence') . ' ' . trans('global.in') . '/' . trans('global.out'),
+                'title' => trans('front.geofence').' '.trans('global.in').'/'.trans('global.out'),
                 'attributes' => [
                     [
                         'name' => 'geofences',
                         'title' => trans('validation.attributes.geofences'),
                         'type' => 'multiselect',
                         'options' => $geofences,
-                        'default' => $alert ? $alert->geofences->pluck('id')->all() : []
-                    ]
-                ]
+                        'default' => $alert ? $alert->geofences->pluck('id')->all() : [],
+                    ],
+                ],
             ],
             [
                 'type' => 'custom',
@@ -460,9 +460,9 @@ class AlertModalHelper extends ModalHelper
                         'type' => 'multiselect',
                         'options' => $events_custom,
                         'default' => $alert ? $alert->events_custom->pluck('id')->all() : [],
-                        'description' => trans('front.alert_events_tip')
-                    ]
-                ]
+                        'description' => trans('front.alert_events_tip'),
+                    ],
+                ],
             ],
             [
                 'type' => 'sos',
@@ -471,45 +471,41 @@ class AlertModalHelper extends ModalHelper
             [
                 'type' => 'outdated_gps',
                 'title' => 'GPS desatualizado',
-                
+
             ],
         ];
-
-
     }
 
     public function getSchedules($alert = null)
     {
         $weekdays = [
-            'monday'    => trans('front.monday'),
-            'tuesday'   => trans('front.tuesday'),
+            'monday' => trans('front.monday'),
+            'tuesday' => trans('front.tuesday'),
             'wednesday' => trans('front.wednesday'),
-            'thursday'  => trans('front.thursday'),
-            'friday'    => trans('front.friday'),
-            'saturday'  => trans('front.saturday'),
-            'sunday'    => trans('front.sunday')
+            'thursday' => trans('front.thursday'),
+            'friday' => trans('front.friday'),
+            'saturday' => trans('front.saturday'),
+            'sunday' => trans('front.sunday'),
         ];
 
         $schedules = [];
 
-        foreach($weekdays as $weekday => $title)
-        {
+        foreach ($weekdays as $weekday => $title) {
             $items = [];
             $actives = $alert ? array_get($alert->schedules, $weekday, []) : [];
 
-            foreach(config('tobuli.history_time') as $time => $displayTime)
-            {
+            foreach (config('tobuli.history_time') as $time => $displayTime) {
                 $items[] = [
-                    'id'     => $time,
-                    'title'  => $displayTime,
-                    'active' => $alert ? in_array($time, $actives) : false
+                    'id' => $time,
+                    'title' => $displayTime,
+                    'active' => $alert ? in_array($time, $actives) : false,
                 ];
             }
 
             $schedules[] = [
-                    'id'    => $weekday,
-                    'title' => $title,
-                    'items' => $items,
+                'id' => $weekday,
+                'title' => $title,
+                'items' => $items,
             ];
         }
 
@@ -525,40 +521,40 @@ class AlertModalHelper extends ModalHelper
     {
         $notifications = [
             [
-                'active' => $alert ? array_get($alert, "notifications.sound.active", true) : true,
+                'active' => $alert ? array_get($alert, 'notifications.sound.active', true) : true,
                 'name' => 'sound',
                 'title' => trans('validation.attributes.sound_notification'),
             ],
             [
-                'active' => $alert ? array_get($alert, "notifications.push.active", true) : true,
+                'active' => $alert ? array_get($alert, 'notifications.push.active', true) : true,
                 'name' => 'push',
                 'title' => trans('validation.attributes.push_notification'),
             ],
             [
-                'active' => $alert ? array_get($alert, "notifications.email.active", false) : false,
+                'active' => $alert ? array_get($alert, 'notifications.email.active', false) : false,
                 'name' => 'email',
                 'title' => trans('validation.attributes.email_notification'),
-                'input' => $alert ? array_get($alert, "notifications.email.input", '') : '',
-                'description' => trans('front.email_semicolon')
+                'input' => $alert ? array_get($alert, 'notifications.email.input', '') : '',
+                'description' => trans('front.email_semicolon'),
             ],
             [
-                'active' => $alert ? array_get($alert, "notifications.sms.active", false) : false,
+                'active' => $alert ? array_get($alert, 'notifications.sms.active', false) : false,
                 'name' => 'sms',
                 'title' => trans('validation.attributes.sms_notification'),
-                'input' => $alert ? array_get($alert, "notifications.sms.input", '') : '',
-                'description' => trans('front.sms_semicolon')
+                'input' => $alert ? array_get($alert, 'notifications.sms.input', '') : '',
+                'description' => trans('front.sms_semicolon'),
             ],
             [
-                'active' => $alert ? array_get($alert, "notifications.webhook.active", false) : false,
+                'active' => $alert ? array_get($alert, 'notifications.webhook.active', false) : false,
                 'name' => 'webhook',
                 'title' => trans('validation.attributes.webhook_notification'),
-                'input' => $alert ? array_get($alert, "notifications.webhook.input", '') : '',
-                'description' => trans('front.webhook')
-            ]
+                'input' => $alert ? array_get($alert, 'notifications.webhook.input', '') : '',
+                'description' => trans('front.webhook'),
+            ],
         ];
 
-        if ( ! auth()->user()->sms_gateway) {
-            $notifications = array_where($notifications, function($index, $notification){
+        if (! auth()->user()->sms_gateway) {
+            $notifications = array_where($notifications, function ($index, $notification) {
                 return $notification['name'] != 'sms';
             });
         }
@@ -574,16 +570,16 @@ class AlertModalHelper extends ModalHelper
         $devices = DeviceRepo::getWhereIn($this->data['devices']);
 
         $commands = SendCommandModalHelper::getCommands($devices);
-/*
-        foreach ($commands as &$command) {
-            if (empty($command['attributes']))
-                continue;
+        /*
+                foreach ($commands as &$command) {
+                    if (empty($command['attributes']))
+                        continue;
 
-            foreach($command['attributes'] as &$attribute) {
-                $attribute['name'] = 'command[' .$attribute['name'] . ']';
-            }
-        }
-*/
+                    foreach($command['attributes'] as &$attribute) {
+                        $attribute['name'] = 'command[' .$attribute['name'] . ']';
+                    }
+                }
+        */
         return $commands;
     }
 

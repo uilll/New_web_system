@@ -3,10 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Artisan;
 
-use Tobuli\Entities\Device;
-
-class DeviceTimezoneRefactor extends Migration {
-
+class DeviceTimezoneRefactor extends Migration
+{
     const UTC_TIMEZONE_ID = 57;
 
     /**
@@ -18,8 +16,7 @@ class DeviceTimezoneRefactor extends Migration {
     {
         Artisan::call('down');
 
-        if ( ! Schema::hasColumn('devices', 'timezone_id'))
-        {
+        if (! Schema::hasColumn('devices', 'timezone_id')) {
             Schema::table('devices', function ($table) {
                 $table->integer('timezone_id')->after('user_id')->unsigned()->nullable()->index();
                 $table->foreign('timezone_id')->references('id')->on('timezones')->onDelete('set null');
@@ -29,27 +26,24 @@ class DeviceTimezoneRefactor extends Migration {
             $this->correctUsersTimezone();
         }
 
-
-        if ( ! Schema::connection('traccar_mysql')->hasColumn('devices', 'device_time')) {
+        if (! Schema::connection('traccar_mysql')->hasColumn('devices', 'device_time')) {
             Schema::connection('traccar_mysql')->table('devices', function ($table) {
                 $table->datetime('device_time')->after('time')->nullable();
             });
 
-            DB::connection('traccar_mysql')->statement("UPDATE devices SET `device_time` = `time`");
+            DB::connection('traccar_mysql')->statement('UPDATE devices SET `device_time` = `time`');
         }
-
 
         $devices = \Tobuli\Entities\Device::with('traccar', 'timezone')->get();
 
-        foreach ($devices as $device)
-        {
+        foreach ($devices as $device) {
             $table_name = 'positions_'.$device->traccar_device_id;
 
-            if ( ! Schema::connection('traccar_mysql')->hasTable($table_name))
+            if (! Schema::connection('traccar_mysql')->hasTable($table_name)) {
                 continue;
+            }
 
-            if ( ! Schema::connection('traccar_mysql')->hasColumn($table_name, 'device_time'))
-            {
+            if (! Schema::connection('traccar_mysql')->hasColumn($table_name, 'device_time')) {
                 Schema::connection('traccar_mysql')->table($table_name, function ($table) {
                     $table->datetime('device_time')->after('time')->nullable();
                     $table->text('sensors_values')->after('server_time')->nullable();
@@ -58,13 +52,13 @@ class DeviceTimezoneRefactor extends Migration {
 
             DB::connection('traccar_mysql')->statement("UPDATE $table_name SET `device_time` = `time`");
 
-            if ($device->timezone_id)
+            if ($device->timezone_id) {
                 $device->applyPositionsTimezone();
+            }
         }
 
         Artisan::call('up');
     }
-
 
     /**
      * Reverse the migrations.
@@ -78,10 +72,10 @@ class DeviceTimezoneRefactor extends Migration {
 
     private function correctDevicesTimezone()
     {
-        $timezones = DB::table("timezones")->get();
+        $timezones = DB::table('timezones')->get();
         $timezones = array_pluck($timezones, 'id');
 
-        $devices = DB::table("user_device_pivot")
+        $devices = DB::table('user_device_pivot')
             ->addSelect('user_device_pivot.device_id')
             ->addSelect('user_device_pivot.timezone_id AS device_timezone_id')
             ->addSelect('users.timezone_id AS user_timezone_id')
@@ -91,42 +85,46 @@ class DeviceTimezoneRefactor extends Migration {
             ->groupBy('user_device_pivot.device_id')
             ->get();
 
-        foreach ($devices as $item)
-        {
+        foreach ($devices as $item) {
             $device = \Tobuli\Entities\Device::with('traccar')->find($item->device_id);
 
-            $device_time = strtotime( $device->getTime() );
-            $server_time = strtotime( $device->getServerTime() );
-            $ack_time = strtotime( $device->getAckTime() );
+            $device_time = strtotime($device->getTime());
+            $server_time = strtotime($device->getServerTime());
+            $ack_time = strtotime($device->getAckTime());
 
-            if ($server_time && ($server_time - $device_time < 900))
+            if ($server_time && ($server_time - $device_time < 900)) {
                 continue;
+            }
 
-            if ($ack_time && ($ack_time - $device_time < 900))
+            if ($ack_time && ($ack_time - $device_time < 900)) {
                 continue;
-
+            }
 
             $sending_timezone_id = $item->user_timezone_id + ($item->user_timezone_id - $item->device_timezone_id);
 
             $timezone_id = self::UTC_TIMEZONE_ID + (self::UTC_TIMEZONE_ID - $sending_timezone_id);
 
-            if (!in_array($timezone_id, $timezones))
+            if (! in_array($timezone_id, $timezones)) {
                 $timezone_id = null;
+            }
 
-            if ($item->user_timezone_id == null || $item->user_timezone_id == self::UTC_TIMEZONE_ID)
+            if ($item->user_timezone_id == null || $item->user_timezone_id == self::UTC_TIMEZONE_ID) {
                 $timezone_id = null;
+            }
 
-            if ($timezone_id == self::UTC_TIMEZONE_ID)
+            if ($timezone_id == self::UTC_TIMEZONE_ID) {
                 $timezone_id = null;
+            }
 
-            if ($timezone_id)
-                DB::table("devices")->where(['id' => $item->device_id])->update(['timezone_id' => $timezone_id]);
+            if ($timezone_id) {
+                DB::table('devices')->where(['id' => $item->device_id])->update(['timezone_id' => $timezone_id]);
+            }
         }
     }
 
     private function correctUsersTimezone()
     {
-        $usersDevicesTimezones = DB::table("user_device_pivot")
+        $usersDevicesTimezones = DB::table('user_device_pivot')
             ->addSelect('user_device_pivot.device_id')
             ->addSelect('user_device_pivot.timezone_id AS device_timezone_id')
             ->addSelect('users.timezone_id AS user_timezone_id')
@@ -138,16 +136,15 @@ class DeviceTimezoneRefactor extends Migration {
 
         $users = [];
 
-        foreach ($usersDevicesTimezones as $timezone)
-        {
-            if (empty($users[$timezone->user_id]))
+        foreach ($usersDevicesTimezones as $timezone) {
+            if (empty($users[$timezone->user_id])) {
                 $users[$timezone->user_id] = [];
+            }
 
             $users[$timezone->user_id][] = $timezone->device_timezone_id;
         }
 
-        foreach ($users as $user_id => $userTimezones)
-        {
+        foreach ($users as $user_id => $userTimezones) {
             $timezones = array_count_values($userTimezones);
 
             arsort($timezones);
@@ -155,19 +152,21 @@ class DeviceTimezoneRefactor extends Migration {
             $timezone_id = key($timezones);
             $counts = $timezones[$timezone_id];
 
-            if (empty($counts))
+            if (empty($counts)) {
                 continue;
+            }
 
-            $devices = DB::table("user_device_pivot")->where(['user_id' => $user_id])->count();
+            $devices = DB::table('user_device_pivot')->where(['user_id' => $user_id])->count();
 
-            if (empty($devices))
+            if (empty($devices)) {
                 continue;
+            }
 
-            if ($counts / $devices < 0.5)
+            if ($counts / $devices < 0.5) {
                 continue;
+            }
 
-            DB::table("users")->where(['id' => $user_id])->update(['timezone_id' => $timezone_id]);
+            DB::table('users')->where(['id' => $user_id])->update(['timezone_id' => $timezone_id]);
         }
     }
-
 }

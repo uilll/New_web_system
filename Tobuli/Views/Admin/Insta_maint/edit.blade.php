@@ -23,7 +23,7 @@
                     </div>  
                     <div class="col-md-6">                        
                         {!! Form::label('plate_number', trans('validation.attributes.plate_number').'*:') !!}
-                        {!! Form::select('plate_number', $devices->lists('plate_number', 'id'), $item['device_id'], ['class' => 'form-control', 'data-live-search' => true]) !!}
+                        {!! Form::select('plate_number', $devices->pluck('plate_number', 'id'), $item['device_id'], ['class' => 'form-control', 'data-live-search' => true]) !!}
                     </div>               
                 </div>
                 <div class="row">
@@ -38,7 +38,7 @@
                     @if(!$item['active'])
                         <div class="col-md-6">
                             {!!Form::label('technician_id', 'Técnico:')!!}
-                            {!! Form::select('technician_id', $technician->lists('name', 'id'), $item['technician_id'], ['class' => 'form-control', 'data-live-search' => true]) !!}
+                            {!! Form::select('technician_id', $technician->pluck('name', 'id'), $item['technician_id'], ['class' => 'form-control', 'data-live-search' => true]) !!}
                         </div>
                         <div class="col-md-6">
                             {!!Form::label('recei_from_cli', 'Técnico Recebeu do cliente (R$):')!!}

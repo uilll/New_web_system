@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Carbon\Carbon;
+use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Tobuli\Helpers\RateLimiter;
@@ -20,7 +20,6 @@ class ThrottleRequests
     /**
      * Create a new request throttler.
      *
-     * @param  \Tobuli\Helpers\RateLimiter  $limiter
      * @return void
      */
     public function __construct(RateLimiter $limiter)
@@ -32,7 +31,6 @@ class ThrottleRequests
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  int  $maxAttempts
      * @param  float|int  $decayMinutes
      * @return mixed

@@ -1,4 +1,6 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use Facades\Repositories\DeviceRepo;
 use Facades\Repositories\EventCustomRepo;
@@ -33,7 +35,7 @@ class CustomEventModalHelper extends ModalHelper
         $types = [
             '1' => trans('front.event_type_1'),
             '2' => trans('front.event_type_2'),
-            '3' => trans('front.event_type_3')
+            '3' => trans('front.event_type_3'),
         ];
 
         if ($this->api) {
@@ -48,54 +50,57 @@ class CustomEventModalHelper extends ModalHelper
     {
         $this->checkException('custom_events', 'store');
 
-        try
-        {
+        try {
             EventCustomFormValidator::validate('create', $this->data);
 
-            $insert = FALSE;
+            $insert = false;
             if ($this->api && isset($this->data['conditions'])) {
                 $this->data['tags'] = json_decode($this->data['conditions'], true);
                 $this->data['conditions'] = [];
-                foreach($this->data['tags'] as $key => $val) {
+                foreach ($this->data['tags'] as $key => $val) {
                     $tag = strtolower($val['tag']);
                     $type = $val['type'];
                     $tag_value = $val['tag_value'];
-                    if ($tag == '' && $tag_value == '')
+                    if ($tag == '' && $tag_value == '') {
                         continue;
+                    }
 
-                    if ($tag == '' || $tag_value == '')
+                    if ($tag == '' || $tag_value == '') {
                         throw new ValidationException(['conditions' => trans('front.fill_all_fields')]);
+                    }
 
-                    $insert = TRUE;
+                    $insert = true;
                     $this->data['conditions'][] = [
                         'tag' => $tag,
                         'type' => $type,
-                        'tag_value' => $tag_value
+                        'tag_value' => $tag_value,
                     ];
                 }
-            }
-            else {
-                foreach($this->data['tag'] as $key => $tag) {
+            } else {
+                foreach ($this->data['tag'] as $key => $tag) {
                     $tag = strtolower($tag);
                     $type = $this->data['type'][$key];
                     $tag_value = $this->data['tag_value'][$key];
-                    if ($tag == '' && $tag_value == '')
+                    if ($tag == '' && $tag_value == '') {
                         continue;
+                    }
 
-                    if ($tag == '' || $tag_value == '')
+                    if ($tag == '' || $tag_value == '') {
                         throw new ValidationException(['conditions' => trans('front.fill_all_fields')]);
+                    }
 
-                    $insert = TRUE;
+                    $insert = true;
                     $this->data['conditions'][] = [
                         'tag' => $tag,
                         'type' => $type,
-                        'tag_value' => $tag_value
+                        'tag_value' => $tag_value,
                     ];
                 }
             }
 
-            if (!$insert)
+            if (! $insert) {
                 throw new ValidationException(['conditions' => trans('front.fill_all_fields')]);
+            }
 
             $item = EventCustomRepo::create($this->data + ['user_id' => $this->user->id, 'always' => isset($this->data['alawys'])]);
 
@@ -103,15 +108,13 @@ class CustomEventModalHelper extends ModalHelper
             foreach ($this->data['conditions'] as $condition) {
                 $tags_arr[$condition['tag']] = [
                     'event_custom_id' => $item->id,
-                    'tag' => $condition['tag']
+                    'tag' => $condition['tag'],
                 ];
             }
             DB::table('event_custom_tags')->insert($tags_arr);
 
             return ['status' => 1, 'item' => $item];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
@@ -129,7 +132,7 @@ class CustomEventModalHelper extends ModalHelper
         $types = [
             '1' => trans('front.event_type_1'),
             '2' => trans('front.event_type_2'),
-            '3' => trans('front.event_type_3')
+            '3' => trans('front.event_type_3'),
         ];
 
         if ($this->api) {
@@ -146,46 +149,46 @@ class CustomEventModalHelper extends ModalHelper
 
         $this->checkException('custom_events', 'update', $item);
 
-        try
-        {
+        try {
             EventCustomFormValidator::validate('update', $this->data);
 
-            $insert = FALSE;
+            $insert = false;
             $tags_arr = [];
-            foreach($this->data['tag'] as $key => $tag) {
+            foreach ($this->data['tag'] as $key => $tag) {
                 $tag = strtolower($tag);
                 $type = $this->data['type'][$key];
                 $tag_value = $this->data['tag_value'][$key];
-                if ($tag == '' && $tag_value == '')
+                if ($tag == '' && $tag_value == '') {
                     continue;
+                }
 
-                if ($tag == '' || $tag_value == '')
+                if ($tag == '' || $tag_value == '') {
                     throw new ValidationException(['conditions' => trans('front.fill_all_fields')]);
+                }
 
-                $insert = TRUE;
+                $insert = true;
 
                 $tags_arr[$tag] = [
                     'event_custom_id' => $item->id,
-                    'tag' => $tag
+                    'tag' => $tag,
                 ];
                 $this->data['conditions'][] = [
                     'tag' => $tag,
                     'type' => $type,
-                    'tag_value' => $tag_value
+                    'tag_value' => $tag_value,
                 ];
             }
 
-            if (!$insert)
+            if (! $insert) {
                 throw new ValidationException(['conditions' => trans('front.fill_all_fields')]);
+            }
 
             EventCustomRepo::update($item->id, $this->data + ['always' => isset($this->data['alawys'])]);
             $item->tags()->delete();
             DB::table('event_custom_tags')->insert($tags_arr);
 
             return ['status' => 1];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
@@ -208,7 +211,7 @@ class CustomEventModalHelper extends ModalHelper
         $this->checkException('custom_events', 'remove', $item);
 
         EventCustomRepo::delete($id);
-        
+
         return ['status' => 1];
     }
 
@@ -220,16 +223,16 @@ class CustomEventModalHelper extends ModalHelper
 
         $items = EventCustomRepo::getWhereInWhere($devicesProtocols, 'protocol', ['user_id' => null])->pluck('message_with_protocol', 'id')->all();
         $groups[] = [
-            'key'   => 'system',
-            'name'  => trans('front.system_events'),
-            'items' => $items
+            'key' => 'system',
+            'name' => trans('front.system_events'),
+            'items' => $items,
         ];
 
         $items = EventCustomRepo::getWhereInWhere($devicesProtocols, 'protocol', ['user_id' => $this->user->id])->pluck('message_with_protocol', 'id')->all();
         $groups[] = [
-            'key'   => 'custom',
-            'name'  => trans('front.custom_events'),
-            'items' => $items
+            'key' => 'custom',
+            'name' => trans('front.custom_events'),
+            'items' => $items,
         ];
 
         return $groups;

@@ -11,15 +11,17 @@ class SendSmsPOST extends SendSmsHTTP
     {
         $command = 'curl -i ';
 
-        if ($this->authentication)
-            $command .= '--user ' . $this->username . ':' . $this->password . ' ';
+        if ($this->authentication) {
+            $command .= '--user '.$this->username.':'.$this->password.' ';
+        }
 
-        if ($this->encoding === 'json')
+        if ($this->encoding === 'json') {
             $command .= '-H "Content-Type: application/json" ';
+        }
 
         $command = $this->headersInToCommandLine($command);
 
-        $command .= '-d \''. $query_url .'\' '.  $base_url .' > /dev/null 2>&1 &';
+        $command .= '-d \''.$query_url.'\' '.$base_url.' > /dev/null 2>&1 &';
 
         @exec($command);
     }
@@ -31,19 +33,21 @@ class SendSmsPOST extends SendSmsHTTP
 
             $curl->options = [
                 'CURLOPT_TIMEOUT' => 5,
-                'CURLOPT_POSTFIELDS' => $query_url
+                'CURLOPT_POSTFIELDS' => $query_url,
             ];
 
             $curl->headers = [
                 'Content-Type: application/json',
-                'Content-Length: ' . strlen($query_url)
+                'Content-Length: '.strlen($query_url),
             ];
 
-            if ( ! empty($this->customHeaders) )
+            if (! empty($this->customHeaders)) {
                 $curl->headers = array_merge($curl->headers, $this->userHeadersToArray());
+            }
 
-            if ($this->authentication)
+            if ($this->authentication) {
                 $curl->setAuth($this->username, $this->username);
+            }
 
             $response = $curl->request('POST', $base_url);
 

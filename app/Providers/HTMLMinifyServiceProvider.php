@@ -1,12 +1,13 @@
-<?php namespace App\Providers;
+<?php
+
+namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Engines\CompilerEngine;
-
 use Tobuli\Helpers\HtmlMinifyCompiler;
 
-class HTMLMinifyServiceProvider extends ServiceProvider {
-
+class HTMLMinifyServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -35,12 +36,13 @@ class HTMLMinifyServiceProvider extends ServiceProvider {
         $app->view->getEngineResolver()->register(
             'blade.php',
             function () use ($app) {
-                $cachePath = storage_path() . '/framework/views';
-                $compiler  = new HtmlMinifyCompiler(
+                $cachePath = storage_path().'/framework/views';
+                $compiler = new HtmlMinifyCompiler(
                     $this->app['config']->get('htmlminify'),
                     $app['files'],
                     $cachePath
                 );
+
                 return new CompilerEngine($compiler);
             }
         );

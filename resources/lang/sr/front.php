@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Dodaj uređaj/vozilo',
     'per_one' => 'po 1',
@@ -665,4 +665,4 @@ SMS gateway URL primer: http://SMS_GATEWAY/sendsms.php?username=USER&password=PA
     'do_objects_delete' => 'Да ли стварно желите да обришете ове уређаје? <br> Сви повезани подаци ће бити изгубљени.',
     'ignition_off' => 'Искључено паљење',
     'forward' => 'Напријед',
-);
+];

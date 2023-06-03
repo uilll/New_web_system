@@ -1,9 +1,10 @@
 <?php
-use Tobuli\Repositories\Timezone\TimezoneRepositoryInterface as Timezone;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class TimezonesTableSeeder extends Seeder {
+use Illuminate\Database\Seeder;
+use Tobuli\Repositories\Timezone\TimezoneRepositoryInterface as Timezone;
+
+class TimezonesTableSeeder extends Seeder
+{
     /**
      * @var Timezone
      */
@@ -14,8 +15,8 @@ class TimezonesTableSeeder extends Seeder {
         $this->timezone = $timezone;
     }
 
-	public function run()
-	{
+    public function run()
+    {
         $items = [
             ['order' => '1', 'title' => 'UTC -14:00', 'zone' => '-14hours', 'prefix' => 'minus', 'time' => '14 0'],
             ['order' => '1.1', 'title' => 'UTC -13:45', 'zone' => '-13hours -45minutes', 'prefix' => 'minus', 'time' => '13 45'],
@@ -134,6 +135,5 @@ class TimezonesTableSeeder extends Seeder {
         foreach ($items as $item) {
             $this->timezone->create($item);
         }
-	}
-
+    }
 }

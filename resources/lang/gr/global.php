@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'Επεξεργασία',
     'add_new' => 'Προσθέστε νέο',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Σαββατοκύριακο',
     'always' => 'Πάντα',
     'advanced' => 'Προχωρημένος',
-);
+];

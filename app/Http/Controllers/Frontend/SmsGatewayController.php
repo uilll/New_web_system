@@ -1,13 +1,12 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\SmsGatewayModalHelper;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
 
 class SmsGatewayController extends Controller
 {
-
     public function testSms()
     {
         return view('front::SmsGateway.test_sms');

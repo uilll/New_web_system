@@ -16,11 +16,11 @@ class AlterBackupsType extends Migration
         if ($ftp_server == '88.216.165.48') {
             settings('backups', [
                 'type' => 'auto',
-                'ftp_server'   => null,
+                'ftp_server' => null,
                 'ftp_username' => null,
                 'ftp_password' => null,
-                'ftp_port'     => null,
-                'ftp_path'     => null,
+                'ftp_port' => null,
+                'ftp_path' => null,
             ]);
         } else {
             settings('backups.type', 'custom');
@@ -34,6 +34,5 @@ class AlterBackupsType extends Migration
      */
     public function down()
     {
-
     }
 }

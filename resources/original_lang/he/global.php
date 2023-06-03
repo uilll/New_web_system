@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'ערוך',
     'add_new' => 'הוסף חדש',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'סוף שבוע',
     'always' => 'תמיד',
     'advanced' => 'מִתקַדֵם',
-);
+];

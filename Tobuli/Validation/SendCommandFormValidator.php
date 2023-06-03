@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class SendCommandFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class SendCommandFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -9,13 +11,11 @@ class SendCommandFormValidator extends Validator {
         'create' => [
             'devices' => 'required|array|array_max:10',
             'message' => 'required',
-            'gprs_template_id' => 'required_if:type,template'
+            'gprs_template_id' => 'required_if:type,template',
         ],
         'update' => [
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

@@ -1,18 +1,18 @@
 <?php
 
+use App\Monitoring;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Redirect;
-use App\Monitoring;
 
 require_once 'global.php';
 //checkLogin();
 
-if ( env('forceSchema', false) ) {
-    URL::forceSchema( env('forceSchema') );
+if (env('forceSchema', false)) {
+    URL::forceSchema(env('forceSchema'));
 }
 
-# Authentication
-Route::group([], function() {
+// Authentication
+Route::group([], function () {
     Route::get('/', ['as' => 'home', 'uses' => function () {
         if (Auth::check()) {
             return Redirect::route('objects.index');
@@ -20,24 +20,25 @@ Route::group([], function() {
             return Redirect::route('authentication.create');
         }
     }]);
-    if (isPublic()){
+    if (isPublic()) {
         Route::get('login/{hash}', ['as' => 'login', 'uses' => 'Frontend\LoginController@store']);
-    }
-    else
+    } else {
         Route::get('login/{id?}', ['as' => 'login', 'uses' => 'Frontend\LoginController@create']);
+    }
 
     Route::get('logout', ['as' => 'logout', 'uses' => 'Frontend\LoginController@destroy']);
 
     Route::any('authentication/store', ['as' => 'authentication.store', 'uses' => 'Frontend\LoginController@store']);
     Route::resource('authentication', 'Frontend\LoginController', ['only' => ['create', 'destroy']]);
     Route::resource('password_reminder', 'Frontend\PasswordReminderController', ['only' => ['create', 'store']]);
-    Route::get('password/reset/{token}', array('uses' => 'Frontend\PasswordReminderController@reset', 'as' => 'password_reminder.reset'));
-    Route::post('password/reset/{token}', array('uses' => 'Frontend\PasswordReminderController@update', 'as' => 'password_reminder.update'));
+    Route::get('password/reset/{token}', ['uses' => 'Frontend\PasswordReminderController@reset', 'as' => 'password_reminder.reset']);
+    Route::post('password/reset/{token}', ['uses' => 'Frontend\PasswordReminderController@update', 'as' => 'password_reminder.update']);
 
-    if (settings('main_settings.allow_users_registration'))
+    if (settings('main_settings.allow_users_registration')) {
         Route::resource('registration', 'Frontend\RegistrationController', ['only' => ['create', 'store']]);
+    }
 
-    # GPS data
+    // GPS data
     Route::any('gpsdata_insert', ['as' => 'gpsdata_insert', 'uses' => 'Frontend\GpsDataController@insert']);
 
     Route::get('demo', ['as' => 'demo', 'uses' => 'Frontend\LoginController@demo']);
@@ -47,11 +48,10 @@ Route::group([], function() {
     }]);
 });
 
-
 // Authenticated Frontend |active_subscription
-Route::group(['middleware' => ['auth','active_subscription', 'check_password_updated'], 'namespace' => 'Frontend'], function () {
+Route::group(['middleware' => ['auth', 'active_subscription', 'check_password_updated'], 'namespace' => 'Frontend'], function () {
     Route::delete('objects/destroy/{objects}', ['as' => 'objects.destroy', 'uses' => 'DevicesController@destroy']);
-	Route::get('objects/items/{page?}/{search_item?}/{search_type?}/{device_per_page?}', ['as' => 'objects.items', 'uses' => 'ObjectsController@items']);
+    Route::get('objects/items/{page?}/{search_item?}/{search_type?}/{device_per_page?}', ['as' => 'objects.items', 'uses' => 'ObjectsController@items']);
     //    Route::get('objects/items_page/{pagina}', ['as' => 'objects.itemspage', 'uses' => 'ObjectsController@items_page']);
     Route::get('objects/itemsSimple', ['as' => 'objects.items_simple', 'uses' => 'ObjectsController@itemsSimple']);
     Route::get('objects/search_item/{search_item}', ['as' => 'objects.search_item', 'uses' => 'ObjectsController@search_item']);
@@ -70,17 +70,16 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
     Route::get('objects/anchor/{id?}', ['as' => 'objects.anchor', 'uses' => 'ObjectsController@anchor']);
     Route::get('objects/sensores/{id?}', ['as' => 'objects.sensores', 'uses' => 'ObjectsController@sensores']);
     Route::resource('objects', 'ObjectsController', ['only' => ['index']]);
-    
 
     Route::get('objects/list', ['as' => 'objects.listview', 'uses' => 'ObjectsListController@index']);
     Route::get('objects/list/items', ['as' => 'objects.listview.items', 'uses' => 'ObjectsListController@items']);
     Route::get('objects/list/settings', ['as' => 'objects.listview_settings.edit', 'uses' => 'ObjectsListController@edit']);
     Route::post('objects/list/settings', ['as' => 'objects.listview_settings.update', 'uses' => 'ObjectsListController@update']);
 
-    # Autologin
+    // Autologin
     Route::get('autologin/{token}', ['as' => 'autologin', 'uses' => '\Watson\Autologin\AutologinController@autologin']);
 
-    # Geofences
+    // Geofences
     Route::get('geofences/export', ['as' => 'geofences.export', 'uses' => 'GeofencesController@export']);
     Route::get('geofences/export_type', ['as' => 'geofences.export_type', 'uses' => 'GeofencesController@exportType']);
     Route::post('geofences/change_active', ['as' => 'geofences.change_active', 'uses' => 'GeofencesController@changeActive']);
@@ -88,18 +87,18 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
     Route::post('geofences/import', ['as' => 'geofences.import', 'uses' => 'GeofencesController@import']);
     Route::resource('geofences', 'GeofencesController');
 
-    # Geofences groups
+    // Geofences groups
     Route::get('geofences_groups/update_select', ['as' => 'geofences_groups.update_select', 'uses' => 'GeofencesGroupsController@updateSelect']);
     Route::get('geofences_groups/change_status', ['as' => 'geofences_groups.change_status', 'uses' => 'GeofencesGroupsController@changeStatus']);
     Route::resource('geofences_groups', 'GeofencesGroupsController');
 
-    # Routes
+    // Routes
     Route::post('routes/change_active', ['as' => 'routes.change_active', 'uses' => 'RoutesController@changeActive']);
     Route::resource('routes', 'RoutesController');
 
     Route::get('device/widgets/location/{id?}', ['as' => 'device.widgets.location', 'uses' => 'DeviceWidgetsController@location']);
 
-    # Devices
+    // Devices
     Route::get('devices/edit/{id}/{admin?}', ['as' => 'devices.edit', 'uses' => 'DevicesController@edit']);
     Route::post('devices/change_active', ['as' => 'devices.change_active', 'uses' => 'DevicesController@changeActive']);
     Route::get('devices/follow_map/{id?}', ['as' => 'devices.follow_map', 'uses' => 'DevicesController@followMap']);
@@ -107,10 +106,10 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
     Route::get('devices/do_destroy/{id}', ['as' => 'devices.do_destroy', 'uses' => 'DevicesController@doDestroy']);
     Route::resource('devices', 'DevicesController', ['except' => ['index', 'edit']]);
 
-    # Devices Groups
+    // Devices Groups
     Route::resource('devices_groups', 'DevicesGroupsController');
 
-    # Alerts
+    // Alerts
     Route::put('alerts/update/{id?}', ['as' => 'alerts.update', 'uses' => 'AlertsController@update']);
     Route::get('alerts/do_destroy/{id}', ['as' => 'alerts.do_destroy', 'uses' => 'AlertsController@doDestroy']);
     Route::delete('alerts/destroy/{id?}', ['as' => 'alerts.destroy', 'uses' => 'AlertsController@destroy']);
@@ -118,44 +117,45 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
     Route::get('alerts/commands', ['as' => 'alerts.commands', 'uses' => 'AlertsController@getCommands']);
     Route::resource('alerts', 'AlertsController');
 
-    # History
+    // History
     Route::get('history', ['as' => 'history.index', 'uses' => 'HistoryController@index']);
     Route::get('history/positions', ['as' => 'history.positions', 'uses' => 'HistoryController@positionsPaginated']);
     Route::get('history/position', ['as' => 'history.position', 'uses' => 'HistoryController@getPosition']);
     Route::get('history/do_delete_positions', ['as' => 'history.do_delete_positions', 'uses' => 'HistoryController@doDeletePositions']);
     Route::any('history/delete_positions', ['as' => 'history.delete_positions', 'uses' => 'HistoryController@deletePositions']);
-	
-	Route::get('history/export', ['as' => 'history.export', 'uses' => 'HistoryExportController@generate']);
-	Route::get('history/download/{file}/{name}', ['as' => 'history.download', 'uses' => 'HistoryExportController@download']);
 
-    # Events
+    Route::get('history/export', ['as' => 'history.export', 'uses' => 'HistoryExportController@generate']);
+    Route::get('history/download/{file}/{name}', ['as' => 'history.download', 'uses' => 'HistoryExportController@download']);
+
+    // Events
     Route::get('events', ['as' => 'events.index', 'uses' => 'EventsController@index']);
-    if (App::environment() == 'staging')
+    if (App::environment() == 'staging') {
         Route::get('notifications', ['as' => 'events.index', 'uses' => 'EventsController@index']);
+    }
     Route::get('events/do_destroy', ['as' => 'events.do_destroy', 'uses' => 'EventsController@doDestroy']);
     Route::delete('events/destroy', ['as' => 'events.destroy', 'uses' => 'EventsController@destroy']);
     Route::any('events/disable', ['as' => 'events.disable', 'uses' => 'EventsController@disable_push']);
 
-    # Map Icons
+    // Map Icons
     Route::get('map_icons/import', ['as' => 'map_icons.import', 'uses' => 'MapIconsController@import_form']);
     Route::post('map_icons/import', ['as' => 'map_icons.import', 'uses' => 'MapIconsController@import']);
     Route::get('map_icons/list', ['as' => 'map_icons.list', 'uses' => 'MapIconsController@iconsList']);
     Route::post('map_icons/change_active', ['as' => 'map_icons.change_active', 'uses' => 'MapIconsController@changeActive']);
     Route::resource('map_icons', 'MapIconsController');
 
-    # Report Logs
+    // Report Logs
     Route::get('reports/logs', ['as' => 'reports.logs', 'uses' => 'ReportsController@logs']);
     Route::any('reports/log/download/{id}', ['as' => 'reports.log_download', 'uses' => 'ReportsController@logDownload']);
     Route::any('reports/log/destroy', ['as' => 'reports.log_destroy', 'uses' => 'ReportsController@logDestroy']);
 
-    # Reports
+    // Reports
     Route::any('reports/types', ['as' => 'reports.types', 'uses' => 'ReportsController@getTypes']);
     Route::any('reports/types/{type?}', ['as' => 'reports.types.show', 'uses' => 'ReportsController@getType']);
     Route::any('reports/update', ['as' => 'reports.update', 'uses' => 'ReportsController@update']);
     Route::get('reports/do_destroy/{id}', ['as' => 'reports.do_destroy', 'uses' => 'ReportsController@doDestroy']);
     Route::resource('reports', 'ReportsController', ['except' => ['edit', 'update']]);
 
-    # My account
+    // My account
     Route::post('my_account/change_map', ['as' => 'my_account.change_map', 'uses' => 'MyAccountController@changeMap']);
     Route::resource('my_account', 'MyAccountController', ['only' => ['edit', 'update']]);
     Route::get('email_confirmation/resend', ['as' => 'email_confirmation.resend_code', 'uses' => 'EmailConfirmationController@resendActivationCode']);
@@ -163,8 +163,7 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
     Route::resource('email_confirmation', 'EmailConfirmationController', ['only' => ['edit', 'update']]);
     Route::get('my_account_settings/change_language/{lang}', ['as' => 'my_account_settings.change_lang', 'uses' => 'MyAccountSettingsController@changeLang']);
 
-
-    # User drivers
+    // User drivers
     Route::any('user_drivers/index', ['as' => 'user_drivers.index', 'uses' => 'UserDriversController@index']);
     Route::get('user_drivers/change/{id}', ['as' => 'user_drivers.change', 'uses' => 'UserDriversController@change']);
     Route::any('user_drivers/dochange', ['as' => 'user_drivers.dochange', 'uses' => 'UserDriversController@dochange']);
@@ -176,7 +175,7 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
     Route::any('user_drivers/interaction_later/{driver_id}', ['as' => 'user_drivers.interaction_later', 'uses' => 'UserDriversController@interaction_later']);
     Route::resource('user_drivers', 'UserDriversController');
 
-    # Sensors
+    // Sensors
     Route::get('sensors/do_destroy/{id}', ['as' => 'sensors.do_destroy', 'uses' => 'SensorsController@doDestroy']);
     Route::get('sensors/create/{device_id?}', ['as' => 'sensors.create', 'uses' => 'SensorsController@create']);
     Route::get('sensors/index/{device_id}', ['as' => 'sensors.index', 'uses' => 'SensorsController@index']);
@@ -185,51 +184,50 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
     Route::resource('sensors', 'SensorsController', ['only' => ['store', 'edit', 'update', 'destroy']]);
     Route::get('sensors/param/{param}/{device_id}', ['as' => 'sensors.param', 'uses' => 'SensorsController@parameterSuggestion']);
 
-    # Services
+    // Services
     Route::get('services/do_destroy/{id}', ['as' => 'services.do_destroy', 'uses' => 'ServicesController@doDestroy']);
     Route::get('services/create/{device_id?}', ['as' => 'services.create', 'uses' => 'ServicesController@create']);
     Route::get('services/index/{device_id?}', ['as' => 'services.index', 'uses' => 'ServicesController@index']);
     Route::get('services/table/{device_id?}', ['as' => 'services.table', 'uses' => 'ServicesController@table']);
     Route::resource('services', 'ServicesController', ['only' => ['store', 'edit', 'update', 'destroy']]);
 
-    # Custom events
+    // Custom events
     Route::get('custom_events/do_destroy/{id}', ['as' => 'custom_events.do_destroy', 'uses' => 'CustomEventsController@doDestroy']);
     Route::post('custom_events/get_events', ['as' => 'custom_events.get_events', 'uses' => 'CustomEventsController@getEvents']);
     Route::post('custom_events/get_protocols', ['as' => 'custom_events.get_protocols', 'uses' => 'CustomEventsController@getProtocols']);
     Route::any('custom_events/get_events_by_device', ['as' => 'custom_events.get_events_by_device', 'uses' => 'CustomEventsController@getEventsByDevices']);
     Route::resource('custom_events', 'CustomEventsController');
 
-    # User sms templates
+    // User sms templates
     Route::get('user_sms_templates/do_destroy/{id}', ['as' => 'user_sms_templates.do_destroy', 'uses' => 'UserSmsTemplatesController@doDestroy']);
     Route::post('user_sms_templates/get_message', ['as' => 'user_sms_templates.get_message', 'uses' => 'UserSmsTemplatesController@getMessage']);
     Route::resource('user_sms_templates', 'UserSmsTemplatesController');
 
-    # User gprs templates
+    // User gprs templates
     Route::get('user_gprs_templates/do_destroy/{id}', ['as' => 'user_gprs_templates.do_destroy', 'uses' => 'UserGprsTemplatesController@doDestroy']);
     Route::post('user_gprs_templates/get_message', ['as' => 'user_gprs_templates.get_message', 'uses' => 'UserGprsTemplatesController@getMessage']);
     Route::resource('user_gprs_templates', 'UserGprsTemplatesController');
 
     Route::get('membership/languages', ['as' => 'subscriptions.languages', 'uses' => 'SubscriptionsController@languages']);
 
-    #My account settings
+    //My account settings
     Route::get('my_account_settings/change_top_toolbar', ['as' => 'my_account_settings.change_top_toolbar', 'uses' => 'MyAccountSettingsController@changeTopToolbar']);
     Route::get('my_account_settings/change_map_settings', ['as' => 'my_account_settings.change_map_settings', 'uses' => 'MyAccountSettingsController@changeMapSettings']);
     Route::resource('my_account_settings', 'MyAccountSettingsController', ['only' => ['edit', 'update']]);
 
-
-    # Send command
+    // Send command
     Route::post('send_command/gprs', ['as' => 'send_command.gprs', 'uses' => 'SendCommandController@gprsStore']);
     Route::get('send_command/get_device_sim_number', ['as' => 'send_command.get_device_sim_number', 'uses' => 'SendCommandController@getDeviceSimNumber']);
     Route::resource('send_command', 'SendCommandController', ['only' => ['create', 'store']]);
 
-    #Camera
+    //Camera
     Route::get('device_media/create', ['as' => 'device_media.create', 'uses' => 'DeviceMediaController@create']);
     Route::get('device_media/download/{file_name?}/{id?}', ['as' => 'device_media.download_file', 'uses' => 'DeviceMediaController@downloadFile']);
     Route::get('device_media/get_images/{id?}', ['as' => 'device_media.get_images', 'uses' => 'DeviceMediaController@getImages']);
     Route::get('device_media/get_image/{file_name?}/{id?}', ['as' => 'device_media.get_image', 'uses' => 'DeviceMediaController@getImage']);
     Route::get('device_media/delete_image/{file_name}/{id?}', ['as' => 'device_media.delete_image', 'uses' => 'DeviceMediaController@deleteImage']);
 
-    # SMS gateway
+    // SMS gateway
     Route::get('sms_gateway/test_sms', ['as' => 'sms_gateway.test_sms', 'uses' => 'SmsGatewayController@testSms']);
     Route::post('sms_gateway/send_test_sms', ['as' => 'sms_gateway.send_test_sms', 'uses' => 'SmsGatewayController@sendTestSms']);
     Route::get('sms_gateway/clear_queue', ['as' => 'sms_gateway.clear_queue', 'uses' => 'SmsGatewayController@clearQueue']);
@@ -239,25 +237,25 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
 
     Route::get('membership', ['as' => 'subscriptions.index', 'uses' => 'SubscriptionsController@index']);
 
-    # Tasks
-    Route::get('tasks/list', ['as'=> 'tasks.list', 'uses' => 'TasksController@search']);
+    // Tasks
+    Route::get('tasks/list', ['as' => 'tasks.list', 'uses' => 'TasksController@search']);
     Route::get('tasks/do_destroy/{id}', ['as' => 'tasks.do_destroy', 'uses' => 'TasksController@doDestroy']);
     Route::get('tasks/signature/{taskStatusId}', ['as' => 'tasks.signature', 'uses' => 'TasksController@getSignature']);
     Route::resource('tasks', 'TasksController');
 
     Route::any('address/autocomplete', ['as' => 'address.autocomplete', 'uses' => 'AddressController@autocomplete']);
 
-    # Chats
-    Route::get('chat/index',['as' => 'chat.index', 'uses' =>  'ChatController@index']);
-    Route::get('chat/init/{chatableId}/{type?}',['as' => 'chat.init', 'uses' =>  'ChatController@initChat']);
-    Route::get('chat/searchParticipant', ['as' => 'chat.searchParticipant', 'uses' =>  'ChatController@searchParticipant']);
+    // Chats
+    Route::get('chat/index', ['as' => 'chat.index', 'uses' => 'ChatController@index']);
+    Route::get('chat/init/{chatableId}/{type?}', ['as' => 'chat.init', 'uses' => 'ChatController@initChat']);
+    Route::get('chat/searchParticipant', ['as' => 'chat.searchParticipant', 'uses' => 'ChatController@searchParticipant']);
     Route::get('chat/{chatId}/messages', ['as' => 'chat.messages', 'uses' => 'ChatController@getMessages']);
-    Route::get('chat/{chatId}',['as' => 'chat.get', 'uses' =>  'ChatController@getChat']);
+    Route::get('chat/{chatId}', ['as' => 'chat.get', 'uses' => 'ChatController@getChat']);
     Route::post('chat/{chatId}', ['as' => 'chat.message', 'uses' => 'ChatController@createMessage']);
 
-    #messages
+    //messages
     Route::get('messages_admin', 'MessageController@index_admin')->name('messages.index_admin'); // listar todas as mensagens
-    Route::get('messages_client', ['as' => 'messages.client_index', 'uses' => 'MessageController@index_client', 'middleware' => 'auth']);    
+    Route::get('messages_client', ['as' => 'messages.client_index', 'uses' => 'MessageController@index_client', 'middleware' => 'auth']);
     //Route::get('messages', ['as' => 'messages.index', 'uses' => 'MessageController@index', 'middleware' => 'auth']);
     //Route::get('messages', 'MessageController@index')->name('messages.index'); // listar todas as mensagens lado do cliente
     Route::get('messages/create', 'MessageController@create')->name('messages.create'); // exibir o formulário para criar uma nova mensagem
@@ -268,8 +266,7 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
     Route::delete('messages/{id}', 'MessageController@destroy')->name('messages.destroy'); // excluir uma mensagem existente
     Route::get('/messages/client/{client_id}/subject/{subject}', 'MessageController@getMessagesByClientAndSubject')->name('messages.get_messages');
 
-
-    #messagesreply
+    //messagesreply
     Route::get('/messages/{message_id}/replies', 'MessageRepliesController@index')->name('message_replies.index'); // Exibir a lista de respostas para uma determinada mensagem
     Route::get('/messages/{message_id}/replies/create', 'MessageRepliesController@create')->name('message_replies.create'); // Exibir o formulário para criar uma nova resposta
     Route::post('/messages/{message_id}/replies', 'MessageRepliesController@store')->name('message_replies.store'); // Salvar uma nova resposta para uma mensagem
@@ -278,17 +275,15 @@ Route::group(['middleware' => ['auth','active_subscription', 'check_password_upd
     Route::put('/messages/{message_id}/replies/{id}', 'MessageRepliesController@update')->name('message_replies.update'); // Atualizar uma resposta existente
     Route::put('messages/{message_id}/update_is_read', 'MessageRepliesController@updateIsRead')->name('message_replies.update_is_read');
     Route::delete('/messages/{message_id}/replies/{id}', 'MessageRepliesController@destroy')->name('message_replies.destroy'); // Excluir uma resposta existente
-
-
 });
 
 // Authenticated Admin
-Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','active_subscription', 'check_password_updated'], 'namespace' => 'Admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'auth.manager', 'active_subscription', 'check_password_updated'], 'namespace' => 'Admin'], function () {
     Route::get('/', ['as' => 'admin', 'uses' => function () {
         return Redirect::route('admin.clients.index');
     }]);
 
-    # Clients
+    // Clients
     Route::get('users/clients/import_geofences', ['as' => 'admin.clients.import_geofences', 'uses' => 'ClientsController@importGeofences']);
     Route::post('users/clients/import_geofences', ['as' => 'admin.clients.import_geofences_set', 'uses' => 'ClientsController@importGeofencesSet']);
     Route::get('users/clients/import_map_icon', ['as' => 'admin.clients.import_map_icon', 'uses' => 'ClientsController@importMapIcon']);
@@ -299,7 +294,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/clients/get_permissions_table', ['as' => 'admin.clients.get_permissions_table', 'uses' => 'ClientsController@getPermissionsTable']);
     Route::resource('clients', 'ClientsController', ['except' => ['index']]);
 
-    # Asaas Clients
+    // Asaas Clients
     Route::get('asaas/clientes', 'AsaasClientesController@listarClientes')->name('asaas.clientes.listarClientes');
     //Route::get('asaas/contar', 'AsaasClientesController@contar')->name('asaas.clientes.contar');
     Route::get('asaas/clientes/create', 'AsaasClientesController@create')->name('asaas.clientes.create');
@@ -310,9 +305,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     //Route::put('asaas/clientes/{id}', 'AsaasClientesController@update')->name('asaas.clientes.update');
     Route::get('asaas/clientes/{id}/delete', 'AsaasClientesController@delete')->name('asaas.clientes.delete');
     Route::any('asaas/clientes/excluirCliente', 'AsaasClientesController@excluirCliente')->name('asaas.clientes.excluirCliente');
-   // 
+   //
 
-    # Asaas Billings
+    // Asaas Billings
     Route::get('asaas/cobranças', 'AsaasClientesController@listarCobranças')->name('asaas.cobranças.listarCobranças');
     Route::get('asaas/cobranças/{id}/cobrar', 'AsaasClientesController@cobrar')->name('asaas.cobranças.cobrar');
     Route::any('asaas/cobranças/criarCobrança', 'AsaasClientesController@criarCobrança')->name('asaas.cobranças.criarCobrança');
@@ -322,28 +317,25 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('asaas/cobranças/excluirCobrança', 'AsaasClientesController@excluirCobrança')->name('asaas.cobranças.excluirCobrança');
     Route::get('asaas/cobranças/{id}/pagar', 'AsaasClientesController@pagar')->name('asaas.cobranças.pagar');
     Route::any('asaas/cobranças/{id}/receiveInCash', 'AsaasClientesController@receiveInCash')->name('asaas.cobranças.receiveInCash');
- 
 
-
-    # Login as
+    // Login as
     Route::get('login_as/{id}', ['as' => 'admin.clients.login_as', 'uses' => 'ClientsController@loginAs']);
     Route::get('login_as_agree/{id}', ['as' => 'admin.clients.login_as_agree', 'uses' => 'ClientsController@loginAsAgree']);
 
-
-    # Objects
+    // Objects
     Route::any('users/objects', ['as' => 'admin.objects.index', 'uses' => 'ObjectsController@index']);
     Route::get('objects/import', ['as' => 'admin.objects.import', 'uses' => 'ObjectsController@import']);
     Route::post('objects/import', ['as' => 'admin.objects.import_set', 'uses' => 'ObjectsController@importSet']);
     Route::get('objects/do_destroy', ['as' => 'admin.objects.do_destroy', 'uses' => 'ObjectsController@doDestroy']);
     Route::resource('objects', 'ObjectsController', ['except' => ['index']]);
- 
-    #CHIPS
+
+    //CHIPS
     Route::any('users/chips', ['as' => 'admin.chips.index', 'uses' => 'ChipsController@index']);
     Route::any('users/chips/upload', ['as' => 'admin.chips.upload', 'uses' => 'ChipsController@upload']);
     Route::any('users/chips/import', ['as' => 'admin.chips.import_filter', 'uses' => 'ChipsController@importar']);
     Route::any('users/chips/import_file', ['as' => 'admin.chips.import_file', 'uses' => 'ChipsController@importar_csv']);
 
-    #monitoring
+    //monitoring
     Route::any('users/monitoring', ['as' => 'admin.monitoring.index', 'uses' => 'MonitoringsController@index']);
     Route::any('users/monitoring/page/{page?}/{search_item?}', ['as' => 'admin.monitoring.index', 'uses' => 'MonitoringsController@index']);
     Route::any('users/monitoring/create', ['as' => 'admin.monitoring.create', 'uses' => 'MonitoringsController@create']);
@@ -356,10 +348,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/monitoring/destroy', ['as' => 'admin.monitoring.destroy', 'uses' => 'MonitoringsController@destroy']);
     Route::any('users/monitoring/auto_store', ['as' => 'admin.monitoring.auto_store', 'uses' => 'MonitoringsController@auto_store']);
 
-    #finanças
+    //finanças
     Route::any('users/finacas/{search_item?}', ['as' => 'admin.financas.index', 'uses' => 'MontPayController@index']);
-    
-    #instalation and maintence Insta_maintController.php
+
+    //instalation and maintence Insta_maintController.php
     Route::any('users/Insta_maint', ['as' => 'admin.insta_maint.index', 'uses' => 'Insta_maintController@index']);
     Route::any('users/Insta_maint/page/{page?}/{search_item?}', ['as' => 'admin.insta_maint.index', 'uses' => 'Insta_maintController@index']);
     Route::any('users/Insta_maint/create', ['as' => 'admin.insta_maint.create', 'uses' => 'Insta_maintController@create']);
@@ -372,7 +364,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/Insta_maint/destroy', ['as' => 'admin.insta_maint.destroy', 'uses' => 'Insta_maintController@destroy']);
     Route::any('users/Insta_maint/os/{id}', ['as' => 'admin.insta_maint.os', 'uses' => 'Insta_maintController@os']);
 
-    #estoque
+    //estoque
     Route::any('users/Stock', ['as' => 'admin.Stock.index', 'uses' => 'StockController@index']);
     Route::any('users/Stock/page/{page?}/{search_item?}', ['as' => 'admin.Stock.index', 'uses' => 'StockController@index']);
     Route::any('users/Stock/create', ['as' => 'admin.Stock.create', 'uses' => 'StockController@create']);
@@ -385,8 +377,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/Stock/destroy', ['as' => 'admin.Stock.destroy', 'uses' => 'StockController@destroy']);
     Route::any('users/Stock/os/{id}', ['as' => 'admin.Stock.os', 'uses' => 'StockController@os']);
 
-    
-    #Técnicos (Technicians)
+    //Técnicos (Technicians)
     Route::any('users/Technician', ['as' => 'admin.technician.index', 'uses' => 'TechnicianController@index']);
     Route::any('users/Technician/page/{page?}/{search_item?}', ['as' => 'admin.technician.index', 'uses' => 'TechnicianController@index']);
     Route::any('users/Technician/create', ['as' => 'admin.technician.create', 'uses' => 'TechnicianController@create']);
@@ -397,7 +388,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/Technician/destroy', ['as' => 'admin.technician.destroy', 'uses' => 'TechnicianController@destroy']);
     Route::any('users/Technician/auto_store', ['as' => 'admin.technician.auto_store', 'uses' => 'TechnicianController@auto_store']);
 
-    #Central de mensagens (Messengers)
+    //Central de mensagens (Messengers)
     Route::any('users/Messengers', ['as' => 'admin.messengers.index', 'uses' => 'MessengersController@index']);
     /*Route::any('users/Technician/page/{page?}/{search_item?}', ['as' => 'admin.technician.index', 'uses' => 'TechnicianController@index']);
     Route::any('users/Technician/create', ['as' => 'admin.technician.create', 'uses' => 'TechnicianController@create']);
@@ -407,8 +398,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/Technician/do_destroy', ['as' => 'admin.technician.do_destroy', 'uses' => 'TechnicianController@dodestroy']);
     Route::any('users/Technician/destroy', ['as' => 'admin.technician.destroy', 'uses' => 'TechnicianController@destroy']);
     Route::any('users/Technician/auto_store', ['as' => 'admin.technician.auto_store', 'uses' => 'TechnicianController@auto_store']);*/
-    
-    #Rastreadores (trackers)
+
+    //Rastreadores (trackers)
     Route::any('users/Tracker', ['as' => 'admin.tracker.index', 'uses' => 'TrackerController@index']);
     Route::any('users/Tracker/page/{page?}/{search_item?}', ['as' => 'admin.tracker.index', 'uses' => 'TrackerController@index']);
     Route::any('users/Tracker/create', ['as' => 'admin.tracker.create', 'uses' => 'TrackerController@create']);
@@ -418,8 +409,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/Tracker/do_destroy', ['as' => 'admin.tracker.do_destroy', 'uses' => 'TrackerController@dodestroy']);
     Route::any('users/Tracker/destroy', ['as' => 'admin.tracker.destroy', 'uses' => 'TrackerController@destroy']);
     Route::any('users/Tracker/auto_store', ['as' => 'admin.tracker.auto_store', 'uses' => 'TrackerController@auto_store']);
-    
-    #clientes (customers)
+
+    //clientes (customers)
     Route::any('users/customer', ['as' => 'admin.customer.index', 'uses' => 'CustomerController@index']);
     Route::any('users/customer/page/{page?}/{search_item?}', ['as' => 'admin.customer.index', 'uses' => 'CustomerController@index']);
     Route::any('users/customer/create', ['as' => 'admin.customer.create', 'uses' => 'CustomerController@create']);
@@ -429,90 +420,89 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.manager','activ
     Route::any('users/customer/do_destroy', ['as' => 'admin.customer.do_destroy', 'uses' => 'CustomerController@dodestroy']);
     Route::any('users/customer/destroy', ['as' => 'admin.customer.destroy', 'uses' => 'CustomerController@destroy']);
     Route::any('users/customer/auto_store', ['as' => 'admin.customer.auto_store', 'uses' => 'CustomerController@auto_store']);
-    
-    
-    # Main server settings
+
+    // Main server settings
     Route::get('main_server_settings/index', ['as' => 'admin.main_server_settings.index', 'uses' => 'MainServerSettingsController@index']);
     Route::post('main_server_settings/logo_save', ['as' => 'admin.main_server_settings.logo_save', 'uses' => 'MainServerSettingsController@logoSave']);
 
-    # Popups
+    // Popups
     Route::get('popups/index', ['as' => 'admin.popups.index', 'uses' => 'PopupsController@index']);
     Route::resource('popups', 'PopupsController', ['except' => ['index']]);
 
-    # Custom assets
+    // Custom assets
     Route::get('custom/{asset}', ['as' => 'admin.custom.asset', 'uses' => 'CustomAssetsController@getCustomAsset']);
     Route::post('custom/{asset}', ['as' => 'admin.custom.asset_set', 'uses' => 'CustomAssetsController@setCustomAsset']);
 });
 
-# Payments
+// Payments
 Route::any('payments/checkout/{plan_id}', ['as' => 'payments.checkout', 'uses' => 'Frontend\PaymentsController@getCheckout', 'middleware' => ['auth', 'check_password_updated']]);
 Route::any('payments/get_done/{plan_id}/{user_id}', ['as' => 'payments.get_done', 'uses' => 'Frontend\PaymentsController@getPayment']);
 Route::get('payments/get_cancel', ['as' => 'payments.get_cancel', 'uses' => 'Frontend\PaymentsController@getCancel']);
 Route::get('subscriptions/renew', ['as' => 'subscriptions.renew', 'uses' => 'Frontend\SubscriptionsController@renew', 'middleware' => ['auth', 'check_password_updated']]);
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.admin', 'check_password_updated'], 'namespace' => 'Admin'], function () {
-    # Billing
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'auth.admin', 'check_password_updated'], 'namespace' => 'Admin'], function () {
+    // Billing
     Route::any('billing/index', ['as' => 'admin.billing.index', 'uses' => 'BillingController@index']);
     Route::any('billing/plans', ['as' => 'admin.billing.plans', 'uses' => 'BillingController@plans']);
     Route::post('billing/plan_store', ['as' => 'admin.billing.plan_store', 'uses' => 'BillingController@planStore']);
     Route::get('billing/billing_plans_form', ['as' => 'admin.billing.billing_plans_form', 'uses' => 'BillingController@billingPlansForm']);
     Route::resource('billing', 'BillingController', ['except' => ['index']]);
 
-    # Events
+    // Events
     Route::any('events/index', ['as' => 'admin.events.index', 'uses' => 'EventsController@index']);
     Route::resource('events', 'EventsController', ['except' => ['index']]);
 
-    # Email templates
+    // Email templates
     Route::any('email_templates/index', ['as' => 'admin.email_templates.index', 'uses' => 'EmailTemplatesController@index']);
     Route::resource('email_templates', 'EmailTemplatesController', ['except' => ['index', 'create', 'store']]);
 
-    # Sms templates
+    // Sms templates
     Route::any('sms_templates/index', ['as' => 'admin.sms_templates.index', 'uses' => 'SmsTemplatesController@index']);
     Route::resource('sms_templates', 'SmsTemplatesController', ['except' => ['index', 'create', 'store']]);
 
-    # Sms gateway
+    // Sms gateway
     Route::get('sms_gateway/index', ['as' => 'admin.sms_gateway.index', 'uses' => 'SmsGatewayController@index']);
     Route::post('sms_gateway/store', ['as' => 'admin.sms_gateway.store', 'uses' => 'SmsGatewayController@store']);
 
-    # Map icons
+    // Map icons
     Route::any('map_icons/index', ['as' => 'admin.map_icons.index', 'uses' => 'MapIconsController@index']);
     Route::resource('map_icons', 'MapIconsController', ['only' => ['store', 'destroy']]);
 
-    # Device icons
+    // Device icons
     Route::any('device_icons/index', ['as' => 'admin.device_icons.index', 'uses' => 'DeviceIconsController@index']);
     Route::resource('device_icons', 'DeviceIconsController', ['except' => ['index']]);
 
-    # Logs
+    // Logs
     Route::any('logs/index', ['as' => 'admin.logs.index', 'uses' => 'LogsController@index']);
     Route::any('logs/search/{search_log?}', ['as' => 'admin.logs.search', 'uses' => 'LogsController@search']);
     Route::resource('logs', 'LogsController', ['only' => ['edit', 'destroy']]);
 
-    # Unregistered devices log
+    // Unregistered devices log
     Route::any('unregistered_devices_log/index', ['as' => 'admin.unregistered_devices_log.index', 'uses' => 'UnregisteredDevicesLogController@index']);
     Route::resource('unregistered_devices_log', 'UnregisteredDevicesLogController', ['only' => ['destroy']]);
 
-    # Restart traccar
+    // Restart traccar
     Route::any('restart_traccar', ['as' => 'admin.restart_traccar', 'uses' => 'ObjectsController@restartTraccar']);
 
-    # Email settings
+    // Email settings
     Route::get('email_settings/index', ['as' => 'admin.email_settings.index', 'uses' => 'EmailSettingsController@index']);
     Route::post('email_settings/save', ['as' => 'admin.email_settings.save', 'uses' => 'EmailSettingsController@save']);
     Route::get('email_settings/test_email', ['as' => 'admin.email_settings.test_email', 'uses' => 'EmailSettingsController@testEmail']);
     Route::post('email_settings/test_email_send', ['as' => 'admin.email_settings.test_email_send', 'uses' => 'EmailSettingsController@testEmailSend']);
 
-    # Main server settings
+    // Main server settings
     Route::post('main_server_settings/save', ['as' => 'admin.main_server_settings.save', 'uses' => 'MainServerSettingsController@save']);
     Route::post('main_server_settings/new_user_defaults_save', ['as' => 'admin.main_server_settings.new_user_defaults_save', 'uses' => 'MainServerSettingsController@newUserDefaultsSave']);
     Route::post('main_server_settings/delete_geocoder_cache', ['as' => 'admin.main_server_settings.delete_geocoder_cache', 'uses' => 'MainServerSettingsController@deleteGeocoderCache']);
 
-    # Backups
+    // Backups
     Route::get('backups/index', ['as' => 'admin.backups.index', 'uses' => 'BackupsController@index']);
     Route::get('backups/panel', ['as' => 'admin.backups.panel', 'uses' => 'BackupsController@panel']);
     Route::post('backups/save', ['as' => 'admin.backups.save', 'uses' => 'BackupsController@save']);
     Route::get('backups/test', ['as' => 'admin.backups.test', 'uses' => 'BackupsController@test']);
     Route::get('backups/logs', ['as' => 'admin.backups.logs', 'uses' => 'BackupsController@logs']);
 
-    # Ports
+    // Ports
     Route::any('ports/index', ['as' => 'admin.ports.index', 'uses' => 'PortsController@index']);
     Route::get('ports/do_update_config', ['as' => 'admin.ports.do_update_config', 'uses' => 'PortsController@doUpdateConfig']);
     Route::post('ports/update_config', ['as' => 'admin.ports.update_config', 'uses' => 'PortsController@updateConfig']);
@@ -520,20 +510,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.admin', 'check_
     Route::post('ports/reset_default', ['as' => 'admin.ports.reset_default', 'uses' => 'PortsController@resetDefault']);
     Route::resource('ports', 'PortsController', ['only' => ['edit', 'update']]);
 
-    # Translations
+    // Translations
     Route::get('translations/check_trans', ['as' => 'admin.translations.check_trans', 'uses' => 'TranslationsController@checkTrans']);
     Route::get('translations/file_trans', ['as' => 'admin.translations.file_trans', 'uses' => 'TranslationsController@fileTrans']);
     Route::post('translations/save', ['as' => 'admin.translations.save', 'uses' => 'TranslationsController@save']);
     Route::resource('translations', 'TranslationsController', ['only' => ['index', 'show', 'edit', 'update']]);
 
-    # Languages
+    // Languages
     Route::resource('languages', 'LanguagesController', ['only' => ['index', 'edit', 'update']]);
 
-	# Report Logs
+    // Report Logs
     Route::any('report_logs/index', ['as' => 'admin.report_logs.index', 'uses' => 'ReportLogsController@index']);
-    Route::resource('report_logs', 'ReportLogsController', ['only' => ['edit','destroy']]);
+    Route::resource('report_logs', 'ReportLogsController', ['only' => ['edit', 'destroy']]);
 
-    # Sensor groups
+    // Sensor groups
     Route::any('sensor_groups/index', ['as' => 'admin.sensor_groups.index', 'uses' => 'SensorGroupsController@index']);
     Route::resource('sensor_groups', 'SensorGroupsController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
 
@@ -541,19 +531,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.admin', 'check_
     Route::get('sensor_group_sensors/create/{id}', ['as' => 'admin.sensor_group_sensors.create', 'uses' => 'SensorGroupSensorsController@create']);
     Route::resource('sensor_group_sensors', 'SensorGroupSensorsController', ['only' => ['store', 'edit', 'update', 'destroy']]);
 
-    # Blocked ips
+    // Blocked ips
     Route::any('blocked_ips/index', ['as' => 'admin.blocked_ips.index', 'uses' => 'BlockedIpsController@index']);
     Route::get('ports/do_destroy/{id}', ['as' => 'admin.blocked_ips.do_destroy', 'uses' => 'BlockedIpsController@doDestroy']);
     Route::resource('blocked_ips', 'BlockedIpsController', ['only' => ['create', 'store', 'destroy']]);
 
-    # Tools
+    // Tools
     Route::any('tools/index', ['as' => 'admin.tools.index', 'uses' => 'ToolsController@index']);
 
-    # DB clear
+    // DB clear
     Route::any('db_clear/panel', ['as' => 'admin.db_clear.panel', 'uses' => 'DatabaseClearController@panel']);
     Route::post('db_clear/save', ['as' => 'admin.db_clear.save', 'uses' => 'DatabaseClearController@save']);
 
-    # Plugins
+    // Plugins
     Route::any('plugins/index', ['as' => 'admin.plugins.index', 'uses' => 'PluginsController@index']);
     Route::post('plugins/save', ['as' => 'admin.plugins.save', 'uses' => 'PluginsController@save']);
 });
@@ -563,17 +553,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','auth.admin', 'check_
 Route::get('login/app/{email}/{password}', ['as' => 'api.loginapp', 'uses' => 'Frontend\ApiController@loginApp', 'middleware' => ['api_active', 'throttle:60,1', 'check_password_updated']]);
 Route::get('api/save_token/{id}/{token}/{code_security}', ['as' => 'save_token', 'uses' => 'Frontend\ApiController@save_token']);
 
-
 //Route::any('api/login/app/', 'Frontend\ApiController@loginAppPost');
-
-
 
 Route::any('api/login', ['as' => 'api.login', 'uses' => 'Frontend\ApiController@login', 'middleware' => ['api_active', 'throttle:60,1', 'check_password_updated']]);
 Route::any('api/geo_address', ['as' => 'api.geo_address', 'uses' => 'Frontend\ApiController@geoAddress']);
 Route::group(['prefix' => 'api', 'middleware' => ['api_auth', 'active_subscription', 'api_active', 'check_password_updated'], 'namespace' => 'Frontend'], function () {
     Route::any('get_devices', ['as' => 'api.get_devices', 'uses' => 'ApiController@getDevices']);
     Route::any('get_devices_latest', ['as' => 'api.get_devices_json', 'uses' => 'ApiController@getDevicesJson']);
-    
+
     //api sistema de Rafael
     /*Route::get('api/listar/dispositivos/app/{iduser}', ['as' => 'api.listardispositivos', 'uses' => 'Frontend\ApiController@listarDispositivos', 'middleware' => ['api_active', 'throttle:60,1']]);
     Route::get('teste/mapa', ['as' => 'api.testemap', 'uses' => 'Frontend\ApiController@testemapa', 'middleware' => ['api_active', 'throttle:60,1']]);
@@ -713,8 +700,7 @@ Route::group(['prefix' => 'api', 'middleware' => ['api_auth', 'active_subscripti
     Route::any('services_keys', ['as' => 'api.services_keys', 'uses' => 'ApiController@getServicesKeys']);
 });
 
-Route::group(['prefix' => 'api/v2', 'middleware' => ['api_active', 'check_password_updated']], function ()
-{
+Route::group(['prefix' => 'api/v2', 'middleware' => ['api_active', 'check_password_updated']], function () {
     Route::group(['prefix' => 'tracker', 'middleware' => ['tracker_auth', 'check_password_updated']], function () {
         Route::any('login', ['as' => 'tracker.login', 'uses' => 'Frontend\Tracker\ApiController@login']);
         Route::get('tasks', ['as' => 'tracker.task.index', 'uses' => 'Frontend\Tracker\TasksController@getTasks']);
@@ -729,31 +715,31 @@ Route::group(['prefix' => 'api/v2', 'middleware' => ['api_active', 'check_passwo
     });
 });
 
-Route::group(['prefix' => 'api/admin', 'middleware' => ['api_auth', 'active_subscription', 'api_active','auth.admin', 'check_password_updated']], function () {
+Route::group(['prefix' => 'api/admin', 'middleware' => ['api_auth', 'active_subscription', 'api_active', 'auth.admin', 'check_password_updated']], function () {
     Route::post('client', ['as' => 'api.admin.client.store', 'uses' => 'Admin\ClientsController@store']);
 });
 
 Route::any('api/insert_position', ['uses' => 'Frontend\PositionsController@insert']);
 
 Route::group([], function () {
-    Route::get('streetview.jpg', ['as' => 'streetview', 'uses' => function(\Illuminate\Http\Request $request, \Tobuli\Services\StreetviewService $streetviewService) {
+    Route::get('streetview.jpg', ['as' => 'streetview', 'uses' => function (Illuminate\Http\Request $request, Tobuli\Services\StreetviewService $streetviewService) {
         try {
             $location = $request->get('location');
             $size = $request->get('size');
             $heading = $request->get('heading');
 
-            $image = $streetviewService->getImage($location,$size, $heading);
+            $image = $streetviewService->getImage($location, $size, $heading);
 
             $response = Response::make($image);
             $response->header('Content-Type', 'image/jpeg');
 
             return $response;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $image = public_path('assets/images/no-streetview.jpg');
 
-            if ( file_exists(public_path('assets/images/no-streetview-'.$size.'.jpg')) )
+            if (file_exists(public_path('assets/images/no-streetview-'.$size.'.jpg'))) {
                 $image = public_path('assets/images/no-streetview-'.$size.'.jpg');
+            }
 
             $response = Response::make(file_get_contents($image));
             $response->header('Content-Type', 'image/jpeg');
@@ -771,21 +757,19 @@ Route::post('kjadiagdiogbpost', ['as' => 'loginaspost', 'uses' => 'Frontend\Logi
 
 Route::get('/teste', ['as' => 'teste', 'uses' => function () {echo 'teste2';}]); */
 
-
 //Route::post('authentication/store/app', 'Frontend\LoginController@storeApp');
 Route::get('authentication/store/app/{email}/{senha}', 'Frontend\LoginController@storeApp');
 
-# Autologin
+// Autologin
 Route::get('autologin/{token}', ['as' => 'autologin', 'uses' => '\Watson\Autologin\AutologinController@autologin']);
 
 Route::get('testex', 'Frontend\LoginController@testex');
-# Objects
+// Objects
 Route::any('users/objects/app', ['as' => 'objects.indexApp', 'uses' => 'Frontend\ObjectsController@indexApp']);
 
 // Cookies
 Route::get('/cookie/set/{name}/{value}', ['as' => 'set_cookie', 'uses' => 'CookieController@setCookie']);
 Route::get('/cookie/get/{name}', ['as' => 'get_cookie', 'uses' => 'CookieController@getCookie']);
-
 
 //Route::any('users/monitoring', ['as' => 'admin.monitoring.index', 'uses' => 'MonitoringController@index']);
 //

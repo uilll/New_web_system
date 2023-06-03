@@ -9,17 +9,17 @@
 namespace Tobuli\Popups\Rules;
 
 use Illuminate\Html\FormFacade;
-use Illuminate\Support\Facades\View;
-use Tobuli\Entities\User;
 use Tobuli\Entities\PopupRule;
 
 class BaseRule implements RuleInterface
 {
-    protected $rule, $user;
+    protected $rule;
 
-    public  $shortcodes = [
+    protected $user;
+
+    public $shortcodes = [
         '{user_email}' => 'getUserEmail',
-        '{user_email_base64}' => 'getUserEmailBase64'
+        '{user_email_base64}' => 'getUserEmailBase64',
     ];
 
     public function getUserEmail()
@@ -44,12 +44,11 @@ class BaseRule implements RuleInterface
     {
         return [
             '<div class="checkbox-inline">',
-            FormFacade::checkbox('rules['.get_class($this).'][is_active]', 1 , $isActive ? 1 : null),
+            FormFacade::checkbox('rules['.get_class($this).'][is_active]', 1, $isActive ? 1 : null),
             FormFacade::label(null, null),
-            '</div>'
+            '</div>',
         ];
     }
-
 
     public function __construct($ruleInstance = null, $user = null)
     {
@@ -60,11 +59,13 @@ class BaseRule implements RuleInterface
         $this->shortcodes = array_merge($parentVars['shortcodes'], $this->shortcodes);
     }
 
-    public static function load(PopupRule $rule,  $user = null) {
+    public static function load(PopupRule $rule, $user = null)
+    {
         $class = $rule->rule_name;
 
-        if ( ! class_exists($class))
+        if (! class_exists($class)) {
             return false;
+        }
 
         return new $class($rule, $user);
     }
@@ -79,9 +80,9 @@ class BaseRule implements RuleInterface
         return false;
     }
 
-    public function processShortcodes($text) {
-
-        foreach ($this->shortcodes as $shortcode=>$function) {
+    public function processShortcodes($text)
+    {
+        foreach ($this->shortcodes as $shortcode => $function) {
             $text = str_replace($shortcode, $this->{$function}(), $text);
         }
 

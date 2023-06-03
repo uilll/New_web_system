@@ -1,98 +1,101 @@
-<?php namespace App\Services\Mail;
+<?php
 
+namespace App\Services\Mail;
+
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Mail;
 use Swift_MailTransport as MailTransport;
-use GuzzleHttp\Exception\ClientException;
 
 class MailHelper
 {
-    public function send($to, $body, $subject, $lang = NULL, $fallback = TRUE, $attaches = [], $view = NULL)
+    public function send($to, $body, $subject, $lang = null, $fallback = true, $attaches = [], $view = null)
     {
-        if (empty($to))
+        if (empty($to)) {
             return [
                 'status' => false,
-                'error'  => 'Empty to'
+                'error' => 'Empty to',
             ];
+        }
 
-        if (!is_array($to))
+        if (! is_array($to)) {
             $to = [$to];
+        }
 
         $to = array_map('trim', $to);
-        $to = array_filter($to, function($value){
+        $to = array_filter($to, function ($value) {
             return ! empty($value);
         });
 
-        if (empty($to))
+        if (empty($to)) {
             return [
                 'status' => false,
-                'error'  => 'Empty to'
+                'error' => 'Empty to',
             ];
+        }
 
-        if (empty($view))
+        if (empty($view)) {
             $view = 'front::Emails.template';
+        }
 
-        if (!empty($attaches) && is_string($attaches))
+        if (! empty($attaches) && is_string($attaches)) {
             $attaches = [$attaches];
+        }
 
         $data = [
-            'to'       => array_map('trim', $to),
-            'subject'  => $subject,
-            'body'     => $body,
-            'lang'     => $lang,
-            'attaches' => $attaches
+            'to' => array_map('trim', $to),
+            'subject' => $subject,
+            'body' => $body,
+            'lang' => $lang,
+            'attaches' => $attaches,
         ];
 
-        try
-        {
+        try {
             Mail::send($view, $data, function ($message) use ($data) {
                 $message
                     ->to($data['to'])
                     ->subject($data['subject']);
 
-                if (!empty($data['attaches'])) {
+                if (! empty($data['attaches'])) {
                     foreach ($data['attaches'] as $attach) {
                         $message->attach($attach);
                     }
                 }
             });
-
-        }
-        catch (ClientException $e) {
+        } catch (ClientException $e) {
             $error = $e->getMessage();
 
             $response = $e->getResponse();
 
-            if ( $response && $response->getStatusCode() == 422 )
-                $fallback = FALSE;
-        }
-        catch (\Exception $e) {
+            if ($response && $response->getStatusCode() == 422) {
+                $fallback = false;
+            }
+        } catch (\Exception $e) {
             $error = $e->getMessage();
         }
 
-        if (!empty($error) && $fallback) {
+        if (! empty($error) && $fallback) {
             $backupMailer = Mail::getSwiftMailer();
 
-            Mail::setSwiftMailer( new \Swift_Mailer(MailTransport::newInstance()) );
+            Mail::setSwiftMailer(new \Swift_Mailer(MailTransport::newInstance()));
 
             Mail::send($view, $data, function ($message) use ($data) {
                 $message
                     ->to($data['to'])
                     ->subject($data['subject']);
 
-                if (!empty($data['attaches'])) {
+                if (! empty($data['attaches'])) {
                     foreach ($data['attaches'] as $attach) {
                         $message->attach($attach);
                     }
                 }
             });
 
-            Mail::setSwiftMailer( $backupMailer );
+            Mail::setSwiftMailer($backupMailer);
         }
 
         return [
             'status' => empty($error),
-            'error'  => empty($error) ? NULL : $error
+            'error' => empty($error) ? null : $error,
         ];
     }
-
 }

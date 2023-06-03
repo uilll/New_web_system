@@ -1,8 +1,9 @@
-<?php namespace Tobuli\Repositories\Notification;
+<?php
+
+namespace Tobuli\Repositories\Notification;
 
 use Tobuli\Repositories\EloquentRepositoryInterface;
 
-interface NotificationRepositoryInterface extends EloquentRepositoryInterface {
-
-
+interface NotificationRepositoryInterface extends EloquentRepositoryInterface
+{
 }

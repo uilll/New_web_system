@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute deve ser aceito.',
     'active_url' => 'O :attribute não é uma URL válida.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => 'O :attribute só pode conter letras e números.',
     'array' => 'O :attribute deve ser uma matriz.',
     'before' => 'O :attribute deve ser uma data antes :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => 'O :attribute deve situar-se entre :min e :max.',
         'file' => 'O :attribute deve situar-se entre :min e :max kilobytes.',
         'string' => 'O :attribute deve situar-se entre :min e :max caracteres.',
         'array' => 'O :attribute deve ter entre :min e :max itens.',
-    ),
+    ],
     'confirmed' => 'O :attribute confirmação não corresponde.',
     'date' => 'O :attribute não é uma data válida.',
     'date_format' => 'O :attribute não coincide com o formato :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'A seleccionado :attribute é inválido.',
     'integer' => 'O :attribute deve ser um inteiro.',
     'ip' => 'O :attribute deve ser um endereço IP válido.',
-    'max'  => array(
+    'max' => [
         'numeric' => 'O :attribute não pode ser maior do que :max.',
         'file' => 'O :attribute não pode ser maior do que :max kilobytes.',
         'string' => 'O :attribute não pode ser maior do que :max caracteres.',
         'array' => 'O :attribute não podem ter mais do que :max itens.',
-    ),
+    ],
     'mimes' => 'O :attribute deve ser um arquivo do tipo: :values.',
-    'min'  => array(
+    'min' => [
         'numeric' => 'O :attribute deve ser pelo menos :min.',
         'file' => 'O :attribute deve ser pelo menos :min kilobytes.',
         'string' => 'O :attribute deve ser pelo menos :min caracteres.',
         'array' => 'O :attribute deve ser pelo menos :min itens.',
-    ),
+    ],
     'not_in' => 'A seleccionado :attribute é inválido.',
     'numeric' => 'O :attribute deve ser um número.',
     'regex' => 'O :attribute formato é inválido.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => 'O :attribute campo é obrigatório quando :values não está presente.',
     'required_without_all' => 'O :attribute campo é necessário quando nenhum :values está presente.',
     'same' => 'O :attribute e :other deve combinar.',
-    'size'  => array(
+    'size' => [
         'numeric' => 'O :attribute deve ser :size.',
         'file' => 'O :attribute deve ser :size kilobytes.',
         'string' => 'O :attribute deve ser :size characters.',
         'array' => 'O :attribute deve conter :size itens.',
-    ),
+    ],
     'unique' => 'O :attribute já foi tomada.',
     'url' => 'O :attribute formato é inválido.',
     'array_max' => 'O :attribute max itens :max.',
     'lesser_than' => 'O :attribute deve ser menor do que :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'custom-message',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'Email',
         'password' => 'Senha',
         'password_confirmation' => 'Confirmação de Senha',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Ícone de status off-line',
         'icon_status_ack' => 'Ícone de status do Ack',
         'icon_status_engine' => 'Ícone de status do mecanismo',
-    ),
+    ],
     'same_protocol' => 'Os dispositivos devem ser do mesmo protocolo.',
     'contains' => 'O :attribute deve conter :value .',
     'ip_port' => 'O :attribute não corresponde ao formato IP:PORT',
-);
+];

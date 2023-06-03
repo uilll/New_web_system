@@ -11,11 +11,13 @@ class UserPolicy extends Policy
 
     protected function ownership(User $user, Model $entity)
     {
-        if ($user->isManager() && $user->id == $entity->manager_id)
+        if ($user->isManager() && $user->id == $entity->manager_id) {
             return true;
+        }
 
-        if ($user->id == $entity->id)
+        if ($user->id == $entity->id) {
             return true;
+        }
 
         return false;
     }

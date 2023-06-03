@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'password' => 'Şifrələr ən az 6 hərfdən ibarət olmalıdı və təsdiqlənməni qarşılamalıdı',
     'user' => 'Bu Email ünvanda istifadəçi tapılmadı',
@@ -8,4 +8,4 @@ return array(
     'sent' => 'Şifrə xatırladıcı göndərildi!',
     'reset' => 'Parolanız sıfırlandı',
     'reset_link' => 'Şifrənizi sıfırlamaq üçün bura vurun',
-);
+];

@@ -17,7 +17,8 @@ class DataArraySerializer extends ArraySerializer
         if ($resourceKey === false) {
             return $data;
         }
-        return array($resourceKey ?: 'data' => $data);
+
+        return [$resourceKey ?: 'data' => $data];
     }
 
     public function item($resourceKey, array $data)
@@ -25,6 +26,7 @@ class DataArraySerializer extends ArraySerializer
         if ($resourceKey === false) {
             return $data;
         }
-        return array($resourceKey ?: 'data' => $data);
+
+        return [$resourceKey ?: 'data' => $data];
     }
 }

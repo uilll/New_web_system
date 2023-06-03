@@ -1,13 +1,17 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class FcmToken extends Eloquent {
-	protected $table = 'fcm_tokens';
+class FcmToken extends Eloquent
+{
+    protected $table = 'fcm_tokens';
 
-    protected $fillable = array('token');
+    protected $fillable = ['token'];
 
-    public function user() {
+    public function user()
+    {
         return $this->hasOne('Tobuli\Entities\User', 'id', 'user_id');
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'เพิ่มอุปกรณ์',
     'per_one' => 'ต่อ 1',
@@ -665,4 +665,4 @@ return array(
     'do_objects_delete' => 'คุณต้องการลบอุปกรณ์เหล่านี้หรือไม่? <br> ข้อมูลที่เกี่ยวข้องทั้งหมดจะหายไป',
     'ignition_off' => 'ปิดจุดระเบิด',
     'forward' => 'ข้างหน้า',
-);
+];

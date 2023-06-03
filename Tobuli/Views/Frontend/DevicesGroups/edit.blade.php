@@ -14,7 +14,7 @@
 
     <div class="form-group">
         {!! Form::label('devices', trans('validation.attributes.devices').':') !!}
-        {!! Form::select('devices[]', $devices->lists('plate_number', 'id')->all(), $item->devices->lists('id')->all(), ['class' => 'form-control multiexpand', 'multiple' => 'multiple', 'data-live-search' => true, 'data-actions-box' => true]) !!}
+        {!! Form::select('devices[]', $devices->pluck('plate_number', 'id')->all(), $item->devices->pluck('id')->all(), ['class' => 'form-control multiexpand', 'multiple' => 'multiple', 'data-live-search' => true, 'data-actions-box' => true]) !!}
     </div>
     {!! Form::close() !!}
 

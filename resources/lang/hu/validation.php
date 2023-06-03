@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => 'A :attribute el kell fogadni.',
     'active_url' => 'A :attribute nem érvényes URL.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => 'A :attribute csak betűket és számokat tartalmazhat.',
     'array' => 'A :attribute tömbnek kell lennie.',
     'before' => 'A :attribute dátumnak kell lennie :date .',
-    'between'  => array(
+    'between' => [
         'numeric' => 'A :attribute :min és :max .',
         'file' => 'A :attribute :min és :max kilobyte között kell lennie.',
         'string' => 'Az :attribute :min és :max karaktereknek kell lennie.',
         'array' => 'A :attribute kell :min és :max elem között.',
-    ),
+    ],
     'confirmed' => 'A :attribute megerősítése nem egyezik.',
     'date' => 'A :attribute nem érvényes dátum.',
     'date_format' => 'A :attribute nem egyezik a formátum :format .',
@@ -28,19 +28,19 @@ return array(
     'in' => 'A kiválasztott :attribute érvénytelen.',
     'integer' => 'A :attribute egész számnak kell lennie.',
     'ip' => 'A :attribute érvényes IP-címnek kell lennie.',
-    'max'  => array(
+    'max' => [
         'numeric' => 'A :attribute nem lehet nagyobb, mint :max .',
         'file' => 'A :attribute nem lehet nagyobb, mint :max kilobyte.',
         'string' => 'A :attribute nem lehet nagyobb, mint :max karakterek.',
         'array' => 'A :attribute nem lehet több :max eleme.',
-    ),
+    ],
     'mimes' => 'A :attribute a következő típusú fájlnak kell lennie :values .',
-    'min'  => array(
+    'min' => [
         'numeric' => 'A :attribute legalább :min .',
         'file' => 'A :attribute legalább :min kilobyte.',
         'string' => 'A :attribute legalább :min karakternek kell lennie.',
         'array' => 'A :attribute kell legalább :min elemekkel.',
-    ),
+    ],
     'not_in' => 'A kiválasztott :attribute érvénytelen.',
     'numeric' => 'A :attribute számnak kell lennie.',
     'regex' => 'A :attribute formátuma érvénytelen.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => 'A :attribute mező akkor kötelező, ha :values nincsenek jelen.',
     'required_without_all' => 'A :attribute akkor szükséges, ha egyik sem :values nincs.',
     'same' => 'A :attribute és :other kell egyeznie.',
-    'size'  => array(
+    'size' => [
         'numeric' => 'A :attribute :size kell lennie.',
         'file' => 'A :attribute :size kilobájtnak kell lennie.',
         'string' => 'A :attribute :size karaktereknek kell lennie.',
         'array' => 'A :attribute tartalmaznia kell :size elemeket.',
-    ),
+    ],
     'unique' => 'A :attribute már megtörtént.',
     'url' => 'A :attribute formátuma érvénytelen.',
     'array_max' => 'A :attribute max elemek :max .',
     'lesser_than' => 'A :attribute kisebbnek kell lennie, mint :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'Egyedi üzenet',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'Email',
         'password' => 'Jelszó',
         'password_confirmation' => 'Jelszó megerősítése',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Offline állapot ikon',
         'icon_status_ack' => 'Ack állapot ikon',
         'icon_status_engine' => 'Motor állapot ikon',
-    ),
+    ],
     'same_protocol' => 'Az eszközöknek ugyanazzal a protokollal kell rendelkezniük.',
     'contains' => 'A :attribute tartalmaznia kell :value .',
     'ip_port' => 'Az :attribute nem egyezik meg az IP:PORT formátummal',
-);
+];

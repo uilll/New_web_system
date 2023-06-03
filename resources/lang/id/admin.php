@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'clients' => 'Klien',
     'content' => 'Konten',
@@ -96,4 +96,4 @@ Berkas penerjemahan tidak ada',
     'languages' => 'Bahasa',
     'translate' => 'Menterjemahkan',
     'group_4' => 'Demo',
-);
+];

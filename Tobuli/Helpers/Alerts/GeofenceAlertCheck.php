@@ -2,28 +2,30 @@
 
 namespace Tobuli\Helpers\Alerts;
 
-
 class GeofenceAlertCheck extends AlertCheck
 {
     public function checkEvents($position, $prevPosition)
     {
-        if ( ! $position)
+        if (! $position) {
             return null;
+        }
 
-        if ( ! $position->isValid())
+        if (! $position->isValid()) {
             return null;
+        }
 
         $prevPosition = $this->device->positionTraccar();
 
-        if ( ! $this->preCheck($position, $prevPosition))
+        if (! $this->preCheck($position, $prevPosition)) {
             return null;
+        }
 
         $events = [];
 
-        foreach ($this->alert->geofences as $geofence)
-        {
-            if ( ! $type = $this->check($position, $prevPosition, $geofence))
+        foreach ($this->alert->geofences as $geofence) {
+            if (! $type = $this->check($position, $prevPosition, $geofence)) {
                 continue;
+            }
 
             $event = $this->getEvent();
 
@@ -34,7 +36,7 @@ class GeofenceAlertCheck extends AlertCheck
             $event->geofence_id = $geofence->id;
 
             $event->additionalQueueData = array_merge($event->additionalQueueData, [
-                'geofence' => htmlentities($geofence->name)
+                'geofence' => htmlentities($geofence->name),
             ]);
 
             $events[] = $event;
@@ -47,21 +49,25 @@ class GeofenceAlertCheck extends AlertCheck
     {
         switch ($this->alert->type) {
             case 'geofence_in':
-                if ( ! $this->checkGeofenceWithSchedules($position, $geofence))
+                if (! $this->checkGeofenceWithSchedules($position, $geofence)) {
                     return false;
-                if ($this->checkGeofenceWithSchedules($prevPosition, $geofence))
+                }
+                if ($this->checkGeofenceWithSchedules($prevPosition, $geofence)) {
                     return false;
+                }
 
                 return 'geofence_in';
 
             case 'geofence_out':
                 //is current in
-                if ($this->checkGeofence($position, $geofence))
+                if ($this->checkGeofence($position, $geofence)) {
                     return false;
+                }
 
                 //is previous in
-                if ( ! $this->checkGeofence($prevPosition, $geofence))
+                if (! $this->checkGeofence($prevPosition, $geofence)) {
                     return false;
+                }
 
                 return 'geofence_out';
 
@@ -69,10 +75,12 @@ class GeofenceAlertCheck extends AlertCheck
                 $isCurrentIn = $this->checkGeofence($position, $geofence);
                 $isPreviousIn = $this->checkGeofence($prevPosition, $geofence);
 
-                if ($isCurrentIn && ! $isPreviousIn)
+                if ($isCurrentIn && ! $isPreviousIn) {
                     return 'geofence_in';
-                if (! $isCurrentIn && $isPreviousIn)
+                }
+                if (! $isCurrentIn && $isPreviousIn) {
                     return 'geofence_out';
+                }
 
                 return false;
 
@@ -83,50 +91,59 @@ class GeofenceAlertCheck extends AlertCheck
 
     protected function checkGeofence($position, $geofence)
     {
-        if ( ! $position)
+        if (! $position) {
             return false;
+        }
 
-        if ( ! $position->isValid())
+        if (! $position->isValid()) {
             return false;
+        }
 
         return $geofence->pointIn($position);
     }
 
     protected function checkGeofenceWithSchedules($position, $geofence)
     {
-        if ( ! $this->checkSchedules($position->time))
+        if (! $this->checkSchedules($position->time)) {
             return false;
+        }
 
         return $this->checkGeofence($position, $geofence);
     }
 
     protected function isPointEquel($position, $prevPosition)
     {
-        if ( ! $position)
+        if (! $position) {
             return false;
+        }
 
-        if ( ! $prevPosition)
+        if (! $prevPosition) {
             return false;
+        }
 
-        if ($position->latitude != $prevPosition->latitude)
+        if ($position->latitude != $prevPosition->latitude) {
             return false;
+        }
 
-        if ($position->longitude != $prevPosition->longitude)
+        if ($position->longitude != $prevPosition->longitude) {
             return false;
+        }
 
         return true;
     }
 
     protected function preCheck($position, $prevPosition)
     {
-        if ($this->isPointEquel($position, $prevPosition))
+        if ($this->isPointEquel($position, $prevPosition)) {
             return false;
+        }
 
         switch ($this->alert->type) {
             case 'geofence_out':
             case 'geofence_inout':
-                if ( ! $this->checkSchedules($position->time))
+                if (! $this->checkSchedules($position->time)) {
                     return false;
+                }
                 break;
         }
 

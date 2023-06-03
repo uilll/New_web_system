@@ -21,14 +21,13 @@
  * Example of Tagging Arabic Text
  *
  * @category  I18N
- * @package   I18N_Arabic
+ *
  * @author    Khaled Al-Sham'aa <khaled@ar-php.org>
  * @copyright 2006-2016 Khaled Al-Sham'aa
- *
  * @license   LGPL <http://www.gnu.org/licenses/lgpl.txt>
+ *
  * @link      http://www.ar-php.org
  */
-
 error_reporting(E_STRICT);
 $time_start = microtime(true);
 
@@ -42,15 +41,15 @@ $str = 'وحسب إحصائية لوزارة الدفاع الأميركية م�
 
 $highlightStr = $Arabic->highlightText($str, 'noun');
 
-echo '<div dir="rtl" align="justify">' . $str . '<hr />' . 
-     $highlightStr . '<hr /></div>';
+echo '<div dir="rtl" align="justify">'.$str.'<hr />'.
+     $highlightStr.'<hr /></div>';
 
 $taggedText = $Arabic->tagText($str);
 
 echo '<div dir="ltr" align="justify">';
 
 foreach ($taggedText as $wordTag) {
-    list($word, $tag) = $wordTag;
+    [$word, $tag] = $wordTag;
 
     if ($tag == 1) {
         echo"<font color=blue>$word is Noun</font>, ";
@@ -66,34 +65,34 @@ echo '</div>';
 <div class="Paragraph">
 <h2>Example Code:</h2>
 <?php
-$code = <<< END
+$code = <<< 'END'
 <?php
     require '../../Arabic.php';
-    \$Arabic = new I18N_Arabic('WordTag');
+    $Arabic = new I18N_Arabic('WordTag');
     
-    \$str = 'وحسب إحصائية لوزارة الدفاع الأميركية ما زال نحو 375 معتقلا يقبعون في
+    $str = 'وحسب إحصائية لوزارة الدفاع الأميركية ما زال نحو 375 معتقلا يقبعون في
     غوانتانامو في إطار ما يسمى " الحرب على الإرهاب "، منهم كثيرون محتجزون منذ
     أكثر من خمس سنوات ومن بينهم مصور قناة الجزيرة سامي الحاج الذي لم توجه له أي
     تهمة رسمية ولم يحظ بأي محاكمة حتى الآن.';
 
-    \$highlightStr = \$Arabic->highlightText(\$str, 'noun');
+    $highlightStr = $Arabic->highlightText($str, 'noun');
 
-    echo '<div dir="rtl" align="justify">' . \$str . '<hr />' . 
-         \$highlightStr . '<hr /></div>';
+    echo '<div dir="rtl" align="justify">' . $str . '<hr />' . 
+         $highlightStr . '<hr /></div>';
     
-    \$taggedText = \$Arabic->tagText(\$str);
+    $taggedText = $Arabic->tagText($str);
     
     echo '<div dir="ltr" align="justify">';
 
-    foreach (\$taggedText as \$wordTag) {
-        list(\$word, \$tag) = \$wordTag;
+    foreach ($taggedText as $wordTag) {
+        list($word, $tag) = $wordTag;
     
-        if (\$tag == 1) {
-            echo"<font color=blue>\$word is Noun</font>, ";
+        if ($tag == 1) {
+            echo"<font color=blue>$word is Noun</font>, ";
         }
     
-        if (\$tag == 0) {
-            echo"<font color=red>\$word is not Noun</font>, ";
+        if ($tag == 0) {
+            echo"<font color=red>$word is not Noun</font>, ";
         }
     }
     echo '</div>';
@@ -105,7 +104,7 @@ $time_end = microtime(true);
 $time = $time_end - $time_start;
 
 echo "<hr />Total execution time is $time seconds<br />\n";
-echo 'Amount of memory allocated to this script is ' . memory_get_usage() . ' bytes';
+echo 'Amount of memory allocated to this script is '.memory_get_usage().' bytes';
 
 $included_files = get_included_files();
 echo '<h4>Names of included or required files:</h4><ul>';

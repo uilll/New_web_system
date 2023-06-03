@@ -1,9 +1,9 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\SendCommandModalHelper;
-
-use Tobuli\Protocols\Manager as ProtocolsManager;
 
 class SendCommandController extends Controller
 {
@@ -13,7 +13,7 @@ class SendCommandController extends Controller
 
         //debugar(true, $data);
 
-        return !$this->api ? view('front::SendCommand.create')->with($data) : $data;
+        return ! $this->api ? view('front::SendCommand.create')->with($data) : $data;
     }
 
     public function store()

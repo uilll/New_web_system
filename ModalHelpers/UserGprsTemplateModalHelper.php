@@ -1,4 +1,6 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use Facades\Repositories\TrackerPortRepo;
 use Facades\Repositories\UserGprsTemplateRepo;
@@ -34,21 +36,18 @@ class UserGprsTemplateModalHelper extends ModalHelper
 
     public function create()
     {
-        try
-        {
+        try {
             UserGprsTemplateFormValidator::validate('create', $this->data);
 
             $item = UserGprsTemplateRepo::create([
                 'user_id' => $this->user->id,
                 'title' => array_get($this->data, 'title'),
                 'protocol' => array_get($this->data, 'protocol'),
-                'message' => array_get($this->data, 'message')
+                'message' => array_get($this->data, 'message'),
             ]);
 
             return ['status' => 1, 'item' => $item];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
@@ -56,10 +55,11 @@ class UserGprsTemplateModalHelper extends ModalHelper
     public function editData()
     {
         $id = array_key_exists('user_gprs_template_id', $this->data) ? $this->data['user_gprs_template_id'] : request()->route('user_gprs_templates');
-        
+
         $item = UserGprsTemplateRepo::find($id);
-        if (empty($item) || $item->user_id != $this->user->id)
+        if (empty($item) || $item->user_id != $this->user->id) {
             return $this->api ? ['status' => 0, 'errors' => ['id' => dontExist('validation.attributes.gprs_template')]] : modal(dontExist('validation.attributes.gprs_template'), 'danger');
+        }
 
         $protocols = TrackerPortRepo::getProtocolList();
         array_unshift($protocols, trans('front.none'));
@@ -75,23 +75,21 @@ class UserGprsTemplateModalHelper extends ModalHelper
     {
         $item = UserGprsTemplateRepo::find($this->data['id']);
 
-        try
-        {
-            if (empty($item) || $item->user_id != $this->user->id)
+        try {
+            if (empty($item) || $item->user_id != $this->user->id) {
                 throw new ValidationException(['id' => dontExist('validation.attributes.gprs_template')]);
+            }
 
             UserGprsTemplateFormValidator::validate('update', $this->data);
 
             UserGprsTemplateRepo::update($item->id, [
                 'title' => array_get($this->data, 'title'),
                 'protocol' => array_get($this->data, 'protocol'),
-                'message' => array_get($this->data, 'message')
+                'message' => array_get($this->data, 'message'),
             ]);
 
             return ['status' => 1];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
@@ -99,10 +97,11 @@ class UserGprsTemplateModalHelper extends ModalHelper
     public function getMessage()
     {
         $id = array_key_exists('user_gprs_template_id', $this->data) ? $this->data['user_gprs_template_id'] : $this->data['id'];
-        
+
         $item = UserGprsTemplateRepo::find($id);
-        if (empty($item) || $item->user_id != $this->user->id)
-            return ['status' => 0, 'errors' => ['id' => dontExist('validation.attributes.message')]];;
+        if (empty($item) || $item->user_id != $this->user->id) {
+            return ['status' => 0, 'errors' => ['id' => dontExist('validation.attributes.message')]];
+        }
 
         return ['status' => 1, 'message' => $item->message];
     }
@@ -110,8 +109,9 @@ class UserGprsTemplateModalHelper extends ModalHelper
     public function doDestroy($id)
     {
         $item = UserGprsTemplateRepo::find($id);
-        if (empty($item) || $item->user_id != $this->user->id)
+        if (empty($item) || $item->user_id != $this->user->id) {
             return modal(dontExist('validation.attributes.gprs_template'), 'danger');
+        }
 
         return compact('item');
     }
@@ -119,13 +119,14 @@ class UserGprsTemplateModalHelper extends ModalHelper
     public function destroy()
     {
         $id = array_key_exists('user_gprs_template_id', $this->data) ? $this->data['user_gprs_template_id'] : $this->data['id'];
-        
+
         $item = UserGprsTemplateRepo::find($id);
-        if (empty($item) || $item->user_id != $this->user->id)
+        if (empty($item) || $item->user_id != $this->user->id) {
             return ['status' => 0, 'errors' => ['id' => dontExist('validation.attributes.gprs_templates')]];
+        }
 
         UserGprsTemplateRepo::delete($id);
-        
+
         return ['status' => 1];
     }
 }

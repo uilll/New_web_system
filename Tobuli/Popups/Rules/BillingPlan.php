@@ -10,11 +10,9 @@ namespace Tobuli\Popups\Rules;
 
 use Facades\Repositories\BillingPlanRepo;
 use Illuminate\Html\FormFacade;
-use Tobuli\Entities\User;
 
-
-class BillingPlan extends BaseRule {
-
+class BillingPlan extends BaseRule
+{
     public $shortcodes = [
         '{billing_plan_name}' => 'getPlanName',
     ];
@@ -28,21 +26,22 @@ class BillingPlan extends BaseRule {
 
     public function getFields()
     {
-        $fields =  BillingPlanRepo::all()->lists('title','id');
+        $fields = BillingPlanRepo::all()->pluck('title', 'id');
         $fields->prepend(trans('admin.no_plan'));
 
         $value = $this->rule ? $this->rule->field_value : null;
 
         return [
             FormFacade::label('rules['.self::class.']', trans('front.plan')),
-            FormFacade::select('rules['.self::class.'][billing_plan_id]',$fields , $value, ['class' => 'form-control']),
+            FormFacade::select('rules['.self::class.'][billing_plan_id]', $fields, $value, ['class' => 'form-control']),
         ];
     }
 
     public function doesApply()
     {
-        if (!$this->user) return false;
-
+        if (! $this->user) {
+            return false;
+        }
 
         if ($this->rule->field_value == 0) {
             $this->rule->field_value = null;
@@ -54,5 +53,4 @@ class BillingPlan extends BaseRule {
 
         return true;
     }
-
 }

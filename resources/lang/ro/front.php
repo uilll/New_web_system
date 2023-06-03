@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Adaugă dispozitiv',
     'per_one' => 'la 1',
@@ -664,4 +664,4 @@ Exemplu de adresă URL pentru gateway-ul SMS: http://SMS_GATEWAY/sendsms.php?use
     'do_objects_delete' => 'Chiar doriți să ștergeți aceste dispozitive? <br> Toate datele asociate vor fi pierdute.',
     'ignition_off' => 'Aprinderea deconectată',
     'forward' => 'Redirecţiona',
-);
+];

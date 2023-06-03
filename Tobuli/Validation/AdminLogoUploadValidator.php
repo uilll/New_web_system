@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class AdminLogoUploadValidator extends Validator {
+namespace Tobuli\Validation;
 
+class AdminLogoUploadValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -16,10 +18,8 @@ class AdminLogoUploadValidator extends Validator {
             'bottom_text' => 'max:2000',
             'apple_store_link' => 'url',
             'google_play_link' => 'url',
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

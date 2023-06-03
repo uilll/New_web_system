@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\GeofenceModalHelper;
@@ -9,13 +11,14 @@ class GeofencesController extends Controller
     {
         $data = GeofenceModalHelper::get();
 
-        return !$this->api ? view('front::Geofences.index')->with($data) : ['items' => $data];
+        return ! $this->api ? view('front::Geofences.index')->with($data) : ['items' => $data];
     }
 
     public function create()
     {
-        if (!$this->user->perm('geofences', 'edit'))
+        if (! $this->user->perm('geofences', 'edit')) {
             return ['status' => 0, 'perm' => 0];
+        }
 
         return ['status' => 1];
     }
@@ -51,7 +54,7 @@ class GeofencesController extends Controller
     {
         $data = GeofenceModalHelper::exportData();
 
-        return !$this->api ? view('front::Geofences.export')->with($data) : $data;
+        return ! $this->api ? view('front::Geofences.export')->with($data) : $data;
     }
 
     public function exportCreate()
@@ -68,5 +71,4 @@ class GeofencesController extends Controller
     {
         return GeofenceModalHelper::exportType();
     }
-
 }

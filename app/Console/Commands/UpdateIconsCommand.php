@@ -1,12 +1,13 @@
-<?php namespace App\Console\Commands;
+<?php
+
+namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
-class UpdateIconsCommand extends Command {
+class UpdateIconsCommand extends Command
+{
     /**
      * The console command name.
      *
@@ -20,7 +21,6 @@ class UpdateIconsCommand extends Command {
      * @var string
      */
     protected $description = 'Command description.';
-
 
     public function __construct()
     {
@@ -36,23 +36,24 @@ class UpdateIconsCommand extends Command {
     {
         $paths = [];
 
-        # Rotating icons
+        // Rotating icons
         $files = File::allFiles(base_path('images/device_icons/rotating'));
-        foreach ($files as $file)
-        {
-            if (!is_object($file) || empty($file->getFilename()))
+        foreach ($files as $file) {
+            if (! is_object($file) || empty($file->getFilename())) {
                 continue;
+            }
 
-            list($width, $height) = getimagesize($file);
-            if (!$width || !$height)
+            [$width, $height] = getimagesize($file);
+            if (! $width || ! $height) {
                 continue;
+            }
 
-            $paths[] = 'frontend/images/device_icons/rotating/' . $file->getFilename();
+            $paths[] = 'frontend/images/device_icons/rotating/'.$file->getFilename();
         }
 
-        if ( $paths ) {
+        if ($paths) {
             DB::table('device_icons')->whereIn('path', $paths)->where('type', '!=', 'rotating')->update([
-                'type' => 'rotating'
+                'type' => 'rotating',
             ]);
         }
 
@@ -66,7 +67,7 @@ class UpdateIconsCommand extends Command {
      */
     protected function getArguments()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -76,6 +77,6 @@ class UpdateIconsCommand extends Command {
      */
     protected function getOptions()
     {
-        return array();
+        return [];
     }
 }

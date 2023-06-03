@@ -1,10 +1,12 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class TrackerPort extends Eloquent {
-	protected $table = 'tracker_ports';
+class TrackerPort extends Eloquent
+{
+    protected $table = 'tracker_ports';
 
-    protected $fillable = array('active', 'port', 'name', 'extra');
-
+    protected $fillable = ['active', 'port', 'name', 'extra'];
 }

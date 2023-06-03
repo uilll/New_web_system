@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreatePopupsTable extends Migration
 {
@@ -12,10 +12,11 @@ class CreatePopupsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('popups')) { return; }
+        if (Schema::hasTable('popups')) {
+            return;
+        }
 
-        Schema::create('popups', function(Blueprint $table)
-        {
+        Schema::create('popups', function (Blueprint $table) {
             $table->increments('id');
             $table->text('title')->nullable();
             $table->longText('content')->nullable();
@@ -33,6 +34,5 @@ class CreatePopupsTable extends Migration
     public function down()
     {
         Schema::drop('popups');
-
     }
 }

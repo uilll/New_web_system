@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-
 use Illuminate\Support\Facades\Redis;
 
 class PositionsKeys
@@ -18,15 +17,16 @@ class PositionsKeys
 
     public function add($data)
     {
-        $this->redis->set(self::PREFIX . '.' . $data['fixTime'] . '.' . $data['imei'], json_encode($data));
+        $this->redis->set(self::PREFIX.'.'.$data['fixTime'].'.'.$data['imei'], json_encode($data));
     }
 
     public function getImeis()
     {
         $keys = $this->getKeys();
 
-        $imeis = array_map(function($key) {
-            list($_prefix, $_time, $_imei) = explode('.', $key, 3);
+        $imeis = array_map(function ($key) {
+            [$_prefix, $_time, $_imei] = explode('.', $key, 3);
+
             return $_imei;
         }, $keys);
 
@@ -35,20 +35,21 @@ class PositionsKeys
 
     public function getKeys()
     {
-        return $this->redis->keys(self::PREFIX . '.*');
+        return $this->redis->keys(self::PREFIX.'.*');
     }
 
     public function count($imei = null)
     {
-        if (is_null($imei))
+        if (is_null($imei)) {
             return $this->countAll();
+        }
 
         return $this->countImeiKeys($imei);
     }
 
     public function getImeiKeys($imei)
     {
-        $keys = $this->redis->keys(self::PREFIX . '.*.' . $imei);
+        $keys = $this->redis->keys(self::PREFIX.'.*.'.$imei);
 
         asort($keys);
 
@@ -59,22 +60,27 @@ class PositionsKeys
     {
         $data = $this->redis->get($key);
 
-        if ($remove)
+        if ($remove) {
             $this->redis->del($key);
+        }
 
-        if ( ! $data)
+        if (! $data) {
             return null;
+        }
 
         $data = json_decode($data, true);
 
-        if ( ! empty($data['deviceId']))
+        if (! empty($data['deviceId'])) {
             $data['imei'] = $data['deviceId'];
+        }
 
-        if ( ! empty($data['uniqueId']))
+        if (! empty($data['uniqueId'])) {
             $data['imei'] = $data['uniqueId'];
+        }
 
-        if (empty($data['imei']))
+        if (empty($data['imei'])) {
             return false;
+        }
 
         $data['protocol'] = isset($data['protocol']) ? $data['protocol'] : null;
 

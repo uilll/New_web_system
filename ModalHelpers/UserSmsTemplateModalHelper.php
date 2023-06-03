@@ -1,4 +1,6 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use Facades\Repositories\UserSmsTemplateRepo;
 use Facades\Validators\UserSmsTemplateFormValidator;
@@ -21,20 +23,17 @@ class UserSmsTemplateModalHelper extends ModalHelper
 
     public function create()
     {
-        try
-        {
+        try {
             UserSmsTemplateFormValidator::validate('create', $this->data);
 
             $item = UserSmsTemplateRepo::create([
                 'user_id' => $this->user->id,
                 'title' => $this->data['title'],
-                'message' => $this->data['message']
+                'message' => $this->data['message'],
             ]);
 
             return ['status' => 1, 'item' => $item];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
@@ -42,10 +41,11 @@ class UserSmsTemplateModalHelper extends ModalHelper
     public function editData()
     {
         $id = array_key_exists('user_sms_template_id', $this->data) ? $this->data['user_sms_template_id'] : request()->route('user_sms_templates');
-        
+
         $item = UserSmsTemplateRepo::find($id);
-        if (empty($item) || $item->user_id != $this->user->id)
+        if (empty($item) || $item->user_id != $this->user->id) {
             return $this->api ? ['status' => 0, 'errors' => ['id' => dontExist('validation.attributes.sms_template')]] : modal(dontExist('validation.attributes.sms_template'), 'danger');
+        }
 
         return compact('item');
     }
@@ -54,22 +54,20 @@ class UserSmsTemplateModalHelper extends ModalHelper
     {
         $item = UserSmsTemplateRepo::find($this->data['id']);
 
-        try
-        {
-            if (empty($item) || $item->user_id != $this->user->id)
+        try {
+            if (empty($item) || $item->user_id != $this->user->id) {
                 throw new ValidationException(['id' => dontExist('validation.attributes.sms_template')]);
+            }
 
             UserSmsTemplateFormValidator::validate('update', $this->data);
 
             UserSmsTemplateRepo::update($item->id, [
                 'title' => $this->data['title'],
-                'message' => $this->data['message']
+                'message' => $this->data['message'],
             ]);
 
             return ['status' => 1];
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
     }
@@ -77,10 +75,11 @@ class UserSmsTemplateModalHelper extends ModalHelper
     public function getMessage()
     {
         $id = array_key_exists('user_sms_template_id', $this->data) ? $this->data['user_sms_template_id'] : $this->data['id'];
-        
+
         $item = UserSmsTemplateRepo::find($id);
-        if (empty($item) || $item->user_id != $this->user->id)
-            return ['status' => 0, 'errors' => ['id' => dontExist('validation.attributes.message')]];;
+        if (empty($item) || $item->user_id != $this->user->id) {
+            return ['status' => 0, 'errors' => ['id' => dontExist('validation.attributes.message')]];
+        }
 
         return ['status' => 1, 'message' => $item->message];
     }
@@ -88,8 +87,9 @@ class UserSmsTemplateModalHelper extends ModalHelper
     public function doDestroy($id)
     {
         $item = UserSmsTemplateRepo::find($id);
-        if (empty($item) || $item->user_id != $this->user->id)
+        if (empty($item) || $item->user_id != $this->user->id) {
             return modal(dontExist('validation.attributes.sms_template'), 'danger');
+        }
 
         return compact('item');
     }
@@ -97,13 +97,14 @@ class UserSmsTemplateModalHelper extends ModalHelper
     public function destroy()
     {
         $id = array_key_exists('user_sms_template_id', $this->data) ? $this->data['user_sms_template_id'] : $this->data['id'];
-        
+
         $item = UserSmsTemplateRepo::find($id);
-        if (empty($item) || $item->user_id != $this->user->id)
+        if (empty($item) || $item->user_id != $this->user->id) {
             return ['status' => 0, 'errors' => ['id' => dontExist('validation.attributes.sms_templates')]];
+        }
 
         UserSmsTemplateRepo::delete($id);
-        
+
         return ['status' => 1];
     }
 }

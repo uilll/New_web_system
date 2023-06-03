@@ -1,9 +1,11 @@
-<?php namespace ModalHelpers;
+<?php
+
+namespace ModalHelpers;
 
 use Facades\Repositories\EventRepo;
 
-class EventModalHelper extends ModalHelper {
-
+class EventModalHelper extends ModalHelper
+{
     public function search($search, $device_id = null)
     {
         $this->checkException('events', 'view');
@@ -21,8 +23,9 @@ class EventModalHelper extends ModalHelper {
             $events = $events->toArray();
 
             foreach ($events['data'] as &$event) {
-                if(!empty($event['geofence']))
+                if (! empty($event['geofence'])) {
                     unset($event['geofence']);
+                }
             }
             $events['url'] = route('api.get_events');
         }

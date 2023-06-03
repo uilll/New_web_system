@@ -2,38 +2,42 @@
 
 namespace App\Http\Controllers\Frontend\Tracker;
 
-use Validator;
+use App\Exceptions\PermissionException;
+use App\Exceptions\ResourseNotFoundException;
 use Tobuli\Entities\Task;
 use Tobuli\Entities\TaskStatus;
-
-use App\Exceptions\ResourseNotFoundException;
-use App\Exceptions\PermissionException;
 use Tobuli\Exceptions\ValidationException;
+use Validator;
 
 class TasksController extends ApiController
 {
-    public function getTasks() {
+    public function getTasks()
+    {
         return response()->json([
             'status' => 1,
-            'data'    => Task::with('lastStatus')->where('device_id', $this->deviceInstance->id)->get()
+            'data' => Task::with('lastStatus')->where('device_id', $this->deviceInstance->id)->get(),
         ]);
     }
 
-    public function getStatuses() {
+    public function getStatuses()
+    {
         return response()->json([
             'status' => 1,
-            'data' => array_chunk(TaskStatus::$statuses, 1, true)
+            'data' => array_chunk(TaskStatus::$statuses, 1, true),
         ], 200, [], true);
     }
 
-    public function getSignature($taskStatusId) {
+    public function getSignature($taskStatusId)
+    {
         $taskStatus = TaskStatus::find($taskStatusId);
 
-        if ( ! $taskStatus)
+        if (! $taskStatus) {
             throw new ResourseNotFoundException('global.task_status');
+        }
 
-        if ( ! $taskStatus->signature)
+        if (! $taskStatus->signature) {
             throw new ResourseNotFoundException('global.task_status');
+        }
 
         return response($taskStatus->signature)
             ->header('Content-Type', 'image/jpeg')
@@ -42,28 +46,32 @@ class TasksController extends ApiController
             ->header('Cache-Control', 'max-age=60, must-revalidate');
     }
 
-    public function update($taskId) {
+    public function update($taskId)
+    {
         $validator = Validator::make(request()->all(), [
-            'status'    => 'required',
-            'signature' => 'required_if:status,' . TaskStatus::STATUS_COMPLETED,
+            'status' => 'required',
+            'signature' => 'required_if:status,'.TaskStatus::STATUS_COMPLETED,
         ]);
 
-        if ( $validator->fails() )
+        if ($validator->fails()) {
             throw new ValidationException($validator->errors());
+        }
 
         $task = Task::find($taskId);
 
-        if ( ! $task)
+        if (! $task) {
             throw new ResourseNotFoundException('global.task');
+        }
 
-        if ($task->device_id != $this->deviceInstance->id)
+        if ($task->device_id != $this->deviceInstance->id) {
             throw new PermissionException();
+        }
 
         $taskStatus = new TaskStatus();
         $taskStatus->task_id = $task->id;
         $taskStatus->status = request()->input('status');
 
-        if ( ! empty(request()->input('signature'))) {
+        if (! empty(request()->input('signature'))) {
             $taskStatus->signatureBase64 = request()->input('signature');
         }
 

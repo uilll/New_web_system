@@ -85,7 +85,7 @@
 						<div class="form-group">
                             <label for="to" class="col-sm-3 control-label">{!!trans('front.geofences')!!}</label>
                             <div class="col-sm-9">
-                                {!!Form::select('geofences[]', $geofences->lists('name', 'id')->all(), null, ['class' => 'form-control', 'multiple' => 'multiple', 'data-icon' => 'icon geofences', 'data-live-search' => true, 'data-actions-box' => true])!!}
+                                {!!Form::select('geofences[]', $geofences->pluck('name', 'id')->all(), null, ['class' => 'form-control', 'multiple' => 'multiple', 'data-icon' => 'icon geofences', 'data-live-search' => true, 'data-actions-box' => true])!!}
                             </div>
                         </div>
 						<div class="form-group">

@@ -1,7 +1,7 @@
 <?php
 
-return array(
+return [
 
     'previous' => '«Prethodno',
     'next' => 'Sljedeći &quot;',
-);
+];

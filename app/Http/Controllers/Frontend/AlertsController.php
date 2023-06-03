@@ -1,8 +1,9 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\AlertModalHelper;
-
 
 class AlertsController extends Controller
 {
@@ -10,16 +11,16 @@ class AlertsController extends Controller
     {
         $data = AlertModalHelper::get();
 
-        return !$this->api ? view('front::Alerts.index')->with($data) : ['status' => 1, 'items' => $data];
+        return ! $this->api ? view('front::Alerts.index')->with($data) : ['status' => 1, 'items' => $data];
     }
 
     public function create()
     {
         $data = AlertModalHelper::createData();
-        
-        //var_dump($data); 
 
-        return is_array($data) && !$this->api ? view('front::Alerts.create')->with($data) : $data;
+        //var_dump($data);
+
+        return is_array($data) && ! $this->api ? view('front::Alerts.create')->with($data) : $data;
     }
 
     public function store()
@@ -31,7 +32,7 @@ class AlertsController extends Controller
     {
         $data = AlertModalHelper::editData();
 
-        return is_array($data) && !$this->api ? view('front::Alerts.edit')->with($data) : $data;
+        return is_array($data) && ! $this->api ? view('front::Alerts.edit')->with($data) : $data;
     }
 
     public function update()
@@ -44,7 +45,8 @@ class AlertsController extends Controller
         return AlertModalHelper::changeActive();
     }
 
-    public function doDestroy($id) {
+    public function doDestroy($id)
+    {
         $data = AlertModalHelper::doDestroy($id);
 
         return is_array($data) ? view('front::Alerts.destroy')->with($data) : $data;

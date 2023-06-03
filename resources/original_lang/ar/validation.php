@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute يجب ان يقبل',
     'active_url' => ':attribute ليس لديه عنوان ويب صحيح',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => ':attribute قد تحتوي على أحرف وأرقام فقط',
     'array' => ':attribute يجب أن تكون مصفوفة',
     'before' => ':attribute يجب أن يكون تاريخه قبل :date',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute يجب أن يتراوح بين :min و :max',
         'file' => ':attribute يجب أن يتراوح بين :min و :max كيلوبايت',
         'string' => ':attribute يجب أن يتراوح بين :min و :max الحروف',
         'array' => ':attribute يجب أن يتراوح بين :min و :max العناصر',
-    ),
+    ],
     'confirmed' => 'تاكيد الـ :attribute غير متطابق',
     'date' => 'تاريخ الـ :attribute غير صحيح',
     'date_format' => ' :attribute لا يطابق صيغة :format',
@@ -28,19 +28,19 @@ return array(
     'in' => ':attribute المحددة غير صالحة',
     'integer' => ':attribute يجب أن تكون عدد صحيح',
     'ip' => ':attribute يجب أن يكون عنوان IP صالحًا',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute قد لا يكون أكبر من :max',
         'file' => ':attribute قد لا يكون أكبر من :max كيلوبايت',
         'string' => ':attribute قد لا يكون أكبر من :max الحروف',
         'array' => ':attribute قد لا يكون أكبر من :max العناصر',
-    ),
+    ],
     'mimes' => ':attribute يجب أن يكون ملف من  نوع :values',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute يجب أن يكون علي الاقل :min ',
         'file' => ':attribute يجب أن يكون علي الاقل :min كيلوبايت ',
         'string' => ':attribute يجب أن يكون علي الاقل :min الحروف',
         'array' => ':attribute يجب أن تحتوي علي الاقل :min من العناصر',
-    ),
+    ],
     'not_in' => ':attribute المحددة غير صالحة',
     'numeric' => ':attribute يجب أن تكون رقما',
     'regex' => ':attribute صيغته غير صالحة',
@@ -51,22 +51,22 @@ return array(
     'required_without' => 'حقل :attribute مطلوب عندما تكون :values غير موجودة',
     'required_without_all' => 'حقل :attribute مطلوب عندما لا يكون اي من :values موجود',
     'same' => ':attribute و :other يجب ان تتطابق',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute يجب ان يكون :size',
         'file' => ':attribute يجب ان يكون :size كيلوبايت',
         'string' => ':attribute يجب ان يكون :size الحروف',
         'array' => ':attribute يجب ان يكون :size العناصر',
-    ),
+    ],
     'unique' => ':attribute تم اختيارة من قبل',
     'url' => ':attribute المحددة غير صالحة',
     'array_max' => ' :attribute الحد الاقصى للعناصر :max.',
     'lesser_than' => ':attribute يجب أن يكون أقل منn :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'رسالة مخصصة',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'بريد اللكتروني',
         'password' => 'كلمة السر',
         'password_confirmation' => 'تاكيد كلمة السر',
@@ -317,8 +317,8 @@ return array(
         'icon_status_offline' => 'أيقونة حالة دون اتصال',
         'icon_status_ack' => 'رمز حالة Ack',
         'icon_status_engine' => 'رمز حالة المحرك',
-    ),
+    ],
     'same_protocol' => 'يجب أن تكون الأجهزة من نفس البروتوكول',
     'contains' => ' :attribute يجب أن تحتوي علي :value',
     'ip_port' => ':attribute لا تتطابق مع تنسيق IP:PORT',
-);
+];

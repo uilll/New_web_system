@@ -1,31 +1,30 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
 
+namespace App\Http\Controllers\Frontend;
+
+use App\customer;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Http\Requests\UpdateMessageRequest;
 use App\Message;
 use App\message_replies;
-use App\Http\Requests\CreateMessageRequest;
-use App\Http\Requests\UpdateMessageRequest;
-use App\customer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class MessageController extends Controller
 {
     public function index_client()
-    {   
+    {
         $user_id = Auth::user()->id; // Obter o ID do cliente logado
-         // Buscar o objeto Customer associado ao usuário logado
-         $customer = customer::select('id', 'all_users')
-            ->whereNotNull('all_users')
-            ->where('all_users', 'LIKE', '%"'.$user_id.'"%')
-            ->first();
+        // Buscar o objeto Customer associado ao usuário logado
+        $customer = customer::select('id', 'all_users')
+           ->whereNotNull('all_users')
+           ->where('all_users', 'LIKE', '%"'.$user_id.'"%')
+           ->first();
         //dd($customers);
-         $client_id = null;
+        $client_id = null;
 
-        if (!$customer) {
+        if (! $customer) {
             // Tratar o caso em que o usuário logado não está associado a um Customer
             // Você pode redirecionar para uma página de erro, por exemplo
             $messages = collect(); // Cria uma coleção vazia
@@ -35,28 +34,30 @@ class MessageController extends Controller
             $messages = Message::where('client_id', $client_id)->orderBy('created_at', 'desc')->get();
             //dd($messages);
         }
-        
+
         $messages = Message::where('client_id', $client_id)->orderBy('created_at', 'desc')->get();
+
         return view('front::Message.index')->with(compact('messages'));
     }
 
-
     public function index_admin()
     {
-        if(Auth::user()->isAdmin())
+        if (Auth::user()->isAdmin()) {
             $customers = customer::orderby('id', 'asc')
                     ->where('manager_id', 0)
                     ->get();
-        else
+        } else {
             $customers = customer::orderby('id', 'asc')
             ->where('manager_id', Auth::User()->id)
             ->get();
+        }
         $messages = Message::orderBy('created_at', 'desc')
             ->get();
-        
+
         //dd ($messages);
         $replies = message_replies::all();
-        return view('admin::Messages.index')->with(compact('messages','replies','customers'));
+
+        return view('admin::Messages.index')->with(compact('messages', 'replies', 'customers'));
     }
 
     public function create()
@@ -66,10 +67,11 @@ class MessageController extends Controller
 
     public function store(Request $request)
     {
-        if(Auth::user()->isAdmin())
+        if (Auth::user()->isAdmin()) {
             $company_id = 0;
-        else    
+        } else {
             $company_id = Auth::User()->id;
+        }
 
         //debugar(true, $request->input('customer_id'));
         $message = new Message();
@@ -88,7 +90,7 @@ class MessageController extends Controller
     public function show($id)
     {
         $message = Message::find($id);
-        if (!$message) {
+        if (! $message) {
             abort(404);
         }
         $message->load('client');
@@ -99,7 +101,7 @@ class MessageController extends Controller
     public function edit($id)
     {
         $message = Message::find($id);
-        if (!$message) {
+        if (! $message) {
             abort(404);
         }
 
@@ -109,7 +111,7 @@ class MessageController extends Controller
     public function update(UpdateMessageRequest $request, $id)
     {
         $message = Message::find($id);
-        if (!$message) {
+        if (! $message) {
             abort(404);
         }
 
@@ -127,7 +129,7 @@ class MessageController extends Controller
     public function destroy($id)
     {
         $message = Message::find($id);
-        if (!$message) {
+        if (! $message) {
             abort(404);
         }
         $message->delete();
@@ -141,10 +143,10 @@ class MessageController extends Controller
             $message = Message::where('client_id', $client_id)
                             ->where('id', $subject)
                             ->firstOrFail(['id', 'subject', 'client_id', 'body', 'is_to_client']);
-            
+
             $messages = message_replies::where('message_id', $message->id)
                                     ->orderBy('created_at', 'asc')
-                                    ->get(['id','body', 'sender_type', 'is_read']);
+                                    ->get(['id', 'body', 'sender_type', 'is_read']);
             //dd($messages );
             if ($message) {
                 //dd($messages );
@@ -154,10 +156,8 @@ class MessageController extends Controller
             }
         } catch (\Exception $e) {
             debugar(true, $e);
+
             return response()->json(['message' => 'Erro ao obter as mensagens'], 500);
         }
     }
-
-
-
 }

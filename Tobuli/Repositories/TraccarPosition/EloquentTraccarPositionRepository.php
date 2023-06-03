@@ -1,19 +1,19 @@
-<?php namespace Tobuli\Repositories\TraccarPosition;
+<?php
 
-use Illuminate\Support\Facades\Auth;
+namespace Tobuli\Repositories\TraccarPosition;
+
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Tobuli\Entities\Device;
 
-class EloquentTraccarPositionRepository implements TraccarPositionRepositoryInterface {
-
+class EloquentTraccarPositionRepository implements TraccarPositionRepositoryInterface
+{
     public function searchObj($device_id, $date_from, $date_to, $sort = 'asc')
     {
         $device = Device::where('traccar_device_id', $device_id)->first();
 
-        if ( ! $device)
+        if (! $device) {
             return [];
+        }
 
         return $device->positions()
             ->whereBetween('time', [$date_from, $date_to])
@@ -26,11 +26,11 @@ class EloquentTraccarPositionRepository implements TraccarPositionRepositoryInte
         DB::connection('traccar_mysql')->setFetchMode(\PDO::FETCH_ASSOC);
 
         $columns = [
-            'id', 'altitude', 'course', 'latitude', 'longitude', 'other', 'speed', 'time', 'server_time', 'valid'
+            'id', 'altitude', 'course', 'latitude', 'longitude', 'other', 'speed', 'time', 'server_time', 'valid',
         ];
 
         $result = DB::connection('traccar_mysql')
-            ->table('positions_'.$device_id )
+            ->table('positions_'.$device_id)
             //->select($columns)
             ->whereBetween('time', [$date_from, $date_to])
             ->orderBy('time', $sort)
@@ -43,15 +43,15 @@ class EloquentTraccarPositionRepository implements TraccarPositionRepositoryInte
         return $result;
     }
 
-    public function search($user_id, $data, $paginate = FALSE, $limit = 50, $sort = 'asc')
+    public function search($user_id, $data, $paginate = false, $limit = 50, $sort = 'asc')
     {
         $query = DB::connection('traccar_mysql')
-            ->table('positions_' . $data['device_id'] . ' AS positions')
+            ->table('positions_'.$data['device_id'].' AS positions')
             ->select('positions.*')
             ->whereBetween('positions.time', [$data['date_from'], $data['date_to']])
             ->orderBy('positions.time', $sort);
 
-        return ($paginate ? $query->paginate($limit) : $query->get());
+        return $paginate ? $query->paginate($limit) : $query->get();
     }
 
     public function sumDistance($device_id, $range)
@@ -72,7 +72,8 @@ class EloquentTraccarPositionRepository implements TraccarPositionRepositoryInte
             ->first();
     }
 
-    public function getOldest($device_id) {
+    public function getOldest($device_id)
+    {
         return DB::connection('traccar_mysql')
             ->table("positions_{$device_id}")
             ->select(DB::raw('*, latitude as lastValidLatitude, longitude as lastValidLongitude'))
@@ -80,7 +81,8 @@ class EloquentTraccarPositionRepository implements TraccarPositionRepositoryInte
             ->first();
     }
 
-    public function getNewer($device_id, $position_id = 0) {
+    public function getNewer($device_id, $position_id = 0)
+    {
         return DB::connection('traccar_mysql')
             ->table("positions_{$device_id}")
             ->select(DB::raw('*, latitude as lastValidLatitude, longitude as lastValidLongitude'))
@@ -88,7 +90,8 @@ class EloquentTraccarPositionRepository implements TraccarPositionRepositoryInte
             ->first();
     }
 
-    public function getOlder($deviceId, $positionId = 0, $limit = 5) {
+    public function getOlder($deviceId, $positionId = 0, $limit = 5)
+    {
         return DB::connection('traccar_mysql')
             ->table("positions_{$deviceId}")
             ->select(DB::raw('*'))
@@ -96,13 +99,13 @@ class EloquentTraccarPositionRepository implements TraccarPositionRepositoryInte
             ->where('distance', '>', 0.02)
             ->take($limit)
             ->get();
-
     }
 
-    public function getBetween($device_id, $from, $to) {
+    public function getBetween($device_id, $from, $to)
+    {
         return DB::connection('traccar_mysql')
             ->table("positions_{$device_id} as positions")
-            ->select(DB::raw("positions.*, sensors.time as sensor_time, sensors.other as sensor_other, DATE(positions.time) as date"))
+            ->select(DB::raw('positions.*, sensors.time as sensor_time, sensors.other as sensor_other, DATE(positions.time) as date'))
             ->whereRaw("(positions.time BETWEEN '{$from}' AND '{$to}' OR sensors.time BETWEEN '{$from}' AND '{$to}')")
             //->whereBetween('positions.time', [$from, $to])
             //->groupBy('positions.id')
@@ -110,12 +113,12 @@ class EloquentTraccarPositionRepository implements TraccarPositionRepositoryInte
             ->get();
     }
 
-    public function getPosition($device_id, $position_id) {
+    public function getPosition($device_id, $position_id)
+    {
         $result = DB::connection('traccar_mysql')
-            ->table('positions_'.$device_id )
+            ->table('positions_'.$device_id)
             ->find($position_id);
 
         return $result;
     }
-
 }

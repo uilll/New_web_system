@@ -1,14 +1,16 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class Timezone extends Eloquent {
+class Timezone extends Eloquent
+{
+    protected $table = 'timezones';
 
-	protected $table = 'timezones';
+    protected $fillable = ['title', 'zone', 'order', 'prefix', 'time'];
 
-	protected $fillable = array('title', 'zone', 'order', 'prefix', 'time');
-
-	public $timestamps = false;
+    public $timestamps = false;
 
     public function getZoneAttribute($value)
     {

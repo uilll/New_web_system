@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Services\AsaasService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
-use Illuminate\Pagination\Paginator;
-
 use App\customer;
+use App\Services\AsaasService;
 use Carbon\Carbon;
-use Tobuli\Repositories\User\UserRepositoryInterface as User;
 use Facades\Repositories\UserRepo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
 
 class AsaasClientesController extends BaseController
 {
     protected $asaasService;
+
     private $section = 'asaas';
 
     public function __construct(AsaasService $asaasService)
@@ -29,71 +24,65 @@ class AsaasClientesController extends BaseController
     public function listarClientes(Request $request)
     {
         //TESTE PARA BLOQUEIO/DESBLOQUEIO DE CLIENTES ################################################
-        if(false){
+        if (false) {
+            $customers = Customer::where('in_debt', true)->get();
 
-                            $customers = Customer::where('in_debt', true)->get();
+            //dd($customers);
 
-                            //dd($customers);
+            foreach ($customers as $customer) {
+                $cpfCnpj = $customer->cpf_cnpj;
 
-                            foreach ($customers as $customer) {
-                                $cpfCnpj = $customer->cpf_cnpj;
-                            
-                                $asaasCustomer = collect($this->asaasService->get("customers", ['cpfCnpj' => $cpfCnpj]))->get('data');
-                                
-                                if ($asaasCustomer) {
-                                    $customerId = $asaasCustomer[0]['id'];
-                                    
-                                    $overduePayments = collect($this->asaasService->get("payments", ['status' => 'OVERDUE', 'customer' => $customerId]))->get('data');
-                            
-                                    if (empty($overduePayments)) {
-                                        // DESBLOQUEIO DO CLIENTE
-                                        $customer->active = true;
-                                        $customer->in_debt = false;
-                                        $customer->save();
-                            
-                                        // DESBLOQUEIO DOS USUÁRIOS
-                                        $users = json_decode($customer->all_users);
-                                        foreach ($users as $id) {
-                                            $item = UserRepo::find($id);
-                                            $item->update(['active' => true]);
-                                        }
-                                    }
-                                }
-                            }
-            
+                $asaasCustomer = collect($this->asaasService->get('customers', ['cpfCnpj' => $cpfCnpj]))->get('data');
 
+                if ($asaasCustomer) {
+                    $customerId = $asaasCustomer[0]['id'];
 
-                            $overduePayments = collect($this->asaasService->get("payments", ['status' => 'OVERDUE']))->get('data');
+                    $overduePayments = collect($this->asaasService->get('payments', ['status' => 'OVERDUE', 'customer' => $customerId]))->get('data');
 
-                            foreach ($overduePayments as $payment) {
-                                $Customer_asaas = $this->asaasService->get("customers/{$payment['customer']}");
+                    if (empty($overduePayments)) {
+                        // DESBLOQUEIO DO CLIENTE
+                        $customer->active = true;
+                        $customer->in_debt = false;
+                        $customer->save();
 
-                                //dd($Customer_asaas);
-                                $customer = Customer::where('cpf_cnpj', $Customer_asaas['cpfCnpj'])->first();
-                            
+                        // DESBLOQUEIO DOS USUÁRIOS
+                        $users = json_decode($customer->all_users);
+                        foreach ($users as $id) {
+                            $item = UserRepo::find($id);
+                            $item->update(['active' => true]);
+                        }
+                    }
+                }
+            }
 
-                                if ($customer && Carbon::parse($payment['dueDate'])->diffInDays(Carbon::now()) >= 30) {
-                                    // BLOQUEIO DO CLIENTE
-                                    $customer->active = false;
-                                    $customer->in_debt = true;
-                                    $customer->save();
+            $overduePayments = collect($this->asaasService->get('payments', ['status' => 'OVERDUE']))->get('data');
 
-                                    // BLOQUEIO DOS USUÁRIOS
-                                    $users = JSON_DECODE($customer->all_users);
-                                    //dd($users);
-                                    foreach ($users as $id) {
-                                        $item = UserRepo::find($id);
-                                        $item->update(['active' => "false"]);
-                                    }
-                                }
-                            }
+            foreach ($overduePayments as $payment) {
+                $Customer_asaas = $this->asaasService->get("customers/{$payment['customer']}");
 
+                //dd($Customer_asaas);
+                $customer = Customer::where('cpf_cnpj', $Customer_asaas['cpfCnpj'])->first();
+
+                if ($customer && Carbon::parse($payment['dueDate'])->diffInDays(Carbon::now()) >= 30) {
+                    // BLOQUEIO DO CLIENTE
+                    $customer->active = false;
+                    $customer->in_debt = true;
+                    $customer->save();
+
+                    // BLOQUEIO DOS USUÁRIOS
+                    $users = json_decode($customer->all_users);
+                    //dd($users);
+                    foreach ($users as $id) {
+                        $item = UserRepo::find($id);
+                        $item->update(['active' => 'false']);
+                    }
+                }
+            }
         }
         //FIM DE TESTE PARA BLOQUEIO/DESBLOQUEIO DE CLIENTES ################################################
 
-
         $params = $request->all();
-        $page = $request->query("page");
+        $page = $request->query('page');
         $offset = 0;
         $allCustomers = [];
 
@@ -106,14 +95,13 @@ class AsaasClientesController extends BaseController
             $offset += 100;
         } while (count($customers) == 100);
 
-        if(request()->has('search_phrase')){
+        if (request()->has('search_phrase')) {
             $searchPhrase = request()->input('search_phrase');
             //dd($searchPhrase);
-            
-            $clientes = paginate_($allCustomers, 10, $page, [], $searchPhrase);    
-        }
-        else{
-            $clientes = paginate_($allCustomers, 10, $page);    
+
+            $clientes = paginate_($allCustomers, 10, $page, [], $searchPhrase);
+        } else {
+            $clientes = paginate_($allCustomers, 10, $page);
         }
         //dd($clientes);
         return View::make('admin::Asaas.Clientes.clientes_index')->with(compact('clientes'));
@@ -122,7 +110,8 @@ class AsaasClientesController extends BaseController
     public function contar()
     {
         $response = collect($this->asaasService->get('customers'))->get('data');
-        $count = count($response);        
+        $count = count($response);
+
         return View::make('admin::'.ucfirst($this->section).'.contar');
     }
 
@@ -137,7 +126,7 @@ class AsaasClientesController extends BaseController
             'name' => 'required',
             'cpfCnpj' => 'required',
         ]);
-        
+
         $response = $this->asaasService->post('customers', [
             'name' => $request->input('name'),
             'cpfCnpj' => $request->input('cpfCnpj'),
@@ -154,7 +143,7 @@ class AsaasClientesController extends BaseController
             'additionalEmails' => $request->input('additionalEmails'),
         ]);
 
-        return Response::json(['status'=>1]);
+        return Response::json(['status' => 1]);
     }
 
     public function consultarCliente($id)
@@ -164,14 +153,15 @@ class AsaasClientesController extends BaseController
         return response()->json($response);
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $item = $this->asaasService->get("customers/{$id}");
 
         //dd($item);
-        
+
         return View::make('admin::Asaas.Clientes.edit')->with(compact('item'));
     }
-  
+
     public function atualizarCliente(Request $request)
     {
         /*$validator = Validator::make($request->all(), [
@@ -180,7 +170,7 @@ class AsaasClientesController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return redirect('asaas/clientes/'.$request->id.'/edit') 
+            return redirect('asaas/clientes/'.$request->id.'/edit')
                         ->withErrors($validator)
                         ->withInput();
         }*/
@@ -190,7 +180,7 @@ class AsaasClientesController extends BaseController
             'cpfCnpj' => 'required',
         ]);
 
-        try{
+        try {
             $response = $this->asaasService->put("customers/{$request->input('id')}", [
                 'name' => $request->input('name'),
                 'cpfCnpj' => $request->input('cpfCnpj'),
@@ -206,15 +196,12 @@ class AsaasClientesController extends BaseController
                 'notificationDisabled' => $request->input('notificationDisabled'),
                 'additionalEmails' => $request->input('additionalEmails'),
             ]);
-
-        }
-        catch (Exception $e){
-            debugar(true,$e);
+        } catch (Exception $e) {
+            debugar(true, $e);
         }
 
         //debugar(true, json_encode($response));
         return Response::json(['status' => 1]);
-        
     }
 
     public function delete($id)
@@ -229,51 +216,51 @@ class AsaasClientesController extends BaseController
         //debugar (true, $request->input('id'));
         //dd('oi');
         $this->asaasService->delete("customers/{$request->input('id')}");
+
         return Response::json(['status' => 1]);
     }
 
     public function listarCobranças(Request $request)
     {
         $params = $request->all();
-        $page = $request->query("page");
-        $status = "PENDING";
+        $page = $request->query('page');
+        $status = 'PENDING';
         $offset = 0;
         $allPayments = [];
-        
 
         do {
-            $Payments = collect($this->asaasService->get('payments', ['limit' => 100, 'offset' => $offset, $status ]))->get('data');
+            $Payments = collect($this->asaasService->get('payments', ['limit' => 100, 'offset' => $offset, $status]))->get('data');
             $allPayments = array_merge($allPayments, $Payments);
             $offset += 100;
             //dd($Payments);
         } while (count($Payments) == 100);
-        
+
         $allPayments = collect($allPayments)->map(function ($payment) {
             $customerid = $payment['customer'];
             $jsonResponse = $this->consultarCliente($customerid);
             $content = json_decode($jsonResponse->getContent(), true);
             $payment['name'] = $content['name'];
+
             return $payment;
         })->toArray();
-          
+
         //dd($allPayments);
-        if(request()->has('search_phrase')){
+        if (request()->has('search_phrase')) {
             $searchPhrase = request()->input('search_phrase');
             //dd($searchPhrase);
-            
-            $cobranças = paginate_($allPayments, 39, $page, [], $searchPhrase);    
+
+            $cobranças = paginate_($allPayments, 39, $page, [], $searchPhrase);
+        } else {
+            $cobranças = paginate_($allPayments, 39, $page);
         }
-        else{
-            $cobranças = paginate_($allPayments, 39, $page);    
-        }
-        
+
         //print_r($cobranças->items);
         //dd($cobranças);
         return View::make('admin::Asaas.Cobranças.cobranças_index')->with(compact('cobranças'));
     }
 
     public function cobrar(Request $request)
-    {   
+    {
         $offset = 0;
         do {
             $customers = collect($this->asaasService->get('customers', ['limit' => 100, 'offset' => $offset]))->get('data');
@@ -291,7 +278,7 @@ class AsaasClientesController extends BaseController
             'name' => 'required',
             'cpfCnpj' => 'required',
         ]);*/
-        
+
         $response = $this->asaasService->post('payments', [
             'customer' => $request->input('customer'),
             'billingType' => $request->input('billingType'),
@@ -304,16 +291,17 @@ class AsaasClientesController extends BaseController
             'externalReference' => $request->input('externalReference'),
         ]);
 
-        return Response::json(['status'=>1]);
+        return Response::json(['status' => 1]);
     }
 
-    public function editCo($id) {
+    public function editCo($id)
+    {
         $item = $this->asaasService->get("payments/{$id}");
 
         //dd($item);
         return View::make('admin::Asaas.Cobranças.edit')->with(compact('item'));
     }
-  
+
     public function atualizarCobrança(Request $request)
     {
         /*$validator = Validator::make($request->all(), [
@@ -322,7 +310,7 @@ class AsaasClientesController extends BaseController
         ]);
 
         if ($validator->fails()) {
-            return redirect('asaas/clientes/'.$request->id.'/edit') 
+            return redirect('asaas/clientes/'.$request->id.'/edit')
                         ->withErrors($validator)
                         ->withInput();
         }*/
@@ -333,21 +321,20 @@ class AsaasClientesController extends BaseController
         ]);*/
 
         $response = $this->asaasService->put("payments/{$request->input('id')}", [
-                'name'=> $request->input('name'),
-                'billingType' => $request->input('billingType'),
-                'value' => $request->input('value'),
-                'dateCreated' => $request->input('dateCreated'),
-                'dueDate' => $request->input('dueDate'),
-                'description' => $request->input('description'),
-                'installmentCount' => $request->input('installmentCount'),
-                'installmentValue' => $request->input('installmentValue'),
-                'externalReference' => $request->input('externalReference'),
+            'name' => $request->input('name'),
+            'billingType' => $request->input('billingType'),
+            'value' => $request->input('value'),
+            'dateCreated' => $request->input('dateCreated'),
+            'dueDate' => $request->input('dueDate'),
+            'description' => $request->input('description'),
+            'installmentCount' => $request->input('installmentCount'),
+            'installmentValue' => $request->input('installmentValue'),
+            'externalReference' => $request->input('externalReference'),
         ]);
 
         //debugar(true, json_encode($response));
         //dd('oi');
         return Response::json(['status' => 1]);
-        
     }
 
     public function deleteCo($id)
@@ -360,12 +347,14 @@ class AsaasClientesController extends BaseController
         //debugar (true, $request->input('id'));
         //dd('oi');
         $this->asaasService->delete("payments/{$request->input('id')}");
+
         return Response::json(['status' => 1]);
     }
 
-    public function pagar($id) {
+    public function pagar($id)
+    {
         $item = $this->asaasService->get("payments/{$id}");
-        
+
         //dd($item);
         return View::make('admin::Asaas.Cobranças.pagar')->with(compact('item'));
     }
@@ -373,41 +362,34 @@ class AsaasClientesController extends BaseController
     public function receiveInCash(Request $request)
     {
         $response = $this->asaasService->put("payments/{$request->input('id')}/receiveInCash", [
-                'value' => $request->input('value'),
-                'paymentDate' => $request->input('paymentDate'),
-                'description' => $request->input('description'),
-                'notifyCustomer' => $request->input('notifyCustomer'),
+            'value' => $request->input('value'),
+            'paymentDate' => $request->input('paymentDate'),
+            'description' => $request->input('description'),
+            'notifyCustomer' => $request->input('notifyCustomer'),
         ]);
 
         //debugar(true, json_encode($response));
         //dd('oi');
         return Response::json(['status' => 1]);
-        
     }
 
     public function teste()
     {
         $clientes = Customer::get()->pluck('cpf_cnpj');
-        foreach($clientes as $cpf)
-        {
-            if(!empty($cpf))
-            {
+        foreach ($clientes as $cpf) {
+            if (! empty($cpf)) {
                 $customer = collect($this->asaasService->get('customers', ['cpfCnpj' => $cpf]))->get('data');
-                $payments = collect($this->asaasService->get("payments", ['customer' => $customer['0']['id'], 'status' => 'OVERDUE']))->get('data'); 
-                if(!empty($payments))
-                {
-                    foreach($payments as $pay){ 
-                        if($pay['dueDate'] < Carbon::now()->subDays(30))
-                        {
+                $payments = collect($this->asaasService->get('payments', ['customer' => $customer['0']['id'], 'status' => 'OVERDUE']))->get('data');
+                if (! empty($payments)) {
+                    foreach ($payments as $pay) {
+                        if ($pay['dueDate'] < Carbon::now()->subDays(30)) {
                             dd('bloqueio');
                         }
                     }
-                } 
-                else
-                {
+                } else {
                     dd('desbloqueia');
                 }
-            }  
+            }
         }
     }
 }

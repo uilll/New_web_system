@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Repositories\UserDriver;
+<?php
+
+namespace Tobuli\Repositories\UserDriver;
 
 use Tobuli\Repositories\EloquentRepositoryInterface;
 
-interface UserDriverRepositoryInterface extends EloquentRepositoryInterface {
-
+interface UserDriverRepositoryInterface extends EloquentRepositoryInterface
+{
 }

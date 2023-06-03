@@ -1,11 +1,14 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class UserDriver extends Eloquent {
-	protected $table = 'user_drivers';
+class UserDriver extends Eloquent
+{
+    protected $table = 'user_drivers';
 
-    protected $fillable = array(
+    protected $fillable = [
         'user_id',
         'device_id',
         'name',
@@ -18,14 +21,16 @@ class UserDriver extends Eloquent {
         'alert',
         'seeing',
         'next_alert',
-        'description'
-    );
+        'description',
+    ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('Tobuli\Entities\User', 'user_id', 'id');
     }
 
-    public function device() {
+    public function device()
+    {
         return $this->hasOne('Tobuli\Entities\Device', 'id', 'device_id');
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class MinifinderProtocol extends BaseProtocol implements Protocol
 {
@@ -21,7 +21,7 @@ class MinifinderProtocol extends BaseProtocol implements Protocol
             //$this->initCommand(Commands::TYPE_MODE_POWER_SAVING),
             //$this->initCommand(Commands::TYPE_MODE_DEEP_SLEEP),
             $this->initCommand(Commands::TYPE_SOS_NUMBER),
-            $this->initCommand(Commands::TYPE_CUSTOM)
+            $this->initCommand(Commands::TYPE_CUSTOM),
         ];
     }
 }

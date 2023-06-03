@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class ArrowAckPath2 extends Migration {
-
+class ArrowAckPath2 extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -15,7 +14,6 @@ class ArrowAckPath2 extends Migration {
         //
     }
 
-
     /**
      * Reverse the migrations.
      *
@@ -25,5 +23,4 @@ class ArrowAckPath2 extends Migration {
     {
         //
     }
-
 }

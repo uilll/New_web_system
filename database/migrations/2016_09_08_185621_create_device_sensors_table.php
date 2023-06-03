@@ -3,19 +3,20 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateDeviceSensorsTable extends Migration {
+class CreateDeviceSensorsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        if (Schema::hasTable('device_sensors')) {
+            return;
+        }
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-        if (Schema::hasTable('device_sensors')) { return; }
-
-		Schema::create('device_sensors', function(Blueprint $table)
-		{
+        Schema::create('device_sensors', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
             $table->integer('device_id')->unsigned()->nullable()->index();
@@ -51,18 +52,16 @@ class CreateDeviceSensorsTable extends Migration {
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             //$table->timestamps();
-		});
-	}
+        });
+    }
 
-
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::drop('device_sensors');
-	}
-
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('device_sensors');
+    }
 }

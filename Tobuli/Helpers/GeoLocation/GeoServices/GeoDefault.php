@@ -2,7 +2,6 @@
 
 namespace Tobuli\Helpers\GeoLocation\GeoServices;
 
-
 class GeoDefault extends GeoNominatim
 {
     public function __construct()

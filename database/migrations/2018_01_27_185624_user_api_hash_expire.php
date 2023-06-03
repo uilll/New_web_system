@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class UserApiHashExpire extends Migration {
-
+class UserApiHashExpire extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -12,14 +11,14 @@ class UserApiHashExpire extends Migration {
      */
     public function up()
     {
-        if (Schema::hasColumn('users', 'api_hash_expire'))
+        if (Schema::hasColumn('users', 'api_hash_expire')) {
             return;
+        }
 
         Schema::table('users', function ($table) {
             $table->datetime('api_hash_expire')->after('api_hash')->nullable();
         });
     }
-
 
     /**
      * Reverse the migrations.
@@ -30,5 +29,4 @@ class UserApiHashExpire extends Migration {
     {
         //
     }
-
 }

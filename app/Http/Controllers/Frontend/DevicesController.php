@@ -1,28 +1,24 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Facades\ModalHelpers\DeviceModalHelper;
 use Facades\Repositories\DeviceRepo;
 use Facades\Repositories\UserRepo;
-use Facades\Repositories\TraccarPositionRepo;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Tobuli\Entities\Device;
-use Tobuli\Helpers\HistoryHelper;
-use Tobuli\Repositories\TraccarPosition\EloquentTraccarPositionRepository;
-
-use Carbon\Carbon;
 
 class DevicesController extends Controller
 {
-
     public function create()
     {
         if (Auth::user()->isAdmin() || Auth::user()->isManager()) {
             $data = DeviceModalHelper::createData();
-            return is_array($data) && !$this->api ? view('front::Devices.create')->with($data) : $data;
+
+            return is_array($data) && ! $this->api ? view('front::Devices.create')->with($data) : $data;
         }
     }
 
@@ -33,70 +29,72 @@ class DevicesController extends Controller
         }
     }
 
-    public function edit($id = NULL, $admin = FALSE) {
+    public function edit($id = null, $admin = false)
+    {
         if (Auth::user()->isAdmin() || Auth::user()->isManager()) {
             $data = DeviceModalHelper::editData();
-            return is_array($data) && !$this->api ? view('front::Devices.edit')->with(array_merge($data, ['admin' => $admin])) : $data;
+
+            return is_array($data) && ! $this->api ? view('front::Devices.edit')->with(array_merge($data, ['admin' => $admin])) : $data;
         }
     }
 
     public function update()
     {
-        if (Auth::user()->isAdmin() || Auth::user()->isManager()) 
+        if (Auth::user()->isAdmin() || Auth::user()->isManager()) {
             return DeviceModalHelper::edit();
-        
+        }
     }
 
     public function transfer()
     {
         //
         if (Auth::user()->isAdmin() || Auth::user()->isManager()) {
-            
-            if (array_key_exists('id', $this->data))
-            $device_id = $this->data['id'];
-            else
+            if (array_key_exists('id', $this->data)) {
+                $device_id = $this->data['id'];
+            } else {
                 $device_id = request()->route('id');
-            
-            if (empty($device_id))
-                $device_id = empty($this->data['device_id']) ? NULL : $this->data['device_id'];
+            }
+
+            if (empty($device_id)) {
+                $device_id = empty($this->data['device_id']) ? null : $this->data['device_id'];
+            }
 
             $item = DeviceRepo::find($device_id);
 
-            if (Auth::User()->isManager())
+            if (Auth::User()->isManager()) {
                 $user_ = Auth::User()->id;
-            else
+            } else {
                 $user_ = 0;
-            
+            }
+
             $devices = DB::table('devices')
-                        ->where('manager_id',$user_)
-                        ->where('name', 'like', "%TESTE%")
-                        ->select('plate_number','id')
+                        ->where('manager_id', $user_)
+                        ->where('name', 'like', '%TESTE%')
+                        ->select('plate_number', 'id')
                         ->get();
             $devices = collect($devices);
+
             return view('front::Devices.transfer')->with(compact('item', 'devices'));
         }
-        
     }
 
     public function transfer_now()
-    {   
-        try{
-
-            
+    {
+        try {
             //debugar(true,"Início");
             $device_id = request()->get('id');
             $new_device_id = request()->get('new_id');
-            
+
             $old_device = DB::table('devices')->find($device_id);
             //debugar(true,"C1");
-            $old_device_traccar = DB::connection('traccar_mysql')->table('devices')->where('id',$old_device->traccar_device_id)->get();
+            $old_device_traccar = DB::connection('traccar_mysql')->table('devices')->where('id', $old_device->traccar_device_id)->get();
             //debugar(true,"C2");
             $old_positions = DB::connection('traccar_mysql')->select('select * from positions_'.$old_device->traccar_device_id);
             //debugar(true,"C3");
             $new_device = DB::table('devices')->find($new_device_id);
 
             $pivots = DB::table('user_device_pivot')->where('device_id', $old_device->id)->get();
-            foreach($pivots as $pivot){
+            foreach ($pivots as $pivot) {
                 switch ($pivot->user_id) {
                     case 2:
                         break;
@@ -111,14 +109,14 @@ class DevicesController extends Controller
                         ->where('device_id', $old_device->id)
                         ->where('user_id', $pivot->user_id)
                         ->update([
-                            'device_id' => $new_device_id
-                            ]);
+                            'device_id' => $new_device_id,
+                        ]);
                         break;
                 }
             }
             //debugar(true,json_encode($pivot));
             //dd('oi');
-            
+
             //debugar(true,"Fazendo mudanças");
             DB::table('devices')->where('id', $new_device_id)
             ->update([
@@ -151,80 +149,72 @@ class DevicesController extends Controller
                 'user_owner' => $old_device->user_owner,
                 'passwor_owner' => $old_device->passwor_owner,
                 'no_powercut' => $old_device->no_powercut,
-                'anchor' => $old_device->anchor
-                ]);
-            
+                'anchor' => $old_device->anchor,
+            ]);
+
             //debugar(true,"mudanças no traccar_web feitas");
 
-
-            foreach($old_device_traccar as $device){
-                DB::connection('traccar_mysql')->table('devices')->where('id',$new_device->traccar_device_id)
+            foreach ($old_device_traccar as $device) {
+                DB::connection('traccar_mysql')->table('devices')->where('id', $new_device->traccar_device_id)
                 ->update([
-                    'name' => $device->name
-                    ]);
+                    'name' => $device->name,
+                ]);
             }
-            
+
             //debugar(true,"inicio mudança de posições, deletando");
             DB::connection('traccar_mysql')->table('positions_'.$new_device->traccar_device_id)->truncate();
             //debugar(true,"deletar mudanças ok, iniciando cópia");
-            foreach($old_positions as $position){  
+            foreach ($old_positions as $position) {
                 //debugar(true, json_encode($new_device->traccar_device_id));
                 DB::connection('traccar_mysql')->table('positions_'.$new_device->traccar_device_id)->insert(
-                    ["device_id" => $position->device_id,
-                    "altitude" => $position->altitude,
-                    "course" => $position->course,
-                    "latitude" => $position->latitude,
-                    "longitude" => $position->longitude,
-                    "other" => $position->other,
-                    "power" => $position->power,
-                    "speed" => $position->speed,
-                    "time" => $position->time,
-                    "device_time" => $position->device_time,
-                    "server_time" => $position->server_time,
-                    "sensors_values" => $position->sensors_values,
-                    "valid" => $position->valid,
-                    "distance" => $position->distance,
-                    "protocol" => $position->protocol]
+                    ['device_id' => $position->device_id,
+                        'altitude' => $position->altitude,
+                        'course' => $position->course,
+                        'latitude' => $position->latitude,
+                        'longitude' => $position->longitude,
+                        'other' => $position->other,
+                        'power' => $position->power,
+                        'speed' => $position->speed,
+                        'time' => $position->time,
+                        'device_time' => $position->device_time,
+                        'server_time' => $position->server_time,
+                        'sensors_values' => $position->sensors_values,
+                        'valid' => $position->valid,
+                        'distance' => $position->distance,
+                        'protocol' => $position->protocol]
                 );
-                
             }
-            
+
             //Alterando os dados do veículo antigo
             DB::table('devices')->where('id', $old_device->id)
             ->update([
-                'name' => "TESTE DE RASTREADOR",
-                'device_model' => "",
-                'plate_number' => "CAR-".substr($old_device->imei,-4),
-                'vin' => "",
-                'registration_number' => "",
-                'object_owner' => "ex-proprietário: ".$old_device->object_owner,
-                'cliente_id' => "",
-                'contact' => "",
-                'additional_notes' => "RASTREADOR REMOVIDO DE CLIENTE ".$old_device->additional_notes,
+                'name' => 'TESTE DE RASTREADOR',
+                'device_model' => '',
+                'plate_number' => 'CAR-'.substr($old_device->imei, -4),
+                'vin' => '',
+                'registration_number' => '',
+                'object_owner' => 'ex-proprietário: '.$old_device->object_owner,
+                'cliente_id' => '',
+                'contact' => '',
+                'additional_notes' => 'RASTREADOR REMOVIDO DE CLIENTE '.$old_device->additional_notes,
                 'maintence_date' => Carbon::now(-3),
-                'chassis' => "",
-                'renavam' => "",
-                'model_year' => "",
-                'vehicle_color' => "",
-                'city' => "",
-                'user_owner' => "",
-                'passwor_owner' => "",
+                'chassis' => '',
+                'renavam' => '',
+                'model_year' => '',
+                'vehicle_color' => '',
+                'city' => '',
+                'user_owner' => '',
+                'passwor_owner' => '',
                 'no_powercut' => false,
-                'anchor' => false
-                ]);
+                'anchor' => false,
+            ]);
 
             return ['status' => 1];
-        }
-        catch (ValidationException $e)
-        {
-            debugar(true,json_encode($e->getErrors()));
+        } catch (ValidationException $e) {
+            debugar(true, json_encode($e->getErrors()));
+
             return ['status' => 0, 'errors' => $e->getErrors()];
         }
-
-
-
-
-
 
         //debugar(true,json_encode($old_device));
     }
@@ -241,7 +231,6 @@ class DevicesController extends Controller
         }
 
         return DeviceModalHelper::destroy();
-
     }
 
     public function doDestroy($id)
@@ -249,10 +238,11 @@ class DevicesController extends Controller
         return view('front::Devices.destroy', compact('id'));
     }
 
-    public function stopTime($device_id = NULL)
+    public function stopTime($device_id = null)
     {
-        if (is_null($device_id))
+        if (is_null($device_id)) {
             $device_id = request()->get('device_id');
+        }
 
         $device = DeviceRepo::getWithFirst(['traccar', 'users', 'sensors'], ['id' => $device_id]);
 
@@ -263,9 +253,8 @@ class DevicesController extends Controller
 
     public function followMap(int $device_id)
     {
-        
         $item = UserRepo::getDevice($this->user->id, $device_id);
-        
+
         $this->checkException('devices', 'show', $item);
 
         $item->lat = $item->lat;
@@ -274,7 +263,7 @@ class DevicesController extends Controller
         $item->course = $item->course;
         $item->altitude = $item->altitude;
         $item->protocol = $item->getProtocol();
-        
+
         $item->time = $item->time;
         $item->timestamp = $item->timestamp;
         $item->acktimestamp = $item->acktimestamp;

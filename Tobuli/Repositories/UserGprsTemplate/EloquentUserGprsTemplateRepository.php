@@ -1,11 +1,13 @@
-<?php namespace Tobuli\Repositories\UserGprsTemplate;
+<?php
+
+namespace Tobuli\Repositories\UserGprsTemplate;
 
 use Tobuli\Entities\UserGprsTemplate as Entity;
 use Tobuli\Repositories\EloquentRepository;
 
-class EloquentUserGprsTemplateRepository extends EloquentRepository implements UserGprsTemplateRepositoryInterface {
-
-    public function __construct( Entity $entity )
+class EloquentUserGprsTemplateRepository extends EloquentRepository implements UserGprsTemplateRepositoryInterface
+{
+    public function __construct(Entity $entity)
     {
         $this->entity = $entity;
     }
@@ -15,13 +17,13 @@ class EloquentUserGprsTemplateRepository extends EloquentRepository implements U
         $query = $this->entity->where('user_id', $user_id)->orderBy('title', 'asc');
 
         if ($protocol) {
-
-            $query->where(function($q) use ($protocol){
+            $query->where(function ($q) use ($protocol) {
                 $q->whereNull('protocol');
-                if (is_array($protocol))
+                if (is_array($protocol)) {
                     $q->orWhereIn('protocol', array_unique($protocol));
-                else
+                } else {
                     $q->orWhere('protocol', $protocol);
+                }
             });
         }
 

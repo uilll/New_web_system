@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Přidat zařízení',
     'per_one' => 'Za 1',
@@ -663,4 +663,4 @@ return array(
     'do_objects_delete' => 'Opravdu chcete tato zařízení smazat? <br> Všechna související data budou ztracena.',
     'ignition_off' => 'Vypněte zapalování',
     'forward' => 'Vpřed',
-);
+];

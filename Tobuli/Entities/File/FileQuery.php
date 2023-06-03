@@ -2,10 +2,9 @@
 
 namespace Tobuli\Entities\File;
 
-
+use Eloquent;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Eloquent;
 
 class FileQuery
 {
@@ -33,9 +32,11 @@ class FileQuery
 
     public function find($filename)
     {
-        $file = $this->directory . '/' . $filename;
+        $file = $this->directory.'/'.$filename;
 
-        if (!File::exists($file)) return 'File does not exists';
+        if (! File::exists($file)) {
+            return 'File does not exists';
+        }
 
         return $this->newModelInstance($file);
     }

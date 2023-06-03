@@ -1,11 +1,14 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class SensorGroupSensor extends Eloquent {
-	protected $table = 'sensor_group_sensors';
+class SensorGroupSensor extends Eloquent
+{
+    protected $table = 'sensor_group_sensors';
 
-    protected $fillable = array(
+    protected $fillable = [
         'group_id',
         'name',
         'type',
@@ -31,8 +34,8 @@ class SensorGroupSensor extends Eloquent {
         'off_tag_value',
         'on_type',
         'off_type',
-        'calibrations'
-    );
+        'calibrations',
+    ];
 
     public $timestamps = false;
 

@@ -8,8 +8,6 @@
 
 namespace Tobuli\Services;
 
-
 class ChatService
 {
-
 }

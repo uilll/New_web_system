@@ -1,11 +1,11 @@
-<?php namespace ModalHelpers;
+<?php
 
-use Illuminate\Support\Facades\Validator;
-use Tobuli\Exceptions\ValidationException;
+namespace ModalHelpers;
 
-class GeofenceGroupsModalHelper extends ModalHelper {
-
-    public function paginated($user, $api, $geofenceGroupRepo) {
+class GeofenceGroupsModalHelper extends ModalHelper
+{
+    public function paginated($user, $api, $geofenceGroupRepo)
+    {
         $groups = $geofenceGroupRepo->getWhere(['user_id' => $user->id]);
 
         if ($api) {
@@ -16,15 +16,17 @@ class GeofenceGroupsModalHelper extends ModalHelper {
         return $groups;
     }
 
-    public function edit($input, $user, $api, $geofenceGroupRepo) {
+    public function edit($input, $user, $api, $geofenceGroupRepo)
+    {
         $group_id = 0;
-        if (!$api) {
+        if (! $api) {
             $edit_group = isset($input['edit_group']) ? $input['edit_group'] : [];
             $edit_arr = [];
             $groups_nr = 0;
             foreach ($edit_group as $id => $title) {
-                if (empty($title))
+                if (empty($title)) {
                     continue;
+                }
 
                 $edit_arr[$id] = $id;
                 $geofenceGroupRepo->updateWhere(['id' => $id, 'user_id' => $user->id], ['title' => $title]);
@@ -36,35 +38,37 @@ class GeofenceGroupsModalHelper extends ModalHelper {
 
             $add_group = isset($input['add_group']) ? $input['add_group'] : [];
             foreach ($add_group as $id => $title) {
-                if (empty($title))
+                if (empty($title)) {
                     continue;
+                }
 
                 $itemd = $geofenceGroupRepo->create(['title' => $title, 'user_id' => $user->id]);
                 $group_id = $itemd->id;
                 $groups_nr++;
-                if ($groups_nr > 50)
+                if ($groups_nr > 50) {
                     break;
+                }
             }
-        }
-        else {
+        } else {
             $arr = [];
             $groups_nr = 0;
             $groups = $geofenceGroupRepo->getWhere(['user_id' => $user->id]);
-            if (!$groups->isEmpty())
-                $groups = $groups->lists('id', 'id')->all();
+            if (! $groups->isEmpty()) {
+                $groups = $groups->pluck('id', 'id')->all();
+            }
 
-            $input_group = isset($input['groups']) ? json_decode($input['groups'], TRUE) : [];
+            $input_group = isset($input['groups']) ? json_decode($input['groups'], true) : [];
             foreach ($input_group as $key => $group) {
                 $title = $group['title'];
                 $id = $group['id'];
-                if (empty($title))
+                if (empty($title)) {
                     continue;
+                }
 
                 if (array_key_exists($group['id'], $groups)) {
                     $arr[$id] = $id;
                     $geofenceGroupRepo->updateWhere(['id' => $id, 'user_id' => $user->id], ['title' => $title]);
-                }
-                else {
+                } else {
                     $itemd = $geofenceGroupRepo->create(['title' => $title, 'user_id' => $user->id]);
                     $id = $itemd->id;
                     $arr[$id] = $id;

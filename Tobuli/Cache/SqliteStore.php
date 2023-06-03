@@ -2,14 +2,11 @@
 
 namespace Tobuli\Cache;
 
-
 use Illuminate\Cache\DatabaseStore;
 use Illuminate\Encryption\Encrypter;
-use Illuminate\Support\Facades\Config;
 
 class SqliteStore extends DatabaseStore
 {
-
     public function __construct()
     {
         $config = config('cache.stores.sqlite');

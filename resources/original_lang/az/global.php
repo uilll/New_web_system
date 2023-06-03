@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'Redaktə etmək',
     'add_new' => 'Yenisini əlavə et',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Həftə sonu',
     'always' => 'Həmişə',
     'advanced' => 'Ətraflı',
-);
+];

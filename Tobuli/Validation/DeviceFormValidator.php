@@ -1,9 +1,11 @@
-<?php namespace Tobuli\Validation;
+<?php
+
+namespace Tobuli\Validation;
 
 use Illuminate\Validation\Factory as IlluminateValidator;
 
-class DeviceFormValidator extends Validator {
-
+class DeviceFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -23,7 +25,7 @@ class DeviceFormValidator extends Validator {
             'sim_number' => 'unique:devices,sim_number',
 
             'forward.ip' => 'required_if:forward.active,1|regex:[0-9]+(?:\.[0-9]+){3}:[0-9]+',
-            'forward.protocol' => 'required_if:forward.active,1|in:TCP,UDP'
+            'forward.protocol' => 'required_if:forward.active,1|in:TCP,UDP',
         ],
         'update' => [
             'imei' => 'required|unique:devices,imei,%s',
@@ -40,18 +42,17 @@ class DeviceFormValidator extends Validator {
             'sim_number' => 'unique:devices,sim_number,%s',
 
             'forward.ip' => 'required_if:forward.active,1|ip_port',
-            'forward.protocol' => 'required_if:forward.active,1|in:TCP,UDP'
-        ]
+            'forward.protocol' => 'required_if:forward.active,1|in:TCP,UDP',
+        ],
     ];
 
-    public function __construct( IlluminateValidator $validator ) {
+    public function __construct(IlluminateValidator $validator)
+    {
         $this->_validator = $validator;
 
-        $this->rules['create']['group_id'] = 'exists:device_groups,id,user_id,' . auth()->user()->id;
-        $this->rules['update']['group_id'] = 'exists:device_groups,id,user_id,' . auth()->user()->id;
+        $this->rules['create']['group_id'] = 'exists:device_groups,id,user_id,'.auth()->user()->id;
+        $this->rules['update']['group_id'] = 'exists:device_groups,id,user_id,'.auth()->user()->id;
     }
-
 }   //end of class
-
 
 //EOF

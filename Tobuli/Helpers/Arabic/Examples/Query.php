@@ -3,14 +3,13 @@
  * Example of Arabic Query Class
  *
  * @category  I18N
- * @package   I18N_Arabic
+ *
  * @author    Khaled Al-Sham'aa <khaled@ar-php.org>
  * @copyright 2006-2016 Khaled Al-Sham'aa
- *
  * @license   LGPL <http://www.gnu.org/licenses/lgpl.txt>
+ *
  * @link      http://www.ar-php.org
  */
-
 error_reporting(E_STRICT);
 $time_start = microtime(true);
 ?>
@@ -64,49 +63,48 @@ $time_start = microtime(true);
     include '../../Arabic.php';
     $Arabic = new I18N_Arabic('Query');
     echo $Arabic->allForms('فلسطينيون');
-        
+
     $dbuser = 'root';
     $dbpwd = '';
     $dbname = 'test';
-    
+
     try {
         $dbh = new PDO('mysql:host=localhost;dbname='.$dbname, $dbuser, $dbpwd);
 
         // Set the error reporting attribute
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
         $dbh->exec("SET NAMES 'utf8'");
-    
+
         if ($_GET['keyword'] != '') {
             $keyword = @$_GET['keyword'];
             $keyword = str_replace('\"', '"', $keyword);
-    
+
             $Arabic->setStrFields('headline');
             $Arabic->setMode($_GET['mode']);
-    
+
             $strCondition = $Arabic->getWhereCondition($keyword);
             $strOrderBy = $Arabic->getOrderBy($keyword);
         } else {
             $strCondition = '1';
         }
-    
+
         $StrSQL = "SELECT `headline` FROM `aljazeera` WHERE $strCondition ORDER BY $strOrderBy";
-    
+
         $i = 0;
         foreach ($dbh->query($StrSQL) as $row) {
             $headline = $row['headline'];
             $i++;
             if ($i % 2 == 0) {
-                $bg = "#f0f0f0";
+                $bg = '#f0f0f0';
             } else {
-                $bg = "#ffffff";
+                $bg = '#ffffff';
             }
             echo"<tr bgcolor=\"$bg\"><td><font size=\"2\">$headline</font></td></tr>";
         }
-    
+
         // Close the databse connection
         $dbh = null;
-    
     } catch (PDOException $e) {
         echo $e->getMessage();
     }
@@ -183,7 +181,7 @@ $time_end = microtime(true);
 $time = $time_end - $time_start;
 
 echo "<hr />Total execution time is $time seconds<br />\n";
-echo 'Amount of memory allocated to this script is ' . memory_get_usage() . ' bytes';
+echo 'Amount of memory allocated to this script is '.memory_get_usage().' bytes';
 
 $included_files = get_included_files();
 echo '<h4>Names of included or required files:</h4><ul>';

@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class UnregisteredDevicesLogCollection extends Migration {
-
+class UnregisteredDevicesLogCollection extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -24,5 +23,4 @@ class UnregisteredDevicesLogCollection extends Migration {
     {
         //
     }
-
 }

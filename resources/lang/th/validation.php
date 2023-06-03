@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute จะต้องได้รับการยอมรับ.',
     'active_url' => ':attribute ไม่ได้เป็น URL ที่ถูกต้อง.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => ':attribute อาจจะมีเพียงตัวอักษรและตัวเลข.',
     'array' => ':attribute จะต้องเป็นอาร์เรย์.',
     'before' => ':attribute ต้องเป็นวันที่ก่อน :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute จะต้องอยู่ระหว่าง :min และ :max.',
         'file' => ':attribute จะต้องอยู่ระหว่าง :min และ :max กิโลไบต์.',
         'string' => ':attribute จะต้องอยู่ระหว่าง :min และ :max ตัวอักษร.',
         'array' => ':attribute จะต้องอยู่ระหว่าง :min และ :max รายการ.',
-    ),
+    ],
     'confirmed' => ':attribute ยืนยันไม่ตรงกับ.',
     'date' => ':attribute ไม่ได้เป็นวันที่ถูกต้อง.',
     'date_format' => ':attribute ไม่ตรงกับรูปแบบ :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => 'เลือก :attribute ไม่ถูกต้อง.',
     'integer' => ':attribute จะต้องเป็น จำนวนเต็ม.',
     'ip' => ':attribute จะต้องเป็น ที่อยู่ IP ที่ถูกต้อง.',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute อาจจะไม่ยิ่งใหญ่กว่า :max.',
         'file' => ':attribute อาจจะไม่ยิ่งใหญ่กว่า :max กิโลไบต์.',
         'string' => ':attribute อาจจะไม่ยิ่งใหญ่กว่า :max ตัวอักษร.',
         'array' => ':attribute อาจไม่ได้มากกว่า :max รายการ.',
-    ),
+    ],
     'mimes' => ':attribute จะต้องเป็นไฟล์ชนิด: :values.',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute ต้องมีอย่างน้อย :min.',
         'file' => ':attribute ต้องมีอย่างน้อย :min กิโลไบต์.',
         'string' => ':attribute ต้องมีอย่างน้อย :min ตัวอักษร.',
         'array' => ':attribute ต้องมีอย่างน้อย :min รายการ.',
-    ),
+    ],
     'not_in' => 'เลือก :attribute ไม่ถูกต้อง.',
     'numeric' => ':attribute ต้องเป็นตัวเลข.',
     'regex' => ':attribute รูปแบบไม่ถูกต้อง.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => ':attribute สนามถูกต้องเมื่อ :values ไม่เป็นปัจจุบัน.',
     'required_without_all' => ':attribute สนามถูกต้องเมื่อไม่มี :values ที่มีอยู่.',
     'same' => ':attribute และ :other จะต้องตรงกับ.',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute จะต้องเป็น :size.',
         'file' => ':attribute จะต้องเป็น :size กิโลไบต์.',
         'string' => ':attribute จะต้องเป็น :size ตัวอักษร.',
         'array' => ':attribute จะต้องมี :size รายการ.',
-    ),
+    ],
     'unique' => ':attribute ได้รับการดำเนินการแล้ว.',
     'url' => ':attribute รูปแบบไม่ถูกต้อง.',
     'array_max' => ':attribute รายการสูงสุด :max.',
     'lesser_than' => ':attribute จะต้องน้อยกว่า :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'custom-message',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'อีเมล์',
         'password' => 'รหัสผ่าน',
         'password_confirmation' => 'ยืนยันรหัสผ่าน',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'ไอคอนสถานะออฟไลน์',
         'icon_status_ack' => 'ไอคอนสถานะ Ack',
         'icon_status_engine' => 'ไอคอนสถานะเครื่องยนต์',
-    ),
+    ],
     'same_protocol' => 'อุปกรณ์ต้องมีรูปแบบเดียวกัน',
     'contains' => ':attribute ต้องมี :value',
     'ip_port' => ':attribute ไม่ตรงกับรูปแบบ IP:PORT',
-);
+];

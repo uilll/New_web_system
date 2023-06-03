@@ -1,15 +1,19 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class GeofenceGroup extends Eloquent {
-	protected $table = 'geofence_groups';
+class GeofenceGroup extends Eloquent
+{
+    protected $table = 'geofence_groups';
 
-    protected $fillable = array('title', 'user_id');
+    protected $fillable = ['title', 'user_id'];
 
     public $timestamps = false;
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('Tobuli\Entities\User', 'user_id', 'id');
     }
 }

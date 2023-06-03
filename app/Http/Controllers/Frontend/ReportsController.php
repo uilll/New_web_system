@@ -1,33 +1,32 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 
 use App\Http\Controllers\Controller;
-use Facades\ModalHelpers\ReportModalHelper;
 use Facades\ModalHelpers\ReportLogModalHelper;
-use Illuminate\Http\RedirectResponse;
+use Facades\ModalHelpers\ReportModalHelper;
 
 class ReportsController extends Controller
 {
-
     public function index()
     {
         $data = ReportModalHelper::get();
 
-        return !$this->api ? view('front::Reports.index')->with($data) : ['status' => 1, 'items' => $data];
+        return ! $this->api ? view('front::Reports.index')->with($data) : ['status' => 1, 'items' => $data];
     }
 
     public function create()
     {
         $data = ReportModalHelper::createData();
-		
-		if ( is_array($data) )
-		{
-			$data['logs'] = ReportLogModalHelper::get();
-		}
 
-        return is_array($data) && !$this->api ? view('front::Reports.create')->with($data) : $data;
+        if (is_array($data)) {
+            $data['logs'] = ReportLogModalHelper::get();
+        }
+
+        return is_array($data) && ! $this->api ? view('front::Reports.create')->with($data) : $data;
     }
 
     public function store()
@@ -40,7 +39,6 @@ class ReportsController extends Controller
         $data = ReportModalHelper::generate();
 
         return isset($this->data['generate']) ? $data : response()->json($data);
-        
     }
 
     public function doDestroy($id)
@@ -54,39 +52,39 @@ class ReportsController extends Controller
     {
         return ReportModalHelper::destroy();
     }
-	
-	public function logs()
+
+    public function logs()
     {
-		$data['logs'] = ReportLogModalHelper::get();
+        $data['logs'] = ReportLogModalHelper::get();
 
         return view('front::Reports.logs')->with($data);
     }
-	
-	public function logDownload($id)
-    {
-		$data = ReportLogModalHelper::download($id);
-	   
-		return response()->make( $data['data'], 200, $data['headers']);
-    }
-	
-	public function logDestroy()
-    {
-		$data = ReportLogModalHelper::destroy();
 
-		return request()->ajax() ? response()->json( $data ) : null;
+    public function logDownload($id)
+    {
+        $data = ReportLogModalHelper::download($id);
+
+        return response()->make($data['data'], 200, $data['headers']);
+    }
+
+    public function logDestroy()
+    {
+        $data = ReportLogModalHelper::destroy();
+
+        return request()->ajax() ? response()->json($data) : null;
     }
 
     public function getTypes()
     {
         $data = ReportModalHelper::getTypes();
 
-        return !$this->api ? $data : ['status' => 1, 'items' => $data];
+        return ! $this->api ? $data : ['status' => 1, 'items' => $data];
     }
 
     public function getType($type)
     {
         $data = ReportModalHelper::getType($type);
 
-        return !$this->api ? $data : ['status' => 1, 'item' => $data];
+        return ! $this->api ? $data : ['status' => 1, 'item' => $data];
     }
 }

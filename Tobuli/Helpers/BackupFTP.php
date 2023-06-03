@@ -8,9 +8,13 @@ use Symfony\Component\Process\Process;
 class BackupFTP
 {
     protected $host;
+
     protected $user;
+
     protected $pass;
+
     protected $port;
+
     protected $path;
 
     public function __construct($host, $user, $pass, $port, $path)
@@ -26,7 +30,7 @@ class BackupFTP
     {
         $connection = ftp_connect($this->host, $this->port);
 
-        if ( ! @ftp_login($connection, $this->user, $this->pass)) {
+        if (! @ftp_login($connection, $this->user, $this->pass)) {
             return false;
         }
 
@@ -35,7 +39,7 @@ class BackupFTP
 
     public function process($command, $filename, $gzip = true)
     {
-        $this->run( $this->buildCommand($command, $filename, $gzip) );
+        $this->run($this->buildCommand($command, $filename, $gzip));
     }
 
     protected function buildCommand($command, $filename, $gzip = true)
@@ -44,8 +48,9 @@ class BackupFTP
 
         $commands[] = $command;
 
-        if ($gzip)
-            $commands[] = "gzip -9";
+        if ($gzip) {
+            $commands[] = 'gzip -9';
+        }
 
         $commands[] = "ncftpput -m -c -u {$this->user} -p {$this->pass} -P {$this->port} {$this->host} {$this->path}$filename";
 
@@ -54,7 +59,7 @@ class BackupFTP
 
     protected function buildFilename($filename, $gzip)
     {
-        return date('Y-m-d') . "-" . time() . "-" . $filename . ($gzip ? ".gz" : "");
+        return date('Y-m-d').'-'.time().'-'.$filename.($gzip ? '.gz' : '');
     }
 
     protected function run($command)
@@ -66,7 +71,7 @@ class BackupFTP
             // waiting for process to finish
         }
 
-        if ( ! $process->isSuccessful()) {
+        if (! $process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
     }

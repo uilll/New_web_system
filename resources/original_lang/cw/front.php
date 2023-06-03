@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'maintenance' => 'Mantenshon',
     'fuel' => 'Gasolin',
@@ -663,4 +663,4 @@ return array(
     'do_objects_delete' => 'Você realmente deseja excluir esses dispositivos? <br> Todos os dados associados serão perdidos.',
     'ignition_off' => 'Ignição desativada',
     'forward' => 'Frente',
-);
+];

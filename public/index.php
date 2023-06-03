@@ -1,13 +1,12 @@
 
 <?php
 
-//header('Access-Control-Allow-Origin: *');  
+//header('Access-Control-Allow-Origin: *');
 //header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
- * @package  Laravel
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
 
@@ -45,7 +44,6 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
     $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 });*/
 
-
 /*
 |--------------------------------------------------------------------------
 | Run The Application
@@ -61,12 +59,12 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $kernel = $app->make('Illuminate\Contracts\Http\Kernel');
 
 $response = $kernel->handle(
-	$request = Illuminate\Http\Request::capture()
+    $request = Illuminate\Http\Request::capture()
 );
 
 /*$fp = fopen('/var/www/html/releases/20190129073809/public/debug.txt', "a+");
-		fwrite($fp, "\r\n DEBUGER ".json_encode($response)." \r\n"); 
-		fclose($fp);*/
+        fwrite($fp, "\r\n DEBUGER ".json_encode($response)." \r\n");
+        fclose($fp);*/
 
 $response->send();
 

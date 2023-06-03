@@ -1,10 +1,13 @@
-<?php namespace App\Console\Commands;
+<?php
+
+namespace App\Console\Commands;
+
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Tobuli\Entities\Event;
 use Tobuli\Entities\Alert;
+use Tobuli\Entities\Event;
 use Tobuli\Helpers\Alerts\Checker;
 
 class CheckStopDurationAlertsCommand extends Command
@@ -17,12 +20,14 @@ class CheckStopDurationAlertsCommand extends Command
      * @var string
      */
     protected $name = 'alerts:checkStopDuration';
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Check for stop duration alerts and add them';
+
     /**
      * Create a new command instance.
      */
@@ -44,8 +49,7 @@ class CheckStopDurationAlertsCommand extends Command
             ->get();
 
         foreach ($alerts as $alert) {
-            foreach ($alert->devices as $device)
-            {
+            foreach ($alert->devices as $device) {
                 $checker = new Checker($device, [$alert]);
 
                 $events = $checker->check();
@@ -63,38 +67,38 @@ class CheckStopDurationAlertsCommand extends Command
 
     protected function writeEvents()
     {
-        if ( ! $this->events)
+        if (! $this->events) {
             return;
+        }
 
         $events = [];
         $queues = [];
 
-        foreach ($this->events as $event)
-        {
+        foreach ($this->events as $event) {
             $attributes = $event->attributesToArray();
 
             if ($event->getFillable()) {
                 $attributes = array_intersect_key($attributes, array_flip($event->getFillable()));
 
-                $attributes['created_at']  = date('Y-m-d H:i:s');
-                $attributes['updated_at']  = date('Y-m-d H:i:s');
+                $attributes['created_at'] = date('Y-m-d H:i:s');
+                $attributes['updated_at'] = date('Y-m-d H:i:s');
             }
 
             $events[] = $attributes;
 
             $queues[] = [
-                'user_id'   => $event->user_id,
+                'user_id' => $event->user_id,
                 'device_id' => $event->device_id,
-                'type'      => $event->type,
+                'type' => $event->type,
                 'data' => json_encode(array_merge([
-                    'altitude'      => $event->altitude,
-                    'course'        => $event->course,
-                    'latitude'      => $event->latitude,
-                    'longitude'     => $event->longitude,
-                    'speed'         => $event->speed,
-                    'time'          => $event->time,
-                    'device_name'   => htmlentities($event->device_name),
-                ], $event->additionalQueueData))
+                    'altitude' => $event->altitude,
+                    'course' => $event->course,
+                    'latitude' => $event->latitude,
+                    'longitude' => $event->longitude,
+                    'speed' => $event->speed,
+                    'time' => $event->time,
+                    'device_name' => htmlentities($event->device_name),
+                ], $event->additionalQueueData)),
             ];
         }
 
@@ -104,6 +108,7 @@ class CheckStopDurationAlertsCommand extends Command
 
         DB::table('events_queue')->insert($queues);
     }
+
     /**
      * Get the console command arguments.
      *
@@ -111,8 +116,9 @@ class CheckStopDurationAlertsCommand extends Command
      */
     protected function getArguments()
     {
-        return array();
+        return [];
     }
+
     /**
      * Get the console command options.
      *
@@ -120,6 +126,6 @@ class CheckStopDurationAlertsCommand extends Command
      */
     protected function getOptions()
     {
-        return array();
+        return [];
     }
 }

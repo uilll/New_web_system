@@ -1,35 +1,38 @@
-<?php namespace App\Console\Commands;
+<?php
+
+namespace App\Console\Commands;
+
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 
+use Bugsnag\BugsnagLaravel\BugsnagFacade as Bugsnag;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-
 use Tobuli\Entities\EmailTemplate;
 use Tobuli\Entities\SmsTemplate;
-
 use Tobuli\Repositories\DeviceService\DeviceServiceRepositoryInterface as DeviceService;
-use Bugsnag\BugsnagLaravel\BugsnagFacade as Bugsnag;
-
 
 class CheckServiceExpireCommand extends Command
 {
-
     /**
      * The console command name.
+     *
      * @var string
      */
     protected $name = 'service:check_expire';
 
     /**
      * The console command description.
+     *
      * @var string
      */
     protected $description = 'Check for service expired.';
 
     private $deviceService;
+
     private $emailTemplate;
+
     private $smsTemplate;
 
     /**
@@ -61,15 +64,16 @@ class CheckServiceExpireCommand extends Command
             ->join('timezones', 'users.timezone_id', '=', 'timezones.id')
             ->where([
                 'services.expiration_by' => 'days',
-                'services.expired' => 0
+                'services.expired' => 0,
             ])
             ->whereRaw("((timezones.prefix = 'plus' && DATE(DATE_ADD('Y-m-d H:i:s', INTERVAL timezones.time HOUR_MINUTE)) >= DATE(services.expires_date)) OR (timezones.prefix = 'minus' && DATE(DATE_SUB('Y-m-d H:i:s', INTERVAL timezones.time HOUR_MINUTE)) >= DATE(services.expires_date)))")
             ->groupBy('services.id')
             ->get();
 
         foreach ($items as $item) {
-            if ($id = $this->processItem($item))
+            if ($id = $this->processItem($item)) {
                 $ids[] = $id;
+            }
         }
 
         $items = DB::table('device_services as services')
@@ -95,15 +99,16 @@ class CheckServiceExpireCommand extends Command
             })
             ->where([
                 'services.expiration_by' => 'odometer',
-                'services.expired' => 0
+                'services.expired' => 0,
             ])
             ->whereRaw("((sensors.odometer_value_by = 'virtual_odometer' AND ((sensors.odometer_value_unit = 'km' && sensors.odometer_value >= services.expires) OR (sensors.odometer_value_unit = 'mi' && (sensors.odometer_value * 0.621371192) >= services.expires))) OR (sensors.odometer_value_by = 'connected_odometer' AND sensors.value_formula >= services.expires))")
             ->groupBy('services.id')
             ->get();
 
         foreach ($items as $item) {
-            if ($id = $this->processItem($item))
+            if ($id = $this->processItem($item)) {
                 $ids[] = $id;
+            }
         }
 
         $items = DB::table('device_services as services')
@@ -116,19 +121,21 @@ class CheckServiceExpireCommand extends Command
             })
             ->where([
                 'services.expiration_by' => 'engine_hours',
-                'services.expired' => 0
+                'services.expired' => 0,
             ])
-            ->whereRaw("sensors.value >= services.expires")
+            ->whereRaw('sensors.value >= services.expires')
             ->groupBy('services.id')
             ->get();
 
         foreach ($items as $item) {
-            if ($id = $this->processItem($item))
+            if ($id = $this->processItem($item)) {
                 $ids[] = $id;
+            }
         }
 
-        if ( ! empty($ids))
+        if (! empty($ids)) {
             $this->updateEventSent($ids);
+        }
 
         return 'DONE';
     }
@@ -136,7 +143,7 @@ class CheckServiceExpireCommand extends Command
     private function updateEventSent($ids)
     {
         DB::table('device_services')->whereIn('id', $ids)->update([
-            'expired' => 1
+            'expired' => 1,
         ]);
     }
 
@@ -156,18 +163,19 @@ class CheckServiceExpireCommand extends Command
             Bugsnag::notifyException($e);
         }
 
-        if ( ! $item->renew_after_expiration)
+        if (! $item->renew_after_expiration) {
             return $item->id;
+        }
 
         switch ($item->expiration_by) {
             case 'odometer':
                 $values = [
-                    'odometer' => $item->odometer_value_by == 'virtual_odometer' ? $item->odometer_value : $item->value_formula
+                    'odometer' => $item->odometer_value_by == 'virtual_odometer' ? $item->odometer_value : $item->value_formula,
                 ];
                 break;
             case 'engine_hours':
                 $values = [
-                    'engine_hours' => $item->value
+                    'engine_hours' => $item->value,
                 ];
                 break;
             default:
@@ -183,8 +191,9 @@ class CheckServiceExpireCommand extends Command
 
     private function setLanguage($item)
     {
-        if ($item->lang)
+        if ($item->lang) {
             return App::setLocale($item->lang);
+        }
 
         return App::setLocale(settings('main_settings.default_language'));
     }
@@ -196,7 +205,7 @@ class CheckServiceExpireCommand extends Command
      */
     protected function getArguments()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -206,6 +215,6 @@ class CheckServiceExpireCommand extends Command
      */
     protected function getOptions()
     {
-        return array();
+        return [];
     }
 }

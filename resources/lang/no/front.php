@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Legg til enhet',
     'per_one' => 'Per 1',
@@ -663,4 +663,4 @@ return array(
     'do_objects_delete' => 'Vil du virkelig slette disse enhetene? <br> Alle tilknyttede data vil gå tapt.',
     'ignition_off' => 'Tenning av',
     'forward' => 'Framover',
-);
+];

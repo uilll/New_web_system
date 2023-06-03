@@ -1,6 +1,7 @@
-<?php namespace App\Http\Controllers\Admin;
+<?php
 
-use Illuminate\Support\Facades\Input;
+namespace App\Http\Controllers\Admin;
+
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
@@ -9,26 +10,30 @@ use Tobuli\Helpers\Templates\TemplateBuilderManager;
 use Tobuli\Repositories\EmailTemplate\EmailTemplateRepositoryInterface as EmailTemplate;
 use Tobuli\Validation\EmailTemplateFormValidator;
 
-class EmailTemplatesController extends BaseController {
+class EmailTemplatesController extends BaseController
+{
     /**
      * @var EmailTemplate
      */
     private $emailTemplate;
+
     private $section = 'email_templates';
+
     /**
      * @var EmailTemplateFormValidator
      */
     private $emailTemplateFormValidator;
 
-    function __construct(EmailTemplate $emailTemplate, EmailTemplateFormValidator $emailTemplateFormValidator)
+    public function __construct(EmailTemplate $emailTemplate, EmailTemplateFormValidator $emailTemplateFormValidator)
     {
         parent::__construct();
         $this->emailTemplate = $emailTemplate;
         $this->emailTemplateFormValidator = $emailTemplateFormValidator;
     }
 
-    public function index() {
-        $input = Input::all();
+    public function index()
+    {
+        $input = Request::all();
 
         $items = $this->emailTemplate->searchAndPaginate($input, 'title');
         $section = $this->section;
@@ -37,32 +42,33 @@ class EmailTemplatesController extends BaseController {
         $pagination = smartPaginate($items->currentPage(), $total_pages);
         $url_path = $items->resolveCurrentPath();
 
-        return View::make('admin::'.ucfirst($this->section).'.' . (Request::ajax() ? 'table' : 'index'))->with(compact('items', 'input', 'section', 'pagination', 'page', 'total_pages', 'url_path'));
+        return View::make('admin::'.ucfirst($this->section).'.'.(Request::ajax() ? 'table' : 'index'))->with(compact('items', 'input', 'section', 'pagination', 'page', 'total_pages', 'url_path'));
     }
 
-    public function edit($id = NULL) {
+    public function edit($id = null)
+    {
         $item = $this->emailTemplate->find($id);
-        if (empty($item))
+        if (empty($item)) {
             return modalError(dontExist('global.email_template'));
+        }
 
         $replacers = (new TemplateBuilderManager())->loadTemplateBuilder($item->name)->getReplacers();
 
         return View::make('admin::'.ucfirst($this->section).'.edit')->with(compact('item', 'replacers'));
     }
 
-    public function update() {
-        $input = Input::all();
+    public function update()
+    {
+        $input = Request::all();
         $id = $input['id'];
 
-        try
-        {
+        try {
             $this->emailTemplateFormValidator->validate('update', $input, $id);
 
             $this->emailTemplate->update($id, $input);
+
             return Response::json(['status' => 1]);
-        }
-        catch (ValidationException $e)
-        {
+        } catch (ValidationException $e) {
             return Response::json(['errors' => $e->getErrors()]);
         }
     }

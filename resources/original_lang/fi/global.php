@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'Muokkaa',
     'add_new' => 'Lisää uusi',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Viikonloppu',
     'always' => 'Aina',
     'advanced' => 'Pitkälle kehittynyt',
-);
+];

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Ajouter un traceur',
     'per_one' => 'par 1',
@@ -665,4 +665,4 @@ exemple d\url poour la passerelle SMS : http://SMS_GATEWAY/sendsms.php?username=
     'do_objects_delete' => 'Voulez-vous vraiment supprimer ces appareils? <br> Toutes les données associées seront perdues.',
     'ignition_off' => 'Allumage éteint',
     'forward' => 'Vers l&#39;avant',
-);
+];

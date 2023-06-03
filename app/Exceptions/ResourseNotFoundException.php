@@ -10,7 +10,6 @@ namespace App\Exceptions;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-
 class ResourseNotFoundException extends HttpException
 {
     public function __construct($name)

@@ -1,13 +1,16 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class TraccarDevice extends Eloquent {
+class TraccarDevice extends Eloquent
+{
     protected $connection = 'traccar_mysql';
 
-	protected $table = 'devices';
+    protected $table = 'devices';
 
-    protected $fillable = array(
+    protected $fillable = [
         'name',
         'uniqueId',
         'latestPosition_id',
@@ -24,9 +27,8 @@ class TraccarDevice extends Eloquent {
         'course',
         'address',
         'protocol',
-        'latest_positions'
-    );
+        'latest_positions',
+    ];
 
     public $timestamps = false;
-
 }

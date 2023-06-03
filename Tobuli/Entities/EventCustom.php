@@ -1,25 +1,30 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class EventCustom extends Eloquent {
-	protected $table = 'events_custom';
+class EventCustom extends Eloquent
+{
+    protected $table = 'events_custom';
 
-    protected $fillable = array(
+    protected $fillable = [
         'user_id',
         'protocol',
         'conditions',
         'message',
-        'always'
-    );
+        'always',
+    ];
 
     public $timestamps = false;
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo('Tobuli\Entities\User', 'user_id', 'id');
     }
 
-    public function tags() {
+    public function tags()
+    {
         return $this->hasMany('Tobuli\Entities\EventCustomTag', 'event_custom_id', 'id');
     }
 
@@ -38,8 +43,9 @@ class EventCustom extends Eloquent {
         $message = $this->message;
         $user = auth()->user();
 
-        if ($user && $user->perm('protocol', 'view'))
-            $message .= ' (' . $this->protocol . ')';
+        if ($user && $user->perm('protocol', 'view')) {
+            $message .= ' ('.$this->protocol.')';
+        }
 
         return $message;
     }

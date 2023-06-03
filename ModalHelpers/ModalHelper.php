@@ -3,17 +3,15 @@
 namespace ModalHelpers;
 
 use App\Exceptions\Manager;
-use App\Exceptions\PermissionException;
-use App\Exceptions\ResourseNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Tobuli\Entities\Alert;
-use Tobuli\Entities\Device;
 
 abstract class ModalHelper
 {
     protected $user;
+
     protected $data;
+
     protected $api;
 
     protected $exceptionManager;
@@ -27,11 +25,13 @@ abstract class ModalHelper
         $this->exceptionManager = new Manager($this->user);
     }
 
-    public function setData($data) {
+    public function setData($data)
+    {
         $this->data = $data;
     }
 
-    public function setApi($bool) {
+    public function setApi($bool)
+    {
         $this->api = boolval($bool);
     }
 

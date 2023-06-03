@@ -1,8 +1,9 @@
-<?php namespace Tobuli\Repositories\SmsEventQueue;
+<?php
+
+namespace Tobuli\Repositories\SmsEventQueue;
 
 use Tobuli\Repositories\EloquentRepositoryInterface;
 
-interface SmsEventQueueRepositoryInterface extends EloquentRepositoryInterface {
-
-
+interface SmsEventQueueRepositoryInterface extends EloquentRepositoryInterface
+{
 }

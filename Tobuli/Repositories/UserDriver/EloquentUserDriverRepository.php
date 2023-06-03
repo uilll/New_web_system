@@ -1,21 +1,22 @@
-<?php namespace Tobuli\Repositories\UserDriver;
+<?php
+
+namespace Tobuli\Repositories\UserDriver;
 
 use Tobuli\Entities\UserDriver as Entity;
 use Tobuli\Repositories\EloquentRepository;
-use Illuminate\Support\Facades\Auth;
 
-class EloquentUserDriverRepository extends EloquentRepository implements UserDriverRepositoryInterface {
-
-    public function __construct( Entity $entity )
+class EloquentUserDriverRepository extends EloquentRepository implements UserDriverRepositoryInterface
+{
+    public function __construct(Entity $entity)
     {
         $this->entity = $entity;
-        $this->searchable = [ 
+        $this->searchable = [
             'drivers.name',
-			'drivers.plate_number',
+            'drivers.plate_number',
             'drivers.rfid',
             'drivers.phone',
-			'drivers.email',
-			'drivers.description'
+            'drivers.email',
+            'drivers.description',
         ];
     }
 
@@ -24,21 +25,21 @@ class EloquentUserDriverRepository extends EloquentRepository implements UserDri
         $data = $this->generateSearchData($data);
         $sort = array_merge([
             'sort' => $sort,
-            'sort_by' => $sort_by
+            'sort_by' => $sort_by,
         ], $data['sorting']);
 
         $items = $this->entity
             ->orderBy($sort['sort_by'], $sort['sort'])
             ->with('device')
             ->where(function ($query) use ($data) {
-                if (!empty($data['search_phrase'])) {
+                if (! empty($data['search_phrase'])) {
                     foreach ($this->searchable as $column) {
-                        $query->orWhere($column, 'like', '%' . $data['search_phrase'] . '%');
+                        $query->orWhere($column, 'like', '%'.$data['search_phrase'].'%');
                     }
                 }
 
                 if (count($data['filter'])) {
-                    foreach ($data['filter'] as $key=>$value) {
+                    foreach ($data['filter'] as $key => $value) {
                         $query->where($key, $value);
                     }
                 }
@@ -49,6 +50,4 @@ class EloquentUserDriverRepository extends EloquentRepository implements UserDri
 
         return $items;
     }
-
-
 }

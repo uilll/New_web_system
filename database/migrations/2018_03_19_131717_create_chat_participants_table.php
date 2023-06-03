@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateChatParticipantsTable extends Migration
 {
@@ -10,8 +10,11 @@ class CreateChatParticipantsTable extends Migration
      *
      * @return void
      */
-    public function up() {
-        if (Schema::hasTable('chat_participants')) { return; }
+    public function up()
+    {
+        if (Schema::hasTable('chat_participants')) {
+            return;
+        }
 
         Schema::create('chat_participants', function (Blueprint $table) {
             $table->increments('id');

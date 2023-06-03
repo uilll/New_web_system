@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'add_device' => 'Tambah Tracker',
     'per_one' => 'per 1',
@@ -666,4 +666,4 @@ Contoh URL gateway SMS: http: //SMS_GATEWAY/sendsms.php? Username = USER & passw
     'do_objects_delete' => 'Anda benar-benar ingin menghapus perangkat ini? <br> Semua data yang terkait akan hilang.',
     'ignition_off' => 'Ignition off',
     'forward' => 'Meneruskan',
-);
+];

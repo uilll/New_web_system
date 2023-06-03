@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers\Frontend;
+<?php
+
+namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use Facades\ModalHelpers\HistoryModalHelper;
@@ -9,16 +11,15 @@ class HistoryController extends Controller
     {
         $data = HistoryModalHelper::get();
         //dd($data);
-        
-        
-        return is_array($data) && !$this->api ? view('front::History.index')->with($data) : $data;
+
+        return is_array($data) && ! $this->api ? view('front::History.index')->with($data) : $data;
     }
 
     public function positionsPaginated()
     {
         $data = HistoryModalHelper::getMessages();
 
-        return !$this->api ? view('front::History.partials.bottom_messages')->with($data) : $data;
+        return ! $this->api ? view('front::History.partials.bottom_messages')->with($data) : $data;
     }
 
     public function doDeletePositions()

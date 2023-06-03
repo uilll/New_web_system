@@ -1,10 +1,9 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 
-class MigrateVersion3Images extends Migration {
-
+class MigrateVersion3Images extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -17,7 +16,6 @@ class MigrateVersion3Images extends Migration {
         DB::update('UPDATE map_icons SET path = REPLACE(path, "frontend/images/", "images/")');
     }
 
-
     /**
      * Reverse the migrations.
      *
@@ -27,5 +25,4 @@ class MigrateVersion3Images extends Migration {
     {
         //
     }
-
 }

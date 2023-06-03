@@ -1,12 +1,15 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 use Tobuli\Helpers\Templates\TemplateBuilderManager;
 
-class SmsTemplate extends Eloquent {
-	protected $table = 'sms_templates';
+class SmsTemplate extends Eloquent
+{
+    protected $table = 'sms_templates';
 
-    protected $fillable = array('title', 'note');
+    protected $fillable = ['title', 'note'];
 
     public $timestamps = false;
 

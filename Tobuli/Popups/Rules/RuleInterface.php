@@ -8,13 +8,9 @@
 
 namespace Tobuli\Popups\Rules;
 
-use Tobuli\Entities\User;
-
-
 interface RuleInterface
 {
     public function getFields();
 
     public function doesApply();
-
 }

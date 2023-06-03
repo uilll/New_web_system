@@ -1,11 +1,14 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class Event extends Eloquent {
-	protected $table = 'events';
+class Event extends Eloquent
+{
+    protected $table = 'events';
 
-    protected $fillable = array(
+    protected $fillable = [
         'user_id',
         'geofence_id',
         'position_id',
@@ -20,27 +23,31 @@ class Event extends Eloquent {
         'altitude',
         'power',
         'address',
-        'deleted'
-    );
+        'deleted',
+    ];
 
     protected $appends = [
         'name',
-        'detail'
+        'detail',
     ];
 
-    public function geofence() {
+    public function geofence()
+    {
         return $this->hasOne('Tobuli\Entities\Geofence', 'id', 'geofence_id');
     }
 
-    public function alert() {
+    public function alert()
+    {
         return $this->hasOne('Tobuli\Entities\Alert', 'id', 'alert_id');
     }
 
-    public function device() {
+    public function device()
+    {
         return $this->hasOne('Tobuli\Entities\Device', 'id', 'device_id');
     }
 
-    public function getDetailAttribute() {
+    public function getDetailAttribute()
+    {
         $detail = null;
 
         switch($this->type) {
@@ -53,18 +60,19 @@ class Event extends Eloquent {
                 break;
             case 'overspeed':
                 $data = json_decode($this->message, true);
-                if (auth()->user() && auth()->user()->unit_of_distance == 'mi')
+                if (auth()->user() && auth()->user()->unit_of_distance == 'mi') {
                     $detail = round(kilometersToMiles($data['overspeed_speed'])).' '.trans('front.mi');
-                else
+                } else {
                     $detail = $data['overspeed_speed'].' '.trans('front.km');
+                }
                 break;
             case 'stop_duration':
                 $data = json_decode($this->message, true);
-                $detail = $data['stop_duration'].' '. trans('front.minutes');
+                $detail = $data['stop_duration'].' '.trans('front.minutes');
                 break;
             case 'offline_duration':
                 $data = json_decode($this->message, true);
-                $detail = $data['offline_duration'].' '. trans('front.minutes');
+                $detail = $data['offline_duration'].' '.trans('front.minutes');
                 break;
         }
 
@@ -101,7 +109,6 @@ class Event extends Eloquent {
     {
         $detail = $this->detail;
 
-        return $this->name . ($detail ? " ($detail)" : "");
+        return $this->name.($detail ? " ($detail)" : '');
     }
-
 }

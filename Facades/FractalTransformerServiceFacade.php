@@ -8,13 +8,12 @@
 
 namespace Facades;
 
-
 use Illuminate\Support\Facades\Facade;
 
 class FractalTransformerServiceFacade extends Facade
 {
-    protected static function getFacadeAccessor() {
+    protected static function getFacadeAccessor()
+    {
         return 'Tobuli\Services\FractalTransformerService';
     }
-
 }

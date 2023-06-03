@@ -2,8 +2,8 @@
 
 namespace Tobuli\Protocols\Protocols;
 
-use Tobuli\Protocols\Protocol;
 use Tobuli\Protocols\Commands;
+use Tobuli\Protocols\Protocol;
 
 class SuntechProtocol extends BaseProtocol implements Protocol
 {
@@ -17,7 +17,7 @@ class SuntechProtocol extends BaseProtocol implements Protocol
             $this->initCommand(Commands::TYPE_POSITION_SINGLE),
             $this->initCommand(Commands::TYPE_REBOOT_DEVICE),
             //$this->initCommand(Commands::TYPE_OUTPUT_CONTROL),
-            $this->initCommand(Commands::TYPE_CUSTOM)
+            $this->initCommand(Commands::TYPE_CUSTOM),
         ];
     }
 }

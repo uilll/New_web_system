@@ -1,13 +1,16 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class TraccarPosition extends Eloquent {
+class TraccarPosition extends Eloquent
+{
     const VIRTUAL_ENGINE_HOURS_KEY = 'enginehours';
 
     protected $connection = 'traccar_mysql';
 
-	protected $table = 'positions';
+    protected $table = 'positions';
 
     protected $fillable = [
         'altitude',
@@ -33,16 +36,18 @@ class TraccarPosition extends Eloquent {
     public function getTable()
     {
         if ($this->device_id) {
-            return 'positions_' . $this->device_id;
+            return 'positions_'.$this->device_id;
         }
 
         if (isset($this->table)) {
             return $this->table;
         }
+
         return str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
     }
 
-    public function device() {
+    public function device()
+    {
         return $this->hasOne('Tobuli\Entities\Device', 'traccar_device_id', 'device_id');
     }
 
@@ -74,14 +79,16 @@ class TraccarPosition extends Eloquent {
 
     public function setParametersAttribute($value)
     {
-        if ( is_array($value))
-        {
+        if (is_array($value)) {
             $xml = '<info>';
 
-            foreach ($value as $key => $val)
-            {
-                if (is_numeric($key)) continue;
-                if (is_array($val)) continue;
+            foreach ($value as $key => $val) {
+                if (is_numeric($key)) {
+                    continue;
+                }
+                if (is_array($val)) {
+                    continue;
+                }
 
                 $val = is_bool($val) ? ($val ? 'true' : 'false') : $val;
                 $xml .= "<{$key}>{$val}</$key>";
@@ -103,11 +110,11 @@ class TraccarPosition extends Eloquent {
 
     public function isRfid($rfid)
     {
-        if (empty($rfid))
+        if (empty($rfid)) {
             return false;
+        }
 
-        switch ($this->protocol)
-        {
+        switch ($this->protocol) {
             case 'teltonika':
                 return $rfid == $this->rfid || $rfid == $this->rfidRaw;
                 break;
@@ -120,11 +127,11 @@ class TraccarPosition extends Eloquent {
     {
         $rfids = [];
 
-        if ( ! $this->rfidRaw)
+        if (! $this->rfidRaw) {
             return $rfids;
+        }
 
-        switch ($this->protocol)
-        {
+        switch ($this->protocol) {
             case 'teltonika':
                 $rfids[] = $this->rfid;
                 $rfids[] = $this->rfidRaw;
@@ -146,8 +153,7 @@ class TraccarPosition extends Eloquent {
         $rfid = $this->getRfidRawAttribute();
 
         if ($rfid) {
-            switch ($this->protocol)
-            {
+            switch ($this->protocol) {
                 case 'teltonika':
                     $rfid = teltonikaIbutton($rfid);
                     break;
@@ -157,7 +163,7 @@ class TraccarPosition extends Eloquent {
             }
         }
 
-        return (string)$rfid;
+        return (string) $rfid;
     }
 
     public function getRfidRawAttribute()
@@ -166,10 +172,8 @@ class TraccarPosition extends Eloquent {
 
         $rfid = empty($parameters['rfid']) ? null : $parameters['rfid'];
 
-        if ( ! $rfid)
-        {
-            switch ($this->protocol)
-            {
+        if (! $rfid) {
+            switch ($this->protocol) {
                 case 'teltonika':
                     $rfid = empty($parameters['io78']) ? null : $parameters['io78'];
                     break;
@@ -182,8 +186,9 @@ class TraccarPosition extends Eloquent {
             }
         }
 
-        if ( ! $rfid && ! empty($parameters['driveruniqueid']))
+        if (! $rfid && ! empty($parameters['driveruniqueid'])) {
             $rfid = $parameters['driveruniqueid'];
+        }
 
         return $rfid;
     }
@@ -202,16 +207,18 @@ class TraccarPosition extends Eloquent {
     {
         $sensors = $this->sensors_values;
 
-        if (empty($sensors))
+        if (empty($sensors)) {
             return null;
+        }
 
-        if ( ! is_array($sensors))
+        if (! is_array($sensors)) {
             return null;
+        }
 
-        foreach ($sensors as $sensor)
-        {
-            if ($sensor['id'] == $sensor_id)
+        foreach ($sensors as $sensor) {
+            if ($sensor['id'] == $sensor_id) {
                 return $sensor['val'];
+            }
         }
 
         return null;

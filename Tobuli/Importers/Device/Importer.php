@@ -2,89 +2,92 @@
 
 namespace Tobuli\Importers\Device;
 
-use Validator;
-use Tobuli\Exceptions\ValidationException;
-use Tobuli\Entities\User;
-use Tobuli\Entities\Device;
-use Facades\Repositories\UserRepo;
 use Facades\Repositories\DeviceRepo;
 use Facades\Repositories\TimezoneRepo;
-use Facades\Repositories\TraccarDeviceRepo;
-
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Tobuli\Entities\Device;
+use Tobuli\Entities\User;
+use Tobuli\Exceptions\ValidationException;
+use Validator;
 
 abstract class Importer
 {
     protected $device_icon_colors = [
-        'green', 'yellow', 'red', 'blue', 'orange', 'black'
+        'green', 'yellow', 'red', 'blue', 'orange', 'black',
     ];
 
     protected $defaults = [
-        'visible'             => true,
-        'active'              => true,
-        'group_id'            => null,
-        'icon_id'             => 0,
-        'fuel_quantity'       => 0,
-        'fuel_price'          => 0,
+        'visible' => true,
+        'active' => true,
+        'group_id' => null,
+        'icon_id' => 0,
+        'fuel_quantity' => 0,
+        'fuel_price' => 0,
         'fuel_measurement_id' => 1,
-        'min_moving_speed'    => 6,
-        'min_fuel_fillings'   => 10,
-        'min_fuel_thefts'     => 10,
-        'tail_length'         => 5,
-        'tail_color'          => '#33cc33',
-        'timezone_id'         => null,
-        'expiration_date'     => '0000-00-00',
+        'min_moving_speed' => 6,
+        'min_fuel_fillings' => 10,
+        'min_fuel_thefts' => 10,
+        'tail_length' => 5,
+        'tail_color' => '#33cc33',
+        'timezone_id' => null,
+        'expiration_date' => '0000-00-00',
         'gprs_templates_only' => false,
-        'snap_to_road'        => false,
+        'snap_to_road' => false,
         'icon_colors' => [
-            'moving'  => 'green',
+            'moving' => 'green',
             'stopped' => 'yellow',
             'offline' => 'red',
-            'engine'  => 'yellow',
-        ]
+            'engine' => 'yellow',
+        ],
     ];
 
     abstract protected function load($file);
+
     abstract protected function getItems();
+
     abstract protected function validFormat();
+
     abstract protected function prepare($data);
 
     public function import()
     {
-        if ( ! $this->validFormat() )
+        if (! $this->validFormat()) {
             throw new ValidationException('Invalid content for csv device import');
+        }
 
         $items = $this->getItems();
 
-        foreach ($items as $data)
-        {
+        foreach ($items as $data) {
             $data = $this->prepare($data);
             $data = $this->mergeDefaults($data);
             $data = $this->normalize($data);
 
-            if ( ! $this->validate($data) )
+            if (! $this->validate($data)) {
                 continue;
+            }
 
             $device = $this->getDevice($data);
 
-            if ( ! $device) {
-                if ($this->devicesLimit())
+            if (! $device) {
+                if ($this->devicesLimit()) {
                     continue;
+                }
 
-                if ($this->usersDeviceLimit($data))
+                if ($this->usersDeviceLimit($data)) {
                     continue;
+                }
 
                 $this->create($data);
             }
         }
     }
 
-    public function mergeDefaults($data) {
+    public function mergeDefaults($data)
+    {
         foreach ($this->defaults as $key => $value) {
-            if (isset($data[$key]) && $data[$key] == '')
+            if (isset($data[$key]) && $data[$key] == '') {
                 unset($data[$key]);
+            }
         }
 
         return array_merge($this->defaults, $data);
@@ -94,26 +97,27 @@ abstract class Importer
     {
         $users = $this->getUsers($data);
 
-        if ($users)
+        if ($users) {
             $data['user_id'] = $users->pluck('id')->all();
-        else
+        } else {
             $data['user_id'] = [auth()->user()->id];
+        }
 
-
-        if (empty($data['icon_id']))
+        if (empty($data['icon_id'])) {
             $data['icon_id'] = 0;
+        }
 
         $data['fuel_per_km'] = convertFuelConsumption($data['fuel_measurement_id'], $data['fuel_quantity']);
 
         $statuses = ['moving', 'stopped', 'offline', 'engine'];
 
-        foreach($statuses as $status)
-        {
-            if (isset($data['icon_'.$status]) && in_array($data['icon_'.$status], $this->device_icon_colors))
+        foreach ($statuses as $status) {
+            if (isset($data['icon_'.$status]) && in_array($data['icon_'.$status], $this->device_icon_colors)) {
                 $data['icon_colors'][$status] = $data['icon_'.$status];
+            }
         }
 
-        if ( ! empty($data['timezone'])) {
+        if (! empty($data['timezone'])) {
             $timezone = $this->getTimezone($data['timezone']);
 
             $data['timezone_id'] = $timezone ? $timezone->id : null;
@@ -137,11 +141,11 @@ abstract class Importer
             'min_fuel_thefts' => 'required|numeric|min:1|max:1000',
             'group_id' => 'exists:device_groups,id',
             'sim_number' => 'unique:devices,sim_number',
-            'timezone_id' => 'exists:timezones,id'
+            'timezone_id' => 'exists:timezones,id',
         ]);
 
         if ($validator->fails()) {
-            throw new ValidationException( $validator->messages() );
+            throw new ValidationException($validator->messages());
         }
 
         return true;
@@ -158,8 +162,7 @@ abstract class Importer
             $device->createPositionsTable();
 
             DB::connection('traccar_mysql')->table('unregistered_devices_log')->where('imei', '=', $data['imei'])->delete();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             rollbackTransaction();
             throw new ValidationException(['id' => trans('global.unexpected_db_error').$e->getMessage()]);
         }
@@ -172,14 +175,16 @@ abstract class Importer
         var_dump('updating');
     }
 
-    protected function defaults($defaults) {
+    protected function defaults($defaults)
+    {
         $this->defaults = array_merge($this->defaults, $defaults);
     }
 
     protected function devicesLimit()
     {
-        if (isset($_ENV['limit']) && $_ENV['limit'] > 1 && DeviceRepo::countwhere(['deleted' => 0]) >= $_ENV['limit'])
+        if (isset($_ENV['limit']) && $_ENV['limit'] > 1 && DeviceRepo::countwhere(['deleted' => 0]) >= $_ENV['limit']) {
             throw new ValidationException(['id' => trans('front.devices_limit_reached')]);
+        }
 
         return false;
     }
@@ -189,8 +194,9 @@ abstract class Importer
         $users = $this->getUsers($data);
 
         foreach ($users as $user) {
-            if ($this->userDevicesLimit($user))
-                throw new ValidationException(['id' => $user->email . ': ' . trans('front.devices_limit_reached')]);
+            if ($this->userDevicesLimit($user)) {
+                throw new ValidationException(['id' => $user->email.': '.trans('front.devices_limit_reached')]);
+            }
         }
 
         return false;
@@ -198,16 +204,19 @@ abstract class Importer
 
     protected function userDevicesLimit($user)
     {
-        if (is_null($user->devices_limit))
+        if (is_null($user->devices_limit)) {
             return false;
+        }
 
-        if ($user->isManager())
+        if ($user->isManager()) {
             $user_devices_count = getManagerUsedLimit($user->id);
-        else
+        } else {
             $user_devices_count = $user->devices->count();
+        }
 
-        if ($user_devices_count >= $user->devices_limit)
+        if ($user_devices_count >= $user->devices_limit) {
             return true;
+        }
 
         return false;
     }
@@ -219,15 +228,16 @@ abstract class Importer
 
     protected function getTimezone($timezone)
     {
-        return TimezoneRepo::findWhere(['title' => 'UTC ' . $timezone]);
+        return TimezoneRepo::findWhere(['title' => 'UTC '.$timezone]);
     }
 
     protected function getUsers($data)
     {
-        if ( ! empty($data['user_id']) && is_string($data['user_id']))
+        if (! empty($data['user_id']) && is_string($data['user_id'])) {
             $data['user_id'] = explode(',', $data['user_id']);
+        }
 
-        if ( ! empty($data['users'])) {
+        if (! empty($data['users'])) {
             $emails = explode(',', $data['users']);
             $emails = array_map('trim', $emails);
 
@@ -236,14 +246,16 @@ abstract class Importer
             $data['user_id'] = $users ? $users->pluck('id')->all() : [];
         }
 
-        if (empty($data['user_id']))
+        if (empty($data['user_id'])) {
             $data['user_id'] = [auth()->user()->id];
+        }
 
         if (auth()->user()->isManager()) {
             $query = User::whereIn('id', $data['user_id'])->where('manager_id', auth()->user()->id);
 
-            if (in_array(auth()->user()->id, $data['user_id']))
+            if (in_array(auth()->user()->id, $data['user_id'])) {
                 $query->orWhere('id', auth()->user()->group_id);
+            }
 
             return $query->get();
         }
@@ -251,7 +263,8 @@ abstract class Importer
         return User::whereIn('id', $data['user_id'])->get();
     }
 
-    protected function deviceSyncUsers($device, $data) {
+    protected function deviceSyncUsers($device, $data)
+    {
         $device->users()->sync($data['user_id']);
 
         DB::table('user_device_pivot')
@@ -259,7 +272,7 @@ abstract class Importer
             ->whereIn('user_id', $data['user_id'])
             ->update([
                 'group_id' => $data['group_id'],
-                'active'   => $data['visible'] ? true : false
+                'active' => $data['visible'] ? true : false,
                 //'timezone_id' => $data['timezone_id'] == 0 ? NULL : $data['timezone_id']
             ]);
     }

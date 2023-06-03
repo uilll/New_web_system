@@ -24,7 +24,7 @@ class phpStack {
 	 */
 	public function __construct() {
 		//define the private vars
-		$this->locArray = array();
+		$this->locArray = [];
 		$this->index = -1;
 	}
 
@@ -91,7 +91,7 @@ class phpStack {
 	 */
 	public function clear() {
 		$this->index = -1;
-		$this->locArray = array();
+		$this->locArray = [];
 	}
 
 	/**

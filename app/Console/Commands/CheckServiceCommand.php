@@ -1,14 +1,16 @@
-<?php namespace App\Console\Commands;
+<?php
+
+namespace App\Console\Commands;
+
 ini_set('memory_limit', '-1');
 set_time_limit(0);
 
+use Bugsnag\BugsnagLaravel\BugsnagFacade as Bugsnag;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Tobuli\Entities\EmailTemplate;
 use Tobuli\Entities\SmsTemplate;
-
-use Bugsnag\BugsnagLaravel\BugsnagFacade as Bugsnag;
 
 class CheckServiceCommand extends Command
 {
@@ -53,7 +55,7 @@ class CheckServiceCommand extends Command
         $this->emailTemplate = EmailTemplate::where('name', 'service_expiration')->first();
 
         $items = DB::table('device_services as services')
-            ->select('services.*', 'users.sms_gateway', 'users.sms_gateway_url', 'users.sms_gateway_params', 'devices.plate_number as device_name', 'users.lang') 
+            ->select('services.*', 'users.sms_gateway', 'users.sms_gateway_url', 'users.sms_gateway_params', 'devices.plate_number as device_name', 'users.lang')
             ->join('devices', 'services.device_id', '=', 'devices.id')
             ->join('users', 'services.user_id', '=', 'users.id')
             ->join('timezones', 'users.timezone_id', '=', 'timezones.id')
@@ -116,7 +118,7 @@ class CheckServiceCommand extends Command
                 'services.expired' => 0,
                 'services.event_sent' => 0,
             ])
-            ->whereRaw("sensors.value >= services.remind")
+            ->whereRaw('sensors.value >= services.remind')
             ->groupBy('services.id')
             ->get();
 
@@ -150,16 +152,18 @@ class CheckServiceCommand extends Command
 
     private function updateEventSent()
     {
-        if (empty($this->sentIds))
+        if (empty($this->sentIds)) {
             return;
+        }
 
         DB::table('device_services')->whereIn('id', $this->sentIds)->update(['event_sent' => 1]);
     }
 
     private function setLanguage($item)
     {
-        if ($item->lang)
+        if ($item->lang) {
             return App::setLocale($item->lang);
+        }
 
         return App::setLocale(settings('main_settings.default_language'));
     }
@@ -171,7 +175,7 @@ class CheckServiceCommand extends Command
      */
     protected function getArguments()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -181,6 +185,6 @@ class CheckServiceCommand extends Command
      */
     protected function getOptions()
     {
-        return array();
+        return [];
     }
 }

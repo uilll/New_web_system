@@ -1,13 +1,13 @@
 <?php
 
-return array(
+return [
 
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'הודעה מותאמת אישית',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'אימייל',
         'password' => 'סיסמה',
         'password_confirmation' => 'אישור סיסמה',
@@ -258,7 +258,7 @@ return array(
         'icon_status_offline' => 'סמל סטטוס לא מקוון',
         'icon_status_ack' => 'סמל סטטוס Ack',
         'icon_status_engine' => 'סמל סטטוס מנוע',
-    ),
+    ],
     'same_protocol' => 'ההתקנים חייבים להיות עם אותו הפרוטוקול.',
     'accepted' => ':attribute חייבת להתקבל.',
     'active_url' => ':attribute אינה כתובת אתר חוקית.',
@@ -268,12 +268,12 @@ return array(
     'alpha_num' => ':attribute עשויה להכיל רק אותיות ומספרים.',
     'array' => ':attribute חייבת להיות מערך.',
     'before' => ':attribute חייבת להיות תאריך לפני :date .',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute חייבת להיות בין :min ו- :max .',
         'file' => ':attribute חייבת להיות בין :min ו- :max kilobytes.',
         'string' => ':attribute חייבת להיות בין :min ו- :max תווים :max .',
         'array' => ':attribute חייבת להיות בין :min ו- :max items.',
-    ),
+    ],
     'confirmed' => 'אישור :attribute אינו תואם.',
     'date' => ':attribute אינה תאריך חוקי.',
     'date_format' => ':attribute אינה תואמת את הפורמט :format .',
@@ -286,19 +286,19 @@ return array(
     'in' => 'התכונה שנבחרה :attribute אינה חוקית.',
     'integer' => ':attribute חייבת להיות מספר שלם.',
     'ip' => ':attribute חייבת להיות כתובת IP חוקית.',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute לא יכולה להיות גדולה מ :max .',
         'file' => ':attribute לא יכולה להיות גדולה מ :max קילו-בתים מקסימליים.',
         'string' => ':attribute לא יכולה להיות גדולה מ :max תווים :max .',
         'array' => ':attribute אין יותר מ :max פריטים :max .',
-    ),
+    ],
     'mimes' => ':attribute חייבת להיות קובץ מסוג :values .',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute חייבת להיות לפחות :min .',
         'file' => ':attribute חייבת להיות לפחות :min קילובייט :min .',
         'string' => ':attribute חייבת להיות לפחות :min תווים.',
         'array' => ':attribute חייבת לכלול לפחות פריטים :min .',
-    ),
+    ],
     'not_in' => 'התכונה שנבחרה :attribute אינה חוקית.',
     'numeric' => ':attribute חייבת להיות מספר.',
     'regex' => 'תבנית :attribute אינה חוקית.',
@@ -309,16 +309,16 @@ return array(
     'required_without' => 'שדה :attribute נדרש כאשר :values לא קיימים.',
     'required_without_all' => 'שדה :attribute נדרש כאשר אף אחד :values אלה אינו קיים.',
     'same' => ':attribute ו- :other חייבים להתאים.',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute חייבת להיות :size .',
         'file' => ':attribute חייבת להיות :size קילובייט.',
         'string' => ':attribute חייבת להיות :size תווים.',
         'array' => ':attribute חייבת להכיל :size פריטי :size .',
-    ),
+    ],
     'unique' => ':attribute כבר נלקחה.',
     'url' => 'תבנית :attribute אינה חוקית.',
     'array_max' => 'הפריטים המקסימליים של :attribute :max .',
     'lesser_than' => ':attribute חייב להיות קטן מ :other',
     'contains' => ':attribute חייבת להכיל :value .',
     'ip_port' => ':attribute אינה תואמת את הפורמט IP:PORT',
-);
+];

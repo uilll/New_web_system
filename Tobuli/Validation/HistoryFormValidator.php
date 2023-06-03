@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class HistoryFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class HistoryFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -9,10 +11,9 @@ class HistoryFormValidator extends Validator {
         'create' => [
             'device_id' => 'required',
             'from_date' => 'required|date',
-            'to_date'   => 'required|date',
+            'to_date' => 'required|date',
             'from_time' => 'required',
-            'to_time'   => 'required',
-        ]
+            'to_time' => 'required',
+        ],
     ];
-
 }

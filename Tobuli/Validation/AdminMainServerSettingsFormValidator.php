@@ -1,7 +1,9 @@
-<?php namespace Tobuli\Validation;
+<?php
 
-class AdminMainServerSettingsFormValidator extends Validator {
+namespace Tobuli\Validation;
 
+class AdminMainServerSettingsFormValidator extends Validator
+{
     /**
      * @var array Validation rules for the test form, they can contain in-built Laravel rules or our custom rules
      */
@@ -9,10 +11,8 @@ class AdminMainServerSettingsFormValidator extends Validator {
         'update' => [
             'server_name' => 'required',
             'default_maps' => 'required',
-        ]
+        ],
     ];
-
 }   //end of class
-
 
 //EOF

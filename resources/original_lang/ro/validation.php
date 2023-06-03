@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'accepted' => ':attribute trebuie să fie acceptat.',
     'active_url' => ':attribute nu este o adresă URL validă.',
@@ -10,12 +10,12 @@ return array(
     'alpha_num' => ':attribute poate conține doar litere și numere.',
     'array' => ':attribute trebuie sa fie un vector.',
     'before' => ':attribute trebuie să fie o dată înainte de :date.',
-    'between'  => array(
+    'between' => [
         'numeric' => ':attribute trebuie să fie între :min și :max.',
         'file' => ':attribute trebuie să fie între :min și :max kilobytes.',
         'string' => ':attribute trebuie să fie între :min și :max caractere.',
         'array' => ':attribute trebuie să fie între :min și :max elemente.',
-    ),
+    ],
     'confirmed' => 'Confirmarea pentru :attribute nu se potrivește.',
     'date' => ':attribute nu este o dată validă.',
     'date_format' => ':attribute nu se potrivește cu formatul :format.',
@@ -28,19 +28,19 @@ return array(
     'in' => ':attribute selectat este invalid.',
     'integer' => ':attribute trebuie să fie un număr întreg.',
     'ip' => ':attribute trebuie să fie o adresă IP validă.',
-    'max'  => array(
+    'max' => [
         'numeric' => ':attribute nu poate fi mai mare decât :max.',
         'file' => ':attribute nu poate fi mai mare decât :max kilobytes.',
         'string' => ':attribute nu poate fi mai mare decât :max caractere.',
         'array' => ':attribute nu poate avea mai mult de :max elemente.',
-    ),
+    ],
     'mimes' => ':attribute trebuie să fie un fișier de tip: :values.',
-    'min'  => array(
+    'min' => [
         'numeric' => ':attribute trebuie să fie cel puțin :min.',
         'file' => ':attribute trebuie să fie cel puțin :min kilobytes.',
         'string' => ':attribute trebuie să fie cel puțin :min caractere.',
         'array' => ':attribute trebuie să aibă cel puțin :min elemente.',
-    ),
+    ],
     'not_in' => ':attribute selectat este invalid.',
     'numeric' => ':attribute trebuie să fie un număr.',
     'regex' => ':attribute are formatul invalid.',
@@ -51,22 +51,22 @@ return array(
     'required_without' => 'Câmpul :attribute este obligatoriu când :values nu este prezent.',
     'required_without_all' => 'Câmpul :attribute este obligatoriu când nici unul dintre :values este prezent.',
     'same' => ':attribute și :other trebuie să se potrivească',
-    'size'  => array(
+    'size' => [
         'numeric' => ':attribute trebuie să fie :size.',
         'file' => ':attribute trebuie să fie :size kilobytes.',
         'string' => ':attribute trebuie să fie :size caractere.',
         'array' => ':attribute trebuie să conțină :size elemente.',
-    ),
+    ],
     'unique' => ':attribute a fost deja luat.',
     'url' => ':attribute are formatul invalid.',
     'array_max' => 'Numărul maxim de alemente al :attribute este :max.',
     'lesser_than' => ':attribute trebuie să fie mai mic decât :other',
-    'custom'  => array(
-        'attribute-name'  => array(
+    'custom' => [
+        'attribute-name' => [
             'rule-name' => 'custom-message',
-        ),
-    ),
-    'attributes'  => array(
+        ],
+    ],
+    'attributes' => [
         'email' => 'E-mail',
         'password' => 'Parolă',
         'password_confirmation' => 'Confirmarea parolei',
@@ -315,8 +315,8 @@ return array(
         'icon_status_offline' => 'Pictograma de stare offline',
         'icon_status_ack' => 'Pictogramă stare stare',
         'icon_status_engine' => 'Pictogramă stare motor',
-    ),
+    ],
     'same_protocol' => 'Dispozitivele trebuie să aibă același protocol.',
     'contains' => ':attribute trebuie să conțină :value .',
     'ip_port' => ':attribute nu se potrivește cu formatul IP:PORT',
-);
+];

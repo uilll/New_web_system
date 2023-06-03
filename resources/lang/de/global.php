@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'edit' => 'Edit',
     'add_new' => 'Add new',
@@ -60,4 +60,4 @@ return array(
     'weekend' => 'Wochenende',
     'always' => 'Immer',
     'advanced' => 'Fortgeschritten',
-);
+];

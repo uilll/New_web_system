@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Mail;
 
 use GuzzleHttp\Client;
@@ -13,15 +14,20 @@ use Swift_MimePart;
 class SendgridTransport extends Transport
 {
     const MAXIMUM_FILE_SIZE = 7340032;
+
     const SMTP_API_NAME = 'sendgrid/x-smtpapi';
+
     const BASE_URL = 'https://api.sendgrid.com/v3/mail/send';
 
     /**
      * @var Client
      */
     private $client;
+
     private $options;
+
     private $attachments;
+
     private $numberOfRecipients;
 
     public function __construct(ClientInterface $client, $api_key)
@@ -29,8 +35,8 @@ class SendgridTransport extends Transport
         $this->client = $client;
         $this->options = [
             'headers' => [
-                'Authorization' => 'Bearer ' . $api_key,
-                'Content-Type'  => 'application/json',
+                'Authorization' => 'Bearer '.$api_key,
+                'Content-Type' => 'application/json',
             ],
         ];
     }
@@ -46,9 +52,9 @@ class SendgridTransport extends Transport
 
         $data = [
             'personalizations' => $this->getPersonalizations($message),
-            'from'             => $this->getFrom($message),
-            'subject'          => $message->getSubject(),
-            'content'          => $this->getContents($message),
+            'from' => $this->getFrom($message),
+            'subject' => $message->getSubject(),
+            'content' => $this->getContents($message),
         ];
 
         if ($reply_to = $this->getReplyTo($message)) {
@@ -68,18 +74,18 @@ class SendgridTransport extends Transport
 
         $message->getHeaders()->addTextHeader('X-Message-Id', $response->getHeaderLine('X-Message-Id'));
 
-        if (is_callable("sendPerformed")) {
+        if (is_callable('sendPerformed')) {
             $this->sendPerformed($message);
         }
 
-        if (is_callable("numberOfRecipients")) {
+        if (is_callable('numberOfRecipients')) {
             return $this->numberOfRecipients ?: $this->numberOfRecipients($message);
         }
+
         return $response;
     }
 
     /**
-     * @param Swift_Mime_Message $message
      * @return array
      */
     private function getPersonalizations(Swift_Mime_Message $message)
@@ -94,6 +100,7 @@ class SendgridTransport extends Transport
                 }
                 $recipients[] = $address;
             }
+
             return $recipients;
         };
 
@@ -113,7 +120,6 @@ class SendgridTransport extends Transport
     /**
      * Get From Addresses.
      *
-     * @param Swift_Mime_Message $message
      * @return array
      */
     private function getFrom(Swift_Mime_Message $message)
@@ -123,13 +129,13 @@ class SendgridTransport extends Transport
                 return ['email' => $email, 'name' => $name];
             }
         }
+
         return [];
     }
 
     /**
      * Get ReplyTo Addresses.
      *
-     * @param Swift_Mime_Message $message
      * @return array
      */
     private function getReplyTo(Swift_Mime_Message $message)
@@ -139,13 +145,13 @@ class SendgridTransport extends Transport
                 return ['email' => $email, 'name' => $name];
             }
         }
+
         return null;
     }
 
     /**
      * Get contents.
      *
-     * @param Swift_Mime_Message $message
      * @return array
      */
     private function getContents(Swift_Mime_Message $message)
@@ -154,7 +160,7 @@ class SendgridTransport extends Transport
         foreach ($message->getChildren() as $attachment) {
             if ($attachment instanceof Swift_MimePart) {
                 $content[] = [
-                    'type'  => 'text/plain',
+                    'type' => 'text/plain',
                     'value' => $attachment->getBody(),
                 ];
                 break;
@@ -163,44 +169,45 @@ class SendgridTransport extends Transport
 
         if (empty($content) || strpos($message->getContentType(), 'multipart') !== false) {
             $content[] = [
-                'type'  => 'text/html',
+                'type' => 'text/html',
                 'value' => $message->getBody(),
             ];
         }
+
         return $content;
     }
 
     /**
-     * @param Swift_Mime_Message $message
      * @return array
      */
     private function getAttachments(Swift_Mime_Message $message)
     {
         $attachments = [];
         foreach ($message->getChildren() as $attachment) {
-            if ((!$attachment instanceof Swift_Attachment && !$attachment instanceof Swift_Image)
+            if ((! $attachment instanceof Swift_Attachment && ! $attachment instanceof Swift_Image)
                 || $attachment->getFilename() === self::SMTP_API_NAME
-                || !strlen($attachment->getBody()) > self::MAXIMUM_FILE_SIZE
+                || ! strlen($attachment->getBody()) > self::MAXIMUM_FILE_SIZE
             ) {
                 continue;
             }
             $attachments[] = [
-                'content'     => base64_encode($attachment->getBody()),
-                'filename'    => $attachment->getFilename(),
-                'type'        => $attachment->getContentType(),
+                'content' => base64_encode($attachment->getBody()),
+                'filename' => $attachment->getFilename(),
+                'type' => $attachment->getContentType(),
                 'disposition' => $attachment->getDisposition(),
-                'content_id'  => $attachment->getId(),
+                'content_id' => $attachment->getId(),
             ];
         }
+
         return $this->attachments = $attachments;
     }
 
     /**
      * Set Request Body Parameters
      *
-     * @param Swift_Mime_Message $message
-     * @param array $data
+     * @param  array  $data
      * @return array
+     *
      * @throws \Exception
      */
     protected function setParameters(Swift_Mime_Message $message, $data)
@@ -209,24 +216,23 @@ class SendgridTransport extends Transport
 
         $smtp_api = [];
         foreach ($message->getChildren() as $attachment) {
-            if (!$attachment instanceof Swift_Image
-                || !in_array(self::SMTP_API_NAME, [$attachment->getFilename(), $attachment->getContentType()])
+            if (! $attachment instanceof Swift_Image
+                || ! in_array(self::SMTP_API_NAME, [$attachment->getFilename(), $attachment->getContentType()])
             ) {
                 continue;
             }
             $smtp_api = $attachment->getBody();
         }
 
-        if (!is_array($smtp_api)) {
+        if (! is_array($smtp_api)) {
             return $data;
         }
 
         foreach ($smtp_api as $key => $val) {
-
             switch ($key) {
-
                 case 'personalizations':
                     $this->setPersonalizations($data, $val);
+
                     continue 2;
 
                 case 'attachments':
@@ -235,19 +241,18 @@ class SendgridTransport extends Transport
 
                 case 'unique_args':
                     throw new \Exception('Sendgrid v3 now uses custom_args instead of unique_args');
-
                 case 'custom_args':
                     foreach ($val as $name => $value) {
-                        if (!is_string($value)) {
+                        if (! is_string($value)) {
                             throw new \Exception('Sendgrid v3 custom arguments have to be a string.');
                         }
                     }
                     break;
-
             }
 
             array_set($data, $key, $val);
         }
+
         return $data;
     }
 
@@ -256,17 +261,16 @@ class SendgridTransport extends Transport
         foreach ($personalizations as $index => $params) {
             foreach ($params as $key => $val) {
                 if (in_array($key, ['to', 'cc', 'bcc'])) {
-                    array_set($data, 'personalizations.' . $index . '.' . $key, [$val]);
-                    ++$this->numberOfRecipients;
+                    array_set($data, 'personalizations.'.$index.'.'.$key, [$val]);
+                    $this->numberOfRecipients++;
                 } else {
-                    array_set($data, 'personalizations.' . $index . '.' . $key, $val);
+                    array_set($data, 'personalizations.'.$index.'.'.$key, $val);
                 }
             }
         }
     }
 
     /**
-     * @param $payload
      * @return Response
      */
     private function post($payload)

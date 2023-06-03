@@ -2,8 +2,6 @@
 
 namespace Tobuli\Services;
 
-
 class DeviceService
 {
-
 }

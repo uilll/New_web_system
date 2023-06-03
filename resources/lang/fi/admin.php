@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'clients' => 'Käyttäjät',
     'content' => 'Sisältö',
@@ -93,4 +93,4 @@ return array(
     'languages' => 'Kieli (kielet',
     'translate' => 'Kääntää',
     'group_4' => 'Esittely',
-);
+];

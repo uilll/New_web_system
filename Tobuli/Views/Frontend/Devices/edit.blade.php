@@ -29,7 +29,7 @@
                 
                 <div class="form-group">
                     {!! Form::label('user_id', trans('validation.attributes.user').'*:') !!}
-                    {!! Form::select('user_id[]', $users->lists('email', 'id'), $sel_users, ['class' => 'form-control', 'multiple' => 'multiple', 'data-live-search' => true]) !!}
+                    {!! Form::select('user_id[]', $users->pluck('email', 'id'), $sel_users, ['class' => 'form-control', 'multiple' => 'multiple', 'data-live-search' => true]) !!}
                 </div>
 
             <div class="form-group">
@@ -51,7 +51,7 @@
                                 {!! Form::checkbox('enable_imei2', 1, false) !!}
                                 {!! Form::label(null) !!}
                     </div>
-                    {!! Form::select('imei2', $trackers->lists('imei', 'id'), null, ['class' => 'form-control', 'data-live-search' => true]) !!}
+                    {!! Form::select('imei2', $trackers->pluck('imei', 'id'), null, ['class' => 'form-control', 'data-live-search' => true]) !!}
                 </div>
             </div>
             <div class="form-group">

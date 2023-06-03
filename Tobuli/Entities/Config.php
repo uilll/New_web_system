@@ -1,10 +1,12 @@
-<?php namespace Tobuli\Entities;
+<?php
+
+namespace Tobuli\Entities;
 
 use Eloquent;
 
-class Config extends Eloquent {
-	protected $table = 'configs';
+class Config extends Eloquent
+{
+    protected $table = 'configs';
 
-    protected $fillable = array('title', 'value');
-
+    protected $fillable = ['title', 'value'];
 }

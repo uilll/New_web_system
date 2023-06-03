@@ -1,4 +1,6 @@
-<?php namespace Tobuli\Helpers;
+<?php
+
+namespace Tobuli\Helpers;
 
 use Illuminate\View\Compilers\BladeCompiler;
 
@@ -27,7 +29,6 @@ class HtmlMinifyCompiler extends BladeCompiler
             $this->_config['blade']['escapedContentTags'][0],
             $this->_config['blade']['escapedContentTags'][1]
         );
-
     }
 
     /**
@@ -37,8 +38,7 @@ class HtmlMinifyCompiler extends BladeCompiler
      * by </script>)
      * 3) Value attribute that contains 2 or more adjacent spaces
      *
-     * @param string $value the contents of the view file
-     *
+     * @param  string  $value the contents of the view file
      * @return bool
      */
     public function shouldMinify($value)
@@ -57,22 +57,21 @@ class HtmlMinifyCompiler extends BladeCompiler
     /**
      * Compress the HTML output before saving it
      *
-     * @param string $value the contents of the view file
-     *
+     * @param  string  $value the contents of the view file
      * @return string
      */
     protected function compileMinify($value)
     {
         if ($this->shouldMinify($value)) {
-            $replace = array(
+            $replace = [
                 '/<!--[^\[](.*?)[^\]]-->/s' => '',
-                "/<\?php/"                  => '<?php ',
-                "/\n([\S])/"                => ' $1',
-                "/\r/"                      => '',
-                "/\n/"                      => '',
-                "/\t/"                      => ' ',
-                "/ +/"                      => ' ',
-            );
+                "/<\?php/" => '<?php ',
+                "/\n([\S])/" => ' $1',
+                "/\r/" => '',
+                "/\n/" => '',
+                "/\t/" => ' ',
+                '/ +/' => ' ',
+            ];
 
             return preg_replace(
                 array_keys($replace), array_values($replace), $value
@@ -80,7 +79,5 @@ class HtmlMinifyCompiler extends BladeCompiler
         } else {
             return $value;
         }
-
     }
-
 }
