@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Html\FormFacade as Form;
 use Illuminate\Support\Facades\Config as LaravelConfig;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Tobuli\Exceptions\ValidationException;

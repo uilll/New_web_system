@@ -347,7 +347,7 @@ class MontPayController extends BaseController
         $devices = UserRepo::getDevices($this->user->id);
         $Monitorings = Monitoring::all();
         $devices = UserRepo::getDevices($this->user->id)->filter(function ($devices_) {
-        return $devices_->traccar_device_id == 832;
+            return $devices_->traccar_device_id == 832;
         });
 
         foreach ($devices as $item) {
@@ -444,7 +444,7 @@ class MontPayController extends BaseController
         if ($request->has('plate_number')) {
             $device_id = $request->input('plate_number');
             $devices = UserRepo::getDevices($this->user->id)->filter(function ($devices_) use ($device_id) {
-            return $devices_->traccar_device_id == $device_id;
+                return $devices_->traccar_device_id == $device_id;
             });
             foreach ($devices as $item) {
                 $plate_number = array_get($item, 'plate_number');

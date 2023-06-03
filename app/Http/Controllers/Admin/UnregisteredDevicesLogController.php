@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Request;
 
 class UnregisteredDevicesLogController extends BaseController

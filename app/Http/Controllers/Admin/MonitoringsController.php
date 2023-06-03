@@ -350,7 +350,7 @@ class MonitoringsController extends BaseController
         if ($request->has('plate_number')) {
             $device_id = $request->input('plate_number');
             $devices = UserRepo::getDevices($this->user->id)->filter(function ($devices_) use ($device_id) {
-            return $devices_->id == $device_id;
+                return $devices_->id == $device_id;
             });
             foreach ($devices as $item) {
                 $plate_number = array_get($item, 'plate_number');
